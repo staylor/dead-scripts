@@ -1,5 +1,6 @@
-import type { Browser } from 'puppeteer';
 import fs from 'node:fs';
+
+import type { Browser } from 'puppeteer';
 
 interface Song {
   title: string;

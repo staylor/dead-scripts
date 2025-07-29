@@ -1,6 +1,8 @@
-import { PDFDocument } from 'pdf-lib';
 import * as fs from 'fs/promises';
 import path from 'path';
+
+import { PDFDocument } from 'pdf-lib';
+
 import schema from './schema.json';
 
 const ICLOUD_DIR = '/Users/scott/Documents/Scores/Lead Sheets/Grateful Dead';

@@ -1,5 +1,6 @@
-import { Document, Paragraph, TextRun, HeadingLevel, Packer } from 'docx';
 import fs from 'node:fs';
+
+import { Document, Paragraph, TextRun, HeadingLevel, Packer } from 'docx';
 
 interface Song {
   title: string;

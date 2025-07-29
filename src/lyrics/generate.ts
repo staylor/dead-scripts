@@ -1,11 +1,13 @@
-import puppeteer from 'puppeteer';
 import fs from 'node:fs';
-import { JSDOM } from 'jsdom';
 import path from 'node:path';
 
+import { JSDOM } from 'jsdom';
+import puppeteer from 'puppeteer';
+
 import { slugify } from '../slugify';
-import { jsonToPdf } from './pdf';
+
 import { createDocxFile } from './docx';
+import { jsonToPdf } from './pdf';
 
 const cacheDir = path.join(process.cwd(), '.cache');
 
