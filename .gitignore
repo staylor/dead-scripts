@@ -1,0 +1,9 @@
+.DS_Store
+.cache
+.env
+.env.*
+
+node_modules
+
+docx
+pdf
