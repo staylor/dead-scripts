@@ -4,7 +4,7 @@
 
 There are too many songs in the Grateful Dead universe to attempt to copy-paste them by hand and create PDFs that can be used in a collection, so we must automate file generation as much as possible.
 
-This script uses Puppeteer to scrape all of the Robert Hunter and John Perry Barlow lyrics from whitegum dot com. The site originates from the '90s, so it uses Perl and `<frameset>`s, and won't let you access individual `<frame>` contents directly in the browser, so Puppeteer is used to:
+This script uses `puppeteer` to scrape all of the Robert Hunter and John Perry Barlow lyrics from whitegum.com. The site originates from the '90s, so it uses Perl and `<frameset>`s, and won't let you access individual `<frame>` contents directly in the browser, so Puppeteer is used to:
 
 - scrape the index-like pages for each lyricist to get the title and URLs for each song, and save to a JSON file for each lyricist
 - in the JSON output, we create a slug for every song, so we can identify it across datasets
@@ -14,16 +14,16 @@ This script uses Puppeteer to scrape all of the Robert Hunter and John Perry Bar
 - once in `JSDOM`, we use heuristics to figure out which `<blockquote>` in the output contains the lyrics
 - we save the lyrics to a JSON file with some metadata about the song, also scraped from the page
 
-> We store these JSON files in `.cache`, so we can replay the script idempotently later, even if the network is down. Once we store the JSON for every song, we don't need to hit whitegum dot com ever again, or worry about being rate-limited or blocked. Many other Dead lyrics site forbid scraping (I tried).
+> We store these JSON files in `.cache`, so we can replay the script idempotently later, even if the network is down. Once we store the JSON for every song, we don't need to hit whitegum dot com ever again, or worry about being rate-limited or blocked. Many other Dead lyrics sites forbid scraping (I tried).
 
 We then loop through the index pages for each lyricist again to:
 
-- generate a PDF of each song using Puppeteer - Puppeteer allows you load HTML/CSS and then save it to a PDF, pretty cool!
+- generate a PDF of each song using `puppeteer` - Puppeteer allows you load HTML/CSS and then save it to a PDF, pretty cool!
 - generate a DOCX file of each using the `docx` lib - we do this in case we want to edit any of the pages later. Since this is automated, we lose nothing by running this script for every song. We use the same-ish styles from the PDF script to create identical formatted content.
 
 ## yarn real-book
 
-tl;dr creates a Grateful Dead Real Book by combining many PDFs into 1 PDF - a collection/book of lyrics and lead sheets.
+**tl;dr creates a Grateful Dead Real Book by combining many PDFs into 1 PDF - a collection/book of lyrics and lead sheets.**
 
 The main advantages to programmatically creating this book are the following:
 
