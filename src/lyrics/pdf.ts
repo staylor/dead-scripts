@@ -2,6 +2,8 @@ import fs from 'node:fs';
 
 import type { Browser } from 'puppeteer';
 
+import { htmlToPdf } from '~/utils';
+
 interface Song {
   title: string;
   authors: string[];
@@ -17,7 +19,6 @@ export async function jsonToPdf(browser: Browser, song: Song) {
 
   console.log('Creating PDF for:', song.title);
 
-  const page = await browser.newPage();
   const lines = song.lyrics.split('\n');
 
   const styledHtml = `
@@ -66,10 +67,5 @@ export async function jsonToPdf(browser: Browser, song: Song) {
     </html>
   `;
 
-  await page.setContent(styledHtml);
-  await page.pdf({
-    path: filename,
-    format: 'letter',
-    margin: { top: '1in', right: '1in', bottom: '1in', left: '1in' },
-  });
+  await htmlToPdf(browser, styledHtml, filename);
 }
