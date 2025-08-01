@@ -255,6 +255,10 @@
   },
   { "title": "Loser", "files": ["L/Loser/loser.pdf", "L/Loser/Loser Score.pdf"] },
   {
+    "title": "Lost Sailor",
+    "files": ["L/Lost Sailor/lost-sailor.pdf", "L/Lost Sailor/Lost Sailor Score.pdf"]
+  },
+  {
     "title": "Me & My Uncle",
     "files": ["M/Me & My Uncle/me-and-my-uncle.pdf", "M/Me & My Uncle/Me & My Uncle Score.pdf"]
   },
@@ -289,6 +293,10 @@
       "P/Playing in the Band/playing-in-the-band.pdf",
       "P/Playing in the Band/Playing in the Band Score.pdf"
     ]
+  },
+  {
+    "title": "Ramble on Rose",
+    "files": ["R/Ramble on Rose/ramble-on-rose.pdf", "R/Ramble on Rose/Ramble on Rose Score.pdf"]
   },
   {
     "title": "Ripple",
@@ -361,5 +369,16 @@
       "U/Uncle John's Band/uncle-johns-band.pdf",
       "U/Uncle John's Band/Uncle John's Band Score.pdf"
     ]
+  },
+  {
+    "title": "West L.A. Fadeaway",
+    "files": [
+      "W/West L.A. Fadeaway/west-la-fadeaway.pdf",
+      "W/West L.A. Fadeaway/West L.A. Fadeaway Score.pdf"
+    ]
+  },
+  {
+    "title": "Wharf Rat",
+    "files": ["W/Wharf Rat/wharf-rat.pdf", "W/Wharf Rat/Wharf Rat Score.pdf"]
   }
 ]
