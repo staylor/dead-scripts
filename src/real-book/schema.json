@@ -196,6 +196,10 @@
     ]
   },
   {
+    "title": "Good Times",
+    "files": ["G/Good Times/good-times.pdf", "G/Good Times/Good Times Score.pdf"]
+  },
+  {
     "title": "He's Gone",
     "files": ["H/He's Gone/hes-gone.pdf", "H/He's Gone/He's Gone Score.pdf"]
   },
@@ -236,6 +240,13 @@
     "files": ["J/Jack Straw/jack-straw.pdf", "J/Jack Straw/Jack Straw Score.pdf"]
   },
   {
+    "title": "Knockin' on Heaven's Door",
+    "files": [
+      "K/Knockin' on Heaven's Door/knockin-on-heavens-door.pdf",
+      "K/Knockin' on Heaven's Door/Knockin' on Heaven's Door Score.pdf"
+    ]
+  },
+  {
     "title": "Lady With a Fan",
     "files": [
       "L/Lady With a Fan/lady-with-a-fan.pdf",
@@ -268,6 +279,10 @@
       "M/Mississippi Half-Step Uptown Toodeloo/mississippi-half-step-uptown-toodeloo.pdf",
       "M/Mississippi Half-Step Uptown Toodeloo/Mississippi Half-Step Uptown Toodeloo Score.pdf"
     ]
+  },
+  {
+    "title": "Morning Dew",
+    "files": ["M/Morning Dew/morning-dew.pdf", "M/Morning Dew/Morning Dew Score.pdf"]
   },
   {
     "title": "New, New Minglewood Blues",
@@ -344,6 +359,17 @@
     "files": ["S/Sugaree/sugaree.pdf", "S/Sugaree/Sugaree Score.pdf"]
   },
   {
+    "title": "Tennessee Jed",
+    "files": ["T/Tennessee Jed/tennessee-jed.pdf", "T/Tennessee Jed/Tennessee Jed Score.pdf"]
+  },
+  {
+    "title": "Terrapin Station",
+    "files": [
+      "T/Terrapin Station/terrapin-station.pdf",
+      "T/Terrapin Station/Terrapin Station Score.pdf"
+    ]
+  },
+  {
     "title": "The Other One",
     "files": ["T/The Other One/the-other-one.pdf", "T/The Other One/The Other One Score.pdf"]
   },
@@ -358,6 +384,13 @@
   {
     "title": "Truckin'",
     "files": ["T/Truckin'/truckin.pdf", "T/Truckin'/Truckin' Score.pdf"]
+  },
+  {
+    "title": "Turn On Your Lovelight",
+    "files": [
+      "T/Turn On Your Lovelight/turn-on-your-lovelight.pdf",
+      "T/Turn On Your Lovelight/Turn On Your Lovelight Score.pdf"
+    ]
   },
   {
     "title": "U.S. Blues",

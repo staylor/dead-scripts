@@ -2,10 +2,10 @@ import path from 'path';
 
 import puppeteer from 'puppeteer';
 
-import { htmlToPdf } from '../utils';
+import { htmlToPdf, ICLOUD_DIR } from '../utils';
 
-import { ICLOUD_DIR } from './constants';
 import schema from './schema.json';
+import { loadPDF } from './utils';
 
 export async function createPages() {
   const browser = await puppeteer.launch({ headless: true });
@@ -37,7 +37,11 @@ export async function createPages() {
         `<li><strong>${String(count + 1).padStart(2, '0')}</strong> <span>${entry.title}</span></li>`
       );
     }
-    count += entry.files.length;
+    const loaded = await Promise.all(entry.files.map((file) => loadPDF(ICLOUD_DIR, file)));
+    count += loaded.reduce((acc, pdf) => {
+      acc += pdf.getPageCount();
+      return acc;
+    }, 0);
   }
 
   const toc = `<html>

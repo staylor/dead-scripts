@@ -1,4 +1,4 @@
-import fs from 'node:fs';
+// import fs from 'node:fs';
 
 import type { Browser } from 'puppeteer';
 
@@ -13,23 +13,26 @@ interface Song {
 
 export async function jsonToPdf(browser: Browser, song: Song) {
   const filename = `${process.cwd()}/pdf/${song.slug}.pdf`;
-  if (fs.existsSync(filename)) {
-    return filename;
-  }
+  // Uncomment to skip existing
+  // if (fs.existsSync(filename)) {
+  //   return filename;
+  // }
 
   console.log('Creating PDF for:', song.title);
 
   const lines = song.lyrics.split('\n');
+
+  let lastLine = '';
 
   const styledHtml = `
     <html>
     <head>
       <style>
         body { font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', sans-serif; margin: 0; padding: 0; }
-        h1 { font-size: 18pt; line-height: 18pt; font-weight: bold; margin: 0; padding: 0; }
+        h1 { font-size: 18pt; line-height: 18pt; font-weight: bold; margin: 0 0 12pt; padding: 0; }
         h2 { font-size: 12pt; line-height: 1.2; font-weight: normal; margin: 0; padding: 0; }
         h3 { font-size: 11pt; line-height: 1.2; font-weight: normal; margin: 0; padding: 0; }
-        h3:last-of-type { margin-bottom: 12pt; }
+        h3:last-of-type { margin-bottom: 18pt; }
         p { font-size: ${lines.length > 75 ? '10.5pt' : '12pt'}; line-height: 1.2; margin: 0; padding: 0; }
         .break { margin-bottom: 12pt; }
         .chorus { margin: 12pt 0; }
@@ -46,18 +49,29 @@ export async function jsonToPdf(browser: Browser, song: Song) {
         .map((line) => {
           const trimmed = line.trim();
           let text = trimmed;
+
           if (text === '') {
             return `<p class="break"></p>`;
           }
 
           if (text === 'Chorus') {
+            lastLine = text;
+
             return `<p><strong>${text}</strong></p>`;
           }
 
           if (['[chorus]', '[chorus - repeated]'].includes(text)) {
+            if (lastLine?.startsWith('[chorus')) {
+              return '';
+            }
+
+            lastLine = text;
+
             text = text.replace(/[\[\]]/g, '').replace('chorus', 'Chorus');
             return `<p class="chorus"><strong>${text}</strong></p>`;
           }
+
+          lastLine = text;
 
           return `<p>${text}</p>`;
         })
@@ -67,5 +81,5 @@ export async function jsonToPdf(browser: Browser, song: Song) {
     </html>
   `;
 
-  await htmlToPdf(browser, styledHtml, filename);
+  return htmlToPdf(browser, styledHtml, filename);
 }

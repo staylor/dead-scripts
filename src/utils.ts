@@ -1,5 +1,7 @@
 import type { Browser } from 'puppeteer';
 
+export const ICLOUD_DIR = '/Users/scott/Documents/Scores/Lead Sheets/Grateful Dead';
+
 export async function htmlToPdf(browser: Browser, html: string, file: string) {
   const page = await browser.newPage();
   await page.setContent(html);
@@ -8,4 +10,6 @@ export async function htmlToPdf(browser: Browser, html: string, file: string) {
     format: 'letter',
     margin: { top: '1in', right: '1in', bottom: '1in', left: '1in' },
   });
+
+  return file;
 }

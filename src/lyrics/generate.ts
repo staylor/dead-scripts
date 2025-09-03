@@ -1,15 +1,19 @@
-import fs from 'node:fs';
-import path from 'node:path';
+import { existsSync, copyFileSync } from 'node:fs';
 
-import { JSDOM } from 'jsdom';
 import puppeteer from 'puppeteer';
 
 import { slugify } from '../slugify';
 
 import { createDocxFile } from './docx';
 import { jsonToPdf } from './pdf';
-
-const cacheDir = path.join(process.cwd(), '.cache');
+import {
+  getAuthorFile,
+  getIcloudFile,
+  getLyricsFromContent,
+  getSongFile,
+  readJSON,
+  saveJSON,
+} from './utils';
 
 const lyricists = [
   ['robert-hunter', 'Robert Hunter', 'https://whitegum.com/cgi-bin/cgiwrap/acsa/findhun3.pl'],
@@ -20,69 +24,13 @@ const lyricists = [
   ],
 ];
 
-function getAuthorFile(slug: string) {
-  const filename = `${slug}.json`;
-  return path.join(cacheDir, filename);
-}
-
-function getSongFile(slug: string) {
-  const songFile = `${slug}.json`;
-  return path.join(cacheDir, 'lyrics', songFile);
-}
-
-function stripNotes(text: string) {
-  return text.replaceAll(/\(note [a-zA-Z0-9]+?\)/g, '');
-}
-
-function getLyricsFromContent(content: string) {
-  const dom = new JSDOM(content);
-  const doc = dom.window.document;
-  const title = doc.title;
-  let authors = doc.querySelector('p')?.textContent?.trim().split('\n');
-  if (authors) {
-    authors = authors
-      .filter((author) => author.includes('Music: ') || author.includes('Lyrics: '))
-      .map(stripNotes);
-  }
-  const blockquotes = Array.from(doc.querySelectorAll('blockquote'));
-  let lyrics = blockquotes[0]?.textContent?.trim();
-  if (blockquotes.length > 1) {
-    const notes = blockquotes
-      .find((quote) => quote.innerHTML.includes('href="#note'))
-      ?.textContent?.trim();
-    // if the blockquote contains notes
-    if (notes) {
-      lyrics = notes;
-      console.log(`${title} contains notes!`);
-    } else {
-      // find the largest blockquote
-      lyrics = blockquotes
-        .map(({ textContent }) => textContent?.trim() || '')
-        .reduce((a: string, b: string) => (a.length > b.length ? a : b), '');
-      console.log(`${title} has to guess by picking the largest :(`);
-    }
-  }
-  if (!lyrics) {
-    return { title, authors };
-  }
-  return { title, authors, lyrics: stripNotes(lyrics) };
-}
-
-function readJSON(file: string) {
-  return JSON.parse(fs.readFileSync(file, { encoding: 'utf-8' }));
-}
-
-function saveJSON(file: string, data: any) {
-  fs.writeFileSync(file, JSON.stringify(data, null, 2));
-}
-
 const browser = await puppeteer.launch({ headless: true });
 const page = await browser.newPage();
 
 // Create JSON index of songs, so that this can be replayed idempotently without the network
 for (const [slug, name, url] of lyricists) {
   const songsFile = getAuthorFile(slug);
-  if (fs.existsSync(songsFile)) {
+  if (existsSync(songsFile)) {
     console.log(`Songs file exists for ${name}`);
     continue;
   }
@@ -108,16 +56,13 @@ for (const [slug, name, url] of lyricists) {
 }
 
 // Loop again, extracting data for each song
-for (const [slug, name, url] of lyricists) {
+for (const [slug, , url] of lyricists) {
   const songsFile = getAuthorFile(slug);
-  if (!fs.existsSync(songsFile)) {
-    throw new Error(`Songs file is missing for: ${name}`);
-  }
 
   const songs = readJSON(songsFile);
   for (const song of songs) {
     const songFile = getSongFile(song.slug);
-    if (fs.existsSync(songFile)) {
+    if (existsSync(songFile)) {
       continue;
     }
 
@@ -148,12 +93,12 @@ for (const [slug, name, url] of lyricists) {
 }
 
 for (const [slug] of lyricists) {
-  const authorFile = path.join(cacheDir, `${slug}.json`);
+  const authorFile = getAuthorFile(slug);
   const songs = readJSON(authorFile);
 
   for (const song of songs) {
-    const songFile = path.join(cacheDir, 'lyrics', `${song.slug}.json`);
-    if (!fs.existsSync(songFile)) {
+    const songFile = getSongFile(song.slug);
+    if (!existsSync(songFile)) {
       continue;
     }
     const data = readJSON(songFile);
@@ -163,7 +108,15 @@ for (const [slug] of lyricists) {
 
     // Create docx file in case we need to edit later and generate new PDF
     await createDocxFile(data);
-    await jsonToPdf(browser, data);
+    const filename = await jsonToPdf(browser, data);
+
+    // Save file to iCloud folder to update book
+    const dest = getIcloudFile(data);
+    if (!existsSync(dest)) {
+      continue;
+    }
+    console.log('Copying', data.title, 'to iCloud');
+    copyFileSync(filename, dest);
   }
 }
 
