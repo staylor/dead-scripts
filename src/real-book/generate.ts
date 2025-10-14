@@ -1,7 +1,7 @@
 import * as fs from 'fs/promises';
 import path from 'path';
 
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
 import { ICLOUD_DIR } from '../utils';
 
@@ -17,6 +17,26 @@ async function mergePDFs(paths: string[], pdfDir: string) {
     const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
     copiedPages.forEach((page) => mergedPdf.addPage(page));
   }
+
+  const font = await mergedPdf.embedFont(StandardFonts.Helvetica);
+
+  const pages = mergedPdf.getPages();
+  pages.forEach((page, idx) => {
+    if (idx < 2) {
+      return;
+    }
+
+    const { width } = page.getSize();
+    const pageNumber = `${idx + 1}`;
+
+    page.drawText(pageNumber, {
+      x: width / 2 - 20, // centered
+      y: 20, // 20 units from bottom
+      size: 12,
+      font,
+      color: rgb(0, 0, 0),
+    });
+  });
 
   return mergedPdf.save();
 }

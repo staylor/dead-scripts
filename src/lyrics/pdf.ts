@@ -33,10 +33,10 @@ export async function jsonToPdf(browser: Browser, song: Song) {
         h2 { font-size: 12pt; line-height: 1.2; font-weight: normal; margin: 0; padding: 0; }
         h3 { font-size: 11pt; line-height: 1.2; font-weight: normal; margin: 0; padding: 0; }
         h3:last-of-type { margin-bottom: 18pt; }
-        p { font-size: ${lines.length > 75 ? '10.5pt' : '12pt'}; line-height: 1.2; margin: 0; padding: 0; }
+        p { font-size: 13pt; line-height: 1.2; margin: 0; padding: 0; }
         .break { margin-bottom: 12pt; }
         .chorus { margin: 12pt 0; }
-        ${lines.length > 40 ? `.columns { column-count: 2; column-gap: 40px; }` : ''}
+        ${lines.length > 50 ? `.columns { column-count: 2; column-gap: 40px; }` : ''}
         strong { font-weight: bold; }
         em { font-style: italic; }
       </style>
