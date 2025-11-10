@@ -3,14 +3,51 @@ import SwiftUI
 struct SongRowView: View {
     let song: Song
     
+    // Helper function to load images
+    private func loadImage(named fileName: String) -> UIImage? {
+        // Try without directory prefix (most common if files are at root)
+        let justFileName = (fileName as NSString).lastPathComponent
+        let fileNameWithoutExt = (justFileName as NSString).deletingPathExtension
+        let ext = (justFileName as NSString).pathExtension
+        
+        if let image = UIImage(named: justFileName) {
+            return image
+        }
+        
+        if let path = Bundle.main.path(forResource: fileNameWithoutExt, ofType: ext),
+           let image = UIImage(contentsOfFile: path) {
+            return image
+        }
+        
+        // Try with full path as fallback
+        if let image = UIImage(named: fileName) {
+            return image
+        }
+        
+        return nil
+    }
+    
     var body: some View {
         HStack(spacing: 16) {
-            Image(systemName: "music.note.list")
-                .font(.system(size: 40))
-                .foregroundColor(.pink)
-                .frame(width: 60, height: 60)
-                .background(Color(.systemGray6))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+            // Album Cover Art or Icon
+            Group {
+                if let album = song.album,
+                   let coverArtFileName = album.coverArtFileName,
+                   let uiImage = loadImage(named: coverArtFileName) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                } else {
+                    Image(systemName: "music.note.list")
+                        .font(.system(size: 40))
+                        .foregroundColor(.pink)
+                        .frame(width: 60, height: 60)
+                        .background(Color(.systemGray6))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                }
+            }
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(song.name)

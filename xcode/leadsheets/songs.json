@@ -6,6 +6,7 @@
         {
           "name": "Grateful Dead",
           "releaseYear": 1967,
+          "coverArtFileName": "grateful-dead.jpg",
           "songs": [
             {
               "trackNumber": 7,
@@ -24,6 +25,7 @@
         {
           "name": "Anthem of the Sun",
           "releaseYear": 1968,
+          "coverArtFileName": "anthem-of-the-sun.jpg",
           "songs": [
             {
               "trackNumber": 1,
@@ -36,6 +38,7 @@
         {
           "name": "Aoxomoxoa",
           "releaseYear": 1969,
+          "coverArtFileName": "aoxomoxoa.jpg",
           "songs": [
             {
               "trackNumber": 1,
@@ -48,6 +51,7 @@
         {
           "name": "Live Dead",
           "releaseYear": 1969,
+          "coverArtFileName": "live-dead.jpg",
           "songs": [
             {
               "trackNumber": 5,
@@ -66,6 +70,7 @@
         {
           "name": "Workingman's Dead",
           "releaseYear": 1970,
+          "coverArtFileName": "workingmans-dead.jpg",
           "songs": [
             {
               "trackNumber": 6,
@@ -114,6 +119,7 @@
         {
           "name": "American Beauty",
           "releaseYear": 1970,
+          "coverArtFileName": "american-beauty.jpg",
           "songs": [
             {
               "trackNumber": 9,
@@ -168,6 +174,7 @@
         {
           "name": "Grateful Dead (Skull & Roses)",
           "releaseYear": 1971,
+          "coverArtFileName": "skull-and-roses.jpg",
           "songs": [
             {
               "trackNumber": 1,
@@ -216,6 +223,7 @@
         {
           "name": "Europe '72",
           "releaseYear": 1972,
+          "coverArtFileName": "europe-72.jpg",
           "songs": [
             {
               "trackNumber": 8,
@@ -270,6 +278,7 @@
         {
           "name": "Wake of the Flood",
           "releaseYear": 1973,
+          "coverArtFileName": "wake-of-the-flood.jpg",
           "songs": [
             {
               "trackNumber": 6,
@@ -306,6 +315,7 @@
         {
           "name": "From the Mars Hotel",
           "releaseYear": 1974,
+          "coverArtFileName": "from-the-mars-hotel.jpg",
           "songs": [
             {
               "trackNumber": 2,
@@ -342,6 +352,7 @@
         {
           "name": "Blues for Allah",
           "releaseYear": 1975,
+          "coverArtFileName": "blues-for-allah.jpg",
           "songs": [
             {
               "trackNumber": 5,
@@ -372,6 +383,7 @@
         {
           "name": "Shakedown Street",
           "releaseYear": 1978,
+          "coverArtFileName": "shakedown-street.jpg",
           "songs": [
             {
               "trackNumber": 9,
@@ -402,6 +414,7 @@
         {
           "name": "Terrapin Station",
           "releaseYear": 1977,
+          "coverArtFileName": "terrapin-station.jpg",
           "songs": [
             {
               "trackNumber": 2,
@@ -426,6 +439,7 @@
         {
           "name": "Go to Heaven",
           "releaseYear": 1980,
+          "coverArtFileName": "go-to-heaven.jpg",
           "songs": [
             {
               "trackNumber": 1,
@@ -468,6 +482,7 @@
         {
           "name": "In the Dark",
           "releaseYear": 1987,
+          "coverArtFileName": "in-the-dark.jpg",
           "songs": [
             {
               "trackNumber": 7,
@@ -504,6 +519,7 @@
         {
           "name": "Built to Last",
           "releaseYear": 1989,
+          "coverArtFileName": "built-to-last.jpg",
           "songs": [
             {
               "trackNumber": 4,
@@ -522,6 +538,7 @@
         {
           "name": "So Many Roads",
           "releaseYear": 1999,
+          "coverArtFileName": "so-many-roads.jpg",
           "songs": [
             {
               "name": "Days Between",
@@ -533,6 +550,7 @@
         {
           "name": "Ladies and Gentleman... The Grateful Dead",
           "releaseYear": 2000,
+          "coverArtFileName": "ladies-and-gentlman-the-grateful-dead.jpg",
           "songs": [
             {
               "name": "El Paso",
@@ -544,6 +562,7 @@
         {
           "name": "Crimson, White & Indigo",
           "releaseYear": 2010,
+          "coverArtFileName": "crimson-white-and-indigo.jpg",
           "songs": [
             {
               "name": "Knockin' on Heaven's Door",
@@ -555,6 +574,7 @@
         {
           "name": "So Glad You Made It",
           "releaseYear": 2012,
+          "coverArtFileName": "so-glad-you-made-it.jpg",
           "songs": [
             {
               "name": "Let the Good Times Roll",
@@ -566,6 +586,7 @@
         {
           "name": "Complete Studio Rarities Collection",
           "releaseYear": 2013,
+          "coverArtFileName": "complete-studio-rarities-collection.jpg",
           "songs": [
             {
               "name": "Peggy-O",
@@ -582,6 +603,7 @@
         {
           "name": "Ace",
           "releaseYear": 1972,
+          "coverArtFileName": "ace.jpg",
           "songs": [
             {
               "trackNumber": 2,
@@ -605,6 +627,7 @@
         {
           "name": "Garcia",
           "releaseYear": 1972,
+          "coverArtFileName": "garcia.jpg",
           "songs": [
             {
               "trackNumber": 2,

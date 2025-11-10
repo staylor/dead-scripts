@@ -328,117 +328,140 @@
     "grateful-dead": {
       "artist": "grateful-dead",
       "name": "Grateful Dead",
-      "releaseYear": 1967
+      "releaseYear": 1967,
+      "coverArtFileName": "grateful-dead.jpg"
     },
     "anthem-of-the-sun": {
       "artist": "grateful-dead",
       "name": "Anthem of the Sun",
-      "releaseYear": 1968
+      "releaseYear": 1968,
+      "coverArtFileName": "anthem-of-the-sun.jpg"
     },
     "aoxomoxoa": {
       "artist": "grateful-dead",
       "name": "Aoxomoxoa",
-      "releaseYear": 1969
+      "releaseYear": 1969,
+      "coverArtFileName": "aoxomoxoa.jpg"
     },
     "live-dead": {
       "artist": "grateful-dead",
       "name": "Live Dead",
-      "releaseYear": 1969
+      "releaseYear": 1969,
+      "coverArtFileName": "live-dead.jpg"
     },
     "workingmans-dead": {
       "artist": "grateful-dead",
       "name": "Workingman's Dead",
-      "releaseYear": 1970
+      "releaseYear": 1970,
+      "coverArtFileName": "workingmans-dead.jpg"
     },
     "american-beauty": {
       "artist": "grateful-dead",
       "name": "American Beauty",
-      "releaseYear": 1970
+      "releaseYear": 1970,
+      "coverArtFileName": "american-beauty.jpg"
     },
     "skull-and-roses": {
       "artist": "grateful-dead",
       "name": "Grateful Dead (Skull & Roses)",
-      "releaseYear": 1971
+      "releaseYear": 1971,
+      "coverArtFileName": "skull-and-roses.jpg"
     },
     "ace": {
       "artist": "bob-weir",
       "name": "Ace",
-      "releaseYear": 1972
+      "releaseYear": 1972,
+      "coverArtFileName": "ace.jpg"
     },
     "garcia": {
       "artist": "jerry-garcia",
       "name": "Garcia",
-      "releaseYear": 1972
+      "releaseYear": 1972,
+      "coverArtFileName": "garcia.jpg"
     },
     "europe-72": {
       "artist": "grateful-dead",
       "name": "Europe '72",
-      "releaseYear": 1972
+      "releaseYear": 1972,
+      "coverArtFileName": "europe-72.jpg"
     },
     "wake-of-the-flood": {
       "artist": "grateful-dead",
       "name": "Wake of the Flood",
-      "releaseYear": 1973
+      "releaseYear": 1973,
+      "coverArtFileName": "wake-of-the-flood.jpg"
     },
     "from-the-mars-hotel": {
       "artist": "grateful-dead",
       "name": "From the Mars Hotel",
-      "releaseYear": 1974
+      "releaseYear": 1974,
+      "coverArtFileName": "from-the-mars-hotel.jpg"
     },
     "blues-for-allah": {
       "artist": "grateful-dead",
       "name": "Blues for Allah",
-      "releaseYear": 1975
+      "releaseYear": 1975,
+      "coverArtFileName": "blues-for-allah.jpg"
     },
     "shakedown-street": {
       "artist": "grateful-dead",
       "name": "Shakedown Street",
-      "releaseYear": 1978
+      "releaseYear": 1978,
+      "coverArtFileName": "shakedown-street.jpg"
     },
     "terrapin-station": {
       "artist": "grateful-dead",
       "name": "Terrapin Station",
-      "releaseYear": 1977
+      "releaseYear": 1977,
+      "coverArtFileName": "terrapin-station.jpg"
     },
     "go-to-heaven": {
       "artist": "grateful-dead",
       "name": "Go to Heaven",
-      "releaseYear": 1980
+      "releaseYear": 1980,
+      "coverArtFileName": "go-to-heaven.jpg"
     },
     "in-the-dark": {
       "artist": "grateful-dead",
       "name": "In the Dark",
-      "releaseYear": 1987
+      "releaseYear": 1987,
+      "coverArtFileName": "in-the-dark.jpg"
     },
     "built-to-last": {
       "artist": "grateful-dead",
       "name": "Built to Last",
-      "releaseYear": 1989
+      "releaseYear": 1989,
+      "coverArtFileName": "built-to-last.jpg"
     },
     "so-many-roads": {
       "artist": "grateful-dead",
       "name": "So Many Roads",
-      "releaseYear": 1999
+      "releaseYear": 1999,
+      "coverArtFileName": "so-many-roads.jpg"
     },
     "ladies-and-gentlman-the-grateful-dead": {
       "artist": "grateful-dead",
       "name": "Ladies and Gentleman... The Grateful Dead",
-      "releaseYear": 2000
+      "releaseYear": 2000,
+      "coverArtFileName": "ladies-and-gentlman-the-grateful-dead.jpg"
     },
     "crimson-white-and-indigo": {
       "artist": "grateful-dead",
       "name": "Crimson, White & Indigo",
-      "releaseYear": 2010
+      "releaseYear": 2010,
+      "coverArtFileName": "crimson-white-and-indigo.jpg"
     },
     "so-glad-you-made-it": {
       "artist": "grateful-dead",
       "name": "So Glad You Made It",
-      "releaseYear": 2012
+      "releaseYear": 2012,
+      "coverArtFileName": "so-glad-you-made-it.jpg"
     },
     "complete-studio-rarities-collection": {
       "artist": "grateful-dead",
       "name": "Complete Studio Rarities Collection",
-      "releaseYear": 2013
+      "releaseYear": 2013,
+      "coverArtFileName": "complete-studio-rarities-collection.jpg"
     }
   },
   "artists": {

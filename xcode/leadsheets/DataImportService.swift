@@ -48,7 +48,7 @@ actor DataImportService {
             // Create artist once
             let artist = Artist(
                 name: artistData.name,
-                imageFileName: artistData.imageFileName
+                imageFileName: artistData.imageFileName.map { ResourcePath.forArtistImage($0) }
             )
             context.insert(artist)
             
@@ -116,13 +116,6 @@ extension DataImportService {
                 return fileName
             }
             return "artists/\(fileName)"
-        }
-        
-        static func forAlbumCover(_ fileName: String) -> String {
-            if fileName.contains("/") {
-                return fileName
-            }
-            return "albums/\(fileName)"
         }
     }
 }
