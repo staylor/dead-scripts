@@ -17,7 +17,7 @@ class Song {
     var album: Album?
     var artist: Artist?
     
-    @Relationship(deleteRule: .cascade, inverse: \Tag.songs)
+    @Relationship(inverse: \Tag.songs)
     var tags: [Tag]?
     
     // Computed property for PDF URL
@@ -54,22 +54,18 @@ class Song {
 class Artist {
     @Attribute(.unique) var id: UUID
     var name: String
-    var biography: String?
     var imageFileName: String? // For artist photos
-    var website: String?
     
-    @Relationship(deleteRule: .cascade, inverse: \Song.artist)
+    @Relationship(inverse: \Song.artist)
     var songs: [Song]?
     
-    @Relationship(deleteRule: .cascade, inverse: \Album.artist)
+    @Relationship(inverse: \Album.artist)
     var albums: [Album]?
     
-    init(name: String, biography: String? = nil, imageFileName: String? = nil, website: String? = nil) {
+    init(name: String, imageFileName: String? = nil) {
         self.id = UUID()
         self.name = name
-        self.biography = biography
         self.imageFileName = imageFileName
-        self.website = website
     }
 }
 
@@ -79,23 +75,21 @@ class Album {
     var name: String
     var releaseDate: Date?
     var coverArtFileName: String? // For album artwork
-    var recordLabel: String?
     
     var artist: Artist?
     
-    @Relationship(deleteRule: .cascade, inverse: \Song.album)
+    @Relationship(inverse: \Song.album)
     var songs: [Song]?
     
     var sortedSongs: [Song] {
         songs?.sorted { ($0.diskNumber ?? 0, $0.trackNumber ?? 0) < ($1.diskNumber ?? 0, $1.trackNumber ?? 0) } ?? []
     }
     
-    init(name: String, releaseDate: Date? = nil, coverArtFileName: String? = nil, recordLabel: String? = nil, artist: Artist? = nil) {
+    init(name: String, releaseDate: Date? = nil, coverArtFileName: String? = nil, artist: Artist? = nil) {
         self.id = UUID()
         self.name = name
         self.releaseDate = releaseDate
         self.coverArtFileName = coverArtFileName
-        self.recordLabel = recordLabel
         self.artist = artist
     }
 }

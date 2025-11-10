@@ -32,6 +32,7 @@ struct SongRowView: View {
                             
                             Text(albumName)
                                 .font(.subheadline)
+                                .italic()
                                 .foregroundColor(.secondary)
                                 .lineLimit(1)
                         }
@@ -39,6 +40,7 @@ struct SongRowView: View {
                 } else if let albumName = song.album?.name, !albumName.isEmpty {
                     Text(albumName)
                         .font(.subheadline)
+                        .italic()
                         .foregroundColor(.secondary)
                         .lineLimit(1)
                 }

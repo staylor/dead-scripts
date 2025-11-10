@@ -86,10 +86,6 @@
     "files": ["C/Casey Jones/casey-jones.pdf", "C/Casey Jones/Casey Jones Score.pdf"]
   },
   {
-    "title": "Cassidy",
-    "files": ["C/Cassidy/cassidy.pdf", "C/Cassidy/Cassidy Score.pdf"]
-  },
-  {
     "title": "China Cat Sunflower",
     "files": [
       "C/China Cat Sunflower/china-cat-sunflower.pdf",
@@ -99,13 +95,6 @@
   {
     "title": "China Doll",
     "files": ["C/China Doll/china-doll.pdf", "C/China Doll/China Doll Score.pdf"]
-  },
-  {
-    "title": "Cold Rain and Snow",
-    "files": [
-      "C/Cold Rain and Snow/cold-rain-and-snow.pdf",
-      "C/Cold Rain and Snow/Cold Rain and Snow Score.pdf"
-    ]
   },
   {
     "title": "Crazy Fingers",
@@ -124,10 +113,6 @@
       "D/Dancin' in the Streets/dancin-in-the-streets.pdf",
       "D/Dancin' in the Streets/Dancin' in the Streets Score.pdf"
     ]
-  },
-  {
-    "title": "Dark Star",
-    "files": ["D/Dark Star/dark-star.pdf", "D/Dark Star/Dark Star Score.pdf"]
   },
   {
     "title": "Days Between",
@@ -214,7 +199,7 @@
     ]
   },
   {
-    "title": "Help on the Way",
+    "title": "Help on the Way / Slipknot!",
     "files": [
       "H/Help on the Way/help-on-the-way.pdf",
       "H/Help on the Way/Help on the Way Score.pdf"
@@ -293,13 +278,6 @@
   {
     "title": "Morning Dew",
     "files": ["M/Morning Dew/morning-dew.pdf", "M/Morning Dew/Morning Dew Score.pdf"]
-  },
-  {
-    "title": "New, New Minglewood Blues",
-    "files": [
-      "N/New, New Minglewood Blues/new-new-minglewood-blues.pdf",
-      "N/New, New Minglewood Blues/New, New Minglewood Blues Score.pdf"
-    ]
   },
   {
     "title": "New Speedway Boogie",

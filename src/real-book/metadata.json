@@ -1,0 +1,455 @@
+{
+  "songs": {
+    "morning-dew": {
+      "album": "grateful-dead",
+      "trackNumber": 7
+    },
+    "viola-lee-blues": {
+      "album": "grateful-dead",
+      "trackNumber": 9
+    },
+    "the-other-one": {
+      "album": "anthem-of-the-sun",
+      "trackNumber": 1
+    },
+    "turn-on-your-lovelight": {
+      "album": "live-dead",
+      "trackNumber": 4
+    },
+    "death-dont-have-no-mercy": {
+      "album": "live-dead",
+      "trackNumber": 5
+    },
+    "st-stephen": {
+      "album": "aoxomoxoa",
+      "trackNumber": 1
+    },
+    "uncle-johns-band": {
+      "album": "workingmans-dead",
+      "trackNumber": 1
+    },
+    "high-time": {
+      "album": "workingmans-dead",
+      "trackNumber": 2
+    },
+    "dire-wolf": {
+      "album": "workingmans-dead",
+      "trackNumber": 3
+    },
+    "new-speedway-boogie": {
+      "album": "workingmans-dead",
+      "trackNumber": 4
+    },
+    "cumberland-blues": {
+      "album": "workingmans-dead",
+      "trackNumber": 5
+    },
+    "black-peter": {
+      "album": "workingmans-dead",
+      "trackNumber": 6
+    },
+    "casey-jones": {
+      "album": "workingmans-dead",
+      "trackNumber": 8
+    },
+    "box-of-rain": {
+      "album": "american-beauty",
+      "trackNumber": 1
+    },
+    "friend-of-the-devil": {
+      "album": "american-beauty",
+      "trackNumber": 2
+    },
+    "sugar-magnolia": {
+      "album": "american-beauty",
+      "trackNumber": 3
+    },
+    "candyman": {
+      "album": "american-beauty",
+      "trackNumber": 5
+    },
+    "ripple": {
+      "album": "american-beauty",
+      "trackNumber": 6
+    },
+    "brokedown-palace": {
+      "album": "american-beauty",
+      "trackNumber": 7
+    },
+    "attics-of-my-life": {
+      "album": "american-beauty",
+      "trackNumber": 9
+    },
+    "truckin": {
+      "album": "american-beauty",
+      "trackNumber": 10
+    },
+    "bertha": {
+      "album": "skull-and-roses",
+      "trackNumber": 1
+    },
+    "big-railroad-blues": {
+      "album": "skull-and-roses",
+      "trackNumber": 3
+    },
+    "playing-in-the-band": {
+      "album": "skull-and-roses",
+      "trackNumber": 4
+    },
+    "me-and-my-uncle": {
+      "album": "skull-and-roses",
+      "trackNumber": 6
+    },
+    "wharf-rat": {
+      "album": "skull-and-roses",
+      "trackNumber": 10
+    },
+    "not-fade-away": {
+      "album": "skull-and-roses",
+      "trackNumber": 11
+    },
+    "goin-down-the-road-feeling-bad": {
+      "album": "skull-and-roses",
+      "trackNumber": 11
+    },
+    "deal": {
+      "album": "garcia",
+      "trackNumber": 1
+    },
+    "bird-song": {
+      "album": "garcia",
+      "trackNumber": 2
+    },
+    "sugaree": {
+      "album": "garcia",
+      "trackNumber": 3
+    },
+    "loser": {
+      "album": "garcia",
+      "trackNumber": 4
+    },
+    "the-wheel": {
+      "album": "garcia",
+      "trackNumber": 10
+    },
+    "black-throated-wind": {
+      "album": "ace",
+      "trackNumber": 2
+    },
+    "looks-like-rain": {
+      "album": "ace",
+      "trackNumber": 5
+    },
+    "hes-gone": {
+      "album": "europe-72",
+      "trackNumber": 2
+    },
+    "one-more-saturday-night": {
+      "album": "europe-72",
+      "trackNumber": 3
+    },
+    "jack-straw": {
+      "album": "europe-72",
+      "trackNumber": 4
+    },
+    "china-cat-sunflower": {
+      "album": "europe-72",
+      "trackNumber": 6
+    },
+    "i-know-you-rider": {
+      "album": "europe-72",
+      "trackNumber": 7
+    },
+    "brown-eyed-women": {
+      "album": "europe-72",
+      "trackNumber": 8
+    },
+    "ramble-on-rose": {
+      "album": "europe-72",
+      "trackNumber": 10
+    },
+    "tennessee-jed": {
+      "album": "europe-72",
+      "trackNumber": 13
+    },
+    "mississippi-half-step-uptown-toodeloo": {
+      "album": "wake-of-the-flood",
+      "trackNumber": 1
+    },
+    "row-jimmy": {
+      "album": "wake-of-the-flood",
+      "trackNumber": 3
+    },
+    "stella-blue": {
+      "album": "wake-of-the-flood",
+      "trackNumber": 4
+    },
+    "here-comes-sunshine": {
+      "album": "wake-of-the-flood",
+      "trackNumber": 5
+    },
+    "eyes-of-the-world": {
+      "album": "wake-of-the-flood",
+      "trackNumber": 6
+    },
+    "us-blues": {
+      "album": "from-the-mars-hotel",
+      "trackNumber": 1
+    },
+    "china-doll": {
+      "album": "from-the-mars-hotel",
+      "trackNumber": 2
+    },
+    "loose-lucy": {
+      "album": "from-the-mars-hotel",
+      "trackNumber": 4
+    },
+    "scarlet-begonias": {
+      "album": "from-the-mars-hotel",
+      "trackNumber": 5
+    },
+    "ship-of-fools": {
+      "album": "from-the-mars-hotel",
+      "trackNumber": 8
+    },
+    "help-on-the-way-slipknot": {
+      "album": "blues-for-allah",
+      "trackNumber": 1
+    },
+    "franklins-tower": {
+      "album": "blues-for-allah",
+      "trackNumber": 2
+    },
+    "the-music-never-stopped": {
+      "album": "blues-for-allah",
+      "trackNumber": 4
+    },
+    "crazy-fingers": {
+      "album": "blues-for-allah",
+      "trackNumber": 5
+    },
+    "estimated-prophet": {
+      "album": "terrapin-station",
+      "trackNumber": 1
+    },
+    "dancin-in-the-streets": {
+      "album": "terrapin-station",
+      "trackNumber": 2
+    },
+    "terrapin-station": {
+      "album": "terrapin-station",
+      "trackNumber": 6
+    },
+    "shakedown-street": {
+      "album": "shakedown-street",
+      "trackNumber": 3
+    },
+    "fire-on-the-mountain": {
+      "album": "shakedown-street",
+      "trackNumber": 5
+    },
+    "i-need-a-miracle": {
+      "album": "shakedown-street",
+      "trackNumber": 6
+    },
+    "all-new-minglewood-blues": {
+      "album": "shakedown-street",
+      "trackNumber": 9
+    },
+    "alabama-getaway": {
+      "album": "go-to-heaven",
+      "trackNumber": 1
+    },
+    "althea": {
+      "album": "go-to-heaven",
+      "trackNumber": 3
+    },
+    "feel-like-a-stranger": {
+      "album": "go-to-heaven",
+      "trackNumber": 4
+    },
+    "lost-sailor": {
+      "album": "go-to-heaven",
+      "trackNumber": 5
+    },
+    "saint-of-circumstance": {
+      "album": "go-to-heaven",
+      "trackNumber": 6
+    },
+    "dont-ease-me-in": {
+      "album": "go-to-heaven",
+      "trackNumber": 9
+    },
+    "touch-of-grey": {
+      "album": "in-the-dark",
+      "trackNumber": 1
+    },
+    "hell-in-a-bucket": {
+      "album": "in-the-dark",
+      "trackNumber": 2
+    },
+    "west-la-fadeaway": {
+      "album": "in-the-dark",
+      "trackNumber": 4
+    },
+    "throwing-stones": {
+      "album": "in-the-dark",
+      "trackNumber": 6
+    },
+    "black-muddy-river": {
+      "album": "in-the-dark",
+      "trackNumber": 7
+    },
+    "blow-away": {
+      "album": "built-to-last",
+      "trackNumber": 4
+    },
+    "standing-on-the-moon": {
+      "album": "built-to-last",
+      "trackNumber": 7
+    },
+    "days-between": {
+      "album": "so-many-roads"
+    },
+    "el-paso": {
+      "album": "ladies-and-gentlman-the-grateful-dead"
+    },
+    "knockin-on-heavens-door": {
+      "album": "crimson-white-and-indigo"
+    },
+    "let-the-good-times-roll": {
+      "album": "so-glad-you-made-it"
+    },
+    "peggy-o": {
+      "album": "complete-studio-rarities-collection"
+    }
+  },
+  "albums": {
+    "grateful-dead": {
+      "artist": "grateful-dead",
+      "name": "Grateful Dead",
+      "releaseYear": 1967
+    },
+    "anthem-of-the-sun": {
+      "artist": "grateful-dead",
+      "name": "Anthem of the Sun",
+      "releaseYear": 1968
+    },
+    "aoxomoxoa": {
+      "artist": "grateful-dead",
+      "name": "Aoxomoxoa",
+      "releaseYear": 1969
+    },
+    "live-dead": {
+      "artist": "grateful-dead",
+      "name": "Live Dead",
+      "releaseYear": 1969
+    },
+    "workingmans-dead": {
+      "artist": "grateful-dead",
+      "name": "Workingman's Dead",
+      "releaseYear": 1970
+    },
+    "american-beauty": {
+      "artist": "grateful-dead",
+      "name": "American Beauty",
+      "releaseYear": 1970
+    },
+    "skull-and-roses": {
+      "artist": "grateful-dead",
+      "name": "Grateful Dead (Skull & Roses)",
+      "releaseYear": 1971
+    },
+    "ace": {
+      "artist": "bob-weir",
+      "name": "Ace",
+      "releaseYear": 1972
+    },
+    "garcia": {
+      "artist": "jerry-garcia",
+      "name": "Garcia",
+      "releaseYear": 1972
+    },
+    "europe-72": {
+      "artist": "grateful-dead",
+      "name": "Europe '72",
+      "releaseYear": 1972
+    },
+    "wake-of-the-flood": {
+      "artist": "grateful-dead",
+      "name": "Wake of the Flood",
+      "releaseYear": 1973
+    },
+    "from-the-mars-hotel": {
+      "artist": "grateful-dead",
+      "name": "From the Mars Hotel",
+      "releaseYear": 1974
+    },
+    "blues-for-allah": {
+      "artist": "grateful-dead",
+      "name": "Blues for Allah",
+      "releaseYear": 1975
+    },
+    "shakedown-street": {
+      "artist": "grateful-dead",
+      "name": "Shakedown Street",
+      "releaseYear": 1978
+    },
+    "terrapin-station": {
+      "artist": "grateful-dead",
+      "name": "Terrapin Station",
+      "releaseYear": 1977
+    },
+    "go-to-heaven": {
+      "artist": "grateful-dead",
+      "name": "Go to Heaven",
+      "releaseYear": 1980
+    },
+    "in-the-dark": {
+      "artist": "grateful-dead",
+      "name": "In the Dark",
+      "releaseYear": 1987
+    },
+    "built-to-last": {
+      "artist": "grateful-dead",
+      "name": "Built to Last",
+      "releaseYear": 1989
+    },
+    "so-many-roads": {
+      "artist": "grateful-dead",
+      "name": "So Many Roads",
+      "releaseYear": 1999
+    },
+    "ladies-and-gentlman-the-grateful-dead": {
+      "artist": "grateful-dead",
+      "name": "Ladies and Gentleman... The Grateful Dead",
+      "releaseYear": 2000
+    },
+    "crimson-white-and-indigo": {
+      "artist": "grateful-dead",
+      "name": "Crimson, White & Indigo",
+      "releaseYear": 2010
+    },
+    "so-glad-you-made-it": {
+      "artist": "grateful-dead",
+      "name": "So Glad You Made It",
+      "releaseYear": 2012
+    },
+    "complete-studio-rarities-collection": {
+      "artist": "grateful-dead",
+      "name": "Complete Studio Rarities Collection",
+      "releaseYear": 2013
+    }
+  },
+  "artists": {
+    "grateful-dead": {
+      "name": "Grateful Dead"
+    },
+    "bob-weir": {
+      "name": "Bob Weir"
+    },
+    "jerry-garcia": {
+      "name": "Jerry Garcia"
+    }
+  }
+}

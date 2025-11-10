@@ -9,7 +9,7 @@ struct SearchScreen: View {
         VStack(spacing: 0) {
             // Title
             HStack {
-                Text("Lead Sheets")
+                Text("Dead Sheets")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)

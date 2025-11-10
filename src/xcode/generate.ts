@@ -1,13 +1,27 @@
 import { copyFile } from 'fs/promises';
 import path from 'path';
 
+import metadata from '~/real-book/metadata.json';
 import schema from '~/real-book/schema.json';
 import { slugify } from '~/slugify';
 import { readJSON, saveJSON, ICLOUD_DIR } from '~/utils';
 
 const appDir = path.join(process.cwd(), 'xcode', 'leadsheets');
 const lyricsDir = path.join(process.cwd(), '.cache', 'lyrics');
-const songs: any[] = [];
+
+const all = metadata as any;
+const refMap: Record<string, any> = {};
+for (const [slug, { artist, ...album }] of Object.entries(metadata.albums)) {
+  const resolved = all.artists[artist];
+  resolved.albums ||= [];
+  const entry = album as any;
+  entry.songs ||= [];
+  refMap[slug] = entry;
+  resolved.albums.push(entry);
+}
+const artists = {
+  artists: Object.values(metadata.artists),
+};
 
 await Promise.all(
   schema.map(async (entry) => {
@@ -22,6 +36,8 @@ await Promise.all(
 
     const pdf = score.split('/').pop();
     const slug = slugify(entry.title);
+    const { album, ...meta } = all.songs[slug];
+    const lookup = refMap[album];
 
     let lyrics = '';
     try {
@@ -29,9 +45,9 @@ await Promise.all(
       lyrics = data.lyrics || '';
     } catch {}
 
-    songs.push({
+    lookup.songs.push({
+      ...meta,
       name: entry.title,
-      albumName: '',
       fileName: pdf!,
       lyrics,
     });
@@ -44,4 +60,4 @@ await Promise.all(
 );
 
 const file = path.join(appDir, 'songs.json');
-saveJSON(file, songs);
+saveJSON(file, artists);
