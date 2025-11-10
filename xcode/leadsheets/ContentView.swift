@@ -10,7 +10,6 @@ struct ContentView: View {
     @State private var searchText = ""
     @State private var selected: Song?
     @State private var isImporting = false
-    @State private var showingDebugMenu = false
     
     var filteredSongs: [Song] {
         if searchText.isEmpty {
@@ -67,26 +66,6 @@ struct ContentView: View {
             }
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: selected)
-        // Debug gesture: Long press with 3 fingers to show debug menu
-        .onLongPressGesture(minimumDuration: 2.0) {
-            showingDebugMenu = true
-        }
-        .alert("Debug Menu", isPresented: $showingDebugMenu) {
-            Button("Reset Import Flag & Delete All Data", role: .destructive) {
-                resetAllData()
-            }
-            Button("Re-import Data (Keep Flag)", role: .destructive) {
-                Task {
-                    await importInitialData()
-                }
-            }
-            Button("Show Stats") {
-                printDebugStats()
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Songs: \(allSongs.count)\nImported: \(hasImportedInitialData ? "Yes" : "No")")
-        }
         .task {
             print("🔍 ContentView.task called")
             print("📊 Current song count: \(allSongs.count)")
@@ -134,6 +113,11 @@ struct ContentView: View {
             // Import from your existing songs.json file using the CURRENT format (array-based)
             try await importService.importEnhancedJSON(from: "songs", into: backgroundContext)
             
+            // Deduplicate singers and tags to clean up any existing duplicates
+            print("🧹 Deduplicating singers and tags...")
+            try await importService.deduplicateSingers(in: backgroundContext)
+            try await importService.deduplicateTags(in: backgroundContext)
+            
             // Save on background context
             try backgroundContext.save()
             
@@ -146,43 +130,13 @@ struct ContentView: View {
             // so it will retry next time
         }
     }
-    
-    // MARK: - Debug Helpers
-    
-    private func resetAllData() {
-        print("🗑️ Deleting all data and resetting import flag...")
-        
-        // Delete all data
-        let manager = SongDataManager(modelContext: modelContext)
-        manager.deleteAllData()
-        
-        // Reset the flag
-        hasImportedInitialData = false
-        
-        print("✅ Reset complete. App will re-import on next launch.")
-    }
-    
-    private func printDebugStats() {
-        let manager = SongDataManager(modelContext: modelContext)
-        print("""
-        
-        📊 Debug Stats:
-        ===============
-        Songs: \(manager.getSongCount())
-        Artists: \(manager.getArtistCount())
-        Albums: \(manager.getAlbumCount())
-        Has Imported: \(hasImportedInitialData)
-        ===============
-        
-        """)
-    }
 }
 
 // MARK: - Preview
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .modelContainer(for: [Song.self, Artist.self, Album.self, Tag.self], inMemory: true)
+            .modelContainer(for: [Song.self, Artist.self, Album.self, Tag.self, Singer.self], inMemory: true)
             .previewDevice("iPad Pro (12.9-inch) (6th generation)")
     }
 }

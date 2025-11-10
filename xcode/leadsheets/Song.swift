@@ -12,10 +12,12 @@ class Song {
     var diskNumber: Int?
     var releaseYear: Int?
     var dateAdded: Date
+    var songType: String?
     
     // Relationships
     var album: Album?
     var artist: Artist?
+    var singer: Singer?
     
     @Relationship(inverse: \Tag.songs)
     var tags: [Tag]?
@@ -33,8 +35,10 @@ class Song {
         trackNumber: Int? = nil,
         diskNumber: Int? = nil,
         releaseYear: Int? = nil,
+        songType: String? = nil,
         album: Album? = nil,
-        artist: Artist? = nil
+        artist: Artist? = nil,
+        singer: Singer? = nil
     ) {
         self.id = UUID()
         self.name = name
@@ -44,9 +48,25 @@ class Song {
         self.trackNumber = trackNumber
         self.diskNumber = diskNumber
         self.releaseYear = releaseYear
+        self.songType = songType
         self.dateAdded = Date()
         self.album = album
         self.artist = artist
+        self.singer = singer
+    }
+}
+
+@Model
+class Singer {
+    @Attribute(.unique) var id: UUID
+    var name: String
+    
+    @Relationship(inverse: \Song.singer)
+    var songs: [Song]?
+    
+    init(name: String) {
+        self.id = UUID()
+        self.name = name
     }
 }
 

@@ -7,6 +7,6 @@ struct LeadSheetsApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [Song.self, Artist.self, Album.self, Tag.self])
+        .modelContainer(for: [Song.self, Artist.self, Album.self, Tag.self, Singer.self])
     }
 }

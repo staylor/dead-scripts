@@ -37,7 +37,7 @@ await Promise.all(
 
     const pdf = score.split('/').pop();
     const slug = slugify(entry.title);
-    const { album, ...meta } = all.songs[slug];
+    const { album, singer, ...meta } = all.songs[slug];
     const lookup = refMap[album];
 
     let lyrics = '';
@@ -51,6 +51,7 @@ await Promise.all(
       name: entry.title,
       fileName: pdf!,
       lyrics,
+      singer: singer ? all.singers[singer].name : undefined,
     });
 
     const src = path.join(ICLOUD_DIR, score);
