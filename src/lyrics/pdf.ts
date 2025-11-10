@@ -4,6 +4,8 @@ import type { Browser } from 'puppeteer';
 
 import { htmlToPdf } from '~/utils';
 
+import { cleanupChorus } from './utils';
+
 interface Song {
   title: string;
   authors: string[];
@@ -20,9 +22,8 @@ export async function jsonToPdf(browser: Browser, song: Song) {
 
   console.log('Creating PDF for:', song.title);
 
-  const lines = song.lyrics.split('\n');
-
-  let lastLine = '';
+  const lines = cleanupChorus(song.lyrics).split('\n');
+  let hasChorus = false;
 
   const styledHtml = `
     <html>
@@ -48,30 +49,21 @@ export async function jsonToPdf(browser: Browser, song: Song) {
       ${lines
         .map((line) => {
           const trimmed = line.trim();
-          let text = trimmed;
+          const text = trimmed;
 
-          if (text === '') {
+          if (line === '') {
             return `<p class="break"></p>`;
           }
 
-          if (text === 'Chorus') {
-            lastLine = text;
+          if (line === 'Chorus' || line === 'Chorus - repeated') {
+            const chorus = `<p${hasChorus ? ' class="chorus"' : ''}><strong>${line}</strong></p>`;
 
-            return `<p><strong>${text}</strong></p>`;
-          }
-
-          if (['[chorus]', '[chorus - repeated]'].includes(text)) {
-            if (lastLine?.startsWith('[chorus')) {
-              return '';
+            if (line === 'Chorus') {
+              hasChorus = true;
             }
 
-            lastLine = text;
-
-            text = text.replace(/[\[\]]/g, '').replace('chorus', 'Chorus');
-            return `<p class="chorus"><strong>${text}</strong></p>`;
+            return chorus;
           }
-
-          lastLine = text;
 
           return `<p>${text}</p>`;
         })

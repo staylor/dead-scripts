@@ -1,6 +1,7 @@
 import { copyFile } from 'fs/promises';
 import path from 'path';
 
+import { cleanupChorus } from '~/lyrics/utils';
 import metadata from '~/real-book/metadata.json';
 import schema from '~/real-book/schema.json';
 import { slugify } from '~/slugify';
@@ -42,7 +43,7 @@ await Promise.all(
     let lyrics = '';
     try {
       const data = readJSON(path.join(lyricsDir, `${slug}.json`));
-      lyrics = data.lyrics || '';
+      lyrics = cleanupChorus(data.lyrics || '');
     } catch {}
 
     lookup.songs.push({

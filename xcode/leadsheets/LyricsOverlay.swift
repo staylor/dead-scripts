@@ -13,8 +13,8 @@ struct LyricsOverlay: View {
     
     // Adaptive initial size based on screen
     private var defaultOverlaySize: CGSize {
-        let width = min(300, screenSize.width * 0.85)
-        let height = min(500, screenSize.height * 0.7)
+        let width = min(450, screenSize.width * 0.85)
+        let height = min(600, screenSize.height * 0.7)
         return CGSize(width: width, height: height)
     }
     
@@ -100,11 +100,15 @@ struct LyricsOverlay: View {
                         .padding(.vertical, 8)
                     
                     if let lyrics = song.lyrics, !lyrics.isEmpty {
-                        Text(lyrics)
-                            .font(.body)
-                            .foregroundColor(.primary)
-                            .multilineTextAlignment(.leading)
-                            .lineSpacing(4)
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(Array(lyrics.components(separatedBy: "\n").enumerated()), id: \.offset) { index, line in
+                                Text(line)
+                                    .font(.body)
+                                    .foregroundColor(.primary)
+                                    .bold(line == "Chorus" || line == "Chorus - repeated")
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     } else {
                         Text("No lyrics available")
                             .font(.body)

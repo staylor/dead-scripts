@@ -28,6 +28,28 @@ function stripNotes(text: string) {
   return text.replaceAll(/\(note [a-zA-Z0-9]+?\)/g, '');
 }
 
+export function cleanupChorus(text: string) {
+  let lastLine = '';
+  return text
+    .split('\n')
+    .map((line: string) => {
+      const trimmed = line.trim();
+      let text = trimmed;
+      if (['[chorus]', '[chorus - repeated]'].includes(text)) {
+        if (lastLine?.startsWith('[chorus')) {
+          return '';
+        }
+
+        lastLine = text;
+        text = text.replace(/\[|\]/g, '').replace('chorus', 'Chorus');
+      }
+
+      lastLine = text;
+      return text;
+    })
+    .join('\n');
+}
+
 export function getLyricsFromContent(content: string) {
   const dom = new JSDOM(content);
   const doc = dom.window.document;
@@ -59,5 +81,5 @@ export function getLyricsFromContent(content: string) {
   if (!lyrics) {
     return { title, authors };
   }
-  return { title, authors, lyrics: stripNotes(lyrics) };
+  return { title, authors, lyrics: cleanupChorus(stripNotes(lyrics)) };
 }
