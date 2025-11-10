@@ -35,7 +35,7 @@
   },
   {
     "title": "Bird Song",
-    "files": ["B/Bird Song/bird-song.pdf", "B/Bird Song/Bird Song Score.pdf"]
+    "files": ["B/Bird Song/bird-song.pdf", "B/Bird Song/Bird Song (Studio) Score.pdf"]
   },
   {
     "title": "Black Muddy River",
@@ -145,6 +145,13 @@
     "title": "Dire Wolf",
     "files": ["D/Dire Wolf/dire-wolf.pdf", "D/Dire Wolf/Dire Wolf Score.pdf"]
   },
+  {
+    "title": "Don't Ease Me In",
+    "files": [
+      "D/Don't Ease Me In/dont-ease-me-in.pdf",
+      "D/Don't Ease Me In/Don't Ease Me In Score.pdf"
+    ]
+  },
   { "title": "El Paso", "files": ["E/El Paso/el-paso.pdf", "E/El Paso/El Paso Score.pdf"] },
   {
     "title": "Estimated Prophet",
@@ -196,12 +203,15 @@
     ]
   },
   {
-    "title": "Good Times",
-    "files": ["G/Good Times/good-times.pdf", "G/Good Times/Good Times Score.pdf"]
-  },
-  {
     "title": "He's Gone",
     "files": ["H/He's Gone/hes-gone.pdf", "H/He's Gone/He's Gone Score.pdf"]
+  },
+  {
+    "title": "Hell in a Bucket",
+    "files": [
+      "H/Hell in a Bucket/hell-in-a-bucket.pdf",
+      "H/Hell in a Bucket/Hell in a Bucket Score.pdf"
+    ]
   },
   {
     "title": "Help on the Way",
@@ -247,10 +257,10 @@
     ]
   },
   {
-    "title": "Lady With a Fan",
+    "title": "Let the Good Times Roll",
     "files": [
-      "L/Lady With a Fan/lady-with-a-fan.pdf",
-      "L/Lady With a Fan/Lady With a Fan Score.pdf"
+      "L/Let the Good Times Roll/good-times.pdf",
+      "L/Let the Good Times Roll/Good Times Score.pdf"
     ]
   },
   {
@@ -303,6 +313,14 @@
     "files": ["N/Not Fade Away/not-fade-away.pdf", "N/Not Fade Away/Not Fade Away Score.pdf"]
   },
   {
+    "title": "One More Saturday Night",
+    "files": ["O/One More Saturday Night/One More Saturday Night Score.pdf"]
+  },
+  {
+    "title": "Peggy-O",
+    "files": ["P/Peggy-O/Peggy-O Score.pdf"]
+  },
+  {
     "title": "Playing in the Band",
     "files": [
       "P/Playing in the Band/playing-in-the-band.pdf",
@@ -322,6 +340,13 @@
     "files": ["R/Row Jimmy/row-jimmy.pdf", "R/Row Jimmy/Row Jimmy Score.pdf"]
   },
   {
+    "title": "Saint of Circumstance",
+    "files": [
+      "S/Saint of Circumstance/saint-of-circumstance.pdf",
+      "S/Saint of Circumstance/Saint of Circumstance Score.pdf"
+    ]
+  },
+  {
     "title": "Scarlet Begonias",
     "files": [
       "S/Scarlet Begonias/scarlet-begonias.pdf",
@@ -338,6 +363,10 @@
   {
     "title": "Ship of Fools",
     "files": ["S/Ship of Fools/ship-of-fools.pdf", "S/Ship of Fools/Ship of Fools Score.pdf"]
+  },
+  {
+    "title": "St. Stephen",
+    "files": ["S/St. Stephen/saint-stephen.pdf", "S/St. Stephen/St. Stephen Score.pdf"]
   },
   {
     "title": "Standing on the Moon",
@@ -370,12 +399,26 @@
     ]
   },
   {
+    "title": "The Music Never Stopped",
+    "files": [
+      "T/The Music Never Stopped/music-never-stopped-the.pdf",
+      "T/The Music Never Stopped/The Music Never Stopped Score.pdf"
+    ]
+  },
+  {
     "title": "The Other One",
     "files": ["T/The Other One/the-other-one.pdf", "T/The Other One/The Other One Score.pdf"]
   },
   {
     "title": "The Wheel",
     "files": ["T/The Wheel/the-wheel.pdf", "T/The Wheel/The Wheel Score.pdf"]
+  },
+  {
+    "title": "Throwing Stones",
+    "files": [
+      "T/Throwing Stones/throwing-stones.pdf",
+      "T/Throwing Stones/Throwing Stones Score.pdf"
+    ]
   },
   {
     "title": "Touch of Grey",
@@ -402,6 +445,10 @@
       "U/Uncle John's Band/uncle-johns-band.pdf",
       "U/Uncle John's Band/Uncle John's Band Score.pdf"
     ]
+  },
+  {
+    "title": "Viola Lee Blues",
+    "files": ["V/Viola Lee Blues/Viola Lee Blues Score.pdf"]
   },
   {
     "title": "West L.A. Fadeaway",

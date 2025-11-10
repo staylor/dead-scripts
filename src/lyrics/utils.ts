@@ -61,11 +61,3 @@ export function getLyricsFromContent(content: string) {
   }
   return { title, authors, lyrics: stripNotes(lyrics) };
 }
-
-export function readJSON(file: string) {
-  return JSON.parse(fs.readFileSync(file, { encoding: 'utf-8' }));
-}
-
-export function saveJSON(file: string, data: any) {
-  fs.writeFileSync(file, JSON.stringify(data, null, 2));
-}

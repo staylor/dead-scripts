@@ -1,3 +1,5 @@
+import { readFileSync, writeFileSync } from 'fs';
+
 import type { Browser } from 'puppeteer';
 
 export const ICLOUD_DIR = '/Users/scott/Documents/Scores/Lead Sheets/Grateful Dead';
@@ -14,4 +16,12 @@ export async function htmlToPdf(browser: Browser, html: string, file: string) {
   });
 
   return file;
+}
+
+export function readJSON(file: string) {
+  return JSON.parse(readFileSync(file, { encoding: 'utf-8' }));
+}
+
+export function saveJSON(file: string, data: any) {
+  writeFileSync(file, JSON.stringify(data, null, 2));
 }

@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "lyrics": "tsx src/lyrics/generate.ts",
-    "real-book": "tsx src/real-book/generate.ts"
+    "real-book": "tsx src/real-book/generate.ts",
+    "xcode": "tsx src/xcode/generate.ts"
   },
   "dependencies": {
     "docx": "9.5.1",
