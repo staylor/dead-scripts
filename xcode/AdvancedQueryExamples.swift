@@ -163,18 +163,13 @@ struct StatsView: View {
     @Query private var songs: [Song]
     @Query private var artists: [Artist]
     @Query private var albums: [Album]
-    
-    var totalDuration: TimeInterval {
-        songs.compactMap(\.duration).reduce(0, +)
-    }
-    
+
     var body: some View {
         Form {
             Section("Library Stats") {
                 LabeledContent("Total Songs", value: "\(songs.count)")
                 LabeledContent("Total Artists", value: "\(artists.count)")
                 LabeledContent("Total Albums", value: "\(albums.count)")
-                LabeledContent("Total Duration", value: formatDuration(totalDuration))
             }
             
             Section("By Artist") {
@@ -183,11 +178,5 @@ struct StatsView: View {
                 }
             }
         }
-    }
-    
-    private func formatDuration(_ duration: TimeInterval) -> String {
-        let hours = Int(duration) / 3600
-        let minutes = (Int(duration) % 3600) / 60
-        return "\(hours)h \(minutes)m"
     }
 }

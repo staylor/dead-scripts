@@ -1,6 +1,7 @@
 # Migration Guide: PDFDocument → SwiftData
 
 ## Overview
+
 Your app has been migrated from loading data from JSON every launch to using **SwiftData** for persistent, fast, and scalable data management.
 
 ## What Changed
@@ -52,11 +53,13 @@ Your app has been migrated from loading data from JSON every launch to using **S
 ## Data Flow
 
 ### Before:
+
 ```
 JSON file → Load on every app launch → Array in memory → Filter/search
 ```
 
 ### After:
+
 ```
 JSON file → Import once → SwiftData database → Fast queries → Lazy loading
 ```
@@ -72,6 +75,7 @@ JSON file → Import once → SwiftData database → Fast queries → Lazy loadi
 ## Adding New Songs
 
 ### Option 1: Keep Legacy Format (Current songs.json)
+
 ```json
 [
   {
@@ -84,13 +88,13 @@ JSON file → Import once → SwiftData database → Fast queries → Lazy loadi
 ```
 
 ### Option 2: Use New Enhanced Format
+
 ```json
 [
   {
     "name": "Song Name",
     "fileName": "song-file.pdf",
     "lyrics": "Song lyrics...",
-    "duration": 180.5,
     "trackNumber": 1,
     "releaseYear": 2024,
     "artist": {
@@ -110,13 +114,13 @@ JSON file → Import once → SwiftData database → Fast queries → Lazy loadi
 
 ## Performance Benefits
 
-| Metric | Before (JSON) | After (SwiftData) |
-|--------|---------------|-------------------|
-| App Launch | Parse entire JSON | Instant database connection |
-| Search | O(n) scan | Indexed query |
-| Memory | All songs in RAM | Only what's needed |
-| Filter | Re-scan array | Database predicate |
-| Scalability | Degrades with size | Stays fast |
+| Metric      | Before (JSON)      | After (SwiftData)           |
+| ----------- | ------------------ | --------------------------- |
+| App Launch  | Parse entire JSON  | Instant database connection |
+| Search      | O(n) scan          | Indexed query               |
+| Memory      | All songs in RAM   | Only what's needed          |
+| Filter      | Re-scan array      | Database predicate          |
+| Scalability | Degrades with size | Stays fast                  |
 
 ## Future Features Enabled
 
@@ -126,7 +130,7 @@ With SwiftData, you can now easily add:
 - ✅ **Favorites** - Mark songs as favorites
 - ✅ **Play History** - Track recently played
 - ✅ **Advanced Filters** - By year, genre, key, etc.
-- ✅ **Statistics** - Total songs, duration, etc.
+- ✅ **Statistics** - Total songs, etc.
 - ✅ **CloudKit Sync** - Sync across devices
 - ✅ **User Ratings** - Rate songs 1-5 stars
 - ✅ **Custom Sorting** - User preferences
@@ -140,6 +144,7 @@ If you need to re-import from JSON:
 3. Add: `-hasImportedInitialData NO`
 
 Or programmatically:
+
 ```swift
 UserDefaults.standard.set(false, forKey: "hasImportedInitialData")
 ```
@@ -153,6 +158,7 @@ A `typealias PDFRowView = SongRowView` provides backward compatibility if needed
 ## Testing
 
 The preview provider now uses in-memory storage:
+
 ```swift
 .modelContainer(for: [Song.self, Artist.self, Album.self, Tag.self], inMemory: true)
 ```
@@ -160,6 +166,7 @@ The preview provider now uses in-memory storage:
 ## Questions?
 
 Check `AdvancedQueryExamples.swift` for examples of:
+
 - Filtering by artist, year, tag
 - Complex searches
 - Grouping by album

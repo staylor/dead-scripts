@@ -5,11 +5,13 @@
 Your app has been migrated from using a simple `PDFDocument` struct with JSON loading to a full SwiftData architecture.
 
 ### Old Architecture
+
 ```
 JSON file → Array<PDFDocument> → Filter in memory
 ```
 
 ### New Architecture
+
 ```
 JSON seed file → SwiftData database → Query with predicates
 ```
@@ -19,6 +21,7 @@ JSON seed file → SwiftData database → Query with predicates
 ## Files Modified
 
 ### ✅ Created
+
 - **Song.swift** - Main data models (Song, Artist, Album, Tag)
 - **DataImportService.swift** - Handles JSON → SwiftData import
 - **SongRowView.swift** - Row view for songs (replaces PDFRowView for new model)
@@ -26,6 +29,7 @@ JSON seed file → SwiftData database → Query with predicates
 - **songs-new-format-example.json** - Example of new JSON structure
 
 ### ✅ Updated
+
 - **LeadSheetsApp.swift** - Added `.modelContainer` for SwiftData
 - **ContentView.swift** - Now uses `@Query` and imports data on first launch
 - **SearchScreen.swift** - Changed from `pdfs: [PDFDocument]` to `songs: [Song]`
@@ -33,6 +37,7 @@ JSON seed file → SwiftData database → Query with predicates
 - **LyricsOverlay.swift** - Changed from `pdf: PDFDocument` to `song: Song`
 
 ### ⚠️ Kept (for now)
+
 - **PDFDocument.swift** - Legacy struct (can be removed after migration complete)
 - **PDFRowView.swift** - Legacy view (can be removed after migration complete)
 - **songs.json** - Your existing JSON file (still used as seed data)
@@ -42,6 +47,7 @@ JSON seed file → SwiftData database → Query with predicates
 ## How It Works Now
 
 ### First Launch
+
 1. App checks `@AppStorage("hasImportedInitialData")`
 2. If `false`, imports `songs.json` via `DataImportService`
 3. Creates `Song`, `Artist`, and `Album` objects in SwiftData
@@ -49,6 +55,7 @@ JSON seed file → SwiftData database → Query with predicates
 5. Shows songs from database
 
 ### Subsequent Launches
+
 1. App loads songs directly from SwiftData (instant)
 2. No JSON parsing needed
 3. Searches/filters use database queries (fast)
@@ -58,11 +65,13 @@ JSON seed file → SwiftData database → Query with predicates
 ## Database Location
 
 SwiftData stores your database at:
+
 ```
 ~/Library/Application Support/[Your App]/default.store
 ```
 
 To reset the database during development:
+
 - Delete the app from simulator/device
 - Or use `modelContainer(for: ..., inMemory: true)` for testing
 
@@ -71,7 +80,9 @@ To reset the database during development:
 ## Adding New Songs
 
 ### Option 1: Update songs.json (Simple)
+
 Keep adding to your existing `songs.json`:
+
 ```json
 [
   {
@@ -84,18 +95,20 @@ Keep adding to your existing `songs.json`:
 ```
 
 **To re-import:**
+
 - Delete and reinstall the app, OR
 - Add a "Re-import" button in settings that sets `hasImportedInitialData = false`
 
 ### Option 2: Use New Structured Format (Recommended for growth)
+
 Create separate JSON files with full structure:
+
 ```json
 [
   {
     "name": "Blue Bossa",
     "fileName": "blue-bossa.pdf",
     "lyrics": "...",
-    "duration": 180.5,
     "trackNumber": 1,
     "artist": {
       "name": "Kenny Dorham",
@@ -111,6 +124,7 @@ Create separate JSON files with full structure:
 ```
 
 Then import with:
+
 ```swift
 try await importService.importStructuredJSON(from: "new-songs", into: modelContext)
 ```
@@ -120,11 +134,13 @@ try await importService.importStructuredJSON(from: "new-songs", into: modelConte
 ## Search Performance
 
 ### Before (JSON)
+
 - **Search:** O(n) - scans every song
 - **Filter:** Creates new array each time
 - **Memory:** All songs always in RAM
 
 ### After (SwiftData)
+
 - **Search:** Indexed predicates - much faster
 - **Filter:** Query only matching songs
 - **Memory:** Lazy loading - only loads what's visible
@@ -136,6 +152,7 @@ try await importService.importStructuredJSON(from: "new-songs", into: modelConte
 Now that you have SwiftData, you can easily add:
 
 ### 1. User Favorites
+
 ```swift
 // Add to Song model
 var isFavorite: Bool = false
@@ -146,12 +163,14 @@ private var favorites: [Song]
 ```
 
 ### 2. Play Count & History
+
 ```swift
 var playCount: Int = 0
 var lastPlayed: Date?
 ```
 
 ### 3. Playlists
+
 ```swift
 @Model
 class Playlist {
@@ -161,12 +180,15 @@ class Playlist {
 ```
 
 ### 4. CloudKit Sync
+
 ```swift
 .modelContainer(for: [Song.self], isCloudKitEnabled: true)
 ```
 
 ### 5. Advanced Search
+
 See `AdvancedQueryExamples.swift` for examples of:
+
 - Filter by artist
 - Filter by year range
 - Filter by tags
@@ -179,16 +201,19 @@ See `AdvancedQueryExamples.swift` for examples of:
 ## Troubleshooting
 
 ### "No songs showing up"
+
 - Check Console for import errors
 - Verify `songs.json` is in your bundle
 - Try deleting app and reinstalling
 
 ### "Database growing too large"
+
 - SwiftData efficiently manages memory
 - Only visible songs are fully loaded
 - Database is compressed on disk
 
 ### "Want to reset everything"
+
 ```swift
 // Add this in your app for development
 Button("Reset Database") {

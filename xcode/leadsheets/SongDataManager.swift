@@ -143,11 +143,6 @@ class SongDataManager {
         return (try? modelContext.fetchCount(descriptor)) ?? 0
     }
     
-    func getTotalDuration() -> TimeInterval {
-        let songs = fetchAllSongs()
-        return songs.compactMap(\.duration).reduce(0, +)
-    }
-    
     // MARK: - Batch Operations
     
     func deleteAllSongs() {
@@ -232,7 +227,6 @@ class SongDataManager {
              Button("Show Stats") {
                  print("Total songs: \(songManager.getSongCount())")
                  print("Total artists: \(songManager.getArtistCount())")
-                 print("Total duration: \(songManager.getTotalDuration())")
              }
          }
      }

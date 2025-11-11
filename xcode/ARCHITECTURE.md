@@ -27,9 +27,8 @@
               │ name     │                 │ name     │
               │ fileName │                 │ releaseDate
               │ lyrics   │                 │ coverArt │
-              │ duration │                 │ label    │
-              │ track #  │                 └──────────┘
-              │ year     │
+              │ track #  │                 │ label    │
+              │ year     │                 └──────────┘
               └────┬─────┘
                    │
                    │ tags (many-to-many)
@@ -277,12 +276,12 @@
 
 
     Search Performance:
-    
+
     OLD: O(n) - Check every song
     ┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐
     │1│2│3│4│5│6│7│8│9│10│ Check all...
     └─┴─┴─┴─┴─┴─┴─┴─┴─┴─┘
-    
+
     NEW: O(log n) - Database index
     ┌───────────┐
     │   Index   │ ← Fast lookup

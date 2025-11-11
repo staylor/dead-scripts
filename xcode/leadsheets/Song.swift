@@ -7,7 +7,6 @@ class Song {
     var name: String
     var fileName: String // PDF file name
     var lyrics: String?
-    var duration: TimeInterval? // In seconds
     var trackNumber: Int?
     var diskNumber: Int?
     var releaseYear: Int?
@@ -31,7 +30,6 @@ class Song {
         name: String,
         fileName: String,
         lyrics: String? = nil,
-        duration: TimeInterval? = nil,
         trackNumber: Int? = nil,
         diskNumber: Int? = nil,
         releaseYear: Int? = nil,
@@ -44,7 +42,6 @@ class Song {
         self.name = name
         self.fileName = fileName
         self.lyrics = lyrics
-        self.duration = duration
         self.trackNumber = trackNumber
         self.diskNumber = diskNumber
         self.releaseYear = releaseYear
