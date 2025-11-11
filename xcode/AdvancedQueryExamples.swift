@@ -23,26 +23,6 @@ struct ArtistSongsView: View {
         }
     }
 }
-
-// Example 2: Filter by tag
-struct SongsByTagView: View {
-    let tagName: String
-    
-    @Query private var allSongs: [Song]
-    
-    var filteredSongs: [Song] {
-        allSongs.filter { song in
-            song.tags?.contains(where: { $0.name == tagName }) == true
-        }
-    }
-    
-    var body: some View {
-        List(filteredSongs) { song in
-            Text(song.name)
-        }
-    }
-}
-
 // Example 4: Complex search across multiple fields
 struct AdvancedSearchView: View {
     @State private var searchText = ""

@@ -8,7 +8,7 @@ class Song {
     var fileName: String // PDF file name
     var lyrics: String?
     var trackNumber: Int?
-    var diskNumber: Int?
+    var discNumber: Int?
     var dateAdded: Date
     var songType: String?
     
@@ -16,9 +16,6 @@ class Song {
     var album: Album?
     var artist: Artist?
     var singer: Singer?
-    
-    @Relationship(inverse: \Tag.songs)
-    var tags: [Tag]?
     
     // Computed property for PDF URL
     var pdfURL: URL? {
@@ -30,7 +27,7 @@ class Song {
         fileName: String,
         lyrics: String? = nil,
         trackNumber: Int? = nil,
-        diskNumber: Int? = nil,
+        discNumber: Int? = nil,
         songType: String? = nil,
         album: Album? = nil,
         artist: Artist? = nil,
@@ -41,7 +38,7 @@ class Song {
         self.fileName = fileName
         self.lyrics = lyrics
         self.trackNumber = trackNumber
-        self.diskNumber = diskNumber
+        self.discNumber = discNumber
         self.songType = songType
         self.dateAdded = Date()
         self.album = album
@@ -96,7 +93,7 @@ class Album {
     var songs: [Song]?
     
     var sortedSongs: [Song] {
-        songs?.sorted { ($0.diskNumber ?? 0, $0.trackNumber ?? 0) < ($1.diskNumber ?? 0, $1.trackNumber ?? 0) } ?? []
+        songs?.sorted { ($0.discNumber ?? 0, $0.trackNumber ?? 0) < ($1.discNumber ?? 0, $1.trackNumber ?? 0) } ?? []
     }
     
     init(name: String, releaseYear: Int? = nil, coverArtFileName: String? = nil, artist: Artist? = nil) {
@@ -105,19 +102,5 @@ class Album {
         self.releaseYear = releaseYear
         self.coverArtFileName = coverArtFileName
         self.artist = artist
-    }
-}
-
-@Model
-class Tag {
-    @Attribute(.unique) var name: String
-    var color: String? // Hex color for UI
-    
-    @Relationship(deleteRule: .nullify)
-    var songs: [Song]?
-    
-    init(name: String, color: String? = nil) {
-        self.name = name
-        self.color = color
     }
 }

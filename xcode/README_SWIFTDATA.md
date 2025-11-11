@@ -46,7 +46,6 @@ When you're ready, you can upgrade to the new format (see `songs-new-format-exam
 
 - Multiple artists per song
 - Full album metadata with artwork
-- Tags/genres
 - Track numbers
 - Release dates
 

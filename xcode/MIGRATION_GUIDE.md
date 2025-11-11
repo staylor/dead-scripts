@@ -22,7 +22,7 @@ JSON seed file → SwiftData database → Query with predicates
 
 ### ✅ Created
 
-- **Song.swift** - Main data models (Song, Artist, Album, Tag)
+- **Song.swift** - Main data models (Song, Artist, Album)
 - **DataImportService.swift** - Handles JSON → SwiftData import
 - **SongRowView.swift** - Row view for songs (replaces PDFRowView for new model)
 - **AdvancedQueryExamples.swift** - Examples of advanced queries

@@ -29,15 +29,6 @@
               │ lyrics   │                 │ label       │
               │ track #  │                 | releaseYear |
               │ year     │                 └─────────---─┘
-              └────┬─────┘
-                   │
-                   │ tags (many-to-many)
-                   ▼
-              ┌──────────┐
-              │   Tag    │
-              ├──────────┤
-              │ name     │
-              │ color    │
               └──────────┘
 ```
 
@@ -111,7 +102,6 @@
       │ Parse & Cache:   │
       │  - Artists       │
       │  - Albums        │
-      │  - Tags          │
       └────────┬─────────┘
                │
                │ Create models
@@ -216,7 +206,7 @@
 │   └── ContentView.swift            ← Main view
 │
 ├── 📁 Models/
-│   └── Song.swift                   ← Data models (Song, Artist, Album, Tag)
+│   └── Song.swift                   ← Data models (Song, Artist, Album)
 │
 ├── 📁 Services/
 │   ├── DataImportService.swift      ← JSON import
@@ -362,12 +352,6 @@
        ┌────────────────┐
        │ .modelContainer│
        │ + cloudKitID   │ ← Enable sync
-       └────────────────┘
-
-    5. Custom Tags:
-       ┌────────────────┐
-       │ Already exists!│
-       │ Tag model ✅   │ ← Ready to use
        └────────────────┘
 ```
 

@@ -209,11 +209,6 @@ struct SearchScreen: View {
                     await reimportData()
                 }
             }
-            Button("Deduplicate Singers & Tags") {
-                Task {
-                    await deduplicateData()
-                }
-            }
             Button("Show Stats") {
                 printDebugStats()
             }
@@ -225,11 +220,6 @@ struct SearchScreen: View {
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Menu {
-                    Button("Deduplicate Singers & Tags") {
-                        Task {
-                            await deduplicateData()
-                        }
-                    }
                     Button("Show Stats") {
                         printDebugStats()
                     }
@@ -593,20 +583,6 @@ struct SearchScreen: View {
         }
     }
     
-    // MARK: - Debug Helpers
-    
-    private func deduplicateData() async {
-        do {
-            print("🧹 Starting deduplication...")
-            let importService = DataImportService()
-            try await importService.deduplicateSingers(in: modelContext)
-            try await importService.deduplicateTags(in: modelContext)
-            print("✅ Deduplication complete")
-        } catch {
-            print("❌ Deduplication failed: \(error)")
-        }
-    }
-    
     private func resetAllData() {
         print("🗑️ Deleting all data and resetting import flag...")
         
@@ -630,11 +606,6 @@ struct SearchScreen: View {
             let importService = DataImportService()
             try await importService.importEnhancedJSON(from: "songs", into: backgroundContext)
             
-            // Deduplicate after import
-            print("🧹 Deduplicating singers and tags...")
-            try await importService.deduplicateSingers(in: backgroundContext)
-            try await importService.deduplicateTags(in: backgroundContext)
-            
             try backgroundContext.save()
             
             print("✅ Successfully re-imported songs")
@@ -653,7 +624,6 @@ struct SearchScreen: View {
         Artists: \(manager.getArtistCount())
         Albums: \(manager.getAlbumCount())
         Singers: \(singers.count)
-        Tags: \((try? modelContext.fetch(FetchDescriptor<Tag>()))?.count ?? 0)
         Has Imported: \(hasImportedInitialData)
         ===============
         

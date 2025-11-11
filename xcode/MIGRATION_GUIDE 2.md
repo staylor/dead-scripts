@@ -12,7 +12,6 @@ Your app has been migrated from loading data from JSON every launch to using **S
    - `Song` - Represents a song with PDF and metadata
    - `Artist` - Artist information
    - `Album` - Album information
-   - `Tag` - Categorization tags
 
 2. **DataImportService.swift** - Handles JSON import
    - `importLegacyJSON()` - Imports your existing songs.json
@@ -159,7 +158,7 @@ A `typealias PDFRowView = SongRowView` provides backward compatibility if needed
 The preview provider now uses in-memory storage:
 
 ```swift
-.modelContainer(for: [Song.self, Artist.self, Album.self, Tag.self], inMemory: true)
+.modelContainer(for: [Song.self, Artist.self, Album.self], inMemory: true)
 ```
 
 ## Questions?

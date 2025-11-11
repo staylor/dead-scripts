@@ -3,18 +3,23 @@
 ## 🚀 Ready to Run in 3 Steps
 
 ### Step 1: Build
+
 ```
 Cmd + B
 ```
+
 Fix any compiler errors (there shouldn't be any)
 
 ### Step 2: Run
+
 ```
 Cmd + R
 ```
+
 App will launch on simulator/device
 
 ### Step 3: Verify
+
 - ✅ Loading indicator appears briefly
 - ✅ Songs list appears
 - ✅ Can search songs
@@ -28,14 +33,17 @@ App will launch on simulator/device
 ## 📖 What to Read Next
 
 ### If everything works:
+
 1. **README_SWIFTDATA.md** - Understand what changed
 2. **AdvancedQueryExamples.swift** - See what you can build
 
 ### If something's wrong:
+
 1. **TROUBLESHOOTING.md** - Fix common issues
 2. **CHECKLIST.md** - Verify setup
 
 ### To learn more:
+
 1. **ARCHITECTURE.md** - Understand the design
 2. **MIGRATION_GUIDE.md** - Technical details
 
@@ -44,13 +52,17 @@ App will launch on simulator/device
 ## 🔥 Common First-Time Issues
 
 ### Issue: "No songs appear"
+
 **Fix:** Check that `songs.json` is in "Copy Bundle Resources"
+
 1. Project → Target → Build Phases
 2. Expand "Copy Bundle Resources"
 3. Ensure songs.json is listed
 
 ### Issue: "App crashes"
+
 **Fix:** Clean build
+
 ```
 Cmd + Shift + K  (Clean)
 Cmd + B          (Build)
@@ -58,6 +70,7 @@ Cmd + R          (Run)
 ```
 
 ### Issue: "PDFs don't display"
+
 **Fix:** Verify PDF files are in bundle resources (same as songs.json)
 
 ---
@@ -65,12 +78,16 @@ Cmd + R          (Run)
 ## 💡 Quick Tips
 
 ### Reset Import
+
 If you updated songs.json:
+
 1. Delete app from simulator
 2. Run again (imports fresh)
 
 ### Debug Info
+
 Add to ContentView temporarily:
+
 ```swift
 .task {
     print("📊 Total songs: \(allSongs.count)")
@@ -78,7 +95,9 @@ Add to ContentView temporarily:
 ```
 
 ### View Database
+
 Add debug view:
+
 ```swift
 List(allSongs) { song in
     VStack(alignment: .leading) {
@@ -94,16 +113,17 @@ List(allSongs) { song in
 ## ✨ Your New Capabilities
 
 ### Before:
+
 - JSON loaded every time
 - Simple song list
 - Basic search
 
 ### Now:
+
 - Instant app launches
 - Rich data relationships
 - Fast indexed search
 - Artist/Album grouping
-- Tag support
 - Ready for advanced features
 
 ---
@@ -126,15 +146,15 @@ List(allSongs) { song in
 
 ## 📚 Documentation Index
 
-| File | Purpose | Read When |
-|------|---------|-----------|
-| **SUMMARY.md** | Overview | First |
-| **README_SWIFTDATA.md** | User guide | After first run |
-| **CHECKLIST.md** | Pre-launch | Before running |
-| **TROUBLESHOOTING.md** | Problem solving | When issues occur |
-| **MIGRATION_GUIDE.md** | Technical details | Understanding changes |
-| **ARCHITECTURE.md** | System design | Planning features |
-| **AdvancedQueryExamples.swift** | Code examples | Building features |
+| File                            | Purpose           | Read When             |
+| ------------------------------- | ----------------- | --------------------- |
+| **SUMMARY.md**                  | Overview          | First                 |
+| **README_SWIFTDATA.md**         | User guide        | After first run       |
+| **CHECKLIST.md**                | Pre-launch        | Before running        |
+| **TROUBLESHOOTING.md**          | Problem solving   | When issues occur     |
+| **MIGRATION_GUIDE.md**          | Technical details | Understanding changes |
+| **ARCHITECTURE.md**             | System design     | Planning features     |
+| **AdvancedQueryExamples.swift** | Code examples     | Building features     |
 
 ---
 

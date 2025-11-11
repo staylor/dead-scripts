@@ -178,11 +178,6 @@ struct ContentView: View {
             // Import using the main context since we're already on MainActor
             try await importService.importEnhancedJSON(from: "songs", into: modelContext)
             
-            // Deduplicate singers and tags to clean up any existing duplicates
-            print("🧹 Deduplicating singers and tags...")
-            try await importService.deduplicateSingers(in: modelContext)
-            try await importService.deduplicateTags(in: modelContext)
-            
             hasImportedInitialData = true
             
             print("✅ Successfully imported songs")
@@ -198,7 +193,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .modelContainer(for: [Song.self, Artist.self, Album.self, Tag.self, Singer.self], inMemory: true)
+            .modelContainer(for: [Song.self, Artist.self, Album.self, Singer.self], inMemory: true)
             .previewDevice("iPad Pro (12.9-inch) (6th generation)")
     }
 }

@@ -157,11 +157,6 @@ class SongDataManager {
         fetchAllArtists().forEach { modelContext.delete($0) }
         fetchAllAlbums().forEach { modelContext.delete($0) }
         
-        let descriptor = FetchDescriptor<Tag>()
-        if let tags = try? modelContext.fetch(descriptor) {
-            tags.forEach { modelContext.delete($0) }
-        }
-        
         try? modelContext.save()
     }
     

@@ -42,14 +42,7 @@ actor DataImportService {
         let data = try Data(contentsOf: url)
         let library = try JSONDecoder().decode(EnhancedJSONFormat.self, from: data)
         
-        var tagCache: [String: Tag] = [:]
         var singerCache: [String: Singer] = [:]
-        
-        // Pre-populate caches with existing data from database
-        let existingTags = try context.fetch(FetchDescriptor<Tag>())
-        for tag in existingTags {
-            tagCache[tag.name] = tag
-        }
         
         let existingSingers = try context.fetch(FetchDescriptor<Singer>())
         for singer in existingSingers {
@@ -100,22 +93,6 @@ actor DataImportService {
                         singer: singer
                     )
                     context.insert(song)
-                    
-                    // Handle tags
-                    if let tagNames = songData.tags {
-                        var tags: [Tag] = []
-                        for tagName in tagNames {
-                            if let cached = tagCache[tagName] {
-                                tags.append(cached)
-                            } else {
-                                let tag = Tag(name: tagName)
-                                context.insert(tag)
-                                tagCache[tagName] = tag
-                                tags.append(tag)
-                            }
-                        }
-                        song.tags = tags
-                    }
                 }
             }
         }
@@ -126,73 +103,6 @@ actor DataImportService {
     enum ImportError: Error {
         case fileNotFound
         case invalidFormat
-    }
-    
-    // MARK: - Deduplication Methods
-    
-    /// Remove duplicate singers from the database, keeping only one instance per name
-    func deduplicateSingers(in context: ModelContext) async throws {
-        let allSingers = try context.fetch(FetchDescriptor<Singer>())
-        
-        // Group singers by name
-        var singersByName: [String: [Singer]] = [:]
-        for singer in allSingers {
-            singersByName[singer.name, default: []].append(singer)
-        }
-        
-        // For each group with duplicates, keep the first one and merge relationships
-        for (_, singers) in singersByName where singers.count > 1 {
-            guard let primarySinger = singers.first else { continue }
-            
-            // Merge all songs to the primary singer
-            for duplicateSinger in singers.dropFirst() {
-                if let songs = duplicateSinger.songs {
-                    for song in songs {
-                        song.singer = primarySinger
-                    }
-                }
-                // Delete the duplicate
-                context.delete(duplicateSinger)
-            }
-        }
-        
-        try context.save()
-    }
-    
-    /// Remove duplicate tags from the database, keeping only one instance per name
-    func deduplicateTags(in context: ModelContext) async throws {
-        let allTags = try context.fetch(FetchDescriptor<Tag>())
-        
-        // Group tags by name
-        var tagsByName: [String: [Tag]] = [:]
-        for tag in allTags {
-            tagsByName[tag.name, default: []].append(tag)
-        }
-        
-        // For each group with duplicates, keep the first one and merge relationships
-        for (_, tags) in tagsByName where tags.count > 1 {
-            guard let primaryTag = tags.first else { continue }
-            
-            // Merge all songs to the primary tag
-            for duplicateTag in tags.dropFirst() {
-                if let songs = duplicateTag.songs {
-                    for song in songs {
-                        var songTags = song.tags ?? []
-                        // Remove the duplicate tag if present
-                        songTags.removeAll { $0.name == duplicateTag.name }
-                        // Add the primary tag if not already present
-                        if !songTags.contains(where: { $0.name == primaryTag.name }) {
-                            songTags.append(primaryTag)
-                        }
-                        song.tags = songTags
-                    }
-                }
-                // Delete the duplicate
-                context.delete(duplicateTag)
-            }
-        }
-        
-        try context.save()
     }
 }
 
