@@ -24,40 +24,7 @@ struct ArtistSongsView: View {
     }
 }
 
-// Example 2: Filter by year range
-struct SongsByYearView: View {
-    let startYear: Int
-    let endYear: Int
-    
-    @Query private var songs: [Song]
-    
-    init(startYear: Int, endYear: Int) {
-        self.startYear = startYear
-        self.endYear = endYear
-        
-        _songs = Query(filter: #Predicate<Song> { song in
-            if let year = song.releaseYear {
-                return year >= startYear && year <= endYear
-            }
-            return false
-        }, sort: \Song.releaseYear)
-    }
-    
-    var body: some View {
-        List(songs) { song in
-            HStack {
-                Text(song.name)
-                Spacer()
-                if let year = song.releaseYear {
-                    Text("\(year)")
-                        .foregroundColor(.secondary)
-                }
-            }
-        }
-    }
-}
-
-// Example 3: Filter by tag
+// Example 2: Filter by tag
 struct SongsByTagView: View {
     let tagName: String
     

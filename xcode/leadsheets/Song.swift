@@ -9,7 +9,6 @@ class Song {
     var lyrics: String?
     var trackNumber: Int?
     var diskNumber: Int?
-    var releaseYear: Int?
     var dateAdded: Date
     var songType: String?
     
@@ -32,7 +31,6 @@ class Song {
         lyrics: String? = nil,
         trackNumber: Int? = nil,
         diskNumber: Int? = nil,
-        releaseYear: Int? = nil,
         songType: String? = nil,
         album: Album? = nil,
         artist: Artist? = nil,
@@ -44,7 +42,6 @@ class Song {
         self.lyrics = lyrics
         self.trackNumber = trackNumber
         self.diskNumber = diskNumber
-        self.releaseYear = releaseYear
         self.songType = songType
         self.dateAdded = Date()
         self.album = album
@@ -90,7 +87,7 @@ class Artist {
 class Album {
     @Attribute(.unique) var id: UUID
     var name: String
-    var releaseDate: Date?
+    var releaseYear: Int?
     var coverArtFileName: String? // For album artwork
     
     var artist: Artist?
@@ -102,10 +99,10 @@ class Album {
         songs?.sorted { ($0.diskNumber ?? 0, $0.trackNumber ?? 0) < ($1.diskNumber ?? 0, $1.trackNumber ?? 0) } ?? []
     }
     
-    init(name: String, releaseDate: Date? = nil, coverArtFileName: String? = nil, artist: Artist? = nil) {
+    init(name: String, releaseYear: Int? = nil, coverArtFileName: String? = nil, artist: Artist? = nil) {
         self.id = UUID()
         self.name = name
-        self.releaseDate = releaseDate
+        self.releaseYear = releaseYear
         self.coverArtFileName = coverArtFileName
         self.artist = artist
     }

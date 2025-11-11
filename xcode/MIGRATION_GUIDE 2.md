@@ -96,7 +96,6 @@ JSON file → Import once → SwiftData database → Fast queries → Lazy loadi
     "fileName": "song-file.pdf",
     "lyrics": "Song lyrics...",
     "trackNumber": 1,
-    "releaseYear": 2024,
     "artist": {
       "name": "Artist Name",
       "biography": "Bio...",
@@ -104,7 +103,7 @@ JSON file → Import once → SwiftData database → Fast queries → Lazy loadi
     },
     "album": {
       "name": "Album Name",
-      "releaseDate": "2024-01-01T00:00:00Z",
+      "releaseYear": 2024,
       "coverArtFileName": "cover.jpg"
     },
     "tags": ["Jazz", "Standards"]

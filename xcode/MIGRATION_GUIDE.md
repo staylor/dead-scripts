@@ -116,7 +116,7 @@ Create separate JSON files with full structure:
     },
     "album": {
       "name": "Page One",
-      "releaseDate": "1963-01-01T00:00:00Z"
+      "releaseYear": 1963
     },
     "tags": ["Jazz", "Bossa Nova"]
   }

@@ -5,7 +5,6 @@
     "lyrics": "Sample lyrics here...",
     "trackNumber": 1,
     "diskNumber": 1,
-    "releaseYear": 1963,
     "artist": {
       "name": "Kenny Dorham",
       "biography": "American jazz trumpeter, composer, and occasional singer...",
@@ -14,7 +13,7 @@
     },
     "album": {
       "name": "Page One",
-      "releaseDate": "1963-01-01T00:00:00Z",
+      "releaseYear": 1963,
       "coverArtFileName": "page-one-cover.jpg",
       "recordLabel": "Blue Note"
     },
@@ -26,7 +25,6 @@
     "lyrics": "The falling leaves drift by my window...",
     "trackNumber": 3,
     "diskNumber": 1,
-    "releaseYear": 1945,
     "artist": {
       "name": "Joseph Kosma",
       "biography": "Hungarian-French composer...",
@@ -35,7 +33,7 @@
     },
     "album": {
       "name": "Jazz Standards Vol. 1",
-      "releaseDate": "1945-01-01T00:00:00Z",
+      "releaseYear": 1945,
       "coverArtFileName": "jazz-standards-vol1.jpg",
       "recordLabel": "Various"
     },

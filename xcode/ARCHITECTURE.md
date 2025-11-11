@@ -20,15 +20,15 @@
                      │                           │
                      │ songs                     │ albums
                      ▼                           ▼
-              ┌──────────┐                 ┌──────────┐
-              │   Song   │◄────album───────│  Album   │
-              ├──────────┤                 ├──────────┤
-              │ id       │                 │ id       │
-              │ name     │                 │ name     │
-              │ fileName │                 │ releaseDate
-              │ lyrics   │                 │ coverArt │
-              │ track #  │                 │ label    │
-              │ year     │                 └──────────┘
+              ┌──────────┐                 ┌──────────-──┐
+              │   Song   │◄────album───────│    Album    │
+              ├──────────┤                 ├─────────────┤
+              │ id       │                 │ id          │
+              │ name     │                 │ name        │
+              │ fileName │                 │ coverArt    |
+              │ lyrics   │                 │ label       │
+              │ track #  │                 | releaseYear |
+              │ year     │                 └─────────---─┘
               └────┬─────┘
                    │
                    │ tags (many-to-many)
