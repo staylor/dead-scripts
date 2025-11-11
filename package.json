@@ -4,6 +4,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
+    "postinstall": "prisma generate",
     "lyrics": "tsx src/lyrics/generate.ts",
     "real-book": "tsx src/real-book/generate.ts",
     "xcode": "tsx src/xcode/generate.ts",
@@ -11,6 +12,7 @@
   },
   "dependencies": {
     "@dotenvx/dotenvx": "1.51.1",
+    "@prisma/client": "6.19.0",
     "docx": "9.5.1",
     "jsdom": "26.1.0",
     "jsonwebtoken": "9.0.2",
@@ -22,6 +24,7 @@
   "devDependencies": {
     "@types/jsdom": "21.1.7",
     "@types/jsonwebtoken": "9.0.10",
-    "@wonderboymusic/eslint-config": "1.0.2"
+    "@wonderboymusic/eslint-config": "1.0.2",
+    "prisma": "6.19.0"
   }
 }

@@ -557,13 +557,16 @@
   },
   "artists": {
     "grateful-dead": {
-      "name": "Grateful Dead"
+      "name": "Grateful Dead",
+      "imageFileName": "grateful-dead.jpg"
     },
     "bob-weir": {
-      "name": "Bob Weir"
+      "name": "Bob Weir",
+      "imageFileName": "bob-weir.jpg"
     },
     "jerry-garcia": {
-      "name": "Jerry Garcia"
+      "name": "Jerry Garcia",
+      "imageFileName": "jerry-garcia.jpg"
     }
   },
   "singers": {

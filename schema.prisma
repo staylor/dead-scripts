@@ -1,0 +1,61 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:dev.db"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "src/prisma/client"
+}
+
+model Song {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  slug        String   @unique
+  lyrics      String?
+  fileName    String?
+  trackNumber Int?
+  discNumber  Int?
+  songType    String? // e.g. "cover"
+  album       Album?   @relation(fields: [albumId], references: [id])
+  albumId     Int?
+  singer      Singer?  @relation(fields: [singerId], references: [id])
+  singerId    Int?
+  writers     Writer[]
+}
+
+model Album {
+  id               Int     @id @default(autoincrement())
+  name             String  @unique
+  slug             String  @unique
+  releaseYear      Int?
+  coverArtFileName String?
+  artist           Artist? @relation(fields: [artistId], references: [id])
+  artistId         Int?
+  songs            Song[]
+}
+
+model Artist {
+  id            Int     @id @default(autoincrement())
+  name          String  @unique
+  slug          String  @unique
+  imageFileName String?
+  albums        Album[]
+}
+
+model Singer {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  slug  String @unique
+  songs Song[]
+}
+
+model Writer {
+  id           Int    @id @default(autoincrement())
+  name         String
+  slug         String
+  contribution String
+  songs        Song[]
+
+  @@unique([slug, contribution])
+}
