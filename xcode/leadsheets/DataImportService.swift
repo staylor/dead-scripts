@@ -144,7 +144,7 @@ actor DataImportService {
         }
         
         // For each group with duplicates, keep the first one and merge relationships
-        for (name, singers) in singersByName where singers.count > 1 {
+        for (_, singers) in singersByName where singers.count > 1 {
             guard let primarySinger = singers.first else { continue }
             
             // Merge all songs to the primary singer
@@ -173,7 +173,7 @@ actor DataImportService {
         }
         
         // For each group with duplicates, keep the first one and merge relationships
-        for (name, tags) in tagsByName where tags.count > 1 {
+        for (_, tags) in tagsByName where tags.count > 1 {
             guard let primaryTag = tags.first else { continue }
             
             // Merge all songs to the primary tag

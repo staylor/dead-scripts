@@ -72,6 +72,43 @@ struct SearchScreen: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            #if os(macOS)
+            // macOS: Use toolbar instead of custom header
+            VStack(spacing: 0) {
+                // Search Bar (macOS native style)
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.secondary)
+                    
+                    TextField("Search songs...", text: $searchText)
+                        .textFieldStyle(.roundedBorder)
+                    
+                    if !searchText.isEmpty {
+                        Button(action: { searchText = "" }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.secondary)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding()
+                
+                // Filter Picker (macOS native style)
+                Picker("Filter", selection: $selectedFilter) {
+                    ForEach(SearchFilter.allCases, id: \.self) { filter in
+                        Text(filter.rawValue).tag(filter)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal)
+                .onChange(of: selectedFilter) { _, _ in
+                    selectedAlbum = nil
+                    selectedArtist = nil
+                    selectedSinger = nil
+                }
+            }
+            #else
+            // iOS/iPadOS: Keep existing custom design
             // Title with Debug Button
             HStack {
                 Text("Dead Sheets")
@@ -136,6 +173,7 @@ struct SearchScreen: View {
                 .padding(.horizontal)
             }
             .padding(.bottom)
+            #endif
             
             // Results List
             if selectedFilter == .allSongs {
@@ -183,6 +221,33 @@ struct SearchScreen: View {
         } message: {
             Text("Songs: \(allSongs.count)\nImported: \(hasImportedInitialData ? "Yes" : "No")")
         }
+        #if os(macOS)
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                Menu {
+                    Button("Deduplicate Singers & Tags") {
+                        Task {
+                            await deduplicateData()
+                        }
+                    }
+                    Button("Show Stats") {
+                        printDebugStats()
+                    }
+                    Divider()
+                    Button("Re-import Data", role: .destructive) {
+                        Task {
+                            await reimportData()
+                        }
+                    }
+                    Button("Reset All Data", role: .destructive) {
+                        resetAllData()
+                    }
+                } label: {
+                    Label("Settings", systemImage: "gearshape")
+                }
+            }
+        }
+        #endif
     }
     
     // MARK: - View Components
@@ -193,6 +258,13 @@ struct SearchScreen: View {
                 emptyStateView
             } else {
                 List(songs) { song in
+                    #if os(macOS)
+                    SongRowView(song: song)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            onSelect(song)
+                        }
+                    #else
                     Button(action: { onSelect(song) }) {
                         SongRowView(song: song)
                     }
@@ -201,9 +273,12 @@ struct SearchScreen: View {
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                 }
+                #if os(iOS)
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
+                #endif
             }
         }
     }
@@ -214,6 +289,13 @@ struct SearchScreen: View {
                 emptyStateView
             } else {
                 List(filteredAlbums) { album in
+                    #if os(macOS)
+                    AlbumRowView(album: album)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            selectedAlbum = album
+                        }
+                    #else
                     Button(action: { selectedAlbum = album }) {
                         AlbumRowView(album: album)
                     }
@@ -222,9 +304,12 @@ struct SearchScreen: View {
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                 }
+                #if os(iOS)
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
+                #endif
             }
         }
     }
@@ -235,6 +320,13 @@ struct SearchScreen: View {
                 emptyStateView
             } else {
                 List(filteredArtists) { artist in
+                    #if os(macOS)
+                    ArtistRowView(artist: artist)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            selectedArtist = artist
+                        }
+                    #else
                     Button(action: { selectedArtist = artist }) {
                         ArtistRowView(artist: artist)
                     }
@@ -243,9 +335,12 @@ struct SearchScreen: View {
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                 }
+                #if os(iOS)
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
+                #endif
             }
         }
     }
@@ -256,6 +351,13 @@ struct SearchScreen: View {
                 emptyStateView
             } else {
                 List(filteredSingers) { singer in
+                    #if os(macOS)
+                    SingerRowView(singer: singer)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            selectedSinger = singer
+                        }
+                    #else
                     Button(action: { selectedSinger = singer }) {
                         SingerRowView(singer: singer)
                     }
@@ -264,9 +366,12 @@ struct SearchScreen: View {
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                 }
+                #if os(iOS)
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
+                #endif
             }
         }
     }
@@ -277,6 +382,13 @@ struct SearchScreen: View {
                 emptyStateView
             } else {
                 List(coverSongs) { song in
+                    #if os(macOS)
+                    SongRowView(song: song)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            onSelect(song)
+                        }
+                    #else
                     Button(action: { onSelect(song) }) {
                         SongRowView(song: song)
                     }
@@ -285,9 +397,12 @@ struct SearchScreen: View {
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                 }
+                #if os(iOS)
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
+                #endif
             }
         }
     }
@@ -314,6 +429,13 @@ struct SearchScreen: View {
                 emptyStateView
             } else {
                 List(albumSongs) { song in
+                    #if os(macOS)
+                    SongRowView(song: song)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            onSelect(song)
+                        }
+                    #else
                     Button(action: { onSelect(song) }) {
                         SongRowView(song: song)
                     }
@@ -322,9 +444,12 @@ struct SearchScreen: View {
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                 }
+                #if os(iOS)
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
+                #endif
             }
         }
     }
@@ -351,6 +476,13 @@ struct SearchScreen: View {
                 emptyStateView
             } else {
                 List(artistSongs) { song in
+                    #if os(macOS)
+                    SongRowView(song: song)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            onSelect(song)
+                        }
+                    #else
                     Button(action: { onSelect(song) }) {
                         SongRowView(song: song)
                     }
@@ -359,9 +491,12 @@ struct SearchScreen: View {
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                 }
+                #if os(iOS)
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
+                #endif
             }
         }
     }
@@ -388,6 +523,13 @@ struct SearchScreen: View {
                 emptyStateView
             } else {
                 List(singerSongs) { song in
+                    #if os(macOS)
+                    SongRowView(song: song)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            onSelect(song)
+                        }
+                    #else
                     Button(action: { onSelect(song) }) {
                         SongRowView(song: song)
                     }
@@ -396,9 +538,12 @@ struct SearchScreen: View {
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                 }
+                #if os(iOS)
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
+                #endif
             }
         }
     }

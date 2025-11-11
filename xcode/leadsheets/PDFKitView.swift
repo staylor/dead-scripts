@@ -1,6 +1,10 @@
 import SwiftUI
 import PDFKit
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 struct PDFKitView: View {
     let url: URL
     
@@ -11,6 +15,7 @@ struct PDFKitView: View {
     }
 }
 
+#if os(iOS)
 private struct PDFKitViewRepresentable: UIViewRepresentable {
     let url: URL
     let size: CGSize
@@ -46,8 +51,18 @@ private struct PDFKitViewRepresentable: UIViewRepresentable {
     }
     
     func updateUIView(_ pdfView: PDFView, context: Context) {
-        // Use the size from GeometryReader instead of pdfView.bounds
-        updateScaleFactor(for: pdfView, width: size.width, resetPosition: false)
+        // Check if we need to load a different PDF
+        if pdfView.document?.documentURL != url {
+            if let document = PDFKit.PDFDocument(url: url) {
+                pdfView.document = document
+                DispatchQueue.main.async {
+                    self.updateScaleFactor(for: pdfView, width: size.width, resetPosition: true)
+                }
+            }
+        } else {
+            // Use the size from GeometryReader instead of pdfView.bounds
+            updateScaleFactor(for: pdfView, width: size.width, resetPosition: false)
+        }
     }
     
     // MARK: - Helper Methods
@@ -67,12 +82,10 @@ private struct PDFKitViewRepresentable: UIViewRepresentable {
         
         // Store current scroll position before changing scale (only during resize)
         var relativeScrollY: CGFloat = 0
-        var savedCurrentPage: PDFPage? = nil
         
         if !resetPosition, let currentPage = pdfView.currentPage {
-            savedCurrentPage = currentPage
             // Get the document view (scroll view) to calculate relative position
-            if let documentView = pdfView.documentView {
+            if pdfView.documentView != nil {
                 let scrollView = pdfView.subviews.first as? UIScrollView
                 let currentOffset = scrollView?.contentOffset.y ?? 0
                 let maxOffset = (scrollView?.contentSize.height ?? 1) - (scrollView?.bounds.height ?? 0)
@@ -101,3 +114,74 @@ private struct PDFKitViewRepresentable: UIViewRepresentable {
         }
     }
 }
+#elseif os(macOS)
+private struct PDFKitViewRepresentable: NSViewRepresentable {
+    let url: URL
+    let size: CGSize
+    
+    func makeNSView(context: Context) -> PDFView {
+        let pdfView = PDFView()
+        pdfView.autoScales = false
+        pdfView.displayMode = .singlePageContinuous
+        pdfView.displayDirection = .vertical
+        
+        // Set white background for PDFView
+        pdfView.backgroundColor = NSColor.white
+        
+        // Remove all shadows
+        pdfView.layer?.shadowOpacity = 0
+        pdfView.layer?.shadowRadius = 0
+        pdfView.layer?.shadowOffset = CGSize.zero
+        
+        // Remove page shadows
+        pdfView.pageShadowsEnabled = false
+        
+        // Load PDF document
+        if let document = PDFKit.PDFDocument(url: url) {
+            pdfView.document = document
+            
+            // Use a small delay to ensure pdfView has a proper frame
+            DispatchQueue.main.async {
+                self.updateScaleFactor(for: pdfView, width: size.width, resetPosition: true)
+            }
+        }
+        
+        return pdfView
+    }
+    
+    func updateNSView(_ pdfView: PDFView, context: Context) {
+        // Check if we need to load a different PDF
+        if pdfView.document?.documentURL != url {
+            if let document = PDFKit.PDFDocument(url: url) {
+                pdfView.document = document
+                DispatchQueue.main.async {
+                    self.updateScaleFactor(for: pdfView, width: size.width, resetPosition: true)
+                }
+            }
+        } else {
+            updateScaleFactor(for: pdfView, width: size.width, resetPosition: false)
+        }
+    }
+    
+    private func updateScaleFactor(for pdfView: PDFView, width: CGFloat, resetPosition: Bool) {
+        guard let document = pdfView.document,
+              let page = document.page(at: 0) else { return }
+        
+        let pageSize = page.bounds(for: .mediaBox).size
+        
+        guard width > 0 else { return }
+        
+        let scaleToFit = width / pageSize.width
+        
+        guard resetPosition || abs(pdfView.minScaleFactor - scaleToFit) > 0.01 else { return }
+        
+        pdfView.scaleFactor = scaleToFit
+        pdfView.minScaleFactor = scaleToFit
+        pdfView.maxScaleFactor = scaleToFit * 4.0
+        
+        if resetPosition, let page = document.page(at: 0) {
+            pdfView.go(to: page)
+        }
+    }
+}
+#endif

@@ -25,6 +25,65 @@ struct ContentView: View {
     }
     
     var body: some View {
+        #if os(macOS)
+        // macOS native three-column layout: Song List | PDF | Lyrics
+        NavigationSplitView {
+            // Column 1: Song list
+            SearchScreen(
+                searchText: $searchText,
+                songs: filteredSongs,
+                onSelect: { song in
+                    selected = song
+                }
+            )
+            .navigationSplitViewColumnWidth(min: 280, ideal: 350, max: 450)
+        } content: {
+            // Column 2: PDF Viewer (content column)
+            if isImporting {
+                VStack {
+                    ProgressView("Importing songs...")
+                        .controlSize(.large)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.white)
+                .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: 1000)
+            } else if let song = selected {
+                PDFViewerScreen(song: song, onBack: {
+                    selected = nil
+                })
+                .toolbar(removing: .title)
+                .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: 1000)
+            } else {
+                ContentUnavailableView(
+                    "Select a Song",
+                    systemImage: "music.note",
+                    description: Text("Choose a song from the list to view its lead sheet")
+                )
+                .toolbar(removing: .title)
+                .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: 1000)
+            }
+        } detail: {
+            // Column 3: Lyrics
+            if let song = selected {
+                LyricsInspector(song: song)
+                    .navigationSplitViewColumnWidth(min: 250, ideal: 300, max: 400)
+                    .id(song.id)
+            } else {
+                ContentUnavailableView(
+                    "Lyrics",
+                    systemImage: "text.quote",
+                    description: Text("Select a song to view its lyrics")
+                )
+                .navigationSplitViewColumnWidth(min: 250, ideal: 300, max: 400)
+            }
+        }
+        .navigationSplitViewStyle(.balanced)
+        .background(Color.white)
+        .task {
+            await performInitialImport()
+        }
+        #else
+        // iOS/iPadOS layout
         NavigationStack {
             ZStack {
                 // White background for entire app
@@ -36,7 +95,11 @@ struct ContentView: View {
                     VStack {
                         ProgressView("Importing songs...")
                             .padding()
+                            #if os(iOS)
                             .background(Color(.systemBackground))
+                            #else
+                            .background(Color(nsColor: .windowBackgroundColor))
+                            #endif
                             .cornerRadius(12)
                             .shadow(radius: 10)
                     }
@@ -67,19 +130,25 @@ struct ContentView: View {
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: selected)
         .task {
-            print("🔍 ContentView.task called")
-            print("📊 Current song count: \(allSongs.count)")
-            print("✅ Has imported data before: \(hasImportedInitialData)")
-            
-            if !hasImportedInitialData {
-                print("⬇️ Starting initial data import...")
-                await importInitialData()
-            } else {
-                print("⏭️ Skipping import - data already exists")
-            }
+            await performInitialImport()
+        }
+        #endif
+    }
+    
+    private func performInitialImport() async {
+        print("🔍 ContentView.task called")
+        print("📊 Current song count: \(allSongs.count)")
+        print("✅ Has imported data before: \(hasImportedInitialData)")
+        
+        if !hasImportedInitialData {
+            print("⬇️ Starting initial data import...")
+            await importInitialData()
+        } else {
+            print("⏭️ Skipping import - data already exists")
         }
     }
     
+    @MainActor
     private func importInitialData() async {
         isImporting = true
         defer { isImporting = false }
@@ -104,22 +173,15 @@ struct ContentView: View {
             
             print("📥 Importing data from songs.json...")
             
-            // Create a background context for import to avoid threading issues
-            let container = modelContext.container
-            let backgroundContext = ModelContext(container)
-            
             let importService = DataImportService()
             
-            // Import from your existing songs.json file using the CURRENT format (array-based)
-            try await importService.importEnhancedJSON(from: "songs", into: backgroundContext)
+            // Import using the main context since we're already on MainActor
+            try await importService.importEnhancedJSON(from: "songs", into: modelContext)
             
             // Deduplicate singers and tags to clean up any existing duplicates
             print("🧹 Deduplicating singers and tags...")
-            try await importService.deduplicateSingers(in: backgroundContext)
-            try await importService.deduplicateTags(in: backgroundContext)
-            
-            // Save on background context
-            try backgroundContext.save()
+            try await importService.deduplicateSingers(in: modelContext)
+            try await importService.deduplicateTags(in: modelContext)
             
             hasImportedInitialData = true
             

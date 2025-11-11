@@ -5,7 +5,7 @@ struct PDFViewerScreen: View {
     let onBack: () -> Void
     
     @State private var showInfo = false
-    @State private var overlayPosition = CGPoint.zero // Will be centered on first appearance
+    @State private var overlayPosition = CGPoint.zero
     
     var body: some View {
         GeometryReader { geometry in
@@ -25,7 +25,8 @@ struct PDFViewerScreen: View {
                     }
                 }
                 
-                // Overlay controls
+                #if !os(macOS)
+                // Overlay controls (iOS only)
                 VStack {
                     HStack {
                         // Back Button
@@ -58,20 +59,66 @@ struct PDFViewerScreen: View {
                     Spacer()
                 }
                 
-                // Lyrics Overlay
+                // Lyrics Overlay (iOS only)
                 if showInfo {
                     LyricsOverlay(song: song, isShowing: $showInfo, position: $overlayPosition, screenSize: geometry.size)
                         .position(overlayPosition == .zero ? CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2) : overlayPosition)
                         .transition(.scale.combined(with: .opacity))
                         .onAppear {
-                            // Center the overlay on first appearance
                             if overlayPosition == .zero {
                                 overlayPosition = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
                             }
                         }
                 }
+                #endif
             }
         }
         .animation(.easeInOut(duration: 0.3), value: showInfo)
     }
 }
+
+#if os(macOS)
+// MARK: - macOS Lyrics Inspector
+struct LyricsInspector: View {
+    let song: Song
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                // Header
+                Text("Lyrics")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                
+                Divider()
+                
+                // Lyrics Content
+                if let lyrics = song.lyrics, !lyrics.isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        ForEach(Array(lyrics.components(separatedBy: "\n").enumerated()), id: \.offset) { index, line in
+                            Text(line)
+                                .font(.body)
+                                .foregroundColor(.primary)
+                                .fontWeight(line == "Chorus" || line == "Chorus - repeated" ? .bold : .regular)
+                                .textSelection(.enabled)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    VStack(spacing: 16) {
+                        Image(systemName: "music.note")
+                            .font(.system(size: 48))
+                            .foregroundColor(.secondary)
+                        Text("No lyrics available")
+                            .font(.title3)
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 40)
+                }
+            }
+            .padding()
+        }
+    }
+}
+#endif

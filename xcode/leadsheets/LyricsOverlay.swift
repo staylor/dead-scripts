@@ -39,7 +39,11 @@ struct LyricsOverlay: View {
                 }
             }
             .padding()
+            #if os(iOS)
             .background(Color(.systemGray5))
+            #else
+            .background(Color(nsColor: .controlColor))
+            #endif
             .gesture(
                 DragGesture()
                     .onChanged { value in
@@ -121,7 +125,11 @@ struct LyricsOverlay: View {
             }
         }
         .frame(width: overlaySize.width, height: overlaySize.height)
+        #if os(iOS)
         .background(Color(.systemBackground).opacity(isDragging || isResizing ? 0.9 : 0.95))
+        #else
+        .background(Color(nsColor: .windowBackgroundColor).opacity(isDragging || isResizing ? 0.9 : 0.95))
+        #endif
         .cornerRadius(16)
         .shadow(color: .black.opacity(isDragging || isResizing ? 0.2 : 0.1), radius: isDragging || isResizing ? 15 : 10, x: 0, y: isDragging || isResizing ? 8 : 4)
         .scaleEffect(isDragging ? 1.02 : 1.0)
@@ -226,7 +234,11 @@ struct ResizeHandle: View {
                 .padding(8)
                 .background(
                     Circle()
+                        #if os(iOS)
                         .fill(Color(.systemGray5))
+                        #else
+                        .fill(Color(nsColor: .controlColor))
+                        #endif
                         .opacity(isResizing ? 1.0 : 0.8)
                 )
                 .frame(width: 32, height: 32)
