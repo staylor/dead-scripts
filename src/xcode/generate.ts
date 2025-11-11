@@ -2,27 +2,64 @@ import { copyFile } from 'fs/promises';
 import path from 'path';
 
 import { cleanupChorus } from '~/lyrics/utils';
-import metadata from '~/real-book/metadata.json';
+import { PrismaClient } from '~/prisma/client/client';
 import schema from '~/real-book/schema.json';
-import { slugify } from '~/slugify';
-import { readJSON, saveJSON, ICLOUD_DIR } from '~/utils';
+import { saveJSON, ICLOUD_DIR } from '~/utils';
+
+const prisma = new PrismaClient();
+
+const data: any = { artists: [] };
+const artists = await prisma.artist.findMany({
+  include: {
+    albums: {
+      include: {
+        songs: {
+          orderBy: {
+            trackNumber: 'asc',
+          },
+          include: {
+            singer: true,
+          },
+        },
+      },
+    },
+  },
+});
+
+for (const node of artists) {
+  const artist = {
+    name: node.name,
+    imageFileName: node.imageFileName,
+    albums: [] as any[],
+  };
+
+  for (const entry of node.albums) {
+    const album = {
+      name: entry.name,
+      releaseYear: entry.releaseYear,
+      coverArtFileName: entry.coverArtFileName,
+      songs: [] as any[],
+    };
+
+    for (const item of entry.songs) {
+      const song = {
+        trackNumber: item.trackNumber || undefined,
+        discNumber: item.discNumber || undefined,
+        songType: item.songType || undefined,
+        name: item.name,
+        fileName: item.fileName,
+        lyrics: cleanupChorus(item.lyrics || ''),
+        singer: item.singer?.name || undefined,
+      };
+      album.songs.push(song);
+    }
+
+    artist.albums.push(album);
+  }
+  data.artists.push(artist);
+}
 
 const appDir = path.join(process.cwd(), 'xcode', 'leadsheets');
-const lyricsDir = path.join(process.cwd(), '.cache', 'lyrics');
-
-const all = metadata as any;
-const refMap: Record<string, any> = {};
-for (const [slug, { artist, ...album }] of Object.entries(metadata.albums)) {
-  const resolved = all.artists[artist];
-  resolved.albums ||= [];
-  const entry = album as any;
-  entry.songs ||= [];
-  refMap[slug] = entry;
-  resolved.albums.push(entry);
-}
-const artists = {
-  artists: Object.values(metadata.artists),
-};
 
 await Promise.all(
   schema.map(async (entry) => {
@@ -36,24 +73,6 @@ await Promise.all(
     }
 
     const pdf = score.split('/').pop();
-    const slug = slugify(entry.title);
-    const { album, singer, ...meta } = all.songs[slug];
-    const lookup = refMap[album];
-
-    let lyrics = '';
-    try {
-      const data = readJSON(path.join(lyricsDir, `${slug}.json`));
-      lyrics = cleanupChorus(data.lyrics || '');
-    } catch {}
-
-    lookup.songs.push({
-      ...meta,
-      name: entry.title,
-      fileName: pdf!,
-      lyrics,
-      singer: singer ? all.singers[singer].name : undefined,
-    });
-
     const src = path.join(ICLOUD_DIR, score);
     const dest = path.join(appDir, 'pdfs', pdf!);
 
@@ -62,4 +81,4 @@ await Promise.all(
 );
 
 const file = path.join(appDir, 'songs.json');
-saveJSON(file, artists);
+saveJSON(file, data);

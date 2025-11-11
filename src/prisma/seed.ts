@@ -19,6 +19,8 @@ const songsDir = path.join(process.cwd(), 'src', 'songs');
 
 const prisma = new PrismaClient();
 
+// WARNING: This should now just use the database backup!!!!
+
 async function seedWriters(entries: string[]) {
   const writers: Writer[] = [];
 
