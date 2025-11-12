@@ -1,5 +1,6 @@
 import SwiftUI
 
+#if !os(watchOS)
 struct LyricsOverlay: View {
     let song: Song
     @Binding var isShowing: Bool
@@ -41,9 +42,12 @@ struct LyricsOverlay: View {
             .padding()
             #if os(iOS)
             .background(Color(.systemGray5))
+            #elseif os(tvOS)
+            .background(Color.gray.opacity(0.3))
             #else
             .background(Color(nsColor: .controlColor))
             #endif
+            #if os(iOS)
             .gesture(
                 DragGesture()
                     .onChanged { value in
@@ -57,19 +61,20 @@ struct LyricsOverlay: View {
                             isDragging = false
                             let newX = position.x + value.translation.width
                             let newY = position.y + value.translation.height
-                            
+
                             // Keep overlay within screen bounds (with some padding)
                             let minX: CGFloat = overlaySize.width / 2
                             let maxX: CGFloat = screenSize.width - overlaySize.width / 2
                             let minY: CGFloat = overlaySize.height / 2
                             let maxY: CGFloat = screenSize.height - overlaySize.height / 2
-                            
+
                             position.x = max(minX, min(maxX, newX))
                             position.y = max(minY, min(maxY, newY))
                             dragOffset = CGSize.zero
                         }
                     }
             )
+            #endif
             
             Divider()
             
@@ -127,6 +132,8 @@ struct LyricsOverlay: View {
         .frame(width: overlaySize.width, height: overlaySize.height)
         #if os(iOS)
         .background(Color(.systemBackground).opacity(isDragging || isResizing ? 0.9 : 0.95))
+        #elseif os(tvOS)
+        .background(Color.white.opacity(0.15))
         #else
         .background(Color(nsColor: .windowBackgroundColor).opacity(isDragging || isResizing ? 0.9 : 0.95))
         #endif
@@ -134,6 +141,7 @@ struct LyricsOverlay: View {
         .shadow(color: .black.opacity(isDragging || isResizing ? 0.2 : 0.1), radius: isDragging || isResizing ? 15 : 10, x: 0, y: isDragging || isResizing ? 8 : 4)
         .scaleEffect(isDragging ? 1.02 : 1.0)
         .offset(dragOffset)
+        #if os(iOS)
         .overlay(
             // Resize handle - position adapts based on screen location
             ResizeHandle(
@@ -143,6 +151,7 @@ struct LyricsOverlay: View {
                 position: position
             )
         )
+        #endif
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isDragging)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: dragOffset)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: overlaySize)
@@ -236,6 +245,8 @@ struct ResizeHandle: View {
                     Circle()
                         #if os(iOS)
                         .fill(Color(.systemGray5))
+                        #elseif os(tvOS)
+                        .fill(Color.gray.opacity(0.3))
                         #else
                         .fill(Color(nsColor: .controlColor))
                         #endif
@@ -243,6 +254,7 @@ struct ResizeHandle: View {
                 )
                 .frame(width: 32, height: 32)
                 .offset(x: geometry.size.width - 32, y: geometry.size.height - 32)
+                #if os(iOS)
                 .gesture(
                     DragGesture()
                         .onChanged { value in
@@ -251,16 +263,16 @@ struct ResizeHandle: View {
                                 initialSize = size
                                 isResizing = true
                             }
-                            
+
                             // Calculate new size based on initial size + drag translation
                             // Drag right = bigger width, drag down = bigger height
                             let newWidth = initialSize.width + value.translation.width
                             let newHeight = initialSize.height + value.translation.height
-                            
+
                             // Apply constraints
                             let constrainedWidth = max(minWidth, min(min(maxWidth, screenSize.width * 0.9), newWidth))
                             let constrainedHeight = max(minHeight, min(min(maxHeight, screenSize.height * 0.9), newHeight))
-                            
+
                             size = CGSize(width: constrainedWidth, height: constrainedHeight)
                         }
                         .onEnded { _ in
@@ -268,6 +280,8 @@ struct ResizeHandle: View {
                             initialSize = .zero
                         }
                 )
+                #endif
         }
     }
 }
+#endif // !os(watchOS)

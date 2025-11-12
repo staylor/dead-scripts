@@ -30,6 +30,8 @@ struct SongRowView: View {
                         .frame(width: 60, height: 60)
                         #if os(iOS)
                         .background(Color(.systemGray6))
+                        #elseif os(tvOS) || os(watchOS)
+                        .background(Color.gray.opacity(0.2))
                         #else
                         .background(Color(nsColor: .controlBackgroundColor))
                         #endif
@@ -81,6 +83,8 @@ struct SongRowView: View {
         .padding(.horizontal, 16)
         #if os(iOS)
         .background(Color(.systemBackground))
+        #elseif os(tvOS) || os(watchOS)
+        .background(Color.white.opacity(0.1))
         #else
         .background(Color(nsColor: .controlBackgroundColor))
         #endif

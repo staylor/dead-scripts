@@ -6,11 +6,45 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D2AF766A2EC4E950006C0FCE /* leadsheets.watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D2AF76682EC4E950006C0FCE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D2E1EB4E2E9DE20C00E5456E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AF765F2EC4E94E006C0FCE;
+			remoteInfo = leadsheets.watch;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D2AF71132EC4E57A006C0FCE /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				D2AF766A2EC4E950006C0FCE /* leadsheets.watch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = leadsheets.watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2E1EB562E9DE20C00E5456E /* Dead Sheets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dead Sheets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		D2AF76612EC4E94E006C0FCE /* leadsheets.watch */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = leadsheets.watch;
+			sourceTree = "<group>";
+		};
 		D2E1EB582E9DE20C00E5456E /* leadsheets */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = leadsheets;
@@ -19,6 +53,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D2AF765D2EC4E94E006C0FCE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2E1EB532E9DE20C00E5456E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -33,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				D2E1EB582E9DE20C00E5456E /* leadsheets */,
+				D2AF76612EC4E94E006C0FCE /* leadsheets.watch */,
 				D2E1EB572E9DE20C00E5456E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				D2E1EB562E9DE20C00E5456E /* Dead Sheets.app */,
+				D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +91,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D2AF765F2EC4E94E006C0FCE /* leadsheets.watch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D2AF766B2EC4E950006C0FCE /* Build configuration list for PBXNativeTarget "leadsheets.watch" */;
+			buildPhases = (
+				D2AF765C2EC4E94E006C0FCE /* Sources */,
+				D2AF765D2EC4E94E006C0FCE /* Frameworks */,
+				D2AF765E2EC4E94E006C0FCE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				D2AF76612EC4E94E006C0FCE /* leadsheets.watch */,
+			);
+			name = leadsheets.watch;
+			packageProductDependencies = (
+			);
+			productName = leadsheets.watch;
+			productReference = D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */;
+			productType = "com.apple.product-type.application";
+		};
 		D2E1EB552E9DE20C00E5456E /* leadsheets */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D2E1EB612E9DE20F00E5456E /* Build configuration list for PBXNativeTarget "leadsheets" */;
@@ -55,10 +120,12 @@
 				D2E1EB522E9DE20C00E5456E /* Sources */,
 				D2E1EB532E9DE20C00E5456E /* Frameworks */,
 				D2E1EB542E9DE20C00E5456E /* Resources */,
+				D2AF71132EC4E57A006C0FCE /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D2AF76692EC4E950006C0FCE /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				D2E1EB582E9DE20C00E5456E /* leadsheets */,
@@ -77,9 +144,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2600;
+				LastSwiftUpdateCheck = 2610;
 				LastUpgradeCheck = 2610;
 				TargetAttributes = {
+					D2AF765F2EC4E94E006C0FCE = {
+						CreatedOnToolsVersion = 26.1.1;
+					};
 					D2E1EB552E9DE20C00E5456E = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
@@ -100,11 +170,19 @@
 			projectRoot = "";
 			targets = (
 				D2E1EB552E9DE20C00E5456E /* leadsheets */,
+				D2AF765F2EC4E94E006C0FCE /* leadsheets.watch */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D2AF765E2EC4E94E006C0FCE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2E1EB542E9DE20C00E5456E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -115,6 +193,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D2AF765C2EC4E94E006C0FCE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2E1EB522E9DE20C00E5456E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,7 +209,81 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		D2AF76692EC4E950006C0FCE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2AF765F2EC4E94E006C0FCE /* leadsheets.watch */;
+			targetProxy = D2AF76682EC4E950006C0FCE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		D2AF766C2EC4E950006C0FCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LQR2VDPY65;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dead Sheets";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = wonderboymusic.leadsheets;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = wonderboymusic.leadsheets.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		D2AF766D2EC4E950006C0FCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LQR2VDPY65;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dead Sheets";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = wonderboymusic.leadsheets;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = wonderboymusic.leadsheets.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
 		D2E1EB5F2E9DE20F00E5456E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -279,7 +438,7 @@
 				PRODUCT_NAME = "Dead Sheets";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx appletvos appletvsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -287,7 +446,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,3";
+				TVOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
 		};
@@ -322,7 +482,7 @@
 				PRODUCT_NAME = "Dead Sheets";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx appletvos appletvsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -330,13 +490,23 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,3";
+				TVOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D2AF766B2EC4E950006C0FCE /* Build configuration list for PBXNativeTarget "leadsheets.watch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D2AF766C2EC4E950006C0FCE /* Debug */,
+				D2AF766D2EC4E950006C0FCE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D2E1EB512E9DE20C00E5456E /* Build configuration list for PBXProject "leadsheets" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

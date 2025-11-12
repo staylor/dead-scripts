@@ -1,6 +1,8 @@
 import SwiftUI
 import SwiftData
+#if !os(watchOS)
 import PDFKit
+#endif
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
@@ -97,6 +99,8 @@ struct ContentView: View {
                             .padding()
                             #if os(iOS)
                             .background(Color(.systemBackground))
+                            #elseif os(tvOS) || os(watchOS)
+                            .background(Color.white.opacity(0.1))
                             #else
                             .background(Color(nsColor: .windowBackgroundColor))
                             #endif
@@ -115,6 +119,7 @@ struct ContentView: View {
                     .opacity(selected == nil ? 1 : 0)
                     
                     // PDF Viewer Screen (slides in from right)
+                    #if !os(watchOS)
                     if let song = selected {
                         PDFViewerScreen(song: song, onBack: {
                             selected = nil
@@ -125,6 +130,7 @@ struct ContentView: View {
                         ))
                         .zIndex(1)
                     }
+                    #endif
                 }
             }
         }

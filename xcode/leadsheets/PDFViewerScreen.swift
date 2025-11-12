@@ -1,5 +1,6 @@
 import SwiftUI
 
+#if !os(watchOS)
 struct PDFViewerScreen: View {
     let song: Song
     let onBack: () -> Void
@@ -122,3 +123,5 @@ struct LyricsInspector: View {
     }
 }
 #endif
+
+#endif // !os(watchOS)

@@ -144,7 +144,13 @@ struct SearchScreen: View {
                 }
             }
             .padding()
+            #if os(iOS)
             .background(Color(.systemGray6))
+            #elseif os(tvOS) || os(watchOS)
+            .background(Color.gray.opacity(0.2))
+            #else
+            .background(Color(nsColor: .controlBackgroundColor))
+            #endif
             .cornerRadius(10)
             .padding(.horizontal)
             .padding(.bottom, 8)
@@ -164,7 +170,13 @@ struct SearchScreen: View {
                                 .fontWeight(.medium)
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 8)
+                                #if os(iOS)
                                 .background(selectedFilter == filter ? Color.pink : Color(.systemGray6))
+                                #elseif os(tvOS) || os(watchOS)
+                                .background(selectedFilter == filter ? Color.pink : Color.gray.opacity(0.2))
+                                #else
+                                .background(selectedFilter == filter ? Color.pink : Color(nsColor: .controlBackgroundColor))
+                                #endif
                                 .foregroundColor(selectedFilter == filter ? .white : .primary)
                                 .clipShape(Capsule())
                         }
@@ -253,15 +265,19 @@ struct SearchScreen: View {
                         SongRowView(song: song)
                     }
                     .buttonStyle(.plain)
+                    #if !os(tvOS) && !os(watchOS)
                     .listRowSeparator(.hidden)
+                    #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
                     #endif
                 }
-                #if os(iOS)
+                #if os(iOS) || os(tvOS)
                 .listStyle(.plain)
+                #if !os(tvOS) && !os(watchOS)
                 .scrollContentBackground(.hidden)
+                #endif
                 #endif
             }
         }
@@ -284,15 +300,19 @@ struct SearchScreen: View {
                         AlbumRowView(album: album)
                     }
                     .buttonStyle(.plain)
+                    #if !os(tvOS) && !os(watchOS)
                     .listRowSeparator(.hidden)
+                    #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
                     #endif
                 }
-                #if os(iOS)
+                #if os(iOS) || os(tvOS)
                 .listStyle(.plain)
+                #if !os(tvOS) && !os(watchOS)
                 .scrollContentBackground(.hidden)
+                #endif
                 #endif
             }
         }
@@ -315,15 +335,19 @@ struct SearchScreen: View {
                         ArtistRowView(artist: artist)
                     }
                     .buttonStyle(.plain)
+                    #if !os(tvOS) && !os(watchOS)
                     .listRowSeparator(.hidden)
+                    #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
                     #endif
                 }
-                #if os(iOS)
+                #if os(iOS) || os(tvOS)
                 .listStyle(.plain)
+                #if !os(tvOS) && !os(watchOS)
                 .scrollContentBackground(.hidden)
+                #endif
                 #endif
             }
         }
@@ -346,15 +370,19 @@ struct SearchScreen: View {
                         SingerRowView(singer: singer)
                     }
                     .buttonStyle(.plain)
+                    #if !os(tvOS) && !os(watchOS)
                     .listRowSeparator(.hidden)
+                    #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
                     #endif
                 }
-                #if os(iOS)
+                #if os(iOS) || os(tvOS)
                 .listStyle(.plain)
+                #if !os(tvOS) && !os(watchOS)
                 .scrollContentBackground(.hidden)
+                #endif
                 #endif
             }
         }
@@ -377,15 +405,19 @@ struct SearchScreen: View {
                         SongRowView(song: song)
                     }
                     .buttonStyle(.plain)
+                    #if !os(tvOS) && !os(watchOS)
                     .listRowSeparator(.hidden)
+                    #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
                     #endif
                 }
-                #if os(iOS)
+                #if os(iOS) || os(tvOS)
                 .listStyle(.plain)
+                #if !os(tvOS) && !os(watchOS)
                 .scrollContentBackground(.hidden)
+                #endif
                 #endif
             }
         }
@@ -424,15 +456,19 @@ struct SearchScreen: View {
                         SongRowView(song: song)
                     }
                     .buttonStyle(.plain)
+                    #if !os(tvOS) && !os(watchOS)
                     .listRowSeparator(.hidden)
+                    #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
                     #endif
                 }
-                #if os(iOS)
+                #if os(iOS) || os(tvOS)
                 .listStyle(.plain)
+                #if !os(tvOS) && !os(watchOS)
                 .scrollContentBackground(.hidden)
+                #endif
                 #endif
             }
         }
@@ -471,15 +507,19 @@ struct SearchScreen: View {
                         SongRowView(song: song)
                     }
                     .buttonStyle(.plain)
+                    #if !os(tvOS) && !os(watchOS)
                     .listRowSeparator(.hidden)
+                    #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
                     #endif
                 }
-                #if os(iOS)
+                #if os(iOS) || os(tvOS)
                 .listStyle(.plain)
+                #if !os(tvOS) && !os(watchOS)
                 .scrollContentBackground(.hidden)
+                #endif
                 #endif
             }
         }
@@ -518,15 +558,19 @@ struct SearchScreen: View {
                         SongRowView(song: song)
                     }
                     .buttonStyle(.plain)
+                    #if !os(tvOS) && !os(watchOS)
                     .listRowSeparator(.hidden)
+                    #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
                     #endif
                 }
-                #if os(iOS)
+                #if os(iOS) || os(tvOS)
                 .listStyle(.plain)
+                #if !os(tvOS) && !os(watchOS)
                 .scrollContentBackground(.hidden)
+                #endif
                 #endif
             }
         }

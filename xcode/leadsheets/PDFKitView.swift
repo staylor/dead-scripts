@@ -1,4 +1,6 @@
 import SwiftUI
+
+#if !os(watchOS)
 import PDFKit
 
 #if canImport(UIKit)
@@ -15,7 +17,7 @@ struct PDFKitView: View {
     }
 }
 
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 private struct PDFKitViewRepresentable: UIViewRepresentable {
     let url: URL
     let size: CGSize
@@ -185,3 +187,5 @@ private struct PDFKitViewRepresentable: NSViewRepresentable {
     }
 }
 #endif
+
+#endif // !os(watchOS)
