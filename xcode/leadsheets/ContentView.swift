@@ -88,9 +88,11 @@ struct ContentView: View {
         // iOS/iPadOS layout
         NavigationStack {
             ZStack {
+                #if !os(tvOS)
                 // White background for entire app
                 Color.white
                     .ignoresSafeArea(.all)
+                #endif
                 
                 if isImporting {
                     // Show loading indicator during import

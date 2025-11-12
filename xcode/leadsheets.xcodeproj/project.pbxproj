@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5072D75D51D2C58AB2AFD560 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1497658284B154007313B8ED /* Song.swift */; };
+		9D86052835241646C210E833 /* DataImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D8B25E8B9AEC7899DC2004 /* DataImportService.swift */; };
 		D2AF766A2EC4E950006C0FCE /* leadsheets.watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FB71896928D39BB8CF2BCDB6 /* songs.json in Resources */ = {isa = PBXBuildFile; fileRef = B5A4C57973005496DCFF812B /* songs.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +38,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1497658284B154007313B8ED /* Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
+		44D8B25E8B9AEC7899DC2004 /* DataImportService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataImportService.swift; sourceTree = "<group>"; };
+		B5A4C57973005496DCFF812B /* songs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = songs.json; sourceTree = "<group>"; };
 		D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = leadsheets.watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2E1EB562E9DE20C00E5456E /* Dead Sheets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dead Sheets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -74,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				D2E1EB582E9DE20C00E5456E /* leadsheets */,
+			D2SHAREDFILES123456789ABC /* Shared */,
 				D2AF76612EC4E94E006C0FCE /* leadsheets.watch */,
 				D2E1EB572E9DE20C00E5456E /* Products */,
 			);
@@ -86,6 +93,17 @@
 				D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+	D2SHAREDFILES123456789ABC /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				1497658284B154007313B8ED /* Song.swift */,
+				44D8B25E8B9AEC7899DC2004 /* DataImportService.swift */,
+				B5A4C57973005496DCFF812B /* songs.json */,
+			);
+			name = Shared;
+			path = leadsheets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,6 +198,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			FB71896928D39BB8CF2BCDB6 /* songs.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +216,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			5072D75D51D2C58AB2AFD560 /* Song.swift in Sources */,
+			9D86052835241646C210E833 /* DataImportService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,6 +269,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
 		};
@@ -281,6 +303,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
 		};
