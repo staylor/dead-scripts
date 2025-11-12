@@ -23,17 +23,21 @@ actor DataImportService {
         let songs: [EnhancedSongJSON]?
     }
     
+    struct EnhancedSingerData: Codable {
+        let name: String
+        let imageFileName: String?
+    }
+    
     struct EnhancedSongJSON: Codable {
         let name: String
         let fileName: String  // Can include path like "audio/shake_it_off.mp3"
         let lyrics: String?
-        let singer: String?
-        let tags: [String]?
+        let singer: EnhancedSingerData?
         let songType: String?
     }
     
     // MARK: - Import Methods
-    /// Import from enhanced JSON format (with additional metadata like release dates, tags, etc.)
+    /// Import from enhanced JSON format (with additional metadata like release dates, etc.)
     func importEnhancedJSON(from fileName: String, into context: ModelContext) async throws {
         guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
             throw ImportError.fileNotFound
@@ -74,11 +78,18 @@ actor DataImportService {
                 guard let songs = albumData.songs else { continue }
                 for songData in songs {
                     var singer: Singer? = nil
-                    if let singerName = songData.singer {
+                    if let singerName = songData.singer?.name {
                         if let cached = singerCache[singerName] {
                             singer = cached
                         } else {
-                            singer = Singer(name: singerName)
+                            if songData.singer?.imageFileName != nil {
+                                singer = Singer(
+                                    name: singerName,
+                                    imageFileName: songData.singer!.imageFileName.map { ResourcePath.forArtistImage($0) }
+                                )
+                            } else {
+                                singer = Singer(name: singerName)
+                            }
                             context.insert(singer!)
                             singerCache[singerName] = singer
                         }

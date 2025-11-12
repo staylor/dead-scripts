@@ -49,7 +49,12 @@ for (const node of artists) {
         name: item.name,
         fileName: item.fileName,
         lyrics: cleanupChorus(item.lyrics || ''),
-        singer: item.singer?.name || undefined,
+        singer: item.singer?.name
+          ? {
+              name: item.singer?.name,
+              imageFileName: item.singer?.imageFileName,
+            }
+          : undefined,
       };
       album.songs.push(song);
     }

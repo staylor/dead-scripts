@@ -201,12 +201,9 @@ struct SearchScreen: View {
             }
         }
         .alert("Debug Menu", isPresented: $showingDebugMenu) {
-            Button("Reset Import Flag & Delete All Data", role: .destructive) {
-                resetAllData()
-            }
-            Button("Re-import Data", role: .destructive) {
+            Button("Reset All Data", role: .destructive) {
                 Task {
-                    await reimportData()
+                    await resetAllData()
                 }
             }
             Button("Show Stats") {
@@ -224,13 +221,10 @@ struct SearchScreen: View {
                         printDebugStats()
                     }
                     Divider()
-                    Button("Re-import Data", role: .destructive) {
-                        Task {
-                            await reimportData()
-                        }
-                    }
                     Button("Reset All Data", role: .destructive) {
-                        resetAllData()
+                        Task {
+                            await resetAllData()
+                        }
                     }
                 } label: {
                     Label("Settings", systemImage: "gearshape")
@@ -583,7 +577,8 @@ struct SearchScreen: View {
         }
     }
     
-    private func resetAllData() {
+    @MainActor
+    private func resetAllData() async {
         print("🗑️ Deleting all data and resetting import flag...")
         
         // Delete all data
@@ -593,9 +588,10 @@ struct SearchScreen: View {
         // Reset the flag
         hasImportedInitialData = false
         
-        print("✅ Reset complete. App will re-import on next launch.")
+        await reimportData()
     }
     
+    @MainActor
     private func reimportData() async {
         do {
             print("📥 Re-importing data from songs.json...")

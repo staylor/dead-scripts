@@ -1,65 +1,14 @@
 import SwiftUI
 
-#if canImport(UIKit)
-import UIKit
-#elseif canImport(AppKit)
-import AppKit
-#endif
-
 struct AlbumRowView: View {
     let album: Album
-    
-    // Helper function to load images
-    #if canImport(UIKit)
-    private func loadImage(named fileName: String) -> UIImage? {
-        let justFileName = (fileName as NSString).lastPathComponent
-        let fileNameWithoutExt = (justFileName as NSString).deletingPathExtension
-        let ext = (justFileName as NSString).pathExtension
-        
-        if let image = UIImage(named: justFileName) {
-            return image
-        }
-        
-        if let path = Bundle.main.path(forResource: fileNameWithoutExt, ofType: ext),
-           let image = UIImage(contentsOfFile: path) {
-            return image
-        }
-        
-        if let image = UIImage(named: fileName) {
-            return image
-        }
-        
-        return nil
-    }
-    #elseif canImport(AppKit)
-    private func loadImage(named fileName: String) -> NSImage? {
-        let justFileName = (fileName as NSString).lastPathComponent
-        let fileNameWithoutExt = (justFileName as NSString).deletingPathExtension
-        let ext = (justFileName as NSString).pathExtension
-        
-        if let image = NSImage(named: justFileName) {
-            return image
-        }
-        
-        if let path = Bundle.main.path(forResource: fileNameWithoutExt, ofType: ext),
-           let image = NSImage(contentsOfFile: path) {
-            return image
-        }
-        
-        if let image = NSImage(named: fileName) {
-            return image
-        }
-        
-        return nil
-    }
-    #endif
     
     var body: some View {
         HStack(spacing: 16) {
             // Album Cover Art or Icon
             Group {
                 if let coverArtFileName = album.coverArtFileName,
-                   let loadedImage = loadImage(named: coverArtFileName) {
+                   let loadedImage = ImageLoader.loadImage(named: coverArtFileName) {
                     #if canImport(UIKit)
                     Image(uiImage: loadedImage)
                         .resizable()

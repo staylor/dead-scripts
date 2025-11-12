@@ -44,10 +44,11 @@ model Artist {
 }
 
 model Singer {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  slug  String @unique
-  songs Song[]
+  id            Int     @id @default(autoincrement())
+  name          String  @unique
+  slug          String  @unique
+  imageFileName String?
+  songs         Song[]
 }
 
 model Writer {

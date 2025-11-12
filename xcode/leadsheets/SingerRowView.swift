@@ -2,14 +2,33 @@ import SwiftUI
 
 struct SingerRowView: View {
     let singer: Singer
-    
+
     var body: some View {
         HStack(spacing: 16) {
             // Singer Icon
-            Image(systemName: "mic.circle.fill")
-                .font(.system(size: 60))
-                .foregroundColor(.pink)
-                .frame(width: 60, height: 60)
+            Group {
+                if let imageFileName = singer.imageFileName,
+                   let loadedImage = ImageLoader.loadImage(named: imageFileName) {
+                    #if canImport(UIKit)
+                    Image(uiImage: loadedImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .clipShape(Circle())
+                    #elseif canImport(AppKit)
+                    Image(nsImage: loadedImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .clipShape(Circle())
+                    #endif
+                } else {
+                    Image(systemName: "person.circle.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.pink)
+                        .frame(width: 60, height: 60)
+                }
+            }
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(singer.name)
