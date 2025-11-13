@@ -18,13 +18,13 @@ struct SearchScreen: View {
     @State private var selectedAlbum: Album?
     @State private var selectedArtist: Artist?
     @State private var selectedSinger: Singer?
-    @State private var showingDebugMenu = false
     @Environment(\.modelContext) private var modelContext
     @Query private var albums: [Album]
     @Query private var artists: [Artist]
     @Query private var singers: [Singer]
     @Query(sort: \Song.name) private var allSongs: [Song]
-    @AppStorage("hasImportedInitialData") private var hasImportedInitialData = false
+
+    @State private var debugManager: DebugMenuManager?
     
     // Filtered albums based on search
     private var filteredAlbums: [Album] {
@@ -75,69 +75,20 @@ struct SearchScreen: View {
             searchHeaderView
             contentView
         }
-        .alert("Debug Menu", isPresented: $showingDebugMenu) {
-            Button("Reset All Data", role: .destructive) {
-                Task {
-                    await resetAllData()
-                }
-            }
-            Button("Show Stats") {
-                printDebugStats()
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Songs: \(allSongs.count)\nImported: \(hasImportedInitialData ? "Yes" : "No")")
-        }
-        #if os(macOS)
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Menu {
-                    Button("Show Stats") {
-                        printDebugStats()
-                    }
-                    Divider()
-                    Button("Reset All Data", role: .destructive) {
-                        Task {
-                            await resetAllData()
-                        }
-                    }
-                } label: {
-                    Label("Settings", systemImage: "gearshape")
-                }
+        .onAppear {
+            if debugManager == nil {
+                debugManager = DebugMenuManager(modelContext: modelContext)
             }
         }
-        #endif
+        .modifier(OptionalDebugMenuModifier(manager: debugManager))
     }
     
-    // MARK: - Header Views
+    // MARK: - Header View
     
     @ViewBuilder
     private var searchHeaderView: some View {
-        #if os(macOS)
-        macOSSearchHeader
-        #elseif os(tvOS)
-        tvOSSearchHeader
-        #else
-        iOSSearchHeader
-        #endif
-    }
-    
-    private var macOSSearchHeader: some View {
         VStack(spacing: 0) {
-            searchBarView
-            filterPickerView
-        }
-    }
-    
-    private var tvOSSearchHeader: some View {
-        VStack(spacing: 0) {
-            searchBarView
-            filterPickerView
-        }
-    }
-    
-    private var iOSSearchHeader: some View {
-        VStack(spacing: 0) {
+            #if os(iOS)
             // Title with Debug Button
             HStack {
                 Text("Dead Sheets")
@@ -145,7 +96,7 @@ struct SearchScreen: View {
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 Spacer()
-                Button(action: { showingDebugMenu = true }) {
+                Button(action: { debugManager?.showingDebugMenu = true }) {
                     Image(systemName: "gearshape.fill")
                         .font(.title2)
                         .foregroundColor(.gray)
@@ -154,7 +105,7 @@ struct SearchScreen: View {
             .padding(.horizontal)
             .padding(.top, 20)
             .padding(.bottom, 10)
-            
+            #endif
             searchBarView
             filterPickerView
         }
@@ -277,7 +228,7 @@ struct SearchScreen: View {
     private var contentView: some View {
         switch selectedFilter {
         case .allSongs:
-            songsListView
+            SongsListView(songs: songs, onSelect: onSelect)
         case .byAlbum:
             if let selectedAlbum {
                 DetailView(
@@ -287,7 +238,9 @@ struct SearchScreen: View {
                     onSelect: onSelect
                 )
             } else {
-                albumsListView
+                AlbumsListView(albums: filteredAlbums) { album in
+                    selectedAlbum = album
+                }
             }
         case .byArtist:
             if let selectedArtist {
@@ -298,7 +251,9 @@ struct SearchScreen: View {
                     onSelect: onSelect
                 )
             } else {
-                artistsListView
+                ArtistsListView(artists: filteredArtists) { artist in
+                    selectedArtist = artist
+                }
             }
         case .bySinger:
             if let selectedSinger {
@@ -309,10 +264,12 @@ struct SearchScreen: View {
                     onSelect: onSelect
                 )
             } else {
-                singersListView
+                SingersListView(singers: filteredSingers) { singer in
+                    selectedSinger = singer
+                }
             }
         case .covers:
-            coversListView
+            CoversListView(songs: coverSongs, onSelect: onSelect)
         }
     }
     
@@ -329,34 +286,9 @@ struct SearchScreen: View {
         selectedSinger = nil
     }
     
-    // MARK: - View Components
 
-    private var songsListView: some View {
-        SongsListView(songs: songs, onSelect: onSelect)
-    }
+    // MARK: - Detail View
 
-    private var albumsListView: some View {
-        AlbumsListView(albums: filteredAlbums) { album in
-            selectedAlbum = album
-        }
-    }
-
-    private var artistsListView: some View {
-        ArtistsListView(artists: filteredArtists) { artist in
-            selectedArtist = artist
-        }
-    }
-
-    private var singersListView: some View {
-        SingersListView(singers: filteredSingers) { singer in
-            selectedSinger = singer
-        }
-    }
-
-    private var coversListView: some View {
-        CoversListView(songs: coverSongs, onSelect: onSelect)
-    }
-    
     // Reusable Detail View for Album/Artist/Singer
     private struct DetailView: View {
         let backButtonTitle: String
@@ -394,53 +326,18 @@ struct SearchScreen: View {
             }
         }
     }
+}
 
-    @MainActor
-    private func resetAllData() async {
-        print("🗑️ Deleting all data and resetting import flag...")
-        
-        // Delete all data
-        let manager = SongDataManager(modelContext: modelContext)
-        manager.deleteAllData()
-        
-        // Reset the flag
-        hasImportedInitialData = false
-        
-        await reimportData()
-    }
-    
-    @MainActor
-    private func reimportData() async {
-        do {
-            print("📥 Re-importing data from songs.json...")
-            
-            let container = modelContext.container
-            let backgroundContext = ModelContext(container)
-            
-            let importService = DataImportService()
-            try await importService.importEnhancedJSON(from: "songs", into: backgroundContext)
-            
-            try backgroundContext.save()
-            
-            print("✅ Successfully re-imported songs")
-        } catch {
-            print("❌ Failed to re-import data: \(error)")
+// MARK: - Helper Modifier
+
+private struct OptionalDebugMenuModifier: ViewModifier {
+    let manager: DebugMenuManager?
+
+    func body(content: Content) -> some View {
+        if let manager = manager {
+            content.debugMenu(manager: manager)
+        } else {
+            content
         }
-    }
-    
-    private func printDebugStats() {
-        let manager = SongDataManager(modelContext: modelContext)
-        print("""
-        
-        📊 Debug Stats:
-        ===============
-        Songs: \(manager.getSongCount())
-        Artists: \(manager.getArtistCount())
-        Albums: \(manager.getAlbumCount())
-        Singers: \(singers.count)
-        Has Imported: \(hasImportedInitialData)
-        ===============
-        
-        """)
     }
 }
