@@ -4,7 +4,8 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Song.name) private var songs: [Song]
-    @AppStorage("hasImportedInitialData") private var hasImportedInitialData = false
+
+    @State private var importManager: DataImportManager?
 
     var body: some View {
         NavigationStack {
@@ -29,26 +30,14 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Songs")
+            .onAppear {
+                if importManager == nil {
+                    importManager = DataImportManager(modelContext: modelContext)
+                }
+            }
             .task {
-                await performInitialImport()
+                await importManager?.performInitialImport()
             }
-        }
-    }
-
-    private func performInitialImport() async {
-        guard !hasImportedInitialData else { return }
-
-        do {
-            let descriptor = FetchDescriptor<Song>()
-            let existingSongCount = try modelContext.fetchCount(descriptor)
-
-            if existingSongCount == 0 {
-                let importService = DataImportService()
-                try await importService.importEnhancedJSON(from: "seeds", into: modelContext)
-                hasImportedInitialData = true
-            }
-        } catch {
-            print("Failed to import data: \(error)")
         }
     }
 }

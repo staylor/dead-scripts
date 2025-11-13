@@ -7,11 +7,10 @@ import PDFKit
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Song.name) private var allSongs: [Song]
-    @AppStorage("hasImportedInitialData") private var hasImportedInitialData = false
-    
+
     @State private var searchText = ""
     @State private var selected: Song?
-    @State private var isImporting = false
+    @State private var importManager: DataImportManager?
     
     var filteredSongs: [Song] {
         if searchText.isEmpty {
@@ -41,7 +40,7 @@ struct ContentView: View {
             .navigationSplitViewColumnWidth(min: 280, ideal: 350, max: 450)
         } content: {
             // Column 2: PDF Viewer (content column)
-            if isImporting {
+            if importManager?.isImporting == true {
                 VStack {
                     ProgressView("Importing songs...")
                         .controlSize(.large)
@@ -81,8 +80,13 @@ struct ContentView: View {
         }
         .navigationSplitViewStyle(.balanced)
         .background(Color.white)
+        .onAppear {
+            if importManager == nil {
+                importManager = DataImportManager(modelContext: modelContext)
+            }
+        }
         .task {
-            await performInitialImport()
+            await importManager?.performInitialImport()
         }
         #else
         // iOS/iPadOS layout
@@ -93,8 +97,8 @@ struct ContentView: View {
                 Color.white
                     .ignoresSafeArea(.all)
                 #endif
-                
-                if isImporting {
+
+                if importManager?.isImporting == true {
                     // Show loading indicator during import
                     VStack {
                         ProgressView("Importing songs...")
@@ -154,63 +158,15 @@ struct ContentView: View {
             }
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: selected)
+        .onAppear {
+            if importManager == nil {
+                importManager = DataImportManager(modelContext: modelContext)
+            }
+        }
         .task {
-            await performInitialImport()
+            await importManager?.performInitialImport()
         }
         #endif
-    }
-    
-    private func performInitialImport() async {
-        print("🔍 ContentView.task called")
-        print("📊 Current song count: \(allSongs.count)")
-        print("✅ Has imported data before: \(hasImportedInitialData)")
-        
-        if !hasImportedInitialData {
-            print("⬇️ Starting initial data import...")
-            await importInitialData()
-        } else {
-            print("⏭️ Skipping import - data already exists")
-        }
-    }
-    
-    @MainActor
-    private func importInitialData() async {
-        isImporting = true
-        defer { isImporting = false }
-        
-        do {
-            // Double-check: if we somehow have songs already, don't import
-            if allSongs.count > 0 {
-                print("⚠️ Songs already exist in database (\(allSongs.count) songs), skipping import")
-                hasImportedInitialData = true
-                return
-            }
-            
-            // Triple-check using a direct fetch to avoid race conditions
-            let descriptor = FetchDescriptor<Song>()
-            let existingSongCount = try modelContext.fetchCount(descriptor)
-            
-            if existingSongCount > 0 {
-                print("⚠️ Found \(existingSongCount) songs via direct fetch, skipping import")
-                hasImportedInitialData = true
-                return
-            }
-            
-            print("📥 Importing data from seeds.json...")
-            
-            let importService = DataImportService()
-            
-            // Import using the main context since we're already on MainActor
-            try await importService.importEnhancedJSON(from: "seeds", into: modelContext)
-            
-            hasImportedInitialData = true
-            
-            print("✅ Successfully imported seeds")
-        } catch {
-            print("❌ Failed to import data: \(error)")
-            // Don't set hasImportedInitialData to true on failure
-            // so it will retry next time
-        }
     }
 }
 
