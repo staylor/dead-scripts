@@ -5,21 +5,24 @@
 ### Issue: "No songs showing after migration"
 
 **Possible causes:**
+
 1. JSON file not found in bundle
 2. JSON format doesn't match expected structure
 3. Import failed silently
 
 **Solutions:**
+
 ```swift
 // Check the console for error messages
 // You should see either:
-// "Successfully imported X songs" 
+// "Successfully imported X songs"
 // or
 // "Failed to import data: [error message]"
 ```
 
 **Quick fix:**
-1. Make sure `songs.json` is in your project
+
+1. Make sure `seeds.json` is in your project
 2. Verify it's included in "Copy Bundle Resources" (Build Phases)
 3. Reset import flag: Settings → Advanced → Reset Data Import
 
@@ -28,6 +31,7 @@
 **Possible cause:** SwiftData model mismatch with existing data
 
 **Solution:**
+
 1. Delete the app from simulator/device
 2. Reinstall (this clears the database)
 3. Or add migration code (advanced)
@@ -37,6 +41,7 @@
 **Cause:** Import flag not being set correctly
 
 **Solution:**
+
 ```swift
 // In ContentView, verify this line exists:
 hasImportedInitialData = true
@@ -47,6 +52,7 @@ hasImportedInitialData = true
 **Reason:** File might still be referenced somewhere
 
 **Solution:**
+
 1. Build the project (`Cmd+B`)
 2. Fix any compiler errors pointing to PDFDocument
 3. Search project for "PDFDocument" (Cmd+Shift+F)
@@ -56,6 +62,7 @@ hasImportedInitialData = true
 ### Issue: "Search not working"
 
 **Check:**
+
 ```swift
 // Make sure filteredSongs is being used in SearchScreen
 SearchScreen(
@@ -68,28 +75,32 @@ SearchScreen(
 ### Issue: "Lyrics not showing"
 
 **Possible causes:**
+
 1. Lyrics field is `nil` or empty in JSON
 2. LyricsOverlay not updated
 
 **Solution:**
+
 ```json
-// In songs.json, ensure lyrics field exists:
+// In seeds.json, ensure lyrics field exists:
 {
   "name": "Song Name",
   "albumName": "Album Name",
   "fileName": "song.pdf",
-  "lyrics": "These are the lyrics..."  // ← Add this
+  "lyrics": "These are the lyrics..." // ← Add this
 }
 ```
 
 ### Issue: "PDFs not displaying"
 
 **Check:**
+
 1. PDF files are in project bundle
 2. File names match exactly (case-sensitive)
 3. PDFKitView is properly implemented
 
 **Debug:**
+
 ```swift
 // Add to Song model or test:
 if let url = song.pdfURL {
@@ -103,11 +114,13 @@ if let url = song.pdfURL {
 ### Issue: "Performance is slow"
 
 **Check:**
+
 1. How many songs do you have?
 2. Is search filtering properly?
 3. Are you loading all relationships unnecessarily?
 
 **Optimization:**
+
 ```swift
 // Instead of:
 let allSongs = songManager.fetchAllSongs()
@@ -122,11 +135,13 @@ let filtered = allSongs.filter { ... }
 ## Resetting Everything
 
 ### Option 1: Delete and Reinstall App
+
 - Easiest method
 - Clears all data
 - Fresh import on next launch
 
 ### Option 2: Reset Import Flag
+
 ```swift
 // Add this somewhere (like a debug button):
 UserDefaults.standard.set(false, forKey: "hasImportedInitialData")
@@ -134,6 +149,7 @@ UserDefaults.standard.set(false, forKey: "hasImportedInitialData")
 ```
 
 ### Option 3: Clear All Data Programmatically
+
 ```swift
 @Environment(\.modelContext) private var modelContext
 
@@ -151,23 +167,23 @@ Add detailed logging to `DataImportService.swift`:
 ```swift
 func importLegacyJSON(from fileName: String, into context: ModelContext) async throws {
     print("🔍 Looking for: \(fileName).json")
-    
+
     guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
         print("❌ File not found!")
         print("Available resources: \(Bundle.main.paths(forResourcesOfType: "json", inDirectory: nil))")
         throw ImportError.fileNotFound
     }
-    
+
     print("✅ Found file at: \(url)")
-    
+
     let data = try Data(contentsOf: url)
     print("📦 Data size: \(data.count) bytes")
-    
+
     let legacySongs = try JSONDecoder().decode([LegacySongJSON].self, from: data)
     print("📝 Decoded \(legacySongs.count) songs")
-    
+
     // ... rest of import code ...
-    
+
     print("✅ Import complete!")
 }
 ```
@@ -175,6 +191,7 @@ func importLegacyJSON(from fileName: String, into context: ModelContext) async t
 ## Checking Database Contents
 
 ### View in Xcode Debugger
+
 ```swift
 // Add breakpoint and in console:
 po allSongs.count
@@ -182,12 +199,13 @@ po allSongs.map { $0.name }
 ```
 
 ### Add Debug View
+
 ```swift
 struct DebugView: View {
     @Query private var songs: [Song]
     @Query private var artists: [Artist]
     @Query private var albums: [Album]
-    
+
     var body: some View {
         List {
             Section("Songs (\(songs.count))") {
@@ -220,6 +238,7 @@ struct DebugView: View {
 ## Clean Build
 
 Sometimes Xcode needs a clean slate:
+
 1. Product → Clean Build Folder (`Cmd+Shift+K`)
 2. Delete Derived Data:
    - Xcode → Settings → Locations
@@ -235,7 +254,7 @@ Create a minimal test:
 ```swift
 struct TestImportView: View {
     @Environment(\.modelContext) private var modelContext
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Button("Test Import") {
@@ -249,7 +268,7 @@ struct TestImportView: View {
                     }
                 }
             }
-            
+
             Button("Check Count") {
                 let descriptor = FetchDescriptor<Song>()
                 let count = (try? modelContext.fetchCount(descriptor)) ?? 0

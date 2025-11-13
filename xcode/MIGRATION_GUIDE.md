@@ -26,7 +26,7 @@ JSON seed file → SwiftData database → Query with predicates
 - **DataImportService.swift** - Handles JSON → SwiftData import
 - **SongRowView.swift** - Row view for songs (replaces PDFRowView for new model)
 - **AdvancedQueryExamples.swift** - Examples of advanced queries
-- **songs-new-format-example.json** - Example of new JSON structure
+- **seeds-new-format-example.json** - Example of new JSON structure
 
 ### ✅ Updated
 
@@ -40,7 +40,7 @@ JSON seed file → SwiftData database → Query with predicates
 
 - **PDFDocument.swift** - Legacy struct (can be removed after migration complete)
 - **PDFRowView.swift** - Legacy view (can be removed after migration complete)
-- **songs.json** - Your existing JSON file (still used as seed data)
+- **seeds.json** - Your existing JSON file (still used as seed data)
 
 ---
 
@@ -49,7 +49,7 @@ JSON seed file → SwiftData database → Query with predicates
 ### First Launch
 
 1. App checks `@AppStorage("hasImportedInitialData")`
-2. If `false`, imports `songs.json` via `DataImportService`
+2. If `false`, imports `seeds.json` via `DataImportService`
 3. Creates `Song`, `Artist`, and `Album` objects in SwiftData
 4. Sets `hasImportedInitialData = true`
 5. Shows songs from database
@@ -79,9 +79,9 @@ To reset the database during development:
 
 ## Adding New Songs
 
-### Option 1: Update songs.json (Simple)
+### Option 1: Update seeds.json (Simple)
 
-Keep adding to your existing `songs.json`:
+Keep adding to your existing `seeds.json`:
 
 ```json
 [
@@ -203,7 +203,7 @@ See `AdvancedQueryExamples.swift` for examples of:
 ### "No songs showing up"
 
 - Check Console for import errors
-- Verify `songs.json` is in your bundle
+- Verify `seeds.json` is in your bundle
 - Try deleting app and reinstalling
 
 ### "Database growing too large"

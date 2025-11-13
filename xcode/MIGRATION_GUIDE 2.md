@@ -14,7 +14,7 @@ Your app has been migrated from loading data from JSON every launch to using **S
    - `Album` - Album information
 
 2. **DataImportService.swift** - Handles JSON import
-   - `importLegacyJSON()` - Imports your existing songs.json
+   - `importLegacyJSON()` - Imports your existing seeds.json
    - `importStructuredJSON()` - For future enhanced JSON format
 
 3. **PDFKitView.swift** - PDF display component
@@ -23,7 +23,7 @@ Your app has been migrated from loading data from JSON every launch to using **S
 4. **AdvancedQueryExamples.swift** - Reference for future features
    - Shows how to query, filter, and display data
 
-5. **songs-new-format-example.json** - Template for future imports
+5. **seeds-new-format-example.json** - Template for future imports
 
 ### ✅ Updated Files
 
@@ -66,14 +66,14 @@ JSON file → Import once → SwiftData database → Fast queries → Lazy loadi
 ## First Launch Behavior
 
 1. App checks `@AppStorage("hasImportedInitialData")`
-2. If `false`, imports `songs.json` into SwiftData
+2. If `false`, imports `seeds.json` into SwiftData
 3. Shows loading indicator during import
 4. Sets flag to `true` to prevent re-import
 5. From then on, queries database directly
 
 ## Adding New Songs
 
-### Option 1: Keep Legacy Format (Current songs.json)
+### Option 1: Keep Legacy Format (Current seeds.json)
 
 ```json
 [

@@ -44,7 +44,7 @@ struct ContentView: View {
 
             if existingSongCount == 0 {
                 let importService = DataImportService()
-                try await importService.importEnhancedJSON(from: "songs", into: modelContext)
+                try await importService.importEnhancedJSON(from: "seeds", into: modelContext)
                 hasImportedInitialData = true
             }
         } catch {

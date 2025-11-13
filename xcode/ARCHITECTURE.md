@@ -84,7 +84,7 @@
 │                         DATA IMPORT                              │
 └─────────────────────────────────────────────────────────────────┘
 
-         songs.json (Bundle)
+         seeds.json (Bundle)
                 │
                 │ Read file
                 ▼
@@ -223,8 +223,8 @@
 │   └── AdvancedQueryExamples.swift  ← Reference code
 │
 ├── 📁 Resources/
-│   ├── songs.json                   ← Seed data
-│   ├── songs-new-format-example.json ← Template
+│   ├── seeds.json                   ← Seed data
+│   ├── seeds-new-format-example.json ← Template
 │   └── 📁 PDFs/
 │       ├── song1.pdf
 │       ├── song2.pdf

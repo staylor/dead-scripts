@@ -53,11 +53,11 @@ App will launch on simulator/device
 
 ### Issue: "No songs appear"
 
-**Fix:** Check that `songs.json` is in "Copy Bundle Resources"
+**Fix:** Check that `seeds.json` is in "Copy Bundle Resources"
 
 1. Project → Target → Build Phases
 2. Expand "Copy Bundle Resources"
-3. Ensure songs.json is listed
+3. Ensure seeds.json is listed
 
 ### Issue: "App crashes"
 
@@ -71,7 +71,7 @@ Cmd + R          (Run)
 
 ### Issue: "PDFs don't display"
 
-**Fix:** Verify PDF files are in bundle resources (same as songs.json)
+**Fix:** Verify PDF files are in bundle resources (same as seeds.json)
 
 ---
 
@@ -79,7 +79,7 @@ Cmd + R          (Run)
 
 ### Reset Import
 
-If you updated songs.json:
+If you updated seeds.json:
 
 1. Delete app from simulator
 2. Run again (imports fresh)

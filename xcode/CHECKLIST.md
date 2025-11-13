@@ -5,12 +5,14 @@ Before running your migrated app, verify these items:
 ## 📦 Required Files in Bundle
 
 ### Must Have:
-- [ ] `songs.json` is in project
-- [ ] `songs.json` is in "Copy Bundle Resources" (Build Phases → Copy Bundle Resources)
+
+- [ ] `seeds.json` is in project
+- [ ] `seeds.json` is in "Copy Bundle Resources" (Build Phases → Copy Bundle Resources)
 - [ ] All PDF files referenced in JSON are in bundle
 - [ ] PDF files are also in "Copy Bundle Resources"
 
 ### How to Check:
+
 1. Click project in Project Navigator
 2. Select your target
 3. Go to "Build Phases"
@@ -23,6 +25,7 @@ Before running your migrated app, verify these items:
 - [ ] Swift Language Version is Swift 5.9 or later
 
 ### How to Check:
+
 1. Project → Target → Build Settings
 2. Search "deployment target"
 3. Search "swift language version"
@@ -30,12 +33,14 @@ Before running your migrated app, verify these items:
 ## 📝 Code Verification
 
 ### Files Exist:
+
 - [ ] Song.swift (data models)
 - [ ] DataImportService.swift (import logic)
 - [ ] PDFKitView.swift (PDF display)
 - [ ] SongDataManager.swift (helpers)
 
 ### Files Updated:
+
 - [ ] LeadSheetsApp.swift has `.modelContainer()`
 - [ ] ContentView.swift uses `@Query` and `allSongs`
 - [ ] SearchScreen.swift accepts `songs: [Song]`
@@ -54,7 +59,7 @@ Before running your migrated app, verify these items:
 Watch for these console messages:
 
 ```
-🔍 Looking for: songs.json
+🔍 Looking for: seeds.json
 ✅ Found file at: [path]
 📦 Data size: [X] bytes
 📝 Decoded [N] songs
@@ -63,6 +68,7 @@ Successfully imported [N] songs
 ```
 
 If you see errors instead:
+
 - Check `TROUBLESHOOTING.md`
 - Verify JSON is in bundle
 - Check JSON format is valid
@@ -70,6 +76,7 @@ If you see errors instead:
 ## ✨ Test Functionality
 
 ### Basic Features:
+
 - [ ] App launches without crashing
 - [ ] Loading indicator shows briefly
 - [ ] Song list appears
@@ -77,6 +84,7 @@ If you see errors instead:
 - [ ] Each song shows name and artist/album
 
 ### Search:
+
 - [ ] Search bar is visible
 - [ ] Typing filters results
 - [ ] Search works for song names
@@ -85,12 +93,14 @@ If you see errors instead:
 - [ ] Clearing search shows all songs
 
 ### Song Selection:
+
 - [ ] Tapping song opens PDF viewer
 - [ ] PDF displays correctly
 - [ ] Back button works
 - [ ] Transition animation is smooth
 
 ### Lyrics Overlay:
+
 - [ ] Lyrics button visible in PDF viewer
 - [ ] Tapping shows lyrics overlay
 - [ ] Song name displays
@@ -137,20 +147,24 @@ Add this temporary button to ContentView to verify data:
 ## 🚨 Common First-Run Issues
 
 ### No songs appear:
+
 - JSON not in bundle
 - Import failed (check console)
 - Solution: See `TROUBLESHOOTING.md`
 
 ### App crashes:
+
 - Old database conflicting
 - Solution: Delete app, reinstall fresh
 
 ### PDFs don't show:
+
 - PDF files not in bundle
 - File names don't match
 - Solution: Check "Copy Bundle Resources"
 
 ### Search doesn't work:
+
 - Wrong variable passed to SearchScreen
 - Should be `filteredSongs`, not `allSongs`
 

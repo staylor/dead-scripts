@@ -196,16 +196,16 @@ struct ContentView: View {
                 return
             }
             
-            print("📥 Importing data from songs.json...")
+            print("📥 Importing data from seeds.json...")
             
             let importService = DataImportService()
             
             // Import using the main context since we're already on MainActor
-            try await importService.importEnhancedJSON(from: "songs", into: modelContext)
+            try await importService.importEnhancedJSON(from: "seeds", into: modelContext)
             
             hasImportedInitialData = true
             
-            print("✅ Successfully imported songs")
+            print("✅ Successfully imported seeds")
         } catch {
             print("❌ Failed to import data: \(error)")
             // Don't set hasImportedInitialData to true on failure

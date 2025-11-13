@@ -86,7 +86,7 @@ await Promise.all(
   })
 );
 
-const file = path.join(appDir, 'songs.json');
+const file = path.join(appDir, 'seeds.json');
 saveJSON(file, data);
 
 // generate images for tvOS

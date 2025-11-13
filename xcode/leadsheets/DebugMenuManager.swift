@@ -33,17 +33,17 @@ class DebugMenuManager {
 
     func reimportData() async {
         do {
-            print("📥 Re-importing data from songs.json...")
+            print("📥 Re-importing data from seeds.json...")
 
             let container = modelContext.container
             let backgroundContext = ModelContext(container)
 
             let importService = DataImportService()
-            try await importService.importEnhancedJSON(from: "songs", into: backgroundContext)
+            try await importService.importEnhancedJSON(from: "seeds", into: backgroundContext)
 
             try backgroundContext.save()
 
-            print("✅ Successfully re-imported songs")
+            print("✅ Successfully re-imported seeds")
         } catch {
             print("❌ Failed to re-import data: \(error)")
         }

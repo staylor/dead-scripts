@@ -32,17 +32,17 @@ These files are now obsolete (but keep them for reference if you want):
 ### 1. Test the Migration
 
 - Run your app
-- On first launch, it will import `songs.json`
+- On first launch, it will import `seeds.json`
 - Verify all songs appear correctly
 - Test search functionality
 
 ### 2. Keep Your Current JSON (For Now)
 
-Your existing `songs.json` works perfectly! The app automatically converts it to the new format.
+Your existing `seeds.json` works perfectly! The app automatically converts it to the new format.
 
 ### 3. Future JSON Enhancements
 
-When you're ready, you can upgrade to the new format (see `songs-new-format-example.json`) which supports:
+When you're ready, you can upgrade to the new format (see `seeds-new-format-example.json`) which supports:
 
 - Multiple artists per song
 - Full album metadata with artwork

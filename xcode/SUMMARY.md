@@ -9,7 +9,7 @@
 3. **PDFKitView.swift** - PDF viewer component
 4. **SongDataManager.swift** - Database helper utilities
 5. **AdvancedQueryExamples.swift** - Example queries and views
-6. **songs-new-format-example.json** - Template for future use
+6. **seeds-new-format-example.json** - Template for future use
 7. **MIGRATION_GUIDE.md** - Technical documentation
 8. **README_SWIFTDATA.md** - User-friendly overview
 9. **TROUBLESHOOTING.md** - Common issues and fixes
@@ -34,7 +34,7 @@
 
 ### Your JSON Still Works!
 
-No need to change your current `songs.json` format:
+No need to change your current `seeds.json` format:
 
 ```json
 [
@@ -137,7 +137,7 @@ private var milesSongs: [Song]
 
 ### Don't Delete These
 
-- Your `songs.json` - Still needed for imports
+- Your `seeds.json` - Still needed for imports
 - PDF files - Still referenced by Song.fileName
 
 ### iOS Version Requirement
@@ -177,7 +177,7 @@ User → ContentView → SwiftData Database
 ## 🔄 Data Flow
 
 ```
-songs.json (Bundle)
+seeds.json (Bundle)
     ↓
 DataImportService
     ↓
