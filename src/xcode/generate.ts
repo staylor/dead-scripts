@@ -1,3 +1,4 @@
+import { exec } from 'child_process';
 import { copyFile } from 'fs/promises';
 import path from 'path';
 
@@ -87,3 +88,6 @@ await Promise.all(
 
 const file = path.join(appDir, 'songs.json');
 saveJSON(file, data);
+
+// generate images for tvOS
+exec('cd xcode; swift ./convert_pdfs.swift');
