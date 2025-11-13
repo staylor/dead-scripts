@@ -250,6 +250,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Dead Sheets";
+				"INFOPLIST_KEY_CFBundleIcons[sdk=watchos*]" = "<dict><key>CFBundlePrimaryIcon</key><dict><key>CFBundleIconFiles</key><array><string>AppIcon</string></array><key>CFBundleIconName</key><string>AppIcon</string></dict></dict>";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = wonderboymusic.leadsheets;
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
@@ -284,6 +285,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Dead Sheets";
+				"INFOPLIST_KEY_CFBundleIcons[sdk=watchos*]" = "<dict><key>CFBundlePrimaryIcon</key><dict><key>CFBundleIconFiles</key><array><string>AppIcon</string></array><key>CFBundleIconName</key><string>AppIcon</string></dict></dict>";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = wonderboymusic.leadsheets;
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
