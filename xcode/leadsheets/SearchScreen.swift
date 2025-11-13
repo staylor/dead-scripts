@@ -72,174 +72,8 @@ struct SearchScreen: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            #if os(macOS)
-            // macOS: Use toolbar instead of custom header
-            VStack(spacing: 0) {
-                // Search Bar (macOS native style)
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.secondary)
-
-                    TextField("Search songs...", text: $searchText)
-                        .textFieldStyle(.roundedBorder)
-
-                    if !searchText.isEmpty {
-                        Button(action: { searchText = "" }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.secondary)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .padding()
-
-                // Filter Picker (macOS native style)
-                Picker("Filter", selection: $selectedFilter) {
-                    ForEach(SearchFilter.allCases, id: \.self) { filter in
-                        Text(filter.rawValue).tag(filter)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .padding(.horizontal)
-                .onChange(of: selectedFilter) { _, _ in
-                    selectedAlbum = nil
-                    selectedArtist = nil
-                    selectedSinger = nil
-                }
-            }
-            #elseif os(tvOS)
-            // tvOS: Custom search + filter picker
-            VStack(spacing: 0) {
-                // Search Bar (tvOS custom)
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.secondary)
-                        .font(.title2)
-
-                    TextField("Search songs...", text: $searchText)
-                        .font(.title3)
-
-                    if !searchText.isEmpty {
-                        Button(action: { searchText = "" }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.secondary)
-                                .font(.title2)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .padding(.horizontal, 40)
-                .padding(.vertical, 15)
-                .background(Color.white.opacity(0.1))
-
-                // Filter Picker (tvOS native style)
-                Picker("Filter", selection: $selectedFilter) {
-                    ForEach(SearchFilter.allCases, id: \.self) { filter in
-                        Text(filter.rawValue).tag(filter)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .padding(.horizontal, 40)
-                .padding(.top, 15)
-                .padding(.bottom, 20)
-                .onChange(of: selectedFilter) { _, _ in
-                    selectedAlbum = nil
-                    selectedArtist = nil
-                    selectedSinger = nil
-                }
-            }
-            #else
-            // iOS/iPadOS: Keep existing custom design
-            // Title with Debug Button
-            HStack {
-                Text("Dead Sheets")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-                Spacer()
-                Button(action: {
-                    showingDebugMenu = true
-                }) {
-                    Image(systemName: "gearshape.fill")
-                        .font(.title2)
-                        .foregroundColor(.gray)
-                }
-            }
-            .padding(.horizontal)
-            .padding(.top, 20)
-            .padding(.bottom, 10)
-
-            // Search Bar
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.gray)
-
-                TextField("Search songs...", text: $searchText)
-                    .textFieldStyle(.plain)
-
-                if !searchText.isEmpty {
-                    Button(action: { searchText = "" }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.gray)
-                    }
-                }
-            }
-            .padding()
-            .background(Color(.systemGray6))
-            .cornerRadius(10)
-            .padding(.horizontal)
-            .padding(.bottom, 8)
-
-            // Filter Pills
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(SearchFilter.allCases, id: \.self) { filter in
-                        Button(action: {
-                            selectedFilter = filter
-                            selectedAlbum = nil  // Reset selections when changing filter
-                            selectedArtist = nil
-                            selectedSinger = nil
-                        }) {
-                            Text(filter.rawValue)
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 8)
-                                .background(selectedFilter == filter ? Color.pink : Color(.systemGray6))
-                                .foregroundColor(selectedFilter == filter ? .white : .primary)
-                                .clipShape(Capsule())
-                        }
-                    }
-                }
-                .padding(.horizontal)
-            }
-            .padding(.bottom)
-            #endif
-
-            // Results List
-            if selectedFilter == .allSongs {
-                songsListView
-            } else if selectedFilter == .byAlbum {
-                if let selectedAlbum = selectedAlbum {
-                    albumDetailView(for: selectedAlbum)
-                } else {
-                    albumsListView
-                }
-            } else if selectedFilter == .byArtist {
-                if let selectedArtist = selectedArtist {
-                    artistDetailView(for: selectedArtist)
-                } else {
-                    artistsListView
-                }
-            } else if selectedFilter == .bySinger {
-                if let selectedSinger = selectedSinger {
-                    singerDetailView(for: selectedSinger)
-                } else {
-                    singersListView
-                }
-            } else if selectedFilter == .covers {
-                coversListView
-            }
+            searchHeaderView
+            contentView
         }
         .alert("Debug Menu", isPresented: $showingDebugMenu) {
             Button("Reset All Data", role: .destructive) {
@@ -275,405 +109,292 @@ struct SearchScreen: View {
         #endif
     }
     
-    // MARK: - View Components
+    // MARK: - Header Views
     
-    private var songsListView: some View {
-        Group {
-            if songs.isEmpty {
-                emptyStateView
-            } else {
-                List(songs) { song in
-                    #if os(macOS)
-                    SongRowView(song: song)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            onSelect(song)
-                        }
-                    #else
-                    Button(action: { onSelect(song) }) {
-                        SongRowView(song: song)
-                    }
-                    #if os(tvOS)
-                    .buttonStyle(.card)
-                    #else
-                    .buttonStyle(.plain)
-                    #if !os(watchOS)
-                    .listRowSeparator(.hidden)
-                    #endif
-                    .listRowBackground(Color.clear)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 2)
-                    #endif
-                    #endif
-                }
-                #if os(iOS) || os(tvOS)
-                .listStyle(.plain)
-                #if !os(tvOS) && !os(watchOS)
-                .scrollContentBackground(.hidden)
-                #endif
-                #endif
-            }
-        }
+    @ViewBuilder
+    private var searchHeaderView: some View {
+        #if os(macOS)
+        macOSSearchHeader
+        #elseif os(tvOS)
+        tvOSSearchHeader
+        #else
+        iOSSearchHeader
+        #endif
     }
     
-    private var albumsListView: some View {
-        Group {
-            if filteredAlbums.isEmpty {
-                emptyStateView
-            } else {
-                List(filteredAlbums) { album in
-                    #if os(macOS)
-                    AlbumRowView(album: album)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedAlbum = album
-                        }
-                    #else
-                    Button(action: { selectedAlbum = album }) {
-                        AlbumRowView(album: album)
-                    }
-                    #if os(tvOS)
-                    .buttonStyle(.card)
-                    #else
-                    .buttonStyle(.plain)
-                    #if !os(watchOS)
-                    .listRowSeparator(.hidden)
-                    #endif
-                    .listRowBackground(Color.clear)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 2)
-                    #endif
-                    #endif
-                }
-                #if os(iOS) || os(tvOS)
-                .listStyle(.plain)
-                #if !os(tvOS) && !os(watchOS)
-                .scrollContentBackground(.hidden)
-                #endif
-                #endif
-            }
-        }
-    }
-    
-    private var artistsListView: some View {
-        Group {
-            if filteredArtists.isEmpty {
-                emptyStateView
-            } else {
-                List(filteredArtists) { artist in
-                    #if os(macOS)
-                    ArtistRowView(artist: artist)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedArtist = artist
-                        }
-                    #else
-                    Button(action: { selectedArtist = artist }) {
-                        ArtistRowView(artist: artist)
-                    }
-                    .buttonStyle(.plain)
-                    #if !os(tvOS) && !os(watchOS)
-                    .listRowSeparator(.hidden)
-                    #endif
-                    .listRowBackground(Color.clear)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 2)
-                    #endif
-                }
-                #if os(iOS) || os(tvOS)
-                .listStyle(.plain)
-                #if !os(tvOS) && !os(watchOS)
-                .scrollContentBackground(.hidden)
-                #endif
-                #endif
-            }
-        }
-    }
-    
-    private var singersListView: some View {
-        Group {
-            if filteredSingers.isEmpty {
-                emptyStateView
-            } else {
-                List(filteredSingers) { singer in
-                    #if os(macOS)
-                    SingerRowView(singer: singer)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedSinger = singer
-                        }
-                    #else
-                    Button(action: { selectedSinger = singer }) {
-                        SingerRowView(singer: singer)
-                    }
-                    .buttonStyle(.plain)
-                    #if !os(tvOS) && !os(watchOS)
-                    .listRowSeparator(.hidden)
-                    #endif
-                    .listRowBackground(Color.clear)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 2)
-                    #endif
-                }
-                #if os(iOS) || os(tvOS)
-                .listStyle(.plain)
-                #if !os(tvOS) && !os(watchOS)
-                .scrollContentBackground(.hidden)
-                #endif
-                #endif
-            }
-        }
-    }
-    
-    private var coversListView: some View {
-        Group {
-            if coverSongs.isEmpty {
-                emptyStateView
-            } else {
-                List(coverSongs) { song in
-                    #if os(macOS)
-                    SongRowView(song: song)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            onSelect(song)
-                        }
-                    #else
-                    Button(action: { onSelect(song) }) {
-                        SongRowView(song: song)
-                    }
-                    #if os(tvOS)
-                    .buttonStyle(.card)
-                    #else
-                    .buttonStyle(.plain)
-                    #if !os(watchOS)
-                    .listRowSeparator(.hidden)
-                    #endif
-                    .listRowBackground(Color.clear)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 2)
-                    #endif
-                    #endif
-                }
-                #if os(iOS) || os(tvOS)
-                .listStyle(.plain)
-                #if !os(tvOS) && !os(watchOS)
-                .scrollContentBackground(.hidden)
-                #endif
-                #endif
-            }
-        }
-    }
-    
-    private func albumDetailView(for album: Album) -> some View {
+    private var macOSSearchHeader: some View {
         VStack(spacing: 0) {
-            // Album Header with Back Button
+            searchBarView
+            filterPickerView
+        }
+    }
+    
+    private var tvOSSearchHeader: some View {
+        VStack(spacing: 0) {
+            searchBarView
+            filterPickerView
+        }
+    }
+    
+    private var iOSSearchHeader: some View {
+        VStack(spacing: 0) {
+            // Title with Debug Button
             HStack {
-                Button(action: { selectedAlbum = nil }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "chevron.left")
-                        Text("Albums")
-                    }
-                    .foregroundColor(.pink)
-                }
+                Text("Dead Sheets")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
                 Spacer()
+                Button(action: { showingDebugMenu = true }) {
+                    Image(systemName: "gearshape.fill")
+                        .font(.title2)
+                        .foregroundColor(.gray)
+                }
             }
             .padding(.horizontal)
-            .padding(.bottom, 12)
+            .padding(.top, 20)
+            .padding(.bottom, 10)
             
-            // Album songs list
-            let albumSongs = album.sortedSongs
-            if albumSongs.isEmpty {
-                emptyStateView
-            } else {
-                List(albumSongs) { song in
-                    #if os(macOS)
-                    SongRowView(song: song)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            onSelect(song)
-                        }
-                    #else
-                    Button(action: { onSelect(song) }) {
-                        SongRowView(song: song)
-                    }
-                    #if os(tvOS)
-                    .buttonStyle(.card)
-                    #else
-                    .buttonStyle(.plain)
-                    #if !os(watchOS)
-                    .listRowSeparator(.hidden)
-                    #endif
-                    .listRowBackground(Color.clear)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 2)
-                    #endif
-                    #endif
-                }
-                #if os(iOS) || os(tvOS)
-                .listStyle(.plain)
-                #if !os(tvOS) && !os(watchOS)
-                .scrollContentBackground(.hidden)
-                #endif
-                #endif
-            }
+            searchBarView
+            filterPickerView
         }
     }
     
-    private func artistDetailView(for artist: Artist) -> some View {
-        VStack(spacing: 0) {
-            // Artist Header with Back Button
+    // MARK: - Search Bar & Filter Components
+    
+    private var searchBarView: some View {
+        Group {
+            #if os(macOS)
             HStack {
-                Button(action: { selectedArtist = nil }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "chevron.left")
-                        Text("Artists")
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.secondary)
+                TextField("Search songs...", text: $searchText)
+                    .textFieldStyle(.roundedBorder)
+                if !searchText.isEmpty {
+                    Button(action: { searchText = "" }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.secondary)
                     }
-                    .foregroundColor(.pink)
-                }
-                Spacer()
-            }
-            .padding(.horizontal)
-            .padding(.bottom, 12)
-            
-            // Artist songs list
-            let artistSongs = artist.songs?.sorted { $0.name < $1.name } ?? []
-            if artistSongs.isEmpty {
-                emptyStateView
-            } else {
-                List(artistSongs) { song in
-                    #if os(macOS)
-                    SongRowView(song: song)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            onSelect(song)
-                        }
-                    #else
-                    Button(action: { onSelect(song) }) {
-                        SongRowView(song: song)
-                    }
-                    #if os(tvOS)
-                    .buttonStyle(.card)
-                    #else
                     .buttonStyle(.plain)
-                    #if !os(watchOS)
-                    .listRowSeparator(.hidden)
-                    #endif
-                    .listRowBackground(Color.clear)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 2)
-                    #endif
-                    #endif
                 }
-                #if os(iOS) || os(tvOS)
-                .listStyle(.plain)
-                #if !os(tvOS) && !os(watchOS)
-                .scrollContentBackground(.hidden)
-                #endif
-                #endif
             }
-        }
-    }
-    
-    private func singerDetailView(for singer: Singer) -> some View {
-        VStack(spacing: 0) {
-            // Singer Header with Back Button
+            .padding()
+            #elseif os(tvOS)
             HStack {
-                Button(action: { selectedSinger = nil }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "chevron.left")
-                        Text("Singers")
-                    }
-                    .foregroundColor(.pink)
-                }
-                Spacer()
-            }
-            .padding(.horizontal)
-            .padding(.bottom, 12)
-            
-            // Singer songs list
-            let singerSongs = singer.songs?.sorted { $0.name < $1.name } ?? []
-            if singerSongs.isEmpty {
-                emptyStateView
-            } else {
-                List(singerSongs) { song in
-                    #if os(macOS)
-                    SongRowView(song: song)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            onSelect(song)
-                        }
-                    #else
-                    Button(action: { onSelect(song) }) {
-                        SongRowView(song: song)
-                    }
-                    #if os(tvOS)
-                    .buttonStyle(.card)
-                    #else
-                    .buttonStyle(.plain)
-                    #if !os(watchOS)
-                    .listRowSeparator(.hidden)
-                    #endif
-                    .listRowBackground(Color.clear)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 2)
-                    #endif
-                    #endif
-                }
-                #if os(iOS) || os(tvOS)
-                .listStyle(.plain)
-                #if !os(tvOS) && !os(watchOS)
-                .scrollContentBackground(.hidden)
-                #endif
-                #endif
-            }
-        }
-    }
-    
-    private var emptyStateView: some View {
-        VStack {
-            Spacer()
-            VStack(spacing: 16) {
-                Image(systemName: emptyStateIcon)
-                    .font(.system(size: 64))
-                    .foregroundColor(.gray)
-                Text(emptyStateMessage)
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.secondary)
                     .font(.title2)
-                    .foregroundColor(.gray)
+                TextField("Search songs...", text: $searchText)
+                    .font(.title3)
+                if !searchText.isEmpty {
+                    Button(action: { searchText = "" }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.secondary)
+                            .font(.title2)
+                    }
+                    .buttonStyle(.plain)
+                }
             }
-            Spacer()
+            .padding(.horizontal, 40)
+            .padding(.vertical, 15)
+            .background(Color.white.opacity(0.1))
+            #else
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                TextField("Search songs...", text: $searchText)
+                    .textFieldStyle(.plain)
+                if !searchText.isEmpty {
+                    Button(action: { searchText = "" }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
+            .padding()
+            .background(Color.white.opacity(0.1))
+            .cornerRadius(10)
+            .padding(.horizontal)
+            .padding(.bottom, 8)
+            #endif
         }
     }
     
-    private var emptyStateIcon: String {
+    private var filterPickerView: some View {
+        Group {
+            #if os(iOS)
+            // iOS uses custom pill buttons
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(SearchFilter.allCases, id: \.self) { filter in
+                        Button(action: { selectFilter(filter) }) {
+                            Text(filter.rawValue)
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(selectedFilter == filter ? Color.pink : Color(.systemGray6))
+                                .foregroundColor(selectedFilter == filter ? .white : .primary)
+                                .clipShape(Capsule())
+                        }
+                    }
+                }
+                .padding(.horizontal)
+            }
+            .padding(.bottom)
+            #elseif os(tvOS)
+            // tvOS uses segmented picker with custom spacing
+            Picker("Filter", selection: $selectedFilter) {
+                ForEach(SearchFilter.allCases, id: \.self) { filter in
+                    Text(filter.rawValue).tag(filter)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal, 40)
+            .padding(.top, 15)
+            .padding(.bottom, 20)
+            .onChange(of: selectedFilter) { _, _ in
+                resetSelections()
+            }
+            #else
+            // macOS uses standard segmented picker
+            Picker("Filter", selection: $selectedFilter) {
+                ForEach(SearchFilter.allCases, id: \.self) { filter in
+                    Text(filter.rawValue).tag(filter)
+                }
+            }
+            .pickerStyle(.segmented)
+            .onChange(of: selectedFilter) { _, _ in
+                resetSelections()
+            }
+            #endif
+        }
+    }
+    
+    // MARK: - Content View
+    
+    @ViewBuilder
+    private var contentView: some View {
         switch selectedFilter {
         case .allSongs:
-            return "doc.text.magnifyingglass"
+            songsListView
         case .byAlbum:
-            return "opticaldisc"
+            if let selectedAlbum {
+                DetailView(
+                    backButtonTitle: "Albums",
+                    songs: selectedAlbum.sortedSongs,
+                    onBack: { self.selectedAlbum = nil },
+                    onSelect: onSelect
+                )
+            } else {
+                albumsListView
+            }
         case .byArtist:
-            return "person.circle"
+            if let selectedArtist {
+                DetailView(
+                    backButtonTitle: "Artists",
+                    songs: selectedArtist.songs?.sorted { $0.name < $1.name } ?? [],
+                    onBack: { self.selectedArtist = nil },
+                    onSelect: onSelect
+                )
+            } else {
+                artistsListView
+            }
         case .bySinger:
-            return "mic.circle"
+            if let selectedSinger {
+                DetailView(
+                    backButtonTitle: "Singers",
+                    songs: selectedSinger.songs?.sorted { $0.name < $1.name } ?? [],
+                    onBack: { self.selectedSinger = nil },
+                    onSelect: onSelect
+                )
+            } else {
+                singersListView
+            }
         case .covers:
-            return "music.note.list"
+            coversListView
         }
     }
     
-    private var emptyStateMessage: String {
-        switch selectedFilter {
-        case .allSongs:
-            return "No songs found"
-        case .byAlbum:
-            return "No albums found"
-        case .byArtist:
-            return "No artists found"
-        case .bySinger:
-            return "No singers found"
-        case .covers:
-            return "No covers found"
-        }
+    // MARK: - Helper Methods
+    
+    private func selectFilter(_ filter: SearchFilter) {
+        selectedFilter = filter
+        resetSelections()
     }
     
+    private func resetSelections() {
+        selectedAlbum = nil
+        selectedArtist = nil
+        selectedSinger = nil
+    }
+    
+    // MARK: - View Components
+
+    private var songsListView: some View {
+        SongsListView(songs: songs, onSelect: onSelect)
+    }
+
+    private var albumsListView: some View {
+        AlbumsListView(albums: filteredAlbums) { album in
+            selectedAlbum = album
+        }
+    }
+
+    private var artistsListView: some View {
+        ArtistsListView(artists: filteredArtists) { artist in
+            selectedArtist = artist
+        }
+    }
+
+    private var singersListView: some View {
+        SingersListView(singers: filteredSingers) { singer in
+            selectedSinger = singer
+        }
+    }
+
+    private var coversListView: some View {
+        CoversListView(songs: coverSongs, onSelect: onSelect)
+    }
+    
+    // Reusable Detail View for Album/Artist/Singer
+    private struct DetailView: View {
+        let backButtonTitle: String
+        let songs: [Song]
+        let onBack: () -> Void
+        let onSelect: (Song) -> Void
+        
+        var body: some View {
+            VStack(spacing: 0) {
+                // Back Button Header
+                HStack {
+                    Button(action: onBack) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "chevron.left")
+                            Text(backButtonTitle)
+                        }
+                        .foregroundColor(.pink)
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 12)
+
+                // Songs list
+                PlatformListView(
+                    items: songs,
+                    emptyContent: {
+                        EmptyStateView(filter: .allSongs)
+                    },
+                    rowContent: { song in
+                        SongRowView(song: song)
+                    },
+                    onSelect: onSelect
+                )
+            }
+        }
+    }
+
     @MainActor
     private func resetAllData() async {
         print("🗑️ Deleting all data and resetting import flag...")

@@ -28,13 +28,7 @@ struct SongRowView: View {
                         .font(.system(size: 40))
                         .foregroundColor(.pink)
                         .frame(width: 60, height: 60)
-                        #if os(iOS)
-                        .background(Color(.systemGray6))
-                        #elseif os(tvOS) || os(watchOS)
-                        .background(Color.gray.opacity(0.2))
-                        #else
-                        .background(Color(nsColor: .controlBackgroundColor))
-                        #endif
+                        .background(PlatformColors.iconPlaceholder)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
@@ -81,13 +75,7 @@ struct SongRowView: View {
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
-        #if os(iOS)
-        .background(Color(.systemBackground))
-        #elseif os(tvOS) || os(watchOS)
-        .background(Color.white.opacity(0.1))
-        #else
-        .background(Color(nsColor: .controlBackgroundColor))
-        #endif
+        .background(PlatformColors.rowBackground)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
     }
