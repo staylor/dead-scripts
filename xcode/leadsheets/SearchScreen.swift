@@ -79,10 +79,10 @@ struct SearchScreen: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.secondary)
-                    
+
                     TextField("Search songs...", text: $searchText)
                         .textFieldStyle(.roundedBorder)
-                    
+
                     if !searchText.isEmpty {
                         Button(action: { searchText = "" }) {
                             Image(systemName: "xmark.circle.fill")
@@ -92,7 +92,7 @@ struct SearchScreen: View {
                     }
                 }
                 .padding()
-                
+
                 // Filter Picker (macOS native style)
                 Picker("Filter", selection: $selectedFilter) {
                     ForEach(SearchFilter.allCases, id: \.self) { filter in
@@ -101,6 +101,47 @@ struct SearchScreen: View {
                 }
                 .pickerStyle(.segmented)
                 .padding(.horizontal)
+                .onChange(of: selectedFilter) { _, _ in
+                    selectedAlbum = nil
+                    selectedArtist = nil
+                    selectedSinger = nil
+                }
+            }
+            #elseif os(tvOS)
+            // tvOS: Custom search + filter picker
+            VStack(spacing: 0) {
+                // Search Bar (tvOS custom)
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.secondary)
+                        .font(.title2)
+
+                    TextField("Search songs...", text: $searchText)
+                        .font(.title3)
+
+                    if !searchText.isEmpty {
+                        Button(action: { searchText = "" }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.secondary)
+                                .font(.title2)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, 40)
+                .padding(.vertical, 15)
+                .background(Color.white.opacity(0.1))
+
+                // Filter Picker (tvOS native style)
+                Picker("Filter", selection: $selectedFilter) {
+                    ForEach(SearchFilter.allCases, id: \.self) { filter in
+                        Text(filter.rawValue).tag(filter)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal, 40)
+                .padding(.top, 15)
+                .padding(.bottom, 20)
                 .onChange(of: selectedFilter) { _, _ in
                     selectedAlbum = nil
                     selectedArtist = nil
@@ -127,15 +168,15 @@ struct SearchScreen: View {
             .padding(.horizontal)
             .padding(.top, 20)
             .padding(.bottom, 10)
-            
+
             // Search Bar
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.gray)
-                
+
                 TextField("Search songs...", text: $searchText)
                     .textFieldStyle(.plain)
-                
+
                 if !searchText.isEmpty {
                     Button(action: { searchText = "" }) {
                         Image(systemName: "xmark.circle.fill")
@@ -144,17 +185,11 @@ struct SearchScreen: View {
                 }
             }
             .padding()
-            #if os(iOS)
             .background(Color(.systemGray6))
-            #elseif os(tvOS) || os(watchOS)
-            .background(Color.gray.opacity(0.2))
-            #else
-            .background(Color(nsColor: .controlBackgroundColor))
-            #endif
             .cornerRadius(10)
             .padding(.horizontal)
             .padding(.bottom, 8)
-            
+
             // Filter Pills
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
@@ -170,13 +205,7 @@ struct SearchScreen: View {
                                 .fontWeight(.medium)
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 8)
-                                #if os(iOS)
                                 .background(selectedFilter == filter ? Color.pink : Color(.systemGray6))
-                                #elseif os(tvOS) || os(watchOS)
-                                .background(selectedFilter == filter ? Color.pink : Color.gray.opacity(0.2))
-                                #else
-                                .background(selectedFilter == filter ? Color.pink : Color(nsColor: .controlBackgroundColor))
-                                #endif
                                 .foregroundColor(selectedFilter == filter ? .white : .primary)
                                 .clipShape(Capsule())
                         }
@@ -186,7 +215,7 @@ struct SearchScreen: View {
             }
             .padding(.bottom)
             #endif
-            
+
             // Results List
             if selectedFilter == .allSongs {
                 songsListView
@@ -264,13 +293,17 @@ struct SearchScreen: View {
                     Button(action: { onSelect(song) }) {
                         SongRowView(song: song)
                     }
+                    #if os(tvOS)
+                    .buttonStyle(.card)
+                    #else
                     .buttonStyle(.plain)
-                    #if !os(tvOS) && !os(watchOS)
+                    #if !os(watchOS)
                     .listRowSeparator(.hidden)
                     #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                     #endif
                 }
                 #if os(iOS) || os(tvOS)
@@ -299,13 +332,17 @@ struct SearchScreen: View {
                     Button(action: { selectedAlbum = album }) {
                         AlbumRowView(album: album)
                     }
+                    #if os(tvOS)
+                    .buttonStyle(.card)
+                    #else
                     .buttonStyle(.plain)
-                    #if !os(tvOS) && !os(watchOS)
+                    #if !os(watchOS)
                     .listRowSeparator(.hidden)
                     #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                     #endif
                 }
                 #if os(iOS) || os(tvOS)
@@ -404,13 +441,17 @@ struct SearchScreen: View {
                     Button(action: { onSelect(song) }) {
                         SongRowView(song: song)
                     }
+                    #if os(tvOS)
+                    .buttonStyle(.card)
+                    #else
                     .buttonStyle(.plain)
-                    #if !os(tvOS) && !os(watchOS)
+                    #if !os(watchOS)
                     .listRowSeparator(.hidden)
                     #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                     #endif
                 }
                 #if os(iOS) || os(tvOS)
@@ -455,13 +496,17 @@ struct SearchScreen: View {
                     Button(action: { onSelect(song) }) {
                         SongRowView(song: song)
                     }
+                    #if os(tvOS)
+                    .buttonStyle(.card)
+                    #else
                     .buttonStyle(.plain)
-                    #if !os(tvOS) && !os(watchOS)
+                    #if !os(watchOS)
                     .listRowSeparator(.hidden)
                     #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                     #endif
                 }
                 #if os(iOS) || os(tvOS)
@@ -506,13 +551,17 @@ struct SearchScreen: View {
                     Button(action: { onSelect(song) }) {
                         SongRowView(song: song)
                     }
+                    #if os(tvOS)
+                    .buttonStyle(.card)
+                    #else
                     .buttonStyle(.plain)
-                    #if !os(tvOS) && !os(watchOS)
+                    #if !os(watchOS)
                     .listRowSeparator(.hidden)
                     #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                     #endif
                 }
                 #if os(iOS) || os(tvOS)
@@ -557,13 +606,17 @@ struct SearchScreen: View {
                     Button(action: { onSelect(song) }) {
                         SongRowView(song: song)
                     }
+                    #if os(tvOS)
+                    .buttonStyle(.card)
+                    #else
                     .buttonStyle(.plain)
-                    #if !os(tvOS) && !os(watchOS)
+                    #if !os(watchOS)
                     .listRowSeparator(.hidden)
                     #endif
                     .listRowBackground(Color.clear)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
+                    #endif
                     #endif
                 }
                 #if os(iOS) || os(tvOS)

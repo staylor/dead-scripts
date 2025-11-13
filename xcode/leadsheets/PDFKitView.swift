@@ -1,6 +1,6 @@
 import SwiftUI
 
-#if !os(watchOS)
+#if !os(watchOS) && !os(tvOS)
 import PDFKit
 
 #if canImport(UIKit)
@@ -188,4 +188,4 @@ private struct PDFKitViewRepresentable: NSViewRepresentable {
 }
 #endif
 
-#endif // !os(watchOS)
+#endif

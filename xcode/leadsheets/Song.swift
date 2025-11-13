@@ -21,7 +21,12 @@ class Song {
     var pdfURL: URL? {
         Bundle.main.url(forResource: fileName.replacingOccurrences(of: ".pdf", with: ""), withExtension: "pdf")
     }
-    
+
+    // Computed property for image URL (for tvOS)
+    var imageURL: URL? {
+        Bundle.main.url(forResource: fileName.replacingOccurrences(of: ".pdf", with: ""), withExtension: "png")
+    }
+
     init(
         name: String,
         fileName: String,

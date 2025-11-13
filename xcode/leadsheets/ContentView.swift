@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-#if !os(watchOS)
+#if !os(watchOS) && !os(tvOS)
 import PDFKit
 #endif
 
@@ -110,7 +110,23 @@ struct ContentView: View {
                             .shadow(radius: 10)
                     }
                 } else {
-                    // Search Screen (always present in the background)
+                    #if os(tvOS)
+                    // tvOS: Conditional rendering (no opacity trick, for proper focus)
+                    if let song = selected {
+                        ImageViewerScreen(song: song, onBack: {
+                            selected = nil
+                        })
+                    } else {
+                        SearchScreen(
+                            searchText: $searchText,
+                            songs: filteredSongs,
+                            onSelect: { song in
+                                selected = song
+                            }
+                        )
+                    }
+                    #else
+                    // iOS/iPadOS: Keep existing ZStack approach with opacity
                     SearchScreen(
                         searchText: $searchText,
                         songs: filteredSongs,
@@ -119,8 +135,8 @@ struct ContentView: View {
                         }
                     )
                     .opacity(selected == nil ? 1 : 0)
-                    
-                    // PDF Viewer Screen (slides in from right)
+
+                    // Viewer Screen (slides in from right)
                     #if !os(watchOS)
                     if let song = selected {
                         PDFViewerScreen(song: song, onBack: {
@@ -132,6 +148,7 @@ struct ContentView: View {
                         ))
                         .zIndex(1)
                     }
+                    #endif
                     #endif
                 }
             }

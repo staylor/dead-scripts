@@ -1,6 +1,6 @@
 import SwiftUI
 
-#if !os(watchOS)
+#if !os(watchOS) && !os(tvOS)
 struct PDFViewerScreen: View {
     let song: Song
     let onBack: () -> Void

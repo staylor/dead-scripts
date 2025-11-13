@@ -10,4 +10,5 @@ node_modules
 docx
 pdf
 src/prisma/client
+xcode/leadsheets/images
 xcode/leadsheets/pdfs
