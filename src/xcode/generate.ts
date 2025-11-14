@@ -2,14 +2,14 @@ import { exec } from 'child_process';
 import { copyFile } from 'fs/promises';
 import path from 'path';
 
-import { cleanupChorus } from '~/lyrics/utils';
 import { PrismaClient } from '~/prisma/client/client';
 import schema from '~/real-book/schema.json';
 import { saveJSON, ICLOUD_DIR } from '~/utils';
 
 const prisma = new PrismaClient();
 
-const data: any = { artists: [] };
+const singerCache = new Map();
+const data: any = { artists: [], singers: [] };
 const artists = await prisma.artist.findMany({
   include: {
     albums: {
@@ -43,19 +43,21 @@ for (const node of artists) {
     };
 
     for (const item of entry.songs) {
+      let singer;
+      if (item.singer) {
+        singer = item.singer.slug;
+        const { id: _, ...fields } = item.singer;
+        singerCache.set(item.singer.slug, fields);
+      }
       const song = {
         trackNumber: item.trackNumber || undefined,
         discNumber: item.discNumber || undefined,
         songType: item.songType || undefined,
         name: item.name,
         fileName: item.fileName,
-        lyrics: cleanupChorus(item.lyrics || ''),
-        singer: item.singer?.name
-          ? {
-              name: item.singer?.name,
-              imageFileName: item.singer?.imageFileName,
-            }
-          : undefined,
+        // when pasting lyrics in Prisma Studio, things get can escaped
+        lyrics: item.lyrics?.replaceAll(/\\n/g, '\n') || '',
+        singer,
       };
       album.songs.push(song);
     }
@@ -64,6 +66,8 @@ for (const node of artists) {
   }
   data.artists.push(artist);
 }
+
+data.singers.push(...Array.from(singerCache.values()));
 
 const appDir = path.join(process.cwd(), 'xcode', 'leadsheets');
 

@@ -188,6 +188,17 @@
     ]
   },
   {
+    "title": "Good Lovin'",
+    "files": ["G/Good Lovin'/Good Lovin' Score.pdf"]
+  },
+  {
+    "title": "Greatest Story Ever Told",
+    "files": [
+      "G/Greatest Story Ever Told/greatest-story-ever-told.pdf",
+      "G/Greatest Story Ever Told/Greatest Story Ever Told Score.pdf"
+    ]
+  },
+  {
     "title": "He's Gone",
     "files": ["H/He's Gone/hes-gone.pdf", "H/He's Gone/He's Gone Score.pdf"]
   },
@@ -217,6 +228,12 @@
     "files": ["H/High Time/high-time.pdf", "H/High Time/High Time Score.pdf"]
   },
   {
+    "title": "Hurts Me Too",
+    "files": [
+      "H/Hurts Me Too/Hurts Me Too Score.pdf"
+    ]
+  },
+  {
     "title": "I Know You Rider",
     "files": [
       "I/I Know You Rider/i-know-you-rider.pdf",
@@ -228,6 +245,13 @@
     "files": [
       "I/I Need a Miracle/i-need-a-miracle.pdf",
       "I/I Need a Miracle/I Need a Miracle Score.pdf"
+    ]
+  },
+  {
+    "title": "Iko Iko",
+    "files": [
+      "I/Iko Iko/iko-iko.pdf",
+      "I/Iko Iko/Iko Iko Score.pdf"
     ]
   },
   {
@@ -265,6 +289,10 @@
     "files": ["L/Lost Sailor/lost-sailor.pdf", "L/Lost Sailor/Lost Sailor Score.pdf"]
   },
   {
+    "title": "Man Smart, Woman Smarter",
+    "files": ["M/Man Smart, Woman Smarter/Man Smart, Woman Smarter Score.pdf"]
+  },
+  {
     "title": "Me & My Uncle",
     "files": ["M/Me & My Uncle/me-and-my-uncle.pdf", "M/Me & My Uncle/Me & My Uncle Score.pdf"]
   },
@@ -278,6 +306,10 @@
   {
     "title": "Morning Dew",
     "files": ["M/Morning Dew/morning-dew.pdf", "M/Morning Dew/Morning Dew Score.pdf"]
+  },
+  {
+    "title": "Mr. Charlie",
+    "files": ["M/Mr. Charlie/mister-charlie.pdf", "M/Mr. Charlie/Mr. Charlie Score.pdf"]
   },
   {
     "title": "New Speedway Boogie",
@@ -390,6 +422,10 @@
   {
     "title": "The Wheel",
     "files": ["T/The Wheel/the-wheel.pdf", "T/The Wheel/The Wheel Score.pdf"]
+  },
+  {
+    "title": "They Love Each Other",
+    "files": ["T/They Love Each Other/they-love-each-other.pdf", "T/They Love Each Other/They Love Each Other Score.pdf"]
   },
   {
     "title": "Throwing Stones",

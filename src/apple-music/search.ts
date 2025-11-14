@@ -7,7 +7,7 @@ dotenv.config();
 const searchUrl = (term: string) =>
   `https://api.music.apple.com/v1/catalog/us/search?term=${encodeURIComponent(term)}`;
 
-export const search = (slug: string, artist: string, album: string) =>
+const search = async (slug: string, artist: string, album: string) =>
   fetch(searchUrl([artist, album].join(' ')), {
     headers: {
       Authorization: `Bearer ${generateToken()}`,
@@ -25,3 +25,5 @@ export const search = (slug: string, artist: string, album: string) =>
         console.log(slug, JSON.stringify(results.albums.data));
       }
     });
+
+await search('', 'Jerry Garcia', 'Reflections');

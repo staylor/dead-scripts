@@ -8,6 +8,7 @@ actor DataImportService {
     /// Enhanced structure with additional metadata
     struct EnhancedJSONFormat: Codable {
         let artists: [EnhancedArtistJSON]
+        let singers: [EnhancedSingerJSON]
     }
     
     struct EnhancedArtistJSON: Codable {
@@ -23,8 +24,9 @@ actor DataImportService {
         let songs: [EnhancedSongJSON]?
     }
     
-    struct EnhancedSingerData: Codable {
+    struct EnhancedSingerJSON: Codable {
         let name: String
+        let slug: String
         let imageFileName: String?
     }
     
@@ -32,7 +34,7 @@ actor DataImportService {
         let name: String
         let fileName: String  // Can include path like "audio/shake_it_off.mp3"
         let lyrics: String?
-        let singer: EnhancedSingerData?
+        let singer: String?
         let songType: String?
     }
     
@@ -47,10 +49,13 @@ actor DataImportService {
         let library = try JSONDecoder().decode(EnhancedJSONFormat.self, from: data)
         
         var singerCache: [String: Singer] = [:]
-        
-        let existingSingers = try context.fetch(FetchDescriptor<Singer>())
-        for singer in existingSingers {
-            singerCache[singer.name] = singer
+        for singerData in library.singers {
+            let singer = Singer(
+                name: singerData.name,
+                imageFileName: singerData.imageFileName,
+            )
+            singerCache[singerData.slug] = singer
+            context.insert(singer)
         }
         
         // Process each artist
@@ -78,21 +83,8 @@ actor DataImportService {
                 guard let songs = albumData.songs else { continue }
                 for songData in songs {
                     var singer: Singer? = nil
-                    if let singerName = songData.singer?.name {
-                        if let cached = singerCache[singerName] {
-                            singer = cached
-                        } else {
-                            if songData.singer?.imageFileName != nil {
-                                singer = Singer(
-                                    name: singerName,
-                                    imageFileName: songData.singer!.imageFileName.map { ResourcePath.forArtistImage($0) }
-                                )
-                            } else {
-                                singer = Singer(name: singerName)
-                            }
-                            context.insert(singer!)
-                            singerCache[singerName] = singer
-                        }
+                    if let slug = songData.singer, let cached = singerCache[slug] {
+                        singer = cached
                     }
                     let song = Song(
                         name: songData.name,
