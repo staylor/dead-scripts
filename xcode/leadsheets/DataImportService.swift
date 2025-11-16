@@ -36,6 +36,8 @@ actor DataImportService {
         let lyrics: String?
         let singer: String?
         let songType: String?
+        let discNumber: Int?
+        let trackNumber: Int?
     }
     
     // MARK: - Import Methods
@@ -90,6 +92,8 @@ actor DataImportService {
                         name: songData.name,
                         fileName: songData.fileName,
                         lyrics: songData.lyrics,
+                        trackNumber: songData.trackNumber,
+                        discNumber: songData.discNumber,
                         songType: songData.songType,
                         album: album,
                         artist: artist,

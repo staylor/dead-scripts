@@ -86,6 +86,10 @@
     "files": ["C/Casey Jones/casey-jones.pdf", "C/Casey Jones/Casey Jones Score.pdf"]
   },
   {
+    "title": "Cassidy",
+    "files": ["C/Cassidy/cassidy.pdf", "C/Cassidy/Cassidy (Studio) Score.pdf"]
+  },
+  {
     "title": "China Cat Sunflower",
     "files": [
       "C/China Cat Sunflower/china-cat-sunflower.pdf",
@@ -289,12 +293,20 @@
     "files": ["L/Lost Sailor/lost-sailor.pdf", "L/Lost Sailor/Lost Sailor Score.pdf"]
   },
   {
+    "title": "Mama Tried",
+    "files": ["M/Mama Tried/Mama Tried Score.pdf"]
+  },
+  {
     "title": "Man Smart, Woman Smarter",
     "files": ["M/Man Smart, Woman Smarter/Man Smart, Woman Smarter Score.pdf"]
   },
   {
     "title": "Me & My Uncle",
     "files": ["M/Me & My Uncle/me-and-my-uncle.pdf", "M/Me & My Uncle/Me & My Uncle Score.pdf"]
+  },
+  {
+    "title": "Mexicali Blues",
+    "files": ["M/Mexicali Blues/mexicali-blues.pdf", "M/Mexicali Blues/Mexicali Blues Score.pdf"]
   },
   {
     "title": "Mississippi Half-Step Uptown Toodeloo",
@@ -327,6 +339,10 @@
     "files": ["O/One More Saturday Night/One More Saturday Night Score.pdf"]
   },
   {
+    "title": "Passenger",
+    "files": ["P/Passenger/Passenger Score.pdf"]
+  },
+  {
     "title": "Peggy-O",
     "files": ["P/Peggy-O/Peggy-O Score.pdf"]
   },
@@ -355,6 +371,10 @@
       "S/Saint of Circumstance/saint-of-circumstance.pdf",
       "S/Saint of Circumstance/Saint of Circumstance Score.pdf"
     ]
+  },
+  {
+    "title": "Samson and Delilah",
+    "files": ["S/Samson and Delilah/Samson and Delilah Score.pdf"]
   },
   {
     "title": "Scarlet Begonias",
