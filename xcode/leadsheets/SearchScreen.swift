@@ -25,6 +25,7 @@ struct SearchScreen: View {
     @Query(sort: \Song.name) private var allSongs: [Song]
 
     @State private var debugManager: DebugMenuManager?
+    @FocusState private var isSearchFieldFocused: Bool
     
     // Filtered albums based on search
     private var filteredAlbums: [Album] {
@@ -151,22 +152,30 @@ struct SearchScreen: View {
             .background(Color.white.opacity(0.1))
             #else
             HStack {
+                Spacer()
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(.gray)
+                    .foregroundColor(isSearchFieldFocused ? .pink : .gray)
                 TextField("Search songs...", text: $searchText)
-                    .textFieldStyle(.plain)
+                    .focused($isSearchFieldFocused)
+                    .frame(minHeight: 56)
                 if !searchText.isEmpty {
                     Button(action: { searchText = "" }) {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.gray)
                     }
+                    Spacer()
                 }
             }
-            .padding()
-            .background(Color.white.opacity(0.1))
-            .cornerRadius(10)
+            .background(Color(.systemBackground))
+            .cornerRadius(14)
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(isSearchFieldFocused ? .pink : .gray.opacity(0.3), lineWidth: 1)
+            )
+            .shadow(color: .gray.opacity(0.2), radius: 8, x: 0, y: 4)
             .padding(.horizontal)
-            .padding(.bottom, 8)
+            .padding(.top, 10)
+            .padding(.bottom, 30)
             #endif
         }
     }
