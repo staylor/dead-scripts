@@ -6,6 +6,7 @@ enum SearchFilter: String, CaseIterable {
     case byAlbum = "By Album"
     case byArtist = "By Artist"
     case bySinger = "By Singer"
+    case byWriter = "By Writer"
     case covers = "Covers"
 }
 
@@ -18,10 +19,12 @@ struct SearchScreen: View {
     @State private var selectedAlbum: Album?
     @State private var selectedArtist: Artist?
     @State private var selectedSinger: Singer?
+    @State private var selectedWriter: Writer?
     @Environment(\.modelContext) private var modelContext
     @Query private var albums: [Album]
     @Query private var artists: [Artist]
     @Query private var singers: [Singer]
+    @Query private var writers: [Writer]
     @Query(sort: \Song.name) private var allSongs: [Song]
 
     @State private var debugManager: DebugMenuManager?
@@ -56,6 +59,37 @@ struct SearchScreen: View {
         return singers.filter { singer in
             singer.name.localizedCaseInsensitiveContains(searchText)
         }.sorted { $0.name < $1.name }
+    }
+    
+    // Filtered writers based on search
+    private var filteredWriters: [Writer] {
+        let baseWriters = searchText.isEmpty ? writers : writers.filter { writer in
+            writer.name.localizedCaseInsensitiveContains(searchText) ||
+            writer.contribution.localizedCaseInsensitiveContains(searchText)
+        }
+        
+        // Group writers by name
+        let groupedByName = Dictionary(grouping: baseWriters) { $0.name }
+        
+        // For each name, deduplicate if they have the same song counts
+        var deduplicatedWriters: [Writer] = []
+        for (_, writersWithSameName) in groupedByName {
+            if writersWithSameName.count == 1 {
+                deduplicatedWriters.append(writersWithSameName[0])
+            } else {
+                // Check if all have the same number of songs
+                let songCounts = writersWithSameName.map { $0.songs?.count ?? 0 }
+                if Set(songCounts).count == 1 {
+                    // All have the same count - only include one
+                    deduplicatedWriters.append(writersWithSameName[0])
+                } else {
+                    // Different counts - include all
+                    deduplicatedWriters.append(contentsOf: writersWithSameName)
+                }
+            }
+        }
+        
+        return deduplicatedWriters.sorted { $0.name < $1.name }
     }
     
     // Filtered cover songs
@@ -217,16 +251,23 @@ struct SearchScreen: View {
                 resetSelections()
             }
             #else
-            // macOS uses standard segmented picker
-            Picker("Filter", selection: $selectedFilter) {
-                ForEach(SearchFilter.allCases, id: \.self) { filter in
-                    Text(filter.rawValue).tag(filter)
+            // macOS uses a two-row grid for better spacing
+            VStack(spacing: 12) {
+                HStack(spacing: 12) {
+                    ForEach([SearchFilter.allSongs, .byAlbum, .byArtist], id: \.self) { filter in
+                        filterButton(for: filter)
+                    }
                 }
+                HStack(spacing: 12) {
+                    ForEach([SearchFilter.bySinger, .byWriter, .covers], id: \.self) { filter in
+                        filterButton(for: filter)
+                    }
+                }
+                
+                Divider()
             }
-            .pickerStyle(.segmented)
-            .onChange(of: selectedFilter) { _, _ in
-                resetSelections()
-            }
+            .padding(.horizontal)
+            .padding(.bottom, 8)
             #endif
         }
     }
@@ -277,6 +318,19 @@ struct SearchScreen: View {
                     selectedSinger = singer
                 }
             }
+        case .byWriter:
+            if let selectedWriter {
+                DetailView(
+                    backButtonTitle: "Writers",
+                    songs: selectedWriter.songs?.sorted { $0.name < $1.name } ?? [],
+                    onBack: { self.selectedWriter = nil },
+                    onSelect: onSelect
+                )
+            } else {
+                WritersListView(writers: filteredWriters) { writer in
+                    selectedWriter = writer
+                }
+            }
         case .covers:
             CoversListView(songs: coverSongs, onSelect: onSelect)
         }
@@ -293,7 +347,23 @@ struct SearchScreen: View {
         selectedAlbum = nil
         selectedArtist = nil
         selectedSinger = nil
+        selectedWriter = nil
     }
+    
+    #if os(macOS)
+    private func filterButton(for filter: SearchFilter) -> some View {
+        Button(action: { selectFilter(filter) }) {
+            Text(filter.rawValue)
+                .font(.body)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+                .background(selectedFilter == filter ? Color.accentColor : Color(nsColor: .controlBackgroundColor))
+                .foregroundColor(selectedFilter == filter ? .white : .primary)
+                .clipShape(RoundedRectangle(cornerRadius: 6))
+        }
+        .buttonStyle(.plain)
+    }
+    #endif
     
 
     // MARK: - Detail View

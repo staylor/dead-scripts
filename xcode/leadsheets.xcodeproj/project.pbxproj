@@ -11,6 +11,7 @@
 		66F8E9D91B23C567890BCDEF /* DataImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E6F7D80A12B456789ABCDE /* DataImportManager.swift */; };
 		9D86052835241646C210E833 /* DataImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D8B25E8B9AEC7899DC2004 /* DataImportService.swift */; };
 		A1B2C3D4E5F6789012345678 /* Singer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4B5A69780FEDCBA98 /* Singer.swift */; };
+		A1B2C3D4E5F6789012345679 /* Writer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4B5A69780FEDCBA97 /* Writer.swift */; };
 		B2C3D4E5F67890123456789A /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D3C4B5A69780FEDCBA9876 /* Artist.swift */; };
 		C3D4E5F67890123456789ABC /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C4B5A69780FEDCBA987654 /* Album.swift */; };
 		D2AF766A2EC4E950006C0FCE /* leadsheets.watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -51,6 +52,7 @@
 		D3C4B5A69780FEDCBA987654 /* Album.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		E2D3C4B5A69780FEDCBA9876 /* Artist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		F1E2D3C4B5A69780FEDCBA98 /* Singer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Singer.swift; sourceTree = "<group>"; };
+		F1E2D3C4B5A69780FEDCBA97 /* Writer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Writer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -108,6 +110,7 @@
 			children = (
 				1497658284B154007313B8ED /* Song.swift */,
 				F1E2D3C4B5A69780FEDCBA98 /* Singer.swift */,
+				F1E2D3C4B5A69780FEDCBA97 /* Writer.swift */,
 				E2D3C4B5A69780FEDCBA9876 /* Artist.swift */,
 				D3C4B5A69780FEDCBA987654 /* Album.swift */,
 				44D8B25E8B9AEC7899DC2004 /* DataImportService.swift */,
@@ -230,6 +233,7 @@
 			files = (
 				5072D75D51D2C58AB2AFD560 /* Song.swift in Sources */,
 				A1B2C3D4E5F6789012345678 /* Singer.swift in Sources */,
+				A1B2C3D4E5F6789012345679 /* Writer.swift in Sources */,
 				B2C3D4E5F67890123456789A /* Artist.swift in Sources */,
 				C3D4E5F67890123456789ABC /* Album.swift in Sources */,
 				9D86052835241646C210E833 /* DataImportService.swift in Sources */,

@@ -9,7 +9,8 @@ import { saveJSON, ICLOUD_DIR } from '~/utils';
 const prisma = new PrismaClient();
 
 const singerCache = new Map();
-const data: any = { artists: [], singers: [] };
+const writerCache = new Map();
+const data: any = { artists: [], singers: [], writers: [] };
 const artists = await prisma.artist.findMany({
   include: {
     albums: {
@@ -20,6 +21,7 @@ const artists = await prisma.artist.findMany({
           },
           include: {
             singer: true,
+            writers: true,
           },
         },
       },
@@ -49,6 +51,14 @@ for (const node of artists) {
         const { id: _, ...fields } = item.singer;
         singerCache.set(item.singer.slug, fields);
       }
+      const writers = [];
+      if (item.writers?.length > 0) {
+        for (const writer of item.writers) {
+          writers.push([writer.slug, writer.contribution]);
+          const { id: _, ...fields } = writer;
+          writerCache.set(`${writer.slug}:${writer.contribution}`, fields);
+        }
+      }
       const song = {
         trackNumber: item.trackNumber || undefined,
         discNumber: item.discNumber || undefined,
@@ -58,6 +68,7 @@ for (const node of artists) {
         // when pasting lyrics in Prisma Studio, things get can escaped
         lyrics: item.lyrics?.replaceAll(/\\n/g, '\n') || '',
         singer,
+        writers,
       };
       album.songs.push(song);
     }
@@ -68,6 +79,7 @@ for (const node of artists) {
 }
 
 data.singers.push(...Array.from(singerCache.values()));
+data.writers.push(...Array.from(writerCache.values()));
 
 const appDir = path.join(process.cwd(), 'xcode', 'leadsheets');
 

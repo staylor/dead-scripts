@@ -16,6 +16,7 @@ class Song {
     var album: Album?
     var artist: Artist?
     var singer: Singer?
+    var writers: [Writer]?
 
     // Computed property for PDF URL
     var pdfURL: URL? {
@@ -36,7 +37,8 @@ class Song {
         songType: String? = nil,
         album: Album? = nil,
         artist: Artist? = nil,
-        singer: Singer? = nil
+        singer: Singer? = nil,
+        writers: [Writer]? = nil,
     ) {
         self.id = UUID()
         self.name = name
@@ -49,5 +51,6 @@ class Song {
         self.album = album
         self.artist = artist
         self.singer = singer
+        self.writers = writers
     }
 }

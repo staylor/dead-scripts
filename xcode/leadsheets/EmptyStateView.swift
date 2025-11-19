@@ -28,6 +28,8 @@ struct EmptyStateView: View {
             return "person.circle"
         case .bySinger:
             return "mic.circle"
+        case .byWriter:
+            return "person.circle"
         case .covers:
             return "music.note.list"
         }
@@ -43,6 +45,8 @@ struct EmptyStateView: View {
             return "No artists found"
         case .bySinger:
             return "No singers found"
+        case .byWriter:
+            return "No writers found"
         case .covers:
             return "No covers found"
         }

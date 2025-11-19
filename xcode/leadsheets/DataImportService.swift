@@ -9,6 +9,7 @@ actor DataImportService {
     struct EnhancedJSONFormat: Codable {
         let artists: [EnhancedArtistJSON]
         let singers: [EnhancedSingerJSON]
+        let writers: [EnhancedWriterJSON]
     }
     
     struct EnhancedArtistJSON: Codable {
@@ -29,12 +30,19 @@ actor DataImportService {
         let slug: String
         let imageFileName: String?
     }
+
+    struct EnhancedWriterJSON: Codable {
+        let name: String
+        let slug: String
+        let contribution: String
+    }
     
     struct EnhancedSongJSON: Codable {
         let name: String
         let fileName: String  // Can include path like "audio/shake_it_off.mp3"
         let lyrics: String?
         let singer: String?
+        let writers: [[String]]?
         let songType: String?
         let discNumber: Int?
         let trackNumber: Int?
@@ -58,6 +66,15 @@ actor DataImportService {
             )
             singerCache[singerData.slug] = singer
             context.insert(singer)
+        }
+        var writerCache: [String: Writer] = [:]
+        for writerData in library.writers {
+            let writer = Writer(
+                name: writerData.name,
+                contribution: writerData.contribution
+            )
+            writerCache[writerData.slug + writerData.contribution] = writer
+            context.insert(writer)
         }
         
         // Process each artist
@@ -88,6 +105,14 @@ actor DataImportService {
                     if let slug = songData.singer, let cached = singerCache[slug] {
                         singer = cached
                     }
+                    var writers: [Writer] = []
+                    if let entries = songData.writers {
+                        for writer in entries {
+                            if let cached = writerCache[writer[0] + writer[1]] {
+                                writers.append(cached)
+                            }
+                        }
+                    }
                     let song = Song(
                         name: songData.name,
                         fileName: songData.fileName,
@@ -97,7 +122,8 @@ actor DataImportService {
                         songType: songData.songType,
                         album: album,
                         artist: artist,
-                        singer: singer
+                        singer: singer,
+                        writers: writers
                     )
                     context.insert(song)
                 }

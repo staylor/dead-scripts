@@ -46,16 +46,3 @@ struct LyricsDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
-
-#Preview {
-    NavigationStack {
-        LyricsDetailView(song: Song(
-            name: "Sample Song",
-            fileName: "sample.pdf",
-            lyrics: "Sample lyrics\nLine 2\nLine 3",
-            trackNumber: 1,
-            discNumber: 1,
-            songType: "Jazz"
-        ))
-    }
-}

@@ -37,7 +37,7 @@ struct ContentView: View {
                     selected = song
                 }
             )
-            .navigationSplitViewColumnWidth(min: 280, ideal: 350, max: 450)
+            .navigationSplitViewColumnWidth(min: 450, ideal: 450, max: 550)
         } content: {
             // Column 2: PDF Viewer (content column)
             if importManager?.isImporting == true {
@@ -174,7 +174,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .modelContainer(for: [Song.self, Artist.self, Album.self, Singer.self], inMemory: true)
+            .modelContainer(for: [Song.self, Artist.self, Album.self, Singer.self, Writer.self], inMemory: true)
             .previewDevice("iPad Pro (12.9-inch) (6th generation)")
     }
 }

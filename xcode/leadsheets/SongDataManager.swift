@@ -32,6 +32,11 @@ class SongDataManager {
         return (try? modelContext.fetch(descriptor)) ?? []
     }
     
+    func fetchAllWriters() -> [Writer] {
+        let descriptor = FetchDescriptor<Writer>(sortBy: [SortDescriptor(\.name)])
+        return (try? modelContext.fetch(descriptor)) ?? []
+    }
+    
     // MARK: - Statistics
     
     func getSongCount() -> Int {
@@ -57,6 +62,7 @@ class SongDataManager {
         fetchAllArtists().forEach { modelContext.delete($0) }
         fetchAllAlbums().forEach { modelContext.delete($0) }
         fetchAllSingers().forEach { modelContext.delete($0) }
+        fetchAllWriters().forEach { modelContext.delete($0) }
         
         try? modelContext.save()
     }
