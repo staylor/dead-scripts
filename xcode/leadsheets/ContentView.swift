@@ -25,6 +25,8 @@ struct ContentView: View {
         }
     }
     
+    // MARK: - Helper Methods
+    
     var body: some View {
         #if os(macOS)
         // macOS native three-column layout: Song List | PDF | Lyrics
@@ -52,7 +54,8 @@ struct ContentView: View {
                 PDFViewerScreen(song: song, onBack: {
                     selected = nil
                 })
-                .toolbar(removing: .title)
+                .navigationTitle(song.name)
+                .navigationSubtitle(song.writersDisplayText)
                 .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: 1000)
             } else {
                 ContentUnavailableView(

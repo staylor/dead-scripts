@@ -23,6 +23,10 @@ struct LyricsDetailView: View {
                             .font(.caption2)
                             .foregroundStyle(.tertiary)
                     }
+                    
+                    Text(song.writersDisplayText)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
                 }
                 .padding(.bottom, 8)
 

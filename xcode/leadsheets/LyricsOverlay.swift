@@ -86,6 +86,10 @@ struct LyricsOverlay: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
                     
+                    Text(song.writersDisplayText)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    
                     HStack {
                         if let artist = song.artist {
                             Text(artist.name)
