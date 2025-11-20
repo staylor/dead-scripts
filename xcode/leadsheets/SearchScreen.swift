@@ -10,6 +10,22 @@ enum SearchFilter: String, CaseIterable {
     case covers = "Covers"
 }
 
+// Wrapper for grouped writers with combined contributions
+struct GroupedWriter: Identifiable {
+    let id = UUID()
+    let name: String
+    let contributions: [String] // e.g., ["music", "lyrics"]
+    let songs: [Song]
+    let imageFileName: String?
+    
+    var displayContribution: String {
+        contributions
+            .map { $0.prefix(1).uppercased() + $0.dropFirst() }
+            .sorted()
+            .joined(separator: " & ")
+    }
+}
+
 struct SearchScreen: View {
     @Binding var searchText: String
     let songs: [Song]
@@ -19,7 +35,7 @@ struct SearchScreen: View {
     @State private var selectedAlbum: Album?
     @State private var selectedArtist: Artist?
     @State private var selectedSinger: Singer?
-    @State private var selectedWriter: Writer?
+    @State private var selectedGroupedWriter: GroupedWriter?
     @Environment(\.modelContext) private var modelContext
     @Query private var albums: [Album]
     @Query private var artists: [Artist]
@@ -61,8 +77,8 @@ struct SearchScreen: View {
         }.sorted { $0.name < $1.name }
     }
     
-    // Filtered writers based on search
-    private var filteredWriters: [Writer] {
+    // Filtered writers based on search - now returns GroupedWriter
+    private var filteredGroupedWriters: [GroupedWriter] {
         let baseWriters = searchText.isEmpty ? writers : writers.filter { writer in
             writer.name.localizedCaseInsensitiveContains(searchText) ||
             writer.contribution.localizedCaseInsensitiveContains(searchText)
@@ -71,25 +87,42 @@ struct SearchScreen: View {
         // Group writers by name
         let groupedByName = Dictionary(grouping: baseWriters) { $0.name }
         
-        // For each name, deduplicate if they have the same song counts
-        var deduplicatedWriters: [Writer] = []
-        for (_, writersWithSameName) in groupedByName {
-            if writersWithSameName.count == 1 {
-                deduplicatedWriters.append(writersWithSameName[0])
+        var groupedWriters: [GroupedWriter] = []
+        
+        for (name, writersWithSameName) in groupedByName {
+            // Get all songs from all contributions for this writer
+            let allSongsSet = Set(writersWithSameName.flatMap { $0.songs ?? [] })
+            
+            // Check if all writer instances have the exact same songs
+            let allHaveSameSongs = writersWithSameName.allSatisfy { writer in
+                Set(writer.songs ?? []) == allSongsSet
+            }
+            
+            if allHaveSameSongs && writersWithSameName.count > 1 {
+                // Combine contributions for this writer
+                let contributions = writersWithSameName.map { $0.contribution }
+                let songs = Array(allSongsSet).sorted { $0.name < $1.name }
+                
+                groupedWriters.append(GroupedWriter(
+                    name: name,
+                    contributions: contributions,
+                    songs: songs,
+                    imageFileName: writersWithSameName.first?.imageFileName,
+                ))
             } else {
-                // Check if all have the same number of songs
-                let songCounts = writersWithSameName.map { $0.songs?.count ?? 0 }
-                if Set(songCounts).count == 1 {
-                    // All have the same count - only include one
-                    deduplicatedWriters.append(writersWithSameName[0])
-                } else {
-                    // Different counts - include all
-                    deduplicatedWriters.append(contentsOf: writersWithSameName)
+                // Keep separate entries for different song sets
+                for writer in writersWithSameName {
+                    groupedWriters.append(GroupedWriter(
+                        name: writer.name,
+                        contributions: [writer.contribution],
+                        songs: (writer.songs ?? []).sorted { $0.name < $1.name },
+                        imageFileName: writer.imageFileName,
+                    ))
                 }
             }
         }
         
-        return deduplicatedWriters.sorted { $0.name < $1.name }
+        return groupedWriters.sorted { $0.name < $1.name }
     }
     
     // Filtered cover songs
@@ -319,16 +352,16 @@ struct SearchScreen: View {
                 }
             }
         case .byWriter:
-            if let selectedWriter {
+            if let selectedGroupedWriter {
                 DetailView(
                     backButtonTitle: "Writers",
-                    songs: selectedWriter.songs?.sorted { $0.name < $1.name } ?? [],
-                    onBack: { self.selectedWriter = nil },
+                    songs: selectedGroupedWriter.songs,
+                    onBack: { self.selectedGroupedWriter = nil },
                     onSelect: onSelect
                 )
             } else {
-                WritersListView(writers: filteredWriters) { writer in
-                    selectedWriter = writer
+                GroupedWritersListView(groupedWriters: filteredGroupedWriters) { groupedWriter in
+                    selectedGroupedWriter = groupedWriter
                 }
             }
         case .covers:
@@ -347,7 +380,7 @@ struct SearchScreen: View {
         selectedAlbum = nil
         selectedArtist = nil
         selectedSinger = nil
-        selectedWriter = nil
+        selectedGroupedWriter = nil
     }
     
     #if os(macOS)

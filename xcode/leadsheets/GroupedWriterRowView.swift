@@ -1,13 +1,13 @@
 import SwiftUI
 
-struct WriterRowView: View {
-    let writer: Writer
+struct GroupedWriterRowView: View {
+    let groupedWriter: GroupedWriter
     
     var body: some View {
         HStack(spacing: 16) {
             // Writer Image or Icon
             Group {
-                if let imageFileName = writer.imageFileName,
+                if let imageFileName = groupedWriter.imageFileName,
                    let loadedImage = ImageLoader.loadImage(named: imageFileName) {
                     #if canImport(UIKit)
                     Image(uiImage: loadedImage)
@@ -31,17 +31,18 @@ struct WriterRowView: View {
             }
             
             VStack(alignment: .leading, spacing: 4) {
-                Text(writer.name)
+                Text(groupedWriter.name)
                     .font(.headline)
                     .foregroundColor(.primary)
                     .lineLimit(2)
                 
                 HStack(spacing: 8) {
-                    Text(writer.contribution.prefix(1).uppercased() + writer.contribution.dropFirst())
+                    Text(groupedWriter.displayContribution)
                         .font(.caption)
                         .foregroundColor(.pink)
                     
-                    if let songCount = writer.songs?.count, songCount > 0 {
+                    let songCount = groupedWriter.songs.count
+                    if songCount > 0 {
                         Text("•")
                             .font(.caption)
                             .foregroundColor(.secondary)
