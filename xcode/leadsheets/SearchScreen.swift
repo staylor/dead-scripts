@@ -10,22 +10,6 @@ enum SearchFilter: String, CaseIterable {
     case covers = "Covers"
 }
 
-// Wrapper for grouped writers with combined contributions
-struct GroupedWriter: Identifiable {
-    let id = UUID()
-    let name: String
-    let contributions: [String] // e.g., ["music", "lyrics"]
-    let songs: [Song]
-    let imageFileName: String?
-    
-    var displayContribution: String {
-        contributions
-            .map { $0.prefix(1).uppercased() + $0.dropFirst() }
-            .sorted()
-            .joined(separator: " & ")
-    }
-}
-
 struct SearchScreen: View {
     @Binding var searchText: String
     let songs: [Song]
@@ -77,52 +61,95 @@ struct SearchScreen: View {
         }.sorted { $0.name < $1.name }
     }
     
-    // Filtered writers based on search - now returns GroupedWriter
+    // Filtered writers based on search - returns GroupedWriter
     private var filteredGroupedWriters: [GroupedWriter] {
         let baseWriters = searchText.isEmpty ? writers : writers.filter { writer in
             writer.name.localizedCaseInsensitiveContains(searchText) ||
             writer.contribution.localizedCaseInsensitiveContains(searchText)
         }
         
-        // Group writers by name
+        // Step 1: Group writers by name to combine multiple contributions by same person
         let groupedByName = Dictionary(grouping: baseWriters) { $0.name }
         
-        var groupedWriters: [GroupedWriter] = []
+        var individualWriterGroups: [GroupedWriter] = []
         
         for (name, writersWithSameName) in groupedByName {
-            // Get all songs from all contributions for this writer
-            let allSongsSet = Set(writersWithSameName.flatMap { $0.songs ?? [] })
+            // Get all unique songs from all contributions for this writer
+            let allSongsForWriter = Set(writersWithSameName.flatMap { $0.songs ?? [] })
             
-            // Check if all writer instances have the exact same songs
+            // Check if all writer instances (different contributions) have the exact same songs
             let allHaveSameSongs = writersWithSameName.allSatisfy { writer in
-                Set(writer.songs ?? []) == allSongsSet
+                Set(writer.songs ?? []) == allSongsForWriter
             }
             
             if allHaveSameSongs && writersWithSameName.count > 1 {
-                // Combine contributions for this writer
+                // Combine contributions for this writer (e.g., "Music & Lyrics")
                 let contributions = writersWithSameName.map { $0.contribution }
-                let songs = Array(allSongsSet).sorted { $0.name < $1.name }
+                let songs = Array(allSongsForWriter).sorted { $0.name < $1.name }
                 
-                groupedWriters.append(GroupedWriter(
-                    name: name,
+                individualWriterGroups.append(GroupedWriter(
+                    names: [name],
                     contributions: contributions,
                     songs: songs,
-                    imageFileName: writersWithSameName.first?.imageFileName,
+                    imageFileName: writersWithSameName.first?.imageFileName
                 ))
             } else {
                 // Keep separate entries for different song sets
                 for writer in writersWithSameName {
-                    groupedWriters.append(GroupedWriter(
-                        name: writer.name,
+                    individualWriterGroups.append(GroupedWriter(
+                        names: [writer.name],
                         contributions: [writer.contribution],
                         songs: (writer.songs ?? []).sorted { $0.name < $1.name },
-                        imageFileName: writer.imageFileName,
+                        imageFileName: writer.imageFileName
                     ))
                 }
             }
         }
         
-        return groupedWriters.sorted { $0.name < $1.name }
+        // Step 2: Find writers who ONLY collaborate together (never write separately)
+        var finalGroups: [GroupedWriter] = []
+        var processedIndices = Set<Int>()
+        
+        for (i, group1) in individualWriterGroups.enumerated() {
+            if processedIndices.contains(i) { continue }
+            
+            // Find potential collaborators who have identical song sets
+            var collaborators: [GroupedWriter] = [group1]
+            var collaboratorIndices: [Int] = [i]
+            
+            for (j, group2) in individualWriterGroups.enumerated() {
+                if i == j || processedIndices.contains(j) { continue }
+                
+                // Check if they have exactly the same songs
+                if Set(group1.songs) == Set(group2.songs) {
+                    collaborators.append(group2)
+                    collaboratorIndices.append(j)
+                }
+            }
+            
+            // If multiple writers share ALL the same songs, combine them
+            if collaborators.count > 1 {
+                let allNames = collaborators.flatMap { $0.names }
+                let allContributions = Array(Set(collaborators.flatMap { $0.contributions }))
+                let sharedSongs = group1.songs
+                
+                finalGroups.append(GroupedWriter(
+                    names: allNames,
+                    contributions: allContributions,
+                    songs: sharedSongs,
+                    imageFileName: collaborators.first?.imageFileName
+                ))
+                
+                // Mark all collaborators as processed
+                collaboratorIndices.forEach { processedIndices.insert($0) }
+            } else {
+                // This writer doesn't always collaborate, keep them separate
+                finalGroups.append(group1)
+                processedIndices.insert(i)
+            }
+        }
+        
+        return finalGroups.sorted { $0.displayName < $1.displayName }
     }
     
     // Filtered cover songs

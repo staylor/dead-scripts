@@ -23,15 +23,15 @@ struct GroupedWriterRowView: View {
                         .clipShape(Circle())
                     #endif
                 } else {
-                    Image(systemName: "pencil.circle.fill")
+                    Image(systemName: groupedWriter.names.count > 1 ? "person.2.circle.fill" : "pencil.circle.fill")
                         .font(.system(size: 60))
-                        .foregroundColor(.pink)
+                        .foregroundColor(.gray)
                         .frame(width: 60, height: 60)
                 }
             }
             
             VStack(alignment: .leading, spacing: 4) {
-                Text(groupedWriter.name)
+                Text(groupedWriter.displayName)
                     .font(.headline)
                     .foregroundColor(.primary)
                     .lineLimit(2)

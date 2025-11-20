@@ -1638,8 +1638,8 @@
                   "lyrics"
                 ],
                 [
-                  "normal-span",
-                  ""
+                  "norman-span",
+                  "music"
                 ]
               ]
             }
@@ -1826,7 +1826,7 @@
               "trackNumber": 10,
               "name": "The Wheel",
               "fileName": "The Wheel Score.pdf",
-              "lyrics": "Chorus 1\nThe wheel is turning and you can't slow down\nYou can't let go and you can't hold on\nYou can't go back and you can't stand still\nIf the thunder don't get you then the lightning will\n\nChorus 2\nWon't you try just a little bit harder\nCouldn't you try just a little bit more\nWon't you try just a little bit harder\nCouldn't you try just a little bit more\n\nRound, round, Robin run around\nGotta get back where you belong\nLittle bit harder, just a little bit more\nLittle bit further than you gone before\n\n[chorus 1]\n\nSmall wheel turning by the fire and rod\nBig wheel turning by the grace of God\nEvery time that wheel turn round\nBound to cover just a little more ground\n\n[chorus 1]\n\n[chorus 2]",
+              "lyrics": "Chorus 1\nThe wheel is turning and you can't slow down\nYou can't let go and you can't hold on\nYou can't go back and you can't stand still\nIf the thunder don't get you then the lightning will\n\nChorus 2\nWon't you try just a little bit harder\nCouldn't you try just a little bit more\nWon't you try just a little bit harder\nCouldn't you try just a little bit more\n\nRound, round, Robin run around\nGotta get back where you belong\nLittle bit harder, just a little bit more\nLittle bit further than you gone before\n\nChorus 1\n\nSmall wheel turning by the fire and rod\nBig wheel turning by the grace of God\nEvery time that wheel turn round\nBound to cover just a little more ground\n\nChorus 1\n\nChorus 2 ",
               "singer": "jerry-garcia",
               "writers": [
                 [
@@ -2147,8 +2147,8 @@
     },
     {
       "name": "Norman Span",
-      "slug": "normal-span",
-      "contribution": ""
+      "slug": "norman-span",
+      "contribution": "music"
     }
   ]
 }
