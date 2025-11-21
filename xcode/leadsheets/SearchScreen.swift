@@ -27,7 +27,6 @@ struct SearchScreen: View {
     @Query private var writers: [Writer]
     @Query(sort: \Song.name) private var allSongs: [Song]
 
-    @State private var debugManager: DebugMenuManager?
     @FocusState private var isSearchFieldFocused: Bool
     
     // Filtered albums based on search
@@ -170,12 +169,6 @@ struct SearchScreen: View {
             searchHeaderView
             contentView
         }
-        .onAppear {
-            if debugManager == nil {
-                debugManager = DebugMenuManager(modelContext: modelContext)
-            }
-        }
-        .modifier(OptionalDebugMenuModifier(manager: debugManager))
     }
     
     // MARK: - Header View
@@ -184,18 +177,12 @@ struct SearchScreen: View {
     private var searchHeaderView: some View {
         VStack(spacing: 0) {
             #if os(iOS)
-            // Title with Debug Button
             HStack {
                 Text("Dead Sheets")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 Spacer()
-                Button(action: { debugManager?.showingDebugMenu = true }) {
-                    Image(systemName: "gearshape.fill")
-                        .font(.title2)
-                        .foregroundColor(.gray)
-                }
             }
             .padding(.horizontal)
             .padding(.top, 20)
@@ -463,20 +450,6 @@ struct SearchScreen: View {
                     onSelect: onSelect
                 )
             }
-        }
-    }
-}
-
-// MARK: - Helper Modifier
-
-private struct OptionalDebugMenuModifier: ViewModifier {
-    let manager: DebugMenuManager?
-
-    func body(content: Content) -> some View {
-        if let manager = manager {
-            content.debugMenu(manager: manager)
-        } else {
-            content
         }
     }
 }
