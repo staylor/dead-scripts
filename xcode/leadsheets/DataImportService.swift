@@ -46,6 +46,7 @@ actor DataImportService {
         let songType: String?
         let discNumber: Int?
         let trackNumber: Int?
+        let appleMusicId: String?
     }
     
     // MARK: - Import Methods
@@ -123,7 +124,8 @@ actor DataImportService {
                         album: album,
                         artist: artist,
                         singer: singer,
-                        writers: writers
+                        writers: writers,
+                        appleMusicId: songData.appleMusicId
                     )
                     context.insert(song)
                 }

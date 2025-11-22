@@ -11,6 +11,7 @@ class Song {
     var discNumber: Int?
     var dateAdded: Date
     var songType: String?
+    var appleMusicId: String?
 
     // Relationships
     var album: Album?
@@ -39,6 +40,7 @@ class Song {
         artist: Artist? = nil,
         singer: Singer? = nil,
         writers: [Writer]? = nil,
+        appleMusicId: String? = nil,
     ) {
         self.id = UUID()
         self.name = name
@@ -52,6 +54,7 @@ class Song {
         self.artist = artist
         self.singer = singer
         self.writers = writers
+        self.appleMusicId = appleMusicId
     }
 }
 

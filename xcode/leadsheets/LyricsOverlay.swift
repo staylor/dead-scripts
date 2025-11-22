@@ -214,5 +214,27 @@ struct LyricsOverlay: View {
         position.x = max(minX, min(maxX, position.x))
         position.y = max(minY, min(maxY, position.y))
     }
+    
+    private func openAppleMusic(songId: String) {
+        #if os(iOS)
+        // Try to open in Apple Music app first
+        if let url = URL(string: "music://music.apple.com/song/\(songId)") {
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url)
+                return
+            }
+        }
+        
+        // Fallback to web version
+        if let url = URL(string: "https://music.apple.com/song/\(songId)") {
+            UIApplication.shared.open(url)
+        }
+        #elseif os(macOS)
+        // Try to open in Apple Music app
+        if let url = URL(string: "music://music.apple.com/song/\(songId)") {
+            NSWorkspace.shared.open(url)
+        }
+        #endif
+    }
 }
 #endif // !os(watchOS)

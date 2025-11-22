@@ -9,19 +9,20 @@ generator client {
 }
 
 model Song {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  slug        String   @unique
-  lyrics      String?
-  fileName    String?
-  trackNumber Int?
-  discNumber  Int?
-  songType    String? // e.g. "cover"
-  album       Album?   @relation(fields: [albumId], references: [id])
-  albumId     Int?
-  singer      Singer?  @relation(fields: [singerId], references: [id])
-  singerId    Int?
-  writers     Writer[]
+  id           Int      @id @default(autoincrement())
+  name         String   @unique
+  slug         String   @unique
+  lyrics       String?
+  fileName     String?
+  trackNumber  Int?
+  discNumber   Int?
+  songType     String? // e.g. "cover"
+  album        Album?   @relation(fields: [albumId], references: [id])
+  albumId      Int?
+  singer       Singer?  @relation(fields: [singerId], references: [id])
+  singerId     Int?
+  writers      Writer[]
+  appleMusicId String?
 }
 
 model Album {

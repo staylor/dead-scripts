@@ -69,9 +69,8 @@ struct ContentView: View {
         } detail: {
             // Column 3: Lyrics
             if let song = selected {
-                LyricsInspector(song: song)
+                LyricsInspector(songID: song.persistentModelID)
                     .navigationSplitViewColumnWidth(min: 250, ideal: 300, max: 400)
-                    .id(song.id)
             } else {
                 ContentUnavailableView(
                     "Lyrics",

@@ -9,10 +9,32 @@ import UIKit
 
 struct PDFKitView: View {
     let url: URL
+    @State private var initialLoadComplete = false
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var isReturningFromBackground = false
     
     var body: some View {
         GeometryReader { geometry in
-            PDFKitViewRepresentable(url: url, size: geometry.size)
+            PDFKitViewRepresentable(
+                url: url, 
+                size: geometry.size, 
+                initialLoadComplete: $initialLoadComplete,
+                isReturningFromBackground: $isReturningFromBackground
+            )
+        }
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if oldPhase == .active && (newPhase == .inactive || newPhase == .background) {
+                // App is going to background - we need to capture scroll position via a hack
+                // since we don't have direct access to the PDFView here
+                // The Coordinator will handle this in the representable
+            } else if oldPhase == .background && newPhase == .active {
+                // Mark that we're returning from background
+                isReturningFromBackground = true
+                // Reset flag after a short delay
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    isReturningFromBackground = false
+                }
+            }
         }
     }
 }
@@ -21,6 +43,8 @@ struct PDFKitView: View {
 private struct PDFKitViewRepresentable: UIViewRepresentable {
     let url: URL
     let size: CGSize
+    @Binding var initialLoadComplete: Bool
+    @Binding var isReturningFromBackground: Bool
     
     func makeUIView(context: Context) -> PDFView {
         let pdfView = PDFView()
@@ -45,7 +69,19 @@ private struct PDFKitViewRepresentable: UIViewRepresentable {
             
             // Use a small delay to ensure pdfView has a proper frame
             DispatchQueue.main.async {
-                self.updateScaleFactor(for: pdfView, width: size.width, resetPosition: true)
+                self.updateScaleFactor(for: pdfView, width: size.width, resetPosition: true, context: context)
+                self.initialLoadComplete = true
+                context.coordinator.lastSize = size
+                
+                // Lock zoom scale after setting PDFView's scaleFactor
+                // This prevents user pinch-to-zoom but allows our scaleFactor to work
+                if let scrollView = pdfView.subviews.first as? UIScrollView {
+                    let currentZoom = scrollView.zoomScale
+                    scrollView.maximumZoomScale = currentZoom
+                    scrollView.minimumZoomScale = currentZoom
+                    scrollView.bouncesZoom = false
+                    context.coordinator.lastZoomScale = currentZoom
+                }
             }
         }
         
@@ -53,23 +89,129 @@ private struct PDFKitViewRepresentable: UIViewRepresentable {
     }
     
     func updateUIView(_ pdfView: PDFView, context: Context) {
+        // Capture scroll position before any potential changes
+        if let scrollView = pdfView.subviews.first as? UIScrollView {
+            if !isReturningFromBackground {
+                context.coordinator.lastScrollOffset = scrollView.contentOffset
+            }
+        }
+        
+        // If returning from background, force the scale factor back and lock it
+        if isReturningFromBackground {
+            if context.coordinator.lastPDFScaleFactor > 0 {
+                // Restore scale factor first (allow this to work normally)
+                pdfView.scaleFactor = context.coordinator.lastPDFScaleFactor
+                pdfView.minScaleFactor = context.coordinator.lastPDFScaleFactor
+                pdfView.maxScaleFactor = context.coordinator.lastPDFScaleFactor * 4.0
+                
+                if let scrollView = pdfView.subviews.first as? UIScrollView {
+                    scrollView.zoomScale = context.coordinator.lastZoomScale
+                    scrollView.maximumZoomScale = context.coordinator.lastZoomScale
+                    scrollView.minimumZoomScale = context.coordinator.lastZoomScale
+                    
+                    // Restore scroll position without animation
+                    UIView.performWithoutAnimation {
+                        scrollView.setContentOffset(context.coordinator.lastScrollOffset, animated: false)
+                    }
+                }
+                
+                // Keep forcing it for a bit to override any PDFKit layout passes
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    pdfView.scaleFactor = context.coordinator.lastPDFScaleFactor
+                    pdfView.minScaleFactor = context.coordinator.lastPDFScaleFactor
+                    pdfView.maxScaleFactor = context.coordinator.lastPDFScaleFactor * 4.0
+                    
+                    if let scrollView = pdfView.subviews.first as? UIScrollView {
+                        scrollView.zoomScale = context.coordinator.lastZoomScale
+                        scrollView.maximumZoomScale = context.coordinator.lastZoomScale
+                        scrollView.minimumZoomScale = context.coordinator.lastZoomScale
+                        
+                        // Restore scroll position again without animation
+                        UIView.performWithoutAnimation {
+                            scrollView.setContentOffset(context.coordinator.lastScrollOffset, animated: false)
+                        }
+                    }
+                }
+            }
+            return
+        }
+        
         // Check if we need to load a different PDF
         if pdfView.document?.documentURL != url {
             if let document = PDFKit.PDFDocument(url: url) {
                 pdfView.document = document
                 DispatchQueue.main.async {
-                    self.updateScaleFactor(for: pdfView, width: size.width, resetPosition: true)
+                    self.updateScaleFactor(for: pdfView, width: size.width, resetPosition: true, context: context)
+                    self.initialLoadComplete = true
+                    context.coordinator.lastSize = size
+                    
+                    // Lock zoom to current scale after loading
+                    if let scrollView = pdfView.subviews.first as? UIScrollView {
+                        let currentZoom = scrollView.zoomScale
+                        scrollView.maximumZoomScale = currentZoom
+                        scrollView.minimumZoomScale = currentZoom
+                        context.coordinator.lastZoomScale = currentZoom
+                        context.coordinator.lastScrollOffset = scrollView.contentOffset
+                    }
+                    context.coordinator.lastPDFScaleFactor = pdfView.scaleFactor
                 }
             }
-        } else {
-            // Use the size from GeometryReader instead of pdfView.bounds
-            updateScaleFactor(for: pdfView, width: size.width, resetPosition: false)
+        } else if initialLoadComplete {
+            // Only update scale if size has actually changed significantly
+            let sizeChanged = abs(context.coordinator.lastSize.width - size.width) > 1.0 ||
+                             abs(context.coordinator.lastSize.height - size.height) > 1.0
+            
+            if sizeChanged {
+                updateScaleFactor(for: pdfView, width: size.width, resetPosition: false, context: context)
+                context.coordinator.lastSize = size
+                
+                // Update zoom lock after scale change
+                DispatchQueue.main.async {
+                    if let scrollView = pdfView.subviews.first as? UIScrollView {
+                        let currentZoom = scrollView.zoomScale
+                        scrollView.maximumZoomScale = currentZoom
+                        scrollView.minimumZoomScale = currentZoom
+                        context.coordinator.lastZoomScale = currentZoom
+                        context.coordinator.lastScrollOffset = scrollView.contentOffset
+                    }
+                    context.coordinator.lastPDFScaleFactor = pdfView.scaleFactor
+                }
+            } else {
+                // Ensure zoom stays locked even when size hasn't changed
+                if let scrollView = pdfView.subviews.first as? UIScrollView {
+                    let currentZoom = scrollView.zoomScale
+                    // Only reset if user has somehow zoomed
+                    if abs(currentZoom - context.coordinator.lastZoomScale) > 0.01 {
+                        scrollView.zoomScale = context.coordinator.lastZoomScale
+                        scrollView.maximumZoomScale = context.coordinator.lastZoomScale
+                        scrollView.minimumZoomScale = context.coordinator.lastZoomScale
+                    }
+                }
+                
+                // Also check PDF scale factor
+                if abs(pdfView.scaleFactor - context.coordinator.lastPDFScaleFactor) > 0.01 {
+                    pdfView.scaleFactor = context.coordinator.lastPDFScaleFactor
+                    pdfView.minScaleFactor = context.coordinator.lastPDFScaleFactor
+                    pdfView.maxScaleFactor = context.coordinator.lastPDFScaleFactor * 4.0
+                }
+            }
         }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+    
+    class Coordinator {
+        var lastSize: CGSize = .zero
+        var lastZoomScale: CGFloat = 1.0
+        var lastPDFScaleFactor: CGFloat = 1.0
+        var lastScrollOffset: CGPoint = .zero
     }
     
     // MARK: - Helper Methods
     
-    private func updateScaleFactor(for pdfView: PDFView, width: CGFloat, resetPosition: Bool) {
+    private func updateScaleFactor(for pdfView: PDFView, width: CGFloat, resetPosition: Bool, context: Context) {
         guard let document = pdfView.document,
               let page = document.page(at: 0) else { return }
         
@@ -120,6 +262,7 @@ private struct PDFKitViewRepresentable: UIViewRepresentable {
 private struct PDFKitViewRepresentable: NSViewRepresentable {
     let url: URL
     let size: CGSize
+    @Binding var initialLoadComplete: Bool
     
     func makeNSView(context: Context) -> PDFView {
         let pdfView = PDFView()
@@ -145,6 +288,8 @@ private struct PDFKitViewRepresentable: NSViewRepresentable {
             // Use a small delay to ensure pdfView has a proper frame
             DispatchQueue.main.async {
                 self.updateScaleFactor(for: pdfView, width: size.width, resetPosition: true)
+                self.initialLoadComplete = true
+                context.coordinator.lastSize = size
             }
         }
         
@@ -158,11 +303,28 @@ private struct PDFKitViewRepresentable: NSViewRepresentable {
                 pdfView.document = document
                 DispatchQueue.main.async {
                     self.updateScaleFactor(for: pdfView, width: size.width, resetPosition: true)
+                    self.initialLoadComplete = true
+                    context.coordinator.lastSize = size
                 }
             }
-        } else {
-            updateScaleFactor(for: pdfView, width: size.width, resetPosition: false)
+        } else if initialLoadComplete {
+            // Only update scale if size has actually changed significantly
+            let sizeChanged = abs(context.coordinator.lastSize.width - size.width) > 1.0 ||
+                             abs(context.coordinator.lastSize.height - size.height) > 1.0
+            
+            if sizeChanged {
+                updateScaleFactor(for: pdfView, width: size.width, resetPosition: false)
+                context.coordinator.lastSize = size
+            }
         }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+    
+    class Coordinator {
+        var lastSize: CGSize = .zero
     }
     
     private func updateScaleFactor(for pdfView: PDFView, width: CGFloat, resetPosition: Bool) {

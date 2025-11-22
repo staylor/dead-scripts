@@ -69,6 +69,7 @@ for (const node of artists) {
         lyrics: item.lyrics?.replaceAll(/\\n/g, '\n') || '',
         singer,
         writers,
+        appleMusicId: item.appleMusicId,
       };
       album.songs.push(song);
     }
