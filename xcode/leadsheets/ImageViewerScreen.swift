@@ -32,10 +32,21 @@ struct ImageViewerScreen: View {
                 .buttonStyle(.card)
                 .focused($focusedField, equals: .backButton)
 
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(song.name)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                    
+                    Text(song.writersDisplayText)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+
                 Spacer()
 
                 // Scroll controls
-                HStack(spacing: 15) {
+                HStack(spacing: 40) {
                     Button(action: {
                         scrollOffset = min(0, scrollOffset + 200)
                         scrollID = UUID()
