@@ -29,7 +29,7 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
         })
     }
     
-    func templateApplicationScene(
+    private func templateApplicationScene(
         _ templateApplicationScene: CPTemplateApplicationScene,
         didDisconnect interfaceController: CPInterfaceController
     ) {
@@ -109,12 +109,22 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
         
         print("Opening Apple Music for song: \(song.name) with ID: \(appleMusicId)")
         
-        // Try to open in Apple Music app
-        if let url = URL(string: "music://music.apple.com/song/\(appleMusicId)") {
-            UIApplication.shared.open(url) { success in
-                print("Apple Music opened: \(success)")
+        // Try multiple URL formats for Apple Music
+        let urlStrings = [
+            "music://music.apple.com/us/song/\(appleMusicId)",
+            "https://music.apple.com/us/song/\(appleMusicId)"
+        ]
+        
+        for urlString in urlStrings {
+            if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url) { success in
+                    print("Apple Music opened with \(urlString): \(success)")
+                }
+                return
             }
         }
+        
+        print("Unable to open Apple Music with ID: \(appleMusicId)")
     }
 }
 #endif
