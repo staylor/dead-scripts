@@ -39,6 +39,7 @@ for (const node of artists) {
   for (const entry of node.albums) {
     const album = {
       name: entry.name,
+      slug: entry.slug,
       releaseYear: entry.releaseYear,
       coverArtFileName: entry.coverArtFileName,
       songs: [] as any[],
@@ -64,6 +65,7 @@ for (const node of artists) {
         discNumber: item.discNumber || undefined,
         songType: item.songType || undefined,
         name: item.name,
+        slug: item.slug,
         fileName: item.fileName,
         // when pasting lyrics in Prisma Studio, things get can escaped
         lyrics: item.lyrics?.replaceAll(/\\n/g, '\n') || '',

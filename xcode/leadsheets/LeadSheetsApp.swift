@@ -11,6 +11,13 @@ struct LeadSheetsApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     #endif
     
+    init() {
+        // Initialize Watch Connectivity early
+        #if os(iOS) || os(watchOS)
+        _ = WatchConnectivityManager.shared
+        #endif
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

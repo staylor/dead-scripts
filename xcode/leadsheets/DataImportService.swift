@@ -20,6 +20,7 @@ actor DataImportService {
     
     struct EnhancedAlbumJSON: Codable {
         let name: String
+        let slug: String
         let releaseYear: Int?
         let coverArtFileName: String?  // Can include path like "album_covers/1989.jpg"
         let songs: [EnhancedSongJSON]?
@@ -39,6 +40,7 @@ actor DataImportService {
     
     struct EnhancedSongJSON: Codable {
         let name: String
+        let slug: String
         let fileName: String  // Can include path like "audio/shake_it_off.mp3"
         let lyrics: String?
         let singer: String?
@@ -93,6 +95,7 @@ actor DataImportService {
                 // Create album once
                 let album = Album(
                     name: albumData.name,
+                    slug: albumData.slug,
                     releaseYear: albumData.releaseYear,
                     coverArtFileName: albumData.coverArtFileName,
                     artist: artist
@@ -116,6 +119,7 @@ actor DataImportService {
                     }
                     let song = Song(
                         name: songData.name,
+                        slug: songData.slug,
                         fileName: songData.fileName,
                         lyrics: songData.lyrics,
                         trackNumber: songData.trackNumber,

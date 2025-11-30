@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftUI
 import SwiftData
 #if !os(watchOS) && !os(tvOS)
 import PDFKit
@@ -11,6 +12,10 @@ struct ContentView: View {
     @State private var searchText = ""
     @State private var selected: Song?
     @State private var importManager: DataImportManager?
+    
+    #if os(iOS) || os(watchOS)
+    @StateObject private var watchConnectivity = WatchConnectivityManager.shared
+    #endif
     
     var filteredSongs: [Song] {
         if searchText.isEmpty {
@@ -27,6 +32,15 @@ struct ContentView: View {
     
     // MARK: - Helper Methods
     
+    private func selectSong(_ song: Song) {
+        selected = song
+        
+        #if os(iOS) || os(watchOS)
+        // Sync selection to the other device (use slug for matching since Watch has separate DB)
+        watchConnectivity.sendSelectedSong(songID: song.slug ?? "", songName: song.name)
+        #endif
+    }
+    
     var body: some View {
         #if os(macOS)
         // macOS native three-column layout: Song List | PDF | Lyrics
@@ -36,7 +50,7 @@ struct ContentView: View {
                 searchText: $searchText,
                 songs: filteredSongs,
                 onSelect: { song in
-                    selected = song
+                    selectSong(song)
                 }
             )
             .navigationSplitViewColumnWidth(min: 450, ideal: 450, max: 550)
@@ -137,7 +151,7 @@ struct ContentView: View {
                         searchText: $searchText,
                         songs: filteredSongs,
                         onSelect: { song in
-                            selected = song
+                            selectSong(song)
                         }
                     )
                     .opacity(selected == nil ? 1 : 0)
@@ -168,6 +182,14 @@ struct ContentView: View {
         .task {
             await importManager?.performInitialImport()
         }
+        #if os(iOS)
+        // Listen for song selections from Watch (match by slug)
+        .onChange(of: watchConnectivity.selectedSongID) { _, newValue in
+            guard let slug = newValue,
+                  let matchingSong = allSongs.first(where: { $0.slug == slug }) else { return }
+            selected = matchingSong
+        }
+        #endif
         #endif
     }
 }

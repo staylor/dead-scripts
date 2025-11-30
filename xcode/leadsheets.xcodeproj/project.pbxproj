@@ -53,9 +53,17 @@
 		E2D3C4B5A69780FEDCBA9876 /* Artist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		F1E2D3C4B5A69780FEDCBA97 /* Writer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Writer.swift; sourceTree = "<group>"; };
 		F1E2D3C4B5A69780FEDCBA98 /* Singer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Singer.swift; sourceTree = "<group>"; };
+		F1E2D3C4B5A69780FEDCBA99 /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchConnectivityManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D299423D2EDCD2150035A3CC /* Exceptions for "leadsheets" folder in "leadsheets.watch" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				WatchConnectivityManager.swift,
+			);
+			target = D2AF765F2EC4E94E006C0FCE /* leadsheets.watch */;
+		};
 		D2INFOPLIST00001 /* Exceptions for "leadsheets" folder in "leadsheets" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -75,6 +83,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				D2INFOPLIST00001 /* Exceptions for "leadsheets" folder in "leadsheets" target */,
+				D299423D2EDCD2150035A3CC /* Exceptions for "leadsheets" folder in "leadsheets.watch" target */,
 			);
 			path = leadsheets;
 			sourceTree = "<group>";
@@ -122,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				1497658284B154007313B8ED /* Song.swift */,
+				F1E2D3C4B5A69780FEDCBA99 /* WatchConnectivityManager.swift */,
 				F1E2D3C4B5A69780FEDCBA98 /* Singer.swift */,
 				F1E2D3C4B5A69780FEDCBA97 /* Writer.swift */,
 				E2D3C4B5A69780FEDCBA9876 /* Artist.swift */,

@@ -5,6 +5,7 @@ import SwiftData
 class Song {
     @Attribute(.unique) var id: UUID
     var name: String
+    var slug: String?
     var fileName: String // PDF file name
     var lyrics: String?
     var trackNumber: Int?
@@ -31,6 +32,7 @@ class Song {
 
     init(
         name: String,
+        slug: String? = nil,
         fileName: String,
         lyrics: String? = nil,
         trackNumber: Int? = nil,
@@ -44,6 +46,7 @@ class Song {
     ) {
         self.id = UUID()
         self.name = name
+        self.slug = slug
         self.fileName = fileName
         self.lyrics = lyrics
         self.trackNumber = trackNumber

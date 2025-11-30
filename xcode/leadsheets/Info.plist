@@ -79,6 +79,11 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
+
 	<!-- CarPlay Scene Configuration -->
 	<key>UIApplicationSceneManifest</key>
 	<dict>
