@@ -101,6 +101,10 @@
     "files": ["C/China Doll/china-doll.pdf", "C/China Doll/China Doll Score.pdf"]
   },
   {
+    "title": "Comes a Time",
+    "files": ["C/Comes a Time/comes-a-time.pdf", "C/Comes a Time/Comes a Time Score.pdf"]
+  },
+  {
     "title": "Crazy Fingers",
     "files": ["C/Crazy Fingers/crazy-fingers.pdf", "C/Crazy Fingers/Crazy Fingers Score.pdf"]
   },
@@ -168,6 +172,13 @@
     "files": [
       "F/Fire on the Mountain/fire-on-the-mountain.pdf",
       "F/Fire on the Mountain/Fire on the Mountain Score.pdf"
+    ]
+  },
+  {
+    "title": "Foolish Heart",
+    "files": [
+      "F/Foolish Heart/foolish-heart.pdf",
+      "F/Foolish Heart/Foolish Heart Score.pdf"
     ]
   },
   {
@@ -358,6 +369,10 @@
     "files": ["R/Ramble on Rose/ramble-on-rose.pdf", "R/Ramble on Rose/Ramble on Rose Score.pdf"]
   },
   {
+    "title": "Reuben and Cherise",
+    "files": ["R/Reuben and Cherise/reuben-and-cherise.pdf", "R/Reuben and Cherise/Reuben and Cherise Score.pdf"]
+  },
+  {
     "title": "Ripple",
     "files": ["R/Ripple/ripple.pdf", "R/Ripple/Ripple Score.pdf"]
   },
@@ -455,6 +470,10 @@
     ]
   },
   {
+    "title": "To Lay Me Down",
+    "files": ["T/To Lay Me Down/to-lay-me-down.pdf", "T/To Lay Me Down/To Lay Me Down Score.pdf"]
+  },
+  {
     "title": "Touch of Grey",
     "files": ["T/Touch of Grey/touch-of-grey.pdf", "T/Touch of Grey/Touch of Grey Score.pdf"]
   },
@@ -483,6 +502,10 @@
   {
     "title": "Viola Lee Blues",
     "files": ["V/Viola Lee Blues/Viola Lee Blues Score.pdf"]
+  },
+  {
+    "title": "Wang Dang Doodle",
+    "files": ["W/Wang Dang Doodle/Wang Dang Doodle Score.pdf"]
   },
   {
     "title": "West L.A. Fadeaway",

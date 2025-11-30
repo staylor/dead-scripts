@@ -1523,6 +1523,24 @@
           "coverArtFileName": "built-to-last.jpg",
           "songs": [
             {
+              "trackNumber": 1,
+              "name": "Foolish Heart",
+              "fileName": "Foolish Heart Score.pdf",
+              "lyrics": "Carve your name, carve your name in ice and wind\nSearch for where, search for where the rivers end\nOr where the rivers start\nDo everything that's in you, you feel to be your part\nBut never give your love my friend unto a foolish heart\nUnto a foolish heart\n\nDare to leap, leap from ledges high and wild \nLearn to speak, speak with wisdom like a child\nDirectly to the heart \nCrown yourself the king of clowns or stand way back apart \nBut never give your love my friend unto a foolish heart\nUnto a foolish heart\n\nShun a friend, shun a brother and a friend\nNever look, never look around the bend\nOr check the weather chart\nSign the Mona Lisa with a spray can, call it art\nBut never give your love my friend unto a foolish heart\nUnto a foolish heart\n\nA foolish heart will call on you to toss your dreams away\nThen turn around and blame you for the way you went astray\nA foolish heart will cost you sleep and often make you curse \nA selfish heart is trouble, but a foolish heart is worse\n\nBite the hand, bite the hand that bakes your bread\nDare to leap, where the angels fear to tread <\nTill you are torn apart\nStoke the fires of paradise with coals from hell to start\nBut never give you love my friend unto a foolish heart\nUnto a foolish heart",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663965011"
+            },
+            {
               "trackNumber": 4,
               "name": "Blow Away",
               "fileName": "Blow Away Score.pdf",
@@ -1727,6 +1745,32 @@
               "appleMusicId": null
             }
           ]
+        },
+        {
+          "name": "30 Trips Around the Sun",
+          "releaseYear": 2015,
+          "coverArtFileName": "30-trips-around-the-sun.jpg",
+          "songs": [
+            {
+              "trackNumber": 3,
+              "discNumber": 78,
+              "name": "Wang Dang Doodle",
+              "fileName": "Wang Dang Doodle Score.pdf",
+              "lyrics": "Tell automatic Slim\nTo tell razor toting Jim\nTo tell butcher knife toting Annie\nTo tell fast-talking Fanny\nWe're gonna pitch a ball\nDown to the union hall\nWe're gonna romp and stomp till midnight\nWe're gonna fuss and fight till daylight\n\nWe're gonna pitch a wang dang doodle all night long\nAll night long\nAll night long\nAll night long\nAll night long\nWe're gonna pitch a wang dang doodle all night long\n\nTell cedar crawling Red\nTo tell Abyssinian Ned\nTo tell old Pistol Pete\nTo tell everybody he meet\nTonight we need no rest\nWe gonna really throw a mess\nWe're gonna kick out all the windows\nWe're gonna knock down all the doors\n\nChorus\n\nTell Fats and Washboard Sam\nThat everybody's gonna jam\nTell Shakey and Boxcar Joe\nWe got sawdust on the floor\nTell Peg and Carol Dine\nWe gonna have a hell of a time\nAnd when the fish scent fill the air\nThere'll be snuff juice everywhere\n\nChorus\n\nAll night long\nAll night long\nAll night long",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "willie-dixon",
+                  "music"
+                ],
+                [
+                  "willie-dixon",
+                  "lyrics"
+                ]
+              ],
+              "appleMusicId": null
+            }
+          ]
         }
       ]
     },
@@ -1915,6 +1959,24 @@
               "appleMusicId": "1139010695"
             },
             {
+              "trackNumber": 8,
+              "name": "To Lay Me Down",
+              "fileName": "To Lay Me Down Score.pdf",
+              "lyrics": "To lay me down once more, to lay me down\nWith my head in sparkling clover\nLet the world go by, all lost in dreaming\nTo lay me down one last time, to lay me down\n\nTo be with you once more, to be with you\nWith our bodies close together\nLet the world go by, like clouds a-streaming\nTo lay me down one last time, to lay me down\n\nTo lay me down, to lay me down\nTo lay me down one last time, to lay me down\n\nTo lie with you once more, to lie with you\nWith our dreams entwined together\nTo wake beside you, my love still sleeping\nTo tell sweet lies one last time and say goodnight\n\nTo lay me down, to lay me down\nTo lay me down one last time, to lay me down",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1139010553"
+            },
+            {
               "trackNumber": 10,
               "name": "The Wheel",
               "fileName": "The Wheel Score.pdf",
@@ -1960,6 +2022,49 @@
                 ]
               ],
               "appleMusicId": "1139060473"
+            },
+            {
+              "trackNumber": 8,
+              "name": "Comes A Time",
+              "fileName": "Comes a Time Score.pdf",
+              "lyrics": "Chorus\nComes a time when the blind man takes your hand \nSays \"don't you see?\"\nGotta make it somehow\nOn the dreams you still believe\nDon't give it up\nYou got an empty cup\nOnly love can fill\nOnly love can fill\n\nBeen walking all morning\nWent walking all night\nI can't see much difference \nBetween the dark and light\nAnd I feel the wind \nAnd I taste the rain\nNever in my mind\nTo cause so much pain\n\n  [chorus]\n\nFrom day to day\nJust letting it ride \nYou get so far away\nFrom how it feels inside\nYou can't let go\n'Cause you're afraid to fall\nBut the day may come\nWhen you can't feel at all\n\n  [chorus]",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1139060274"
+            }
+          ]
+        },
+        {
+          "name": "Cats Under the Stars",
+          "releaseYear": 1978,
+          "coverArtFileName": "cats-under-the-stars.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "Reuben and Cherise",
+              "fileName": "Reuben and Cherise Score.pdf",
+              "lyrics": "Cérise was brushing her long hair gently down\nIt was the afternoon of Carnival\nAs she brushes it gently down\n\nReuben was strumming his painted mandolin \nIt was enlaid with a pretty face in jade\nPlayed the Carnival Parade \n\nCérise was dressing as Pirouette in white\nWhen a fatal vision gripped her tight \nCérise, beware tonight\n\nReuben, Reuben, tell me truly true\nI feel afraid and I don't know why I do\nIs there another girl for you\n\nIf you could see in my heart\nYou would know it's true\nThere is none, Cérise, except for you\nExcept for you\nI swear to it on my very soul \nIf I lie may I fall down cold\n\nWhen Reuben played on his painted mandolin \nThe breeze would stop and listen in \nBefore going its way again\n\nMasquerade began when nightfall finally woke\nLike waves against the bandstand dancers broke\nTo the painted mandolin\n\nLooking out on the crowd, who is standing there? \nSweet Ruby Claire at Reuben stared\nAt Reuben stared\nShe was dressed as Pirouette in red\nAnd her hair hung gently down\n\nThe crowd pressed round, Ruby stood as though alone\nReuben's song took on a different tone\nAnd he played it just for her\n\nThe song that he played was the Carnival Parade\nEach note cut a thread of Cérise's fate\nIt cut through like a blade\n\nReuben was playing his painted mandolin \nWhen Ruby froze and turned to stone\nFor the strings played all alone\n\nIf you could see in my heart \nYou would know it's true\nThere is none, Cérise, except for you\nExcept for you\n\nThe voice of Cérise from the face of the mandolin\nSinging Reuben, Reuben, tell me true\nFor I have no one but you\n\nIf you could see my heart\nYou would know it's true\nThere is none, Cérise, except for you\nExcept for you\nI swear to it on my very soul \nIf I lie, may I fall down cold\n\nThe truth of love an unsung song must tell \nThe course of love must follow blind\nWithout a look behind \n\nReuben walked the streets of New Orleans till dawn\nCérise so lightly in his arms \nAnd her hair hung gently down",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1138999181"
             }
           ]
         }
@@ -2243,6 +2348,16 @@
       "name": "Norman Span",
       "slug": "norman-span",
       "contribution": "music"
+    },
+    {
+      "name": "Willie Dixon",
+      "slug": "willie-dixon",
+      "contribution": "music"
+    },
+    {
+      "name": "Willie Dixon",
+      "slug": "willie-dixon",
+      "contribution": "lyrics"
     }
   ]
 }

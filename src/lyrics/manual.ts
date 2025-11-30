@@ -1,47 +1,48 @@
 import { PrismaClient } from '~/prisma/client/client';
 import { slugify } from '~/slugify';
-
-import song from '.cache/lyrics/the-wheel.json';
+import song from '~/songs/wang-dang-doodle.json';
 
 const prisma = new PrismaClient();
 
-// const authors = song.authors.map((text) => {
-//   const [contribution, name] = text.split(': ').map((part) => part.trim());
-//   return {
-//     name,
-//     slug: slugify(name),
-//     contribution: contribution.toLowerCase(),
-//   };
-// });
-// const writers = await Promise.all(
-//   authors.map((author) =>
-//     prisma.writer.upsert({
-//       where: { slug_contribution: { slug: author.slug, contribution: author.contribution } },
-//       update: {},
-//       create: author,
-//     })
-//   )
-// );
+const authors = song.authors.map((text) => {
+  const [contribution, name] = text.split(': ').map((part) => part.trim());
+  return {
+    name,
+    slug: slugify(name),
+    contribution: contribution.toLowerCase(),
+  };
+});
+const writers = await Promise.all(
+  authors.map((author) =>
+    prisma.writer.upsert({
+      where: { slug_contribution: { slug: author.slug, contribution: author.contribution } },
+      update: {},
+      create: author,
+    })
+  )
+);
 
 const slug = slugify(song.title);
-// const album = await prisma.album.findUnique({ where: { slug: 'terrapin-station' } });
-// const singer = await prisma.singer.findUnique({ where: { slug: 'bob-weir' } });
-// const trackNumber = 4;
+const album = await prisma.album.findUnique({ where: { slug: '30-trips-around-the-sun' } });
+const singer = await prisma.singer.findUnique({ where: { slug: 'bob-weir' } });
+const discNumber = 78;
+const trackNumber = 3;
 const data = {
   name: song.title,
   slug,
-  // lyrics: song.lyrics,
-  // fileName: `${song.title} Score.pdf`,
-  // trackNumber,
-  // album: {
-  //   connect: { id: album?.id },
-  // },
-  // singer: {
-  //   connect: { id: singer?.id },
-  // },
-  // writers: {
-  //   connect: writers.map(({ id }) => ({ id })),
-  // },
+  lyrics: song.lyrics,
+  fileName: `${song.title} Score.pdf`,
+  trackNumber,
+  discNumber,
+  album: {
+    connect: { id: album?.id },
+  },
+  singer: {
+    connect: { id: singer?.id },
+  },
+  writers: {
+    connect: writers.map(({ id }) => ({ id })),
+  },
 };
 
 await prisma.song.upsert({
