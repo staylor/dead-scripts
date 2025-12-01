@@ -16,13 +16,24 @@ struct LeadSheetsApp: App {
         #if os(iOS) || os(watchOS)
         _ = WatchConnectivityManager.shared
         #endif
+
+        // Initialize CloudKit sync
+        #if os(iOS) || os(macOS)
+        _ = CloudSyncManager.shared
+        #endif
     }
     
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [Song.self, Artist.self, Album.self, Singer.self, Writer.self])
+        .modelContainer(container)
+    }
+
+    var container: ModelContainer {
+        let schema = Schema([Song.self, Artist.self, Album.self, Singer.self, Writer.self])
+        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
+        return try! ModelContainer(for: schema, configurations: [config])
     }
 }
 
@@ -34,9 +45,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         configurationForConnecting connectingSceneSession: UISceneSession,
         options: UIScene.ConnectionOptions
     ) -> UISceneConfiguration {
-        
+
         if connectingSceneSession.role == .carTemplateApplication {
-            // CarPlay scene configuration
             let configuration = UISceneConfiguration(
                 name: "CarPlay Configuration",
                 sessionRole: connectingSceneSession.role
@@ -44,7 +54,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             configuration.delegateClass = CarPlaySceneDelegate.self
             return configuration
         } else {
-            // Default scene configuration for iPhone/iPad
             let configuration = UISceneConfiguration(
                 name: "Default Configuration",
                 sessionRole: connectingSceneSession.role

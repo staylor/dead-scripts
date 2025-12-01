@@ -16,6 +16,10 @@ struct ContentView: View {
     #if os(iOS) || os(watchOS)
     @StateObject private var watchConnectivity = WatchConnectivityManager.shared
     #endif
+
+    #if os(iOS) || os(macOS)
+    @StateObject private var cloudSync = CloudSyncManager.shared
+    #endif
     
     var filteredSongs: [Song] {
         if searchText.isEmpty {
@@ -34,10 +38,22 @@ struct ContentView: View {
     
     private func selectSong(_ song: Song) {
         selected = song
-        
-        #if os(iOS) || os(watchOS)
-        // Sync selection to the other device (use slug for matching since Watch has separate DB)
-        watchConnectivity.sendSelectedSong(songID: song.slug ?? "", songName: song.name)
+
+        print("selectSong: \(song.name), slug: \(song.slug ?? "nil")")
+
+        guard let slug = song.slug else {
+            print("selectSong: no slug, skipping sync")
+            return
+        }
+
+        #if os(iOS)
+        // Direct Watch sync (iPhone only)
+        watchConnectivity.sendSelectedSong(songID: slug, songName: song.name)
+        // CloudKit sync (for iPad → iPhone → Watch flow)
+        cloudSync.sendSelection(slug: slug)
+        #elseif os(macOS)
+        // CloudKit sync from Mac
+        cloudSync.sendSelection(slug: slug)
         #endif
     }
     
@@ -103,6 +119,12 @@ struct ContentView: View {
         }
         .task {
             await importManager?.performInitialImport()
+        }
+        .onChange(of: cloudSync.selectedSongSlug) { _, newValue in
+            guard let slug = newValue,
+                  selected?.slug != slug,
+                  let matchingSong = allSongs.first(where: { $0.slug == slug }) else { return }
+            selected = matchingSong
         }
         #else
         // iOS/iPadOS layout
@@ -183,9 +205,20 @@ struct ContentView: View {
             await importManager?.performInitialImport()
         }
         #if os(iOS)
-        // Listen for song selections from Watch (match by slug)
+        // Listen for song selections from Watch (iPhone only) and forward to CloudKit
         .onChange(of: watchConnectivity.selectedSongID) { _, newValue in
+            guard UIDevice.current.userInterfaceIdiom == .phone,
+                  let slug = newValue,
+                  selected?.slug != slug,
+                  let matchingSong = allSongs.first(where: { $0.slug == slug }) else { return }
+            selected = matchingSong
+            // Forward Watch selection to CloudKit so iPad can see it
+            cloudSync.sendSelection(slug: slug)
+        }
+        // Listen for song selections from CloudKit (from other devices)
+        .onChange(of: cloudSync.selectedSongSlug) { _, newValue in
             guard let slug = newValue,
+                  selected?.slug != slug,
                   let matchingSong = allSongs.first(where: { $0.slug == slug }) else { return }
             selected = matchingSong
         }

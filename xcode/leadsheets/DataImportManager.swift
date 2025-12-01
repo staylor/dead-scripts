@@ -15,8 +15,6 @@ class DataImportManager {
     }
 
     func performInitialImport() async {
-        print("🔍 DataImportManager.performInitialImport called")
-
         // Calculate current hash of seeds.json
         guard let currentHash = calculateSeedsHash() else {
             print("❌ Could not calculate seeds.json hash")

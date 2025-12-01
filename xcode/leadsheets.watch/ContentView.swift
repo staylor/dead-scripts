@@ -10,6 +10,7 @@ struct ContentView: View {
 
     @State private var navigationPath = NavigationPath()
     @State private var importManager: DataImportManager?
+    @State private var autoNavigatedSlug: String?
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -37,18 +38,16 @@ struct ContentView: View {
             .navigationDestination(for: Song.self) { song in
                 LyricsDetailView(song: song)
                     .onAppear {
-                        // Send selection to iPhone
-                        connectivityManager.sendSelectedSong(songID: song.slug ?? "", songName: song.name)
+                        // Only send to iPhone if user manually selected (not auto-navigated from iPhone)
+                        if autoNavigatedSlug != song.slug {
+                            connectivityManager.sendSelectedSong(songID: song.slug ?? "", songName: song.name)
+                        }
+                        autoNavigatedSlug = nil
                     }
             }
             .onAppear {
                 if importManager == nil {
                     importManager = DataImportManager(modelContext: modelContext)
-                }
-                // Check for any pending song selection from application context
-                let context = WCSession.default.receivedApplicationContext
-                if let songID = context["selectedSongID"] as? String {
-                    connectivityManager.selectedSongID = songID
                 }
             }
             .task {
@@ -58,6 +57,7 @@ struct ContentView: View {
                 // Navigate to the selected song when received from iPhone (match by slug)
                 if let newID = newID,
                    let song = songs.first(where: { $0.slug == newID }) {
+                    autoNavigatedSlug = newID
                     WKInterfaceDevice.current().play(.notification)
                     navigationPath.removeLast(navigationPath.count) // Pop to root
                     navigationPath.append(song)
