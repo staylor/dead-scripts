@@ -60,6 +60,8 @@ extension PDFKitView {
                                  abs(context.coordinator.lastSize.height - size.height) > 1.0
 
                 if sizeChanged {
+                    // Force layout update before recalculating scale
+                    pdfView.layoutDocumentView()
                     updateScaleFactor(for: pdfView, width: size.width, resetPosition: false)
                     context.coordinator.lastSize = size
                 }
@@ -94,21 +96,6 @@ extension PDFKitView {
 
             // Always go to first page to keep at top
             pdfView.go(to: page)
-
-            // Force scroll to top and adjust documentView position
-            DispatchQueue.main.async {
-                if let scrollView = pdfView.enclosingScrollView,
-                   let documentView = pdfView.documentView {
-                    // Reset documentView frame to align at top
-                    var frame = documentView.frame
-                    frame.origin.y = 0
-                    documentView.frame = frame
-
-                    // Scroll to top
-                    scrollView.contentView.scroll(to: .zero)
-                    scrollView.reflectScrolledClipView(scrollView.contentView)
-                }
-            }
         }
     }
 }

@@ -79,14 +79,14 @@ struct ContentView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.white)
-                .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: 1000)
+                .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: .infinity)
             } else if let song = selected {
                 PDFViewerScreen(song: song, onBack: {
                     selected = nil
                 })
                 .navigationTitle(song.name)
                 .navigationSubtitle(song.writersDisplayText)
-                .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: 1000)
+                .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: .infinity)
             } else {
                 ContentUnavailableView(
                     "Select a Song",
@@ -94,7 +94,7 @@ struct ContentView: View {
                     description: Text("Choose a song from the list to view its lead sheet")
                 )
                 .toolbar(removing: .title)
-                .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: 1000)
+                .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: .infinity)
             }
         } detail: {
             // Column 3: Lyrics
