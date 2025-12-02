@@ -6,42 +6,54 @@ import PDFKit
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \Song.name) private var allSongs: [Song]
 
     @State private var searchText = ""
     @State private var selected: Song?
     @State private var importManager: DataImportManager?
-    
+
     #if os(iOS) || os(watchOS)
-    @StateObject private var watchConnectivity = WatchConnectivityManager.shared
+    @ObservedObject private var watchConnectivity = WatchConnectivityManager.shared
     #endif
 
     #if os(iOS) || os(macOS)
-    @StateObject private var cloudSync = CloudSyncManager.shared
+    @ObservedObject private var cloudSync = CloudSyncManager.shared
     #endif
-    
-    var filteredSongs: [Song] {
-        if searchText.isEmpty {
-            return allSongs
-        } else {
-            return allSongs.filter { song in
-                song.name.localizedCaseInsensitiveContains(searchText) ||
-                song.artist?.name.localizedCaseInsensitiveContains(searchText) == true ||
-                song.album?.name.localizedCaseInsensitiveContains(searchText) == true ||
-                song.lyrics?.localizedCaseInsensitiveContains(searchText) == true
-            }
-        }
+
+    private func findSong(bySlug slug: String) -> Song? {
+        let predicate = #Predicate<Song> { $0.slug == slug }
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 1
+        return try? modelContext.fetch(descriptor).first
     }
     
     // MARK: - Helper Methods
-    
+
+    #if os(macOS)
+    private func subtitleText(for song: Song) -> String {
+        var subtitle = ""
+        if let album = song.album {
+            subtitle += album.name
+            if let year = album.releaseYear { subtitle += " (\(year))" }
+            subtitle += " • "
+        }
+        subtitle += song.writersDisplayText
+        let singer = song.singerDisplayText
+        if !singer.isEmpty { subtitle += " • \(singer)" }
+        return subtitle
+    }
+    #endif
+
     private func selectSong(_ song: Song) {
         selected = song
 
+        #if DEBUG
         print("selectSong: \(song.name), slug: \(song.slug ?? "nil")")
+        #endif
 
         guard let slug = song.slug else {
+            #if DEBUG
             print("selectSong: no slug, skipping sync")
+            #endif
             return
         }
 
@@ -61,13 +73,15 @@ struct ContentView: View {
         // macOS native three-column layout: Song List | PDF | Lyrics
         NavigationSplitView {
             // Column 1: Song list
-            SearchScreen(
-                searchText: $searchText,
-                songs: filteredSongs,
-                onSelect: { song in
-                    selectSong(song)
-                }
-            )
+            FilteredSongsView(searchText: searchText) { songs in
+                SearchScreen(
+                    searchText: $searchText,
+                    songs: songs,
+                    onSelect: { song in
+                        selectSong(song)
+                    }
+                )
+            }
             .navigationSplitViewColumnWidth(min: 450, ideal: 450, max: 550)
         } content: {
             // Column 2: PDF Viewer (content column)
@@ -80,24 +94,11 @@ struct ContentView: View {
                 .background(Color.white)
                 .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: .infinity)
             } else if let song = selected {
-                let writers = song.writersDisplayText
-                let singer = song.singerDisplayText
-                
                 PDFViewerScreen(song: song, onBack: {
                     selected = nil
                 })
                 .navigationTitle(song.name)
-                .navigationSubtitle({
-                    var subtitle = ""
-                    if let album = song.album {
-                        subtitle += "\(album.name)"
-                        if let year = album.releaseYear { subtitle += " (\(year))" }
-                        subtitle += " • "
-                    }
-                    subtitle += writers
-                    if !singer.isEmpty { subtitle += " • \(singer)" }
-                    return subtitle
-                }())
+                .navigationSubtitle(subtitleText(for: song))
                 .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: .infinity)
             } else {
                 ContentUnavailableView(
@@ -124,18 +125,14 @@ struct ContentView: View {
         }
         .navigationSplitViewStyle(.balanced)
         .background(Color.white)
-        .onAppear {
-            if importManager == nil {
-                importManager = DataImportManager(modelContext: modelContext)
-            }
-        }
-        .task {
-            await importManager?.performInitialImport()
-        }
+        .modifier(ImportManagerModifier(
+            modelContext: modelContext,
+            importManager: $importManager
+        ))
         .onChange(of: cloudSync.selectedSongSlug) { _, newValue in
             guard let slug = newValue,
                   selected?.slug != slug,
-                  let matchingSong = allSongs.first(where: { $0.slug == slug }) else { return }
+                  let matchingSong = findSong(bySlug: slug) else { return }
             selected = matchingSong
         }
         #else
@@ -171,23 +168,27 @@ struct ContentView: View {
                             selected = nil
                         })
                     } else {
-                        SearchScreen(
-                            searchText: $searchText,
-                            songs: filteredSongs,
-                            onSelect: { song in
-                                selected = song
-                            }
-                        )
+                        FilteredSongsView(searchText: searchText) { songs in
+                            SearchScreen(
+                                searchText: $searchText,
+                                songs: songs,
+                                onSelect: { song in
+                                    selected = song
+                                }
+                            )
+                        }
                     }
                     #else
                     // iOS/iPadOS: Keep existing ZStack approach with opacity
-                    SearchScreen(
-                        searchText: $searchText,
-                        songs: filteredSongs,
-                        onSelect: { song in
-                            selectSong(song)
-                        }
-                    )
+                    FilteredSongsView(searchText: searchText) { songs in
+                        SearchScreen(
+                            searchText: $searchText,
+                            songs: songs,
+                            onSelect: { song in
+                                selectSong(song)
+                            }
+                        )
+                    }
                     .opacity(selected == nil ? 1 : 0)
 
                     // Viewer Screen (slides in from right)
@@ -208,21 +209,17 @@ struct ContentView: View {
             }
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: selected)
-        .onAppear {
-            if importManager == nil {
-                importManager = DataImportManager(modelContext: modelContext)
-            }
-        }
-        .task {
-            await importManager?.performInitialImport()
-        }
+        .modifier(ImportManagerModifier(
+            modelContext: modelContext,
+            importManager: $importManager
+        ))
         #if os(iOS)
         // Listen for song selections from Watch (iPhone only) and forward to CloudKit
         .onChange(of: watchConnectivity.selectedSongID) { _, newValue in
             guard UIDevice.current.userInterfaceIdiom == .phone,
                   let slug = newValue,
                   selected?.slug != slug,
-                  let matchingSong = allSongs.first(where: { $0.slug == slug }) else { return }
+                  let matchingSong = findSong(bySlug: slug) else { return }
             selected = matchingSong
             // Forward Watch selection to CloudKit so iPad can see it
             cloudSync.sendSelection(slug: slug)
@@ -231,7 +228,7 @@ struct ContentView: View {
         .onChange(of: cloudSync.selectedSongSlug) { _, newValue in
             guard let slug = newValue,
                   selected?.slug != slug,
-                  let matchingSong = allSongs.first(where: { $0.slug == slug }) else { return }
+                  let matchingSong = findSong(bySlug: slug) else { return }
             selected = matchingSong
         }
         #endif

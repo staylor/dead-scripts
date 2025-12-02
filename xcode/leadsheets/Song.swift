@@ -3,6 +3,7 @@ import SwiftData
 
 @Model
 class Song {
+    #Index<Song>([\.slug])
     @Attribute(.unique) var id: UUID
     var name: String
     var slug: String?
