@@ -47,7 +47,7 @@
 		1497658284B154007313B8ED /* Models/Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models/Song.swift; sourceTree = "<group>"; };
 		44D8B25E8B9AEC7899DC2004 /* Services/DataImportService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Services/DataImportService.swift; sourceTree = "<group>"; };
 		55E6F7D80A12B456789ABCDE /* Services/DataImportManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Services/DataImportManager.swift; sourceTree = "<group>"; };
-		B5A4C57973005496DCFF812B /* seeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = seeds.json; sourceTree = "<group>"; };
+		B5A4C57973005496DCFF812B /* seeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Resources/seeds.json; sourceTree = "<group>"; };
 		D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = leadsheets.watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2E1EB562E9DE20C00E5456E /* Dead Sheets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dead Sheets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3C4B5A69780FEDCBA987654 /* Models/Album.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models/Album.swift; sourceTree = "<group>"; };

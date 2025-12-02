@@ -84,7 +84,7 @@ for (const node of artists) {
 data.singers.push(...Array.from(singerCache.values()));
 data.writers.push(...Array.from(writerCache.values()));
 
-const appDir = path.join(process.cwd(), 'xcode', 'leadsheets');
+const appDir = path.join(process.cwd(), 'xcode', 'leadsheets', 'Resources');
 
 await Promise.all(
   schema.map(async (entry) => {
