@@ -14,12 +14,13 @@ struct SearchScreen: View {
     @Binding var searchText: String
     let songs: [Song]
     let onSelect: (Song) -> Void
-    
+
     @State private var selectedFilter: SearchFilter = .allSongs
     @State private var selectedAlbum: Album?
     @State private var selectedArtist: Artist?
     @State private var selectedSinger: Singer?
     @State private var selectedGroupedWriter: GroupedWriter?
+    @State private var showSettings = false
     @Environment(\.modelContext) private var modelContext
     @Query private var albums: [Album]
     @Query private var artists: [Artist]
@@ -172,7 +173,7 @@ struct SearchScreen: View {
     }
     
     // MARK: - Header View
-    
+
     @ViewBuilder
     private var searchHeaderView: some View {
         VStack(spacing: 0) {
@@ -183,10 +184,18 @@ struct SearchScreen: View {
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 Spacer()
+                Button(action: { showSettings = true }) {
+                    Image(systemName: "gearshape")
+                        .font(.title2)
+                        .foregroundColor(.pink)
+                }
             }
             .padding(.horizontal)
             .padding(.top, 20)
             .padding(.bottom, 10)
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
+            }
             #endif
             searchBarView
             filterPickerView
@@ -209,6 +218,14 @@ struct SearchScreen: View {
                             .foregroundColor(.secondary)
                     }
                     .buttonStyle(.plain)
+                }
+                Button(action: { showSettings = true }) {
+                    Image(systemName: "gearshape")
+                        .foregroundColor(.secondary)
+                }
+                .buttonStyle(.plain)
+                .popover(isPresented: $showSettings) {
+                    SettingsView()
                 }
             }
             .padding()

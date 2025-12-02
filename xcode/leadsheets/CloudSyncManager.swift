@@ -1,6 +1,7 @@
 import Foundation
 import CloudKit
 import Combine
+import SwiftUI
 #if os(iOS)
 import UIKit
 import WatchConnectivity
@@ -14,11 +15,13 @@ class CloudSyncManager: ObservableObject {
 
     @Published var selectedSongSlug: String?
     @Published var senderIdiom: String?
+    @AppStorage("syncWithOtherDevices") private var syncEnabled = false
 
     private let container = CKContainer.default()
     private let recordType = "SongSelection"
     private let recordID = CKRecord.ID(recordName: "currentSelection")
     private var cancellables = Set<AnyCancellable>()
+    private var timerCancellable: AnyCancellable?
 
     private var currentIdiom: String {
         #if os(macOS)
@@ -44,31 +47,44 @@ class CloudSyncManager: ObservableObject {
                 }
                 .store(in: &cancellables)
         }
-
-        // Fetch when app becomes active
-        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
-            .sink { [weak self] _ in
-                self?.fetchCurrentSelection()
-            }
-            .store(in: &cancellables)
-        #elseif os(macOS)
-        // Fetch when app becomes active
-        NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)
-            .sink { [weak self] _ in
-                self?.fetchCurrentSelection()
-            }
-            .store(in: &cancellables)
         #endif
 
-        // Poll every 5 seconds to receive updates from other devices
-        Timer.publish(every: 5, on: .main, in: .common)
+        // Observe sync setting changes
+        UserDefaults.standard.publisher(for: \.syncWithOtherDevices)
+            .sink { [weak self] enabled in
+                self?.updateTimerState(enabled: enabled)
+            }
+            .store(in: &cancellables)
+
+        // Start timer if sync is already enabled
+        if syncEnabled {
+            startPollingTimer()
+        }
+
+        initializeSchema()
+    }
+
+    private func updateTimerState(enabled: Bool) {
+        if enabled {
+            startPollingTimer()
+            fetchCurrentSelection()
+        } else {
+            stopPollingTimer()
+        }
+    }
+
+    private func startPollingTimer() {
+        guard timerCancellable == nil else { return }
+        timerCancellable = Timer.publish(every: 5, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
                 self?.fetchCurrentSelection()
             }
-            .store(in: &cancellables)
+    }
 
-        initializeSchema()
+    private func stopPollingTimer() {
+        timerCancellable?.cancel()
+        timerCancellable = nil
     }
 
     private func initializeSchema() {
@@ -83,6 +99,8 @@ class CloudSyncManager: ObservableObject {
     }
 
     func sendSelection(slug: String) {
+        guard syncEnabled else { return }
+
         container.privateCloudDatabase.fetch(withRecordID: recordID) { [weak self] existingRecord, _ in
             guard let self = self else { return }
 
@@ -100,29 +118,34 @@ class CloudSyncManager: ObservableObject {
     }
 
     func fetchCurrentSelection() {
+        guard syncEnabled else { return }
+
         container.privateCloudDatabase.fetch(withRecordID: recordID) { [weak self] record, _ in
             guard let self = self,
                   let record = record,
                   let slug = record["slug"] as? String,
                   !slug.isEmpty else {
-                print("CloudKit: no valid record")
                 return
             }
 
             let sender = record["sender"] as? String ?? "unknown"
-            print("CloudKit: fetched slug=\(slug), sender=\(sender), currentIdiom=\(self.currentIdiom)")
 
             guard sender != self.currentIdiom else {
-                print("CloudKit: ignoring own record")
                 return
             }
 
             DispatchQueue.main.async {
-                print("CloudKit: updating selectedSongSlug to \(slug)")
                 self.senderIdiom = sender
                 self.selectedSongSlug = slug
             }
         }
+    }
+}
+
+// MARK: - UserDefaults KVO Extension
+extension UserDefaults {
+    @objc dynamic var syncWithOtherDevices: Bool {
+        bool(forKey: "syncWithOtherDevices")
     }
 }
 #endif
