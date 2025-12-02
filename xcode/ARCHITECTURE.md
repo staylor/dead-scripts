@@ -1,369 +1,368 @@
-# 🏗️ App Architecture Overview
+# Lead Sheets - Architecture Overview
 
-## Data Model Relationships
+A multi-platform music lead sheet viewer for iOS, macOS, watchOS, and tvOS with cross-device synchronization.
+
+## Project Structure
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                         SWIFTDATA MODELS                         │
-└─────────────────────────────────────────────────────────────────┘
-
-                              ┌──────────┐
-                              │  Artist  │
-                              ├──────────┤
-                              │ id       │
-                              │ name     │
-                              │ bio      │
-                              │ image    │
-                              └────┬─────┘
-                                   │
-                     ┌─────────────┴─────────────┐
-                     │                           │
-                     │ songs                     │ albums
-                     ▼                           ▼
-              ┌──────────┐                 ┌──────────-──┐
-              │   Song   │◄────album───────│    Album    │
-              ├──────────┤                 ├─────────────┤
-              │ id       │                 │ id          │
-              │ name     │                 │ name        │
-              │ fileName │                 │ coverArt    |
-              │ lyrics   │                 │ label       │
-              │ track #  │                 | releaseYear |
-              │ year     │                 └─────────---─┘
-              └──────────┘
+leadsheets/
+├── LeadSheetsApp.swift              # App entry point, SwiftData container
+├── ContentView.swift                # Platform-aware view router
+│
+├── Models/
+│   ├── Song.swift                   # Core entity with PDF/lyrics
+│   ├── Album.swift                  # Album with cover art
+│   ├── Artist.swift                 # Band/performer
+│   ├── Singer.swift                 # Member who sang song
+│   ├── Writer.swift                 # Songwriter with contribution type
+│   └── GroupedWriter.swift          # Helper for grouped writer display
+│
+├── Services/
+│   ├── DataImportService.swift      # JSON decoding and model creation
+│   ├── DataImportManager.swift      # Import orchestration, hash-based change detection
+│   ├── CloudSyncManager.swift       # CloudKit sync (iPhone/iPad/Mac)
+│   └── WatchConnectivityManager.swift # iPhone-Watch direct sync
+│
+├── Views - Main Screens/
+│   ├── SearchScreen.swift           # Multi-filter search and list
+│   ├── PDFViewerScreen.swift        # Lead sheet PDF display
+│   ├── ImageViewerScreen.swift      # tvOS image viewer
+│   ├── LyricsInspector.swift        # macOS sidebar lyrics
+│   └── SettingsView.swift           # Sync preferences
+│
+├── Views - Components/
+│   ├── SongRowView.swift            # Song list item
+│   ├── AlbumRowView.swift           # Album list item
+│   ├── ArtistRowView.swift          # Artist list item
+│   ├── SingerRowView.swift          # Singer list item
+│   ├── GroupedWriterRowView.swift   # Writer list item
+│   ├── LyricsOverlay.swift          # Draggable lyrics modal (iOS)
+│   ├── EmptyStateView.swift         # No data placeholder
+│   └── Platform*.swift              # Platform-specific utilities
+│
+├── PDFKit Integration/
+│   ├── PDFKitView.swift             # Base PDFKit wrapper
+│   ├── PDFKitView+iOS.swift         # iOS implementation
+│   └── PDFKitView+macOS.swift       # macOS implementation
+│
+├── Platform-Specific/
+│   ├── CarPlaySceneDelegate.swift   # CarPlay interface
+│   └── ImageLoader.swift            # Network image loading
+│
+├── Resources/
+│   ├── seeds.json                   # Song database (~500 songs)
+│   ├── pdfs/                        # Lead sheet PDFs
+│   └── images/                      # Album/artist images
+│
+└── leadsheets.watch/                # watchOS app target
+    ├── LeadSheetsWatchApp.swift
+    ├── ContentView.swift
+    └── LyricsDetailView.swift
 ```
+
+## Data Models
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           SwiftData Models                               │
+└─────────────────────────────────────────────────────────────────────────┘
+
+    ┌──────────┐           ┌──────────┐           ┌──────────┐
+    │  Artist  │──albums──▶│  Album   │◀──album───│   Song   │
+    │          │           │          │           │          │
+    │ id       │◀──artist──│ id       │           │ id       │
+    │ name     │           │ name     │           │ name     │
+    │ image    │           │ slug     │           │ slug     │
+    └────┬─────┘           │ coverArt │           │ fileName │
+         │                 │ year     │           │ lyrics   │
+         │                 └──────────┘           │ track#   │
+         │                                        │ disc#    │
+         │ songs                                  │ songType │
+         ▼                                        │ appleId  │
+    ┌──────────┐                                  └────┬─────┘
+    │   Song   │◀─────────────────────────────────────┘
+    └────┬─────┘
+         │
+    ┌────┴─────────────────────────┐
+    │                              │
+    ▼                              ▼
+┌──────────┐                 ┌──────────┐
+│  Singer  │                 │  Writer  │
+│          │                 │          │
+│ id       │                 │ id       │
+│ name     │                 │ name     │
+│ image    │                 │ contrib  │ ← "music", "lyrics", etc.
+│ songs    │                 │ image    │
+└──────────┘                 │ songs    │
+                             └──────────┘
+```
+
+**Key Model Features:**
+
+- All models use `@Attribute(.unique)` on `id` for uniqueness
+- Songs can have multiple Writers (many-to-many)
+- Singer represents the original artist (for cover songs)
+- Artist represents the performing band
+- GroupedWriter is a non-persisted helper for UI grouping
 
 ## App Flow
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                          APP LAUNCH                              │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                              App Launch                                  │
+└─────────────────────────────────────────────────────────────────────────┘
 
-                         LeadSheetsApp.swift
+                           LeadSheetsApp
                                  │
-                                 │ .modelContainer(for: [...])
+                   .modelContainer(for: [Song, Album, Artist, Singer, Writer])
+                                 │
                                  ▼
-                          ContentView.swift
+                           ContentView
                                  │
-                     ┌───────────┴───────────┐
-                     │                       │
-         First Launch│              Subsequent│Launches
-                     ▼                       ▼
-          ┌─────────────────┐      ┌──────────────────┐
-          │ Show Progress   │      │ Query Database   │
-          │ Import JSON     │      │ Show Results     │
-          │ Save to DB      │      │ Instant!         │
-          │ Set Flag        │      └──────────────────┘
-          └─────────────────┘
-                     │
-                     └──────────┬──────────────────────┐
-                                │                      │
-                                ▼                      ▼
-                        ┌──────────────┐      ┌──────────────┐
-                        │ SearchScreen │      │PDFViewerScreen│
-                        ├──────────────┤      ├──────────────┤
-                        │ Search Bar   │      │ PDF Display  │
-                        │ Song List    │      │ Back Button  │
-                        │ Tap → Open   │      │ Lyrics Btn   │
-                        └──────────────┘      └──────┬───────┘
-                                                     │
-                                                     ▼
-                                             ┌──────────────┐
-                                             │LyricsOverlay │
-                                             ├──────────────┤
-                                             │ Draggable    │
-                                             │ Resizable    │
-                                             │ Show Lyrics  │
-                                             └──────────────┘
+            ┌────────────────────┼────────────────────┐
+            │                    │                    │
+       First Launch         Hash Changed        Normal Launch
+            │                    │                    │
+            ▼                    ▼                    ▼
+    ┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+    │ Import JSON   │   │ Re-import     │   │ Query DB      │
+    │ Save to DB    │   │ (atomic)      │   │ Show results  │
+    │ Store hash    │   │ Update hash   │   │ (instant!)    │
+    └───────────────┘   └───────────────┘   └───────────────┘
 ```
 
-## Data Import Flow
+**Import Process:**
+
+1. DataImportManager computes SHA256 hash of seeds.json
+2. Compares against stored hash in UserDefaults
+3. If changed: clears existing data, imports fresh
+4. DataImportService decodes JSON, creates SwiftData models
+5. Models inserted via ModelContext batch operations
+
+## Search & Filter Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                         DATA IMPORT                              │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          Multi-Filter System                             │
+└─────────────────────────────────────────────────────────────────────────┘
 
-         seeds.json (Bundle)
-                │
-                │ Read file
-                ▼
-    ┌────────────────────────┐
-    │  DataImportService     │
-    ├────────────────────────┤
-    │ importLegacyJSON()     │
-    │ or                     │
-    │ importStructuredJSON() │
-    └───────────┬────────────┘
-                │
-                │ Decode JSON
-                ▼
-      ┌──────────────────┐
-      │ Parse & Cache:   │
-      │  - Artists       │
-      │  - Albums        │
-      └────────┬─────────┘
-               │
-               │ Create models
-               ▼
-      ┌──────────────────┐
-      │ Insert into      │
-      │ ModelContext     │
-      └────────┬─────────┘
-               │
-               │ context.save()
-               ▼
-      ┌──────────────────┐
-      │ SwiftData        │
-      │ Database         │
-      │ (SQLite)         │
-      └──────────────────┘
+    enum SearchFilter {
+        case allSongs      → Show all songs alphabetically
+        case byAlbum       → Group by album, show album covers
+        case byArtist      → Group by artist
+        case bySinger      → Group by original singer (covers)
+        case byWriter      → Group by songwriter(s)
+        case covers        → Filter to cover songs only
+    }
+
+                    SearchScreen
+                         │
+        ┌────────────────┼────────────────┐
+        │                │                │
+        ▼                ▼                ▼
+    Filter Tabs     Search Bar      Results List
+        │                │                │
+        └────────────────┴────────────────┘
+                         │
+                         ▼
+                  Filtered Results
+                  (in-memory filter)
 ```
 
-## Search & Filter Flow
+**Search Implementation:**
+
+- @Query fetches all songs from SwiftData
+- In-memory filtering by name, artist, album, lyrics, singer, writer
+- Filter enum controls list presentation and grouping
+- GroupedWriter helper combines writers with same contribution on same songs
+
+## Platform Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                       SEARCH & FILTER                            │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         Multi-Platform Design                            │
+└─────────────────────────────────────────────────────────────────────────┘
 
-                    User Types in Search
-                            │
-                            ▼
-                  ┌──────────────────┐
-                  │ searchText       │
-                  │ @Binding         │
-                  └────────┬─────────┘
-                           │
-                           ▼
-               ┌──────────────────────┐
-               │ ContentView          │
-               │ filteredSongs        │
-               └────────┬─────────────┘
-                        │
-        ┌───────────────┴────────────────────────┐
-        │                                        │
-        │ Filter allSongs where:                 │
-        │  - name contains searchText            │
-        │  - artist.name contains searchText     │
-        │  - album.name contains searchText      │
-        │  - lyrics contains searchText          │
-        │                                        │
-        └───────────────┬────────────────────────┘
-                        │
-                        ▼
-                ┌──────────────────┐
-                │ SearchScreen     │
-                │ Display Results  │
-                └──────────────────┘
+    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+    │       iOS       │    │      macOS      │    │      tvOS       │
+    ├─────────────────┤    ├─────────────────┤    ├─────────────────┤
+    │ Full-screen PDF │    │ 3-column split  │    │ Image viewer    │
+    │ Lyrics overlay  │    │ Songs|PDF|Lyrics│    │ Focus navigation│
+    │ CarPlay support │    │ Inspector panel │    │ No PDF support  │
+    │ CloudKit sync   │    │ CloudKit sync   │    │                 │
+    │ Watch pairing   │    │                 │    │                 │
+    └─────────────────┘    └─────────────────┘    └─────────────────┘
+
+    ┌─────────────────┐
+    │     watchOS     │
+    ├─────────────────┤
+    │ Song list       │
+    │ Lyrics detail   │
+    │ iPhone sync     │
+    └─────────────────┘
 ```
 
-## Query Pattern
+**Platform Separation:**
+
+- Conditional compilation: `#if os(iOS)`, `#if os(macOS)`, etc.
+- Platform-specific file extensions: `PDFKitView+iOS.swift`
+- Shared models across all platforms
+- PlatformColors/PlatformListView for styling abstraction
+
+## Cross-Device Sync
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                      @QUERY PATTERN                              │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         Sync Architecture                                │
+└─────────────────────────────────────────────────────────────────────────┘
 
-         In Any SwiftUI View:
-
-    @Query(sort: \Song.name)
-    private var songs: [Song]
-              │
-              │ SwiftData automatically:
-              │  1. Fetches from database
-              │  2. Sorts results
-              │  3. Observes changes
-              │  4. Updates view
-              │
-              ▼
-         ┌────────────────┐
-         │ Your View      │
-         │ Uses songs     │
-         │ Automatically! │
-         └────────────────┘
-
-
-    With Filtering:
-
-    @Query(filter: #Predicate<Song> { song in
-        song.artist?.name == "Miles Davis"
-    }, sort: \Song.name)
-    private var songs: [Song]
-              │
-              │ Database Query (Fast!)
-              ▼
-         Only Miles Davis songs
+                              CloudKit
+                           (Private DB)
+                                 │
+              ┌──────────────────┼──────────────────┐
+              │                  │                  │
+              ▼                  ▼                  ▼
+         ┌────────┐         ┌────────┐         ┌────────┐
+         │ iPhone │         │  iPad  │         │  Mac   │
+         └───┬────┘         └────────┘         └────────┘
+             │
+    WatchConnectivity
+             │
+             ▼
+         ┌────────┐
+         │ Watch  │
+         └────────┘
 ```
 
-## File Organization
+**CloudSyncManager:**
 
-```
-📁 Lead Sheets App/
-│
-├── 📁 App/
-│   ├── LeadSheetsApp.swift          ← Entry point
-│   └── ContentView.swift            ← Main view
-│
-├── 📁 Models/
-│   └── Song.swift                   ← Data models (Song, Artist, Album)
-│
-├── 📁 Services/
-│   ├── DataImportService.swift      ← JSON import
-│   └── SongDataManager.swift        ← Database helpers
-│
-├── 📁 Views/
-│   ├── SearchScreen.swift           ← Song list & search
-│   ├── SongRowView.swift            ← Individual song row
-│   ├── PDFViewerScreen.swift        ← PDF display
-│   ├── LyricsOverlay.swift          ← Lyrics popup
-│   └── PDFKitView.swift             ← UIKit wrapper
-│
-├── 📁 Examples/
-│   └── AdvancedQueryExamples.swift  ← Reference code
-│
-├── 📁 Resources/
-│   ├── seeds.json                   ← Seed data
-│   ├── seeds-new-format-example.json ← Template
-│   └── 📁 PDFs/
-│       ├── song1.pdf
-│       ├── song2.pdf
-│       └── ...
-│
-└── 📁 Documentation/
-    ├── SUMMARY.md                   ← Quick overview
-    ├── README_SWIFTDATA.md          ← User guide
-    ├── MIGRATION_GUIDE.md           ← Technical docs
-    ├── TROUBLESHOOTING.md           ← Common issues
-    ├── CHECKLIST.md                 ← Pre-launch checks
-    └── ARCHITECTURE.md              ← This file
-```
+- Uses CloudKit private database
+- Syncs selected song/album across iPhone, iPad, Mac
+- Stores device type for last-selected tracking
+- @Observable with @MainActor for UI updates
 
-## Memory & Performance
+**WatchConnectivityManager:**
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    MEMORY MANAGEMENT                             │
-└─────────────────────────────────────────────────────────────────┘
-
-         OLD WAY (JSON Array):
-         ┌──────────────────────┐
-         │ All 500 songs        │
-         │ All 500 artists      │ ← Always in RAM
-         │ All 500 albums       │ ← Can't scale
-         │ All 500 lyrics       │
-         └──────────────────────┘
-                 Memory: ~50MB
-
-
-         NEW WAY (SwiftData):
-         ┌──────────────────────┐
-         │ Only visible songs   │ ← Lazy loading
-         │ Only queried data    │ ← On-demand
-         │ Smart caching        │ ← Automatic
-         └──────────────────────┘
-                 Memory: ~5MB
-
-
-    Search Performance:
-
-    OLD: O(n) - Check every song
-    ┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐
-    │1│2│3│4│5│6│7│8│9│10│ Check all...
-    └─┴─┴─┴─┴─┴─┴─┴─┴─┴─┘
-
-    NEW: O(log n) - Database index
-    ┌───────────┐
-    │   Index   │ ← Fast lookup
-    └───────────┘
-```
+- Direct iPhone ↔ Watch communication
+- Immediate updates without cloud latency
+- Works offline (paired devices)
+- Syncs currently selected song for lyrics display
 
 ## State Management
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    STATE HIERARCHY                               │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         State Hierarchy                                  │
+└─────────────────────────────────────────────────────────────────────────┘
 
-    @main
-    LeadSheetsApp
+    @main LeadSheetsApp
         │
-        │ .modelContainer (App-level)
+        │ .modelContainer (app-level)
         │
         ├─→ ContentView
         │       │
         │       │ @Environment(\.modelContext)
-        │       │ @Query(all songs)
-        │       │ @State(searchText)
-        │       │ @State(selectedPDF)
-        │       │ @AppStorage(hasImported)
+        │       │ @Query var songs: [Song]
+        │       │ @State var searchText
+        │       │ @State var selectedSong
+        │       │ @State var searchFilter
+        │       │ @AppStorage("syncEnabled")
+        │       │ @StateObject cloudSyncManager
+        │       │ @StateObject watchManager
         │       │
         │       ├─→ SearchScreen
-        │       │       │
-        │       │       │ @Binding(searchText)
-        │       │       │ songs: [Song]
-        │       │       │
-        │       │       └─→ SongRowView (foreach)
-        │       │               │
-        │       │               │ song: Song
+        │       │       @Binding searchText
+        │       │       @Binding searchFilter
+        │       │       songs: [Song]
         │       │
         │       └─→ PDFViewerScreen
-        │               │
-        │               │ song: Song
-        │               │ @State(showInfo)
+        │               song: Song
+        │               @State showLyrics
         │               │
         │               └─→ LyricsOverlay
-        │                       │
-        │                       │ song: Song
-        │                       │ @Binding(isShowing)
-        │                       │ @State(position)
-        │
-        └─→ Other Views...
+        │                       song: Song
+        │                       @Binding isShowing
+        │                       @State position/size
 ```
+
+**State Patterns:**
+
+- @Environment for ModelContext injection
+- @Query for automatic SwiftData binding
+- @State for local UI state
+- @StateObject for singleton managers
+- @AppStorage for user preferences
+- @Binding for parent-child communication
+
+## Performance Considerations
+
+**SwiftData Advantages:**
+
+- Lazy loading: only visible songs in memory
+- Database indexes for fast search
+- Automatic change observation via @Query
+- Batch operations for imports
+
+**Memory Management:**
+
+- ~500 songs with lazy loading uses ~5MB vs ~50MB if all in memory
+- PDFs loaded on-demand, not preloaded
+- Images loaded via ImageLoader with caching
+
+**Import Optimization:**
+
+- SHA256 hash check prevents unnecessary re-imports
+- Atomic clear-and-reimport for data consistency
+- Batch inserts via ModelContext
 
 ## Extension Points
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                   EASY TO ADD FEATURES                           │
-└─────────────────────────────────────────────────────────────────┘
+**Adding New Features:**
 
-    1. Favorites:
-       ┌────────────────┐
-       │ @Model Song    │
-       │ + isFavorite   │ ← Just add property
-       └────────────────┘
+```swift
+// 1. Favorites - add property to Song
+@Model class Song {
+    var isFavorite: Bool = false
+}
 
-    2. Playlists:
-       ┌────────────────┐
-       │ @Model         │
-       │ Playlist       │ ← New model
-       │ - songs: [Song]│
-       └────────────────┘
+// 2. Playlists - new model
+@Model class Playlist {
+    var name: String
+    var songs: [Song]
+}
 
-    3. Play History:
-       ┌────────────────┐
-       │ @Model Song    │
-       │ + playCount    │ ← Track usage
-       │ + lastPlayed   │
-       └────────────────┘
+// 3. Play history - add tracking
+@Model class Song {
+    var playCount: Int = 0
+    var lastPlayed: Date?
+}
 
-    4. CloudKit Sync:
-       ┌────────────────┐
-       │ .modelContainer│
-       │ + cloudKitID   │ ← Enable sync
-       └────────────────┘
+// 4. Full CloudKit sync - modify container
+.modelContainer(for: [...], cloudKitDatabase: .private("iCloud.com.app"))
 ```
 
-## Summary
+## Key Files Reference
 
-- **SwiftData** = Modern, efficient database
-- **@Query** = Automatic, reactive data binding
-- **Relationships** = Artist ↔ Song ↔ Album work automatically
-- **Import once** = Fast subsequent launches
-- **Scalable** = Handles thousands of songs
-- **Memory efficient** = Lazy loading
-- **Fast search** = Database indexes
-- **Easy to extend** = Add features with minimal code
+| File                             | Purpose                              |
+| -------------------------------- | ------------------------------------ |
+| `LeadSheetsApp.swift`            | App entry, SwiftData container setup |
+| `ContentView.swift`              | Platform-aware view router           |
+| `Song.swift`                     | Core data model with relationships   |
+| `DataImportService.swift`        | JSON → SwiftData conversion          |
+| `DataImportManager.swift`        | Import orchestration, hash detection |
+| `CloudSyncManager.swift`         | Cross-device CloudKit sync           |
+| `WatchConnectivityManager.swift` | iPhone-Watch direct sync             |
+| `SearchScreen.swift`             | Main search/filter interface         |
+| `PDFViewerScreen.swift`          | Lead sheet PDF viewer                |
+| `PDFKitView+iOS/macOS.swift`     | Platform-specific PDF rendering      |
+| `CarPlaySceneDelegate.swift`     | CarPlay interface                    |
 
-**Your app is built on a solid foundation! 🏗️**
+## Technology Stack
+
+- **UI**: SwiftUI
+- **Persistence**: SwiftData (SQLite)
+- **Cloud**: CloudKit (private database)
+- **Watch**: WatchConnectivity
+- **PDF**: PDFKit
+- **Hashing**: CryptoKit (SHA256)
+- **Reactive**: Combine, @Observable
