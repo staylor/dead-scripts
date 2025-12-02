@@ -10,5 +10,5 @@ const albums = [
 albums.forEach(([slug, url]) => {
   const resized = url.replace(/\{(w|h)\}/g, '1024');
 
-  exec(`curl -o xcode/leadsheets/albums/${slug}.jpg ${resized}`);
+  exec(`curl -o xcode/leadsheets/Resources/albums/${slug}.jpg ${resized}`);
 });

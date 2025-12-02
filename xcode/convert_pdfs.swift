@@ -4,8 +4,8 @@ import Foundation
 import PDFKit
 import AppKit
 
-let pdfDir = "leadsheets/pdfs"
-let outputDir = "leadsheets/images"
+let pdfDir = "leadsheets/Resources/pdfs"
+let outputDir = "leadsheets/Resources/images"
 
 // Create output directory
 let fileManager = FileManager.default

@@ -7,7 +7,7 @@ A multi-platform music lead sheet viewer for iOS, macOS, watchOS, and tvOS with 
 ```
 leadsheets/
 ├── LeadSheetsApp.swift              # App entry point, SwiftData container
-├── ContentView.swift                # Platform-aware view router
+├── CarPlaySceneDelegate.swift       # CarPlay interface
 │
 ├── Models/
 │   ├── Song.swift                   # Core entity with PDF/lyrics
@@ -17,42 +17,44 @@ leadsheets/
 │   ├── Writer.swift                 # Songwriter with contribution type
 │   └── GroupedWriter.swift          # Helper for grouped writer display
 │
-├── Services/
-│   ├── DataImportService.swift      # JSON decoding and model creation
-│   ├── DataImportManager.swift      # Import orchestration, hash-based change detection
-│   ├── CloudSyncManager.swift       # CloudKit sync (iPhone/iPad/Mac)
-│   └── WatchConnectivityManager.swift # iPhone-Watch direct sync
-│
-├── Views - Main Screens/
+├── Views/
+│   ├── ContentView.swift            # Platform-aware view router
 │   ├── SearchScreen.swift           # Multi-filter search and list
 │   ├── PDFViewerScreen.swift        # Lead sheet PDF display
 │   ├── ImageViewerScreen.swift      # tvOS image viewer
 │   ├── LyricsInspector.swift        # macOS sidebar lyrics
-│   └── SettingsView.swift           # Sync preferences
-│
-├── Views - Components/
-│   ├── SongRowView.swift            # Song list item
-│   ├── AlbumRowView.swift           # Album list item
-│   ├── ArtistRowView.swift          # Artist list item
-│   ├── SingerRowView.swift          # Singer list item
-│   ├── GroupedWriterRowView.swift   # Writer list item
 │   ├── LyricsOverlay.swift          # Draggable lyrics modal (iOS)
+│   ├── SettingsView.swift           # Sync preferences
+│   ├── FilteredSongsView.swift      # Song list with filtering
 │   ├── EmptyStateView.swift         # No data placeholder
-│   └── Platform*.swift              # Platform-specific utilities
+│   ├── PlatformListView.swift       # Platform-specific list styling
+│   ├── *ListView.swift              # List containers (Albums, Artists, etc.)
+│   └── *RowView.swift               # Row components (Song, Album, Artist, etc.)
 │
-├── PDFKit Integration/
+├── Services/
+│   ├── DataImportService.swift      # JSON decoding and model creation
+│   ├── DataImportManager.swift      # Import orchestration, hash-based change detection
+│   ├── CloudSyncManager.swift       # CloudKit sync (iPhone/iPad/Mac)
+│   ├── WatchConnectivityManager.swift # iPhone-Watch direct sync
+│   └── ImageLoader.swift            # Image loading with caching
+│
+├── Utilities/
 │   ├── PDFKitView.swift             # Base PDFKit wrapper
-│   ├── PDFKitView+iOS.swift         # iOS implementation
-│   └── PDFKitView+macOS.swift       # macOS implementation
-│
-├── Platform-Specific/
-│   ├── CarPlaySceneDelegate.swift   # CarPlay interface
-│   └── ImageLoader.swift            # Network image loading
+│   ├── PDFKitView+iOS.swift         # iOS PDF implementation
+│   ├── PDFKitView+macOS.swift       # macOS PDF implementation
+│   ├── PlatformColors.swift         # Cross-platform color definitions
+│   ├── CachedImage.swift            # Cached image view component
+│   ├── RowContainer.swift           # Reusable row layout container
+│   ├── ResizeHandle.swift           # Draggable resize control
+│   └── ImportManagerModifier.swift  # SwiftUI modifier for imports
 │
 ├── Resources/
+│   ├── Assets.xcassets              # App icons, colors, images
 │   ├── seeds.json                   # Song database (~500 songs)
 │   ├── pdfs/                        # Lead sheet PDFs
-│   └── images/                      # Album/artist images
+│   ├── images/                      # Album/artist images
+│   ├── albums/                      # Album cover art
+│   └── artists/                     # Artist photos
 │
 └── leadsheets.watch/                # watchOS app target
     ├── LeadSheetsWatchApp.swift
@@ -343,19 +345,19 @@ leadsheets/
 
 ## Key Files Reference
 
-| File                             | Purpose                              |
-| -------------------------------- | ------------------------------------ |
-| `LeadSheetsApp.swift`            | App entry, SwiftData container setup |
-| `ContentView.swift`              | Platform-aware view router           |
-| `Song.swift`                     | Core data model with relationships   |
-| `DataImportService.swift`        | JSON → SwiftData conversion          |
-| `DataImportManager.swift`        | Import orchestration, hash detection |
-| `CloudSyncManager.swift`         | Cross-device CloudKit sync           |
-| `WatchConnectivityManager.swift` | iPhone-Watch direct sync             |
-| `SearchScreen.swift`             | Main search/filter interface         |
-| `PDFViewerScreen.swift`          | Lead sheet PDF viewer                |
-| `PDFKitView+iOS/macOS.swift`     | Platform-specific PDF rendering      |
-| `CarPlaySceneDelegate.swift`     | CarPlay interface                    |
+| File                                | Purpose                              |
+| ----------------------------------- | ------------------------------------ |
+| `LeadSheetsApp.swift`               | App entry, SwiftData container setup |
+| `Views/ContentView.swift`           | Platform-aware view router           |
+| `Models/Song.swift`                 | Core data model with relationships   |
+| `Services/DataImportService.swift`  | JSON → SwiftData conversion          |
+| `Services/DataImportManager.swift`  | Import orchestration, hash detection |
+| `Services/CloudSyncManager.swift`   | Cross-device CloudKit sync           |
+| `Services/WatchConnectivityManager.swift` | iPhone-Watch direct sync       |
+| `Views/SearchScreen.swift`          | Main search/filter interface         |
+| `Views/PDFViewerScreen.swift`       | Lead sheet PDF viewer                |
+| `Utilities/PDFKitView+iOS/macOS.swift` | Platform-specific PDF rendering   |
+| `CarPlaySceneDelegate.swift`        | CarPlay interface                    |
 
 ## Technology Stack
 

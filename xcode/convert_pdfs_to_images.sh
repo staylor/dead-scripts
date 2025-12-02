@@ -3,8 +3,8 @@
 # Convert PDFs to high-resolution PNGs for tvOS
 # Using sips (built into macOS)
 
-PDF_DIR="leadsheets/pdfs"
-OUTPUT_DIR="leadsheets/images"
+PDF_DIR="leadsheets/Resources/pdfs"
+OUTPUT_DIR="leadsheets/Resources/images"
 
 # Create output directory if it doesn't exist
 mkdir -p "$OUTPUT_DIR"
