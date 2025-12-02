@@ -71,11 +71,21 @@
 			);
 			target = D2E1EB552E9DE20C00E5456E /* leadsheets */;
 		};
+		D2INFOPLIST00002 /* Exceptions for "leadsheets.watch" folder in "leadsheets.watch" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D2AF765F2EC4E94E006C0FCE /* leadsheets.watch */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D2AF76612EC4E94E006C0FCE /* leadsheets.watch */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D2INFOPLIST00002 /* Exceptions for "leadsheets.watch" folder in "leadsheets.watch" target */,
+			);
 			path = leadsheets.watch;
 			sourceTree = "<group>";
 		};
@@ -291,12 +301,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LQR2VDPY65;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Dead Sheets";
-				"INFOPLIST_KEY_CFBundleIcons[sdk=watchos*]" = "<dict><key>CFBundlePrimaryIcon</key><dict><key>CFBundleIconFiles</key><array><string>AppIcon</string></array><key>CFBundleIconName</key><string>AppIcon</string></dict></dict>";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = wonderboymusic.leadsheets;
-				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				INFOPLIST_FILE = leadsheets.watch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -326,12 +331,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LQR2VDPY65;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Dead Sheets";
-				"INFOPLIST_KEY_CFBundleIcons[sdk=watchos*]" = "<dict><key>CFBundlePrimaryIcon</key><dict><key>CFBundleIconFiles</key><array><string>AppIcon</string></array><key>CFBundleIconName</key><string>AppIcon</string></dict></dict>";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = wonderboymusic.leadsheets;
-				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				INFOPLIST_FILE = leadsheets.watch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -483,6 +483,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = leadsheets/leadsheets.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=appletvos*]" = "leadsheets/leadsheets-tvOS.entitlements";
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "leadsheets/leadsheets-macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -524,6 +525,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = leadsheets/leadsheets.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=appletvos*]" = "leadsheets/leadsheets-tvOS.entitlements";
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "leadsheets/leadsheets-macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

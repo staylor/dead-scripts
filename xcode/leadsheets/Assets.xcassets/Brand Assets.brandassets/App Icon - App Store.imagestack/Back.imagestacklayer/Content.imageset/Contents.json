@@ -4,6 +4,11 @@
       "filename" : "white-back-appstore.png",
       "idiom" : "tv",
       "scale" : "1x"
+    },
+    {
+      "filename" : "white-back-appstore.png",
+      "idiom" : "tv",
+      "scale" : "2x"
     }
   ],
   "info" : {
