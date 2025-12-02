@@ -10,7 +10,6 @@ class Song {
     var lyrics: String?
     var trackNumber: Int?
     var discNumber: Int?
-    var dateAdded: Date
     var songType: String?
     var appleMusicId: String?
 
@@ -52,7 +51,6 @@ class Song {
         self.trackNumber = trackNumber
         self.discNumber = discNumber
         self.songType = songType
-        self.dateAdded = Date()
         self.album = album
         self.artist = artist
         self.singer = singer
@@ -61,8 +59,15 @@ class Song {
     }
 }
 
-// MARK: - Writer Display Formatting
+// MARK: - Display Formatting
 extension Song {
+    var singerDisplayText: String {
+        guard let singer = singer else {
+            return ""
+        }
+        return "Original singer: \(singer.name)"
+    }
+    
     /// Formats the writers' names and contributions for display
     /// Groups by contribution type (e.g., "Music: Garcia & Weir, Lyrics: Hunter")
     /// If music and lyrics have the same writers, combines them as "Music & Lyrics"

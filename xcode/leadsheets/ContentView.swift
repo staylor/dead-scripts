@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftUI
 import SwiftData
 #if !os(watchOS) && !os(tvOS)
 import PDFKit
@@ -81,11 +80,24 @@ struct ContentView: View {
                 .background(Color.white)
                 .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: .infinity)
             } else if let song = selected {
+                let writers = song.writersDisplayText
+                let singer = song.singerDisplayText
+                
                 PDFViewerScreen(song: song, onBack: {
                     selected = nil
                 })
                 .navigationTitle(song.name)
-                .navigationSubtitle(song.writersDisplayText)
+                .navigationSubtitle({
+                    var subtitle = ""
+                    if let album = song.album {
+                        subtitle += "\(album.name)"
+                        if let year = album.releaseYear { subtitle += " (\(year))" }
+                        subtitle += " • "
+                    }
+                    subtitle += writers
+                    if !singer.isEmpty { subtitle += " • \(singer)" }
+                    return subtitle
+                }())
                 .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: .infinity)
             } else {
                 ContentUnavailableView(
