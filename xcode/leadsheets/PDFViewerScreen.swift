@@ -16,6 +16,9 @@ struct PDFViewerScreen: View {
                 if let pdfURL = song.pdfURL {
                     PDFKitView(url: pdfURL)
                         .id(pdfURL) // Keep PDF view stable across scene phase changes
+                        #if os(iOS)
+                        .padding(.top, UIDevice.current.userInterfaceIdiom == .phone ? 40 : 0)
+                        #endif
                 } else {
                     // Fallback if PDF not found
                     VStack {
