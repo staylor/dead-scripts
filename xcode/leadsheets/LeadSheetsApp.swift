@@ -5,12 +5,21 @@ import SwiftData
 import CarPlay
 #endif
 
+// MARK: - Shared Model Container
+enum SharedModelContainer {
+    static let shared: ModelContainer = {
+        let schema = Schema([Song.self, Artist.self, Album.self, Singer.self, Writer.self])
+        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
+        return try! ModelContainer(for: schema, configurations: [config])
+    }()
+}
+
 @main
 struct LeadSheetsApp: App {
     #if os(iOS)
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     #endif
-    
+
     init() {
         // Initialize Watch Connectivity early
         #if os(iOS) || os(watchOS)
@@ -22,18 +31,12 @@ struct LeadSheetsApp: App {
         _ = CloudSyncManager.shared
         #endif
     }
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(container)
-    }
-
-    var container: ModelContainer {
-        let schema = Schema([Song.self, Artist.self, Album.self, Singer.self, Writer.self])
-        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
-        return try! ModelContainer(for: schema, configurations: [config])
+        .modelContainer(SharedModelContainer.shared)
     }
 }
 

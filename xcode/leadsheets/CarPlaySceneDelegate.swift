@@ -5,9 +5,16 @@ import UIKit
 
 @available(iOS 14.0, *)
 class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
-    
+
     var interfaceController: CPInterfaceController?
     var modelContext: ModelContext?
+    private var importObserver: NSObjectProtocol?
+
+    deinit {
+        if let observer = importObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+    }
     
     // MARK: - CPTemplateApplicationSceneDelegate
     
@@ -27,6 +34,22 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
                 print("Root template set successfully")
             }
         })
+
+        // Listen for import completion to refresh the list
+        importObserver = NotificationCenter.default.addObserver(
+            forName: .songsDidImport,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.refreshSongList()
+        }
+    }
+
+    private func refreshSongList() {
+        guard let interfaceController = interfaceController else { return }
+        print("Refreshing CarPlay song list after import...")
+        let updatedTemplate = createSongListTemplate()
+        interfaceController.setRootTemplate(updatedTemplate, animated: true, completion: nil)
     }
     
     private func templateApplicationScene(
@@ -41,17 +64,9 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
     
     private func createSongListTemplate() -> CPListTemplate {
         print("Creating song list template...")
-        
-        // Try to get the model context from the shared container
-        guard let container = try? ModelContainer(for: Song.self, Artist.self, Album.self, Singer.self, Writer.self) else {
-            print("Failed to create model container")
-            // Return a template with a message
-            let emptyItem = CPListItem(text: "No songs available", detailText: "Import songs in the app")
-            let section = CPListSection(items: [emptyItem])
-            return CPListTemplate(title: "Dead Sheets", sections: [section])
-        }
-        
-        let context = ModelContext(container)
+
+        // Use the shared model container
+        let context = ModelContext(SharedModelContainer.shared)
         self.modelContext = context
         
         // Fetch all songs
@@ -81,13 +96,17 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
                     text: song.name,
                     detailText: song.artist?.name ?? ""
                 )
-                
+
+                // Capture only the values needed, not the SwiftData model
+                let appleMusicId = song.appleMusicId
+                let songName = song.name
+
                 // Add handler to open Apple Music when tapped
                 item.handler = { [weak self] _, completion in
-                    self?.openAppleMusic(for: song)
+                    self?.openAppleMusic(id: appleMusicId, name: songName)
                     completion()
                 }
-                
+
                 return item
             }
             
@@ -101,13 +120,13 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
     
     // MARK: - Helper Methods
     
-    private func openAppleMusic(for song: Song) {
-        guard let appleMusicId = song.appleMusicId, !appleMusicId.isEmpty else {
-            print("No Apple Music ID for song: \(song.name)")
+    private func openAppleMusic(id appleMusicId: String?, name songName: String) {
+        guard let appleMusicId = appleMusicId, !appleMusicId.isEmpty else {
+            print("No Apple Music ID for song: \(songName)")
             return
         }
-        
-        print("Opening Apple Music for song: \(song.name) with ID: \(appleMusicId)")
+
+        print("Opening Apple Music for song: \(songName) with ID: \(appleMusicId)")
         
         // Try multiple URL formats for Apple Music
         let urlStrings = [

@@ -8,12 +8,10 @@ struct ImportManagerModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .onAppear {
+            .task {
                 if importManager == nil {
                     importManager = DataImportManager(modelContext: modelContext)
                 }
-            }
-            .task {
                 await importManager?.performInitialImport()
             }
     }

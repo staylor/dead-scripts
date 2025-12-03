@@ -20,6 +20,9 @@ class Song {
     var singer: Singer?
     var writers: [Writer]?
 
+    // Cached computed values
+    @Transient private var _writersDisplayText: String?
+
     // Computed property for PDF URL
     var pdfURL: URL? {
         Bundle.main.url(forResource: fileName.replacingOccurrences(of: ".pdf", with: ""), withExtension: "pdf")
@@ -73,35 +76,39 @@ extension Song {
     /// Groups by contribution type (e.g., "Music: Garcia & Weir, Lyrics: Hunter")
     /// If music and lyrics have the same writers, combines them as "Music & Lyrics"
     var writersDisplayText: String {
+        if let cached = _writersDisplayText {
+            return cached
+        }
+
         guard let writers = writers, !writers.isEmpty else {
             return "Unknown Writer"
         }
-        
+
         // Group writers by contribution type
         let groupedByContribution = Dictionary(grouping: writers) { $0.contribution }
-        
+
         // Get writer names for music and lyrics
         let musicWriters = groupedByContribution["music"]?.map { $0.name }.sorted() ?? []
         let lyricsWriters = groupedByContribution["lyrics"]?.map { $0.name }.sorted() ?? []
-        
+
         // Check if music and lyrics have the same writers
         let hasSameWriters = !musicWriters.isEmpty && !lyricsWriters.isEmpty && musicWriters == lyricsWriters
-        
+
         var contributionStrings: [String] = []
-        
+
         if hasSameWriters {
             // Combine music and lyrics into one attribution
             let namesString = formatWriterNames(musicWriters)
             contributionStrings.append("Music & Lyrics: \(namesString)")
-            
+
             // Add any other contribution types
             for (contribution, writersForContribution) in groupedByContribution.sorted(by: { $0.key < $1.key }) {
                 guard contribution != "music" && contribution != "lyrics" else { continue }
-                
+
                 let capitalized = contribution.prefix(1).uppercased() + contribution.dropFirst()
                 let writerNames = writersForContribution.map { $0.name }.sorted()
                 let namesString = formatWriterNames(writerNames)
-                
+
                 contributionStrings.append("\(capitalized): \(namesString)")
             }
         } else {
@@ -110,12 +117,14 @@ extension Song {
                 let capitalized = contribution.prefix(1).uppercased() + contribution.dropFirst()
                 let writerNames = writersForContribution.map { $0.name }.sorted()
                 let namesString = formatWriterNames(writerNames)
-                
+
                 contributionStrings.append("\(capitalized): \(namesString)")
             }
         }
-        
-        return contributionStrings.joined(separator: ", ")
+
+        let result = contributionStrings.joined(separator: ", ")
+        _writersDisplayText = result
+        return result
     }
     
     /// Formats a list of writer names with proper grammar (commas and ampersands)
@@ -130,7 +139,7 @@ extension Song {
         default:
             // 3 or more: use commas between all but the last, then " & " for the last
             let allButLast = names.dropLast().joined(separator: ", ")
-            return "\(allButLast) & \(names.last!)"
+            return "\(allButLast) & \(names[names.count - 1])"
         }
     }
 }

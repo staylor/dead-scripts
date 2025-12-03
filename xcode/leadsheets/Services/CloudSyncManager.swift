@@ -88,12 +88,15 @@ class CloudSyncManager: ObservableObject {
     }
 
     private func initializeSchema() {
-        container.privateCloudDatabase.fetch(withRecordID: recordID) { [weak self] record, _ in
-            if record == nil {
-                let record = CKRecord(recordType: self?.recordType ?? "SongSelection", recordID: self?.recordID ?? CKRecord.ID(recordName: "currentSelection"))
+        Task {
+            do {
+                _ = try await container.privateCloudDatabase.record(for: recordID)
+            } catch {
+                // Record doesn't exist, create it
+                let record = CKRecord(recordType: recordType, recordID: recordID)
                 record["slug"] = ""
                 record["timestamp"] = Date()
-                self?.container.privateCloudDatabase.save(record) { _, _ in }
+                try? await container.privateCloudDatabase.save(record)
             }
         }
     }
@@ -101,18 +104,16 @@ class CloudSyncManager: ObservableObject {
     func sendSelection(slug: String) {
         guard syncEnabled else { return }
 
-        container.privateCloudDatabase.fetch(withRecordID: recordID) { [weak self] existingRecord, _ in
-            guard let self = self else { return }
-
-            let record = existingRecord ?? CKRecord(recordType: self.recordType, recordID: self.recordID)
-            record["slug"] = slug
-            record["sender"] = self.currentIdiom
-            record["timestamp"] = Date()
-
-            self.container.privateCloudDatabase.save(record) { _, error in
-                if let error = error {
-                    print("CloudKit save error: \(error.localizedDescription)")
-                }
+        Task {
+            do {
+                let existingRecord = try? await container.privateCloudDatabase.record(for: recordID)
+                let record = existingRecord ?? CKRecord(recordType: recordType, recordID: recordID)
+                record["slug"] = slug
+                record["sender"] = currentIdiom
+                record["timestamp"] = Date()
+                try await container.privateCloudDatabase.save(record)
+            } catch {
+                print("CloudKit save error: \(error.localizedDescription)")
             }
         }
     }
@@ -120,23 +121,20 @@ class CloudSyncManager: ObservableObject {
     func fetchCurrentSelection() {
         guard syncEnabled else { return }
 
-        container.privateCloudDatabase.fetch(withRecordID: recordID) { [weak self] record, _ in
-            guard let self = self,
-                  let record = record,
-                  let slug = record["slug"] as? String,
-                  !slug.isEmpty else {
-                return
-            }
+        Task {
+            do {
+                let record = try await container.privateCloudDatabase.record(for: recordID)
+                guard let slug = record["slug"] as? String, !slug.isEmpty else { return }
 
-            let sender = record["sender"] as? String ?? "unknown"
+                let sender = record["sender"] as? String ?? "unknown"
+                guard sender != currentIdiom else { return }
 
-            guard sender != self.currentIdiom else {
-                return
-            }
-
-            DispatchQueue.main.async {
-                self.senderIdiom = sender
-                self.selectedSongSlug = slug
+                await MainActor.run {
+                    senderIdiom = sender
+                    selectedSongSlug = slug
+                }
+            } catch {
+                // Record not found or network error - ignore silently
             }
         }
     }

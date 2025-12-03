@@ -45,12 +45,10 @@ struct ContentView: View {
                         autoNavigatedSlug = nil
                     }
             }
-            .onAppear {
+            .task {
                 if importManager == nil {
                     importManager = DataImportManager(modelContext: modelContext)
                 }
-            }
-            .task {
                 await importManager?.performInitialImport()
             }
             .onChange(of: connectivityManager.selectedSongID) { _, newID in

@@ -2,6 +2,10 @@ import SwiftUI
 import SwiftData
 import CryptoKit
 
+extension Notification.Name {
+    static let songsDidImport = Notification.Name("songsDidImport")
+}
+
 @MainActor
 @Observable
 class DataImportManager {
@@ -51,6 +55,9 @@ class DataImportManager {
             // Store the new hash only after successful import
             lastSeedsHash = newHash
             print("✅ Successfully imported seeds (hash: \(newHash.prefix(8))...)")
+
+            // Notify observers (e.g., CarPlay) that songs are available
+            NotificationCenter.default.post(name: .songsDidImport, object: nil)
         } catch {
             print("❌ Failed to import data: \(error)")
             // Don't update lastSeedsHash on failure so it retries

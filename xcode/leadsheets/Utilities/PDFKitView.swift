@@ -26,11 +26,7 @@ struct PDFKitView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .onChange(of: scenePhase) { oldPhase, newPhase in
-            if oldPhase == .active && (newPhase == .inactive || newPhase == .background) {
-                // App is going to background - we need to capture scroll position via a hack
-                // since we don't have direct access to the PDFView here
-                // The Coordinator will handle this in the representable
-            } else if oldPhase == .background && newPhase == .active {
+            if oldPhase == .background && newPhase == .active {
                 // Mark that we're returning from background
                 isReturningFromBackground = true
                 // Reset flag after a short delay

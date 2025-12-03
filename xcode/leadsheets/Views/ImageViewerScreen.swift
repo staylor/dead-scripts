@@ -1,5 +1,12 @@
 import SwiftUI
 
+// Type alias for UIKit/AppKit compatibility
+#if canImport(UIKit)
+typealias NSUIImage = UIImage
+#elseif canImport(AppKit)
+typealias NSUIImage = NSImage
+#endif
+
 #if os(tvOS)
 struct ImageViewerScreen: View {
     let song: Song
@@ -224,11 +231,4 @@ struct ImageViewerScreen: View {
         return paragraphs
     }
 }
-
-// Type alias for UIKit/AppKit compatibility
-#if canImport(UIKit)
-typealias NSUIImage = UIImage
-#elseif canImport(AppKit)
-typealias NSUIImage = NSImage
-#endif
 #endif
