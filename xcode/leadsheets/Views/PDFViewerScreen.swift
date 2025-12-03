@@ -4,10 +4,11 @@ import SwiftUI
 struct PDFViewerScreen: View {
     let song: Song
     let onBack: () -> Void
-    
+
     @State private var showInfo = false
     @State private var overlayPosition = CGPoint.zero
     @Environment(\.scenePhase) private var scenePhase
+    @StateObject private var musicPlayer = MusicPlayerService.shared
     
     var body: some View {
         GeometryReader { geometry in
@@ -53,16 +54,30 @@ struct PDFViewerScreen: View {
                         
                         // Apple Music Button
                         if let appleMusicId = song.appleMusicId, !appleMusicId.isEmpty {
+                            let isThisSongPlaying = musicPlayer.isPlayingSong(appleMusicId)
+                            let isThisSongLoading = musicPlayer.isLoadingSong(appleMusicId)
                             Button(action: {
-                                openAppleMusic(songId: appleMusicId)
+                                if isThisSongPlaying {
+                                    musicPlayer.pause()
+                                } else {
+                                    Task {
+                                        await musicPlayer.play(appleMusicId: appleMusicId, songName: song.name)
+                                    }
+                                }
                             }) {
                                 HStack(spacing: 6) {
-                                    Image(systemName: "play.fill")
-                                        .font(.title2)
+                                    if isThisSongLoading {
+                                        ProgressView()
+                                            .tint(.pink)
+                                    } else {
+                                        Image(systemName: isThisSongPlaying ? "pause.fill" : "play.fill")
+                                            .font(.title2)
+                                    }
                                 }
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 10)
                             }
+                            .disabled(isThisSongLoading)
                             .glassEffect()
                             .foregroundColor(.pink)
                         }
@@ -98,29 +113,6 @@ struct PDFViewerScreen: View {
         .animation(.easeInOut(duration: 0.3), value: showInfo)
     }
     
-    // MARK: - Helper Methods
-    
-    private func openAppleMusic(songId: String) {
-        #if os(iOS)
-        // Try to open in Apple Music app first
-        if let url = URL(string: "music://music.apple.com/song/\(songId)") {
-            if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url)
-                return
-            }
-        }
-        
-        // Fallback to web version
-        if let url = URL(string: "https://music.apple.com/song/\(songId)") {
-            UIApplication.shared.open(url)
-        }
-        #elseif os(macOS)
-        // Try to open in Apple Music app
-        if let url = URL(string: "music://music.apple.com/song/\(songId)") {
-            NSWorkspace.shared.open(url)
-        }
-        #endif
-    }
 }
 
 #endif // !os(watchOS)

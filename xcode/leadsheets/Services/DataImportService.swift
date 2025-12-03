@@ -111,7 +111,7 @@ actor DataImportService {
                     }
                     var writers: [Writer] = []
                     if let entries = songData.writers {
-                        for writer in entries {
+                        for writer in entries where writer.count >= 2 {
                             if let cached = writerCache[writer[0] + writer[1]] {
                                 writers.append(cached)
                             }

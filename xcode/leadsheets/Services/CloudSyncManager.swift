@@ -96,7 +96,7 @@ class CloudSyncManager: ObservableObject {
                 let record = CKRecord(recordType: recordType, recordID: recordID)
                 record["slug"] = ""
                 record["timestamp"] = Date()
-                try? await container.privateCloudDatabase.save(record)
+                _ = try? await container.privateCloudDatabase.save(record)
             }
         }
     }

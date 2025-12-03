@@ -6,8 +6,9 @@ import SwiftData
 /// macOS-specific lyrics inspector view for displaying song lyrics in an inspector panel
 struct LyricsInspector: View {
     @Environment(\.modelContext) private var modelContext
+    @StateObject private var musicPlayer = MusicPlayerService.shared
     let songID: PersistentIdentifier
-    
+
     private var song: Song? {
         modelContext.model(for: songID) as? Song
     }
@@ -22,19 +23,33 @@ struct LyricsInspector: View {
                             Text("Lyrics")
                                 .font(.title2)
                                 .fontWeight(.bold)
-                            
+
                             // Apple Music Button
                             if let appleMusicId = song.appleMusicId, !appleMusicId.isEmpty {
+                                let isThisSongPlaying = musicPlayer.isPlayingSong(appleMusicId)
+                                let isThisSongLoading = musicPlayer.isLoadingSong(appleMusicId)
                                 Spacer()
                                 Button(action: {
-                                    openAppleMusic(songId: appleMusicId)
+                                    if isThisSongPlaying {
+                                        musicPlayer.pause()
+                                    } else {
+                                        Task {
+                                            await musicPlayer.play(appleMusicId: appleMusicId, songName: song.name)
+                                        }
+                                    }
                                 }) {
                                     HStack {
-                                        Image(systemName: "applelogo")
-                                        Text("Play on Apple Music")
+                                        if isThisSongLoading {
+                                            ProgressView()
+                                                .controlSize(.small)
+                                        } else {
+                                            Image(systemName: isThisSongPlaying ? "pause.fill" : "play.fill")
+                                        }
+                                        Text(isThisSongLoading ? "Loading..." : (isThisSongPlaying ? "Pause" : "Play"))
                                     }
                                     .padding(.vertical, 8)
                                 }
+                                .disabled(isThisSongLoading)
                             }
                         }
                         Divider()
@@ -74,15 +89,6 @@ struct LyricsInspector: View {
                     description: Text("The selected song could not be loaded")
                 )
             }
-        }
-    }
-    
-    // MARK: - Helper Methods
-    
-    private func openAppleMusic(songId: String) {
-        // Try to open in Apple Music app
-        if let url = URL(string: "music://music.apple.com/song/\(songId)") {
-            NSWorkspace.shared.open(url)
         }
     }
 }

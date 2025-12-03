@@ -1,6 +1,6 @@
-# Lead Sheets - Architecture Overview
+# Dead Sheets - Architecture Overview
 
-A multi-platform music lead sheet viewer for iOS, macOS, watchOS, and tvOS with cross-device synchronization.
+A multi-platform music lead sheet viewer for iOS, macOS, watchOS, tvOS, and CarPlay with cross-device synchronization and Apple Music integration.
 
 ## Project Structure
 
@@ -36,6 +36,7 @@ leadsheets/
 │   ├── DataImportManager.swift      # Import orchestration, hash-based change detection
 │   ├── CloudSyncManager.swift       # CloudKit sync (iPhone/iPad/Mac)
 │   ├── WatchConnectivityManager.swift # iPhone-Watch direct sync
+│   ├── MusicPlayerService.swift     # Apple Music/MusicKit playback
 │   └── ImageLoader.swift            # Image loading with caching
 │
 ├── Utilities/
@@ -106,6 +107,8 @@ leadsheets/
 - Singer represents the original artist (for cover songs)
 - Artist represents the performing band
 - GroupedWriter is a non-persisted helper for UI grouping
+- Song has computed properties: `pdfURL`, `imageURL` (tvOS), `writersDisplayText`, `singerDisplayText`
+- Album has `sortedSongs` computed property (by disc/track number)
 
 ## App Flow
 
@@ -136,10 +139,11 @@ leadsheets/
 **Import Process:**
 
 1. DataImportManager computes SHA256 hash of seeds.json
-2. Compares against stored hash in UserDefaults
+2. Compares against stored hash in AppStorage
 3. If changed: clears existing data, imports fresh
-4. DataImportService decodes JSON, creates SwiftData models
+4. DataImportService (actor for thread safety) decodes JSON, creates SwiftData models
 5. Models inserted via ModelContext batch operations
+6. Posts `.songsDidImport` notification for CarPlay refresh
 
 ## Search & Filter Architecture
 
@@ -191,17 +195,20 @@ leadsheets/
     │ Full-screen PDF │    │ 3-column split  │    │ Image viewer    │
     │ Lyrics overlay  │    │ Songs|PDF|Lyrics│    │ Focus navigation│
     │ CarPlay support │    │ Inspector panel │    │ No PDF support  │
-    │ CloudKit sync   │    │ CloudKit sync   │    │                 │
-    │ Watch pairing   │    │                 │    │                 │
+    │ CloudKit sync   │    │ CloudKit sync   │    │ Zoom controls   │
+    │ Watch pairing   │    │ MusicKit play   │    │                 │
+    │ MusicKit play   │    │                 │    │                 │
     └─────────────────┘    └─────────────────┘    └─────────────────┘
 
-    ┌─────────────────┐
-    │     watchOS     │
-    ├─────────────────┤
-    │ Song list       │
-    │ Lyrics detail   │
-    │ iPhone sync     │
-    └─────────────────┘
+    ┌─────────────────┐    ┌─────────────────┐
+    │     watchOS     │    │     CarPlay     │
+    ├─────────────────┤    ├─────────────────┤
+    │ Song list       │    │ Alphabetical    │
+    │ Lyrics detail   │    │   song list     │
+    │ iPhone sync     │    │ Apple Music     │
+    └─────────────────┘    │   playback      │
+                           │ Shared DB       │
+                           └─────────────────┘
 ```
 
 **Platform Separation:**
@@ -239,16 +246,29 @@ leadsheets/
 **CloudSyncManager:**
 
 - Uses CloudKit private database
-- Syncs selected song/album across iPhone, iPad, Mac
-- Stores device type for last-selected tracking
-- @Observable with @MainActor for UI updates
+- Syncs selected song slug across iPhone, iPad, Mac
+- Polls CloudKit every 5 seconds when enabled
+- Stores device type (phone/pad/mac) for tracking
+- Prevents echoing selection back to sender device
+- Forwards selections to Watch via WatchConnectivityManager
+- @ObservedObject singleton with published properties
 
 **WatchConnectivityManager:**
 
-- Direct iPhone ↔ Watch communication
+- Direct iPhone ↔ Watch communication via WCSession
 - Immediate updates without cloud latency
 - Works offline (paired devices)
 - Syncs currently selected song for lyrics display
+- Uses both direct messages and application context
+
+**MusicPlayerService:**
+
+- Singleton wrapper around MusicKit
+- Plays songs via Apple Music catalog lookup using appleMusicId
+- Publishes: isPlaying, isLoading, currentSongId, authorizationStatus
+- Fallback to URL deep-link if MusicKit unavailable
+- Per-song loading/playing state tracking
+- Cross-platform (iOS/macOS)
 
 ## State Management
 
@@ -350,12 +370,16 @@ leadsheets/
 | `LeadSheetsApp.swift`               | App entry, SwiftData container setup |
 | `Views/ContentView.swift`           | Platform-aware view router           |
 | `Models/Song.swift`                 | Core data model with relationships   |
-| `Services/DataImportService.swift`  | JSON → SwiftData conversion          |
+| `Services/DataImportService.swift`  | JSON → SwiftData conversion (actor)  |
 | `Services/DataImportManager.swift`  | Import orchestration, hash detection |
 | `Services/CloudSyncManager.swift`   | Cross-device CloudKit sync           |
 | `Services/WatchConnectivityManager.swift` | iPhone-Watch direct sync       |
+| `Services/MusicPlayerService.swift` | MusicKit/Apple Music playback        |
 | `Views/SearchScreen.swift`          | Main search/filter interface         |
 | `Views/PDFViewerScreen.swift`       | Lead sheet PDF viewer                |
+| `Views/ImageViewerScreen.swift`     | tvOS image viewer with zoom          |
+| `Views/LyricsInspector.swift`       | macOS sidebar lyrics panel           |
+| `Views/LyricsOverlay.swift`         | iOS draggable lyrics modal           |
 | `Utilities/PDFKitView+iOS/macOS.swift` | Platform-specific PDF rendering   |
 | `CarPlaySceneDelegate.swift`        | CarPlay interface                    |
 
@@ -365,6 +389,52 @@ leadsheets/
 - **Persistence**: SwiftData (SQLite)
 - **Cloud**: CloudKit (private database)
 - **Watch**: WatchConnectivity
-- **PDF**: PDFKit
+- **PDF**: PDFKit (iOS/macOS only)
+- **Music**: MusicKit (Apple Music integration)
+- **CarPlay**: CarPlay framework (CPTemplateApplicationSceneDelegate)
 - **Hashing**: CryptoKit (SHA256)
-- **Reactive**: Combine, @Observable
+- **Reactive**: Combine, @Observable, @ObservedObject
+
+## CarPlay Integration
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          CarPlay Architecture                            │
+└─────────────────────────────────────────────────────────────────────────┘
+
+    CarPlaySceneDelegate
+           │
+           ├─→ SharedModelContainer.shared (same as main app)
+           │
+           ├─→ CPListTemplate (alphabetical song groups)
+           │       │
+           │       └─→ CPListSection per letter (A-Z, #)
+           │               │
+           │               └─→ CPListItem per song
+           │
+           ├─→ MusicPlayerService.shared
+           │       │
+           │       └─→ Apple Music playback
+           │
+           └─→ CPNowPlayingTemplate (pushed on play)
+```
+
+**CarPlay Features:**
+
+- Songs grouped alphabetically (# for numbers/symbols)
+- Tapping song starts Apple Music playback
+- Uses shared ModelContainer with main app
+- Listens for `.songsDidImport` to refresh list
+- Requests MusicKit authorization on connect
+
+## Platform Comparison
+
+| Feature          | iOS                      | macOS              | tvOS              | watchOS         | CarPlay      |
+|------------------|--------------------------|-------------------|-------------------|-----------------|-------------|
+| PDF Viewer       | Full-screen PDFKit       | 3-col split       | N/A (PNG images)  | N/A             | N/A         |
+| Lyrics Display   | Draggable overlay        | Inspector panel   | Side panel        | ScrollView      | N/A         |
+| Navigation       | NavigationStack          | NavigationSplit   | Conditional       | NavigationStack | CPListTemp  |
+| Sync             | CloudKit + Watch         | CloudKit          | None              | WatchConnect    | Shared DB   |
+| Music Playback   | MusicKit                 | MusicKit          | None              | None            | MusicKit    |
+| Image Zoom       | Locked to width          | 4x max zoom       | Manual buttons    | N/A             | N/A         |
+| Search           | Text + filter pills      | Text + grid       | Segmented picker  | List browse     | N/A         |

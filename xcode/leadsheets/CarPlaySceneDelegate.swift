@@ -24,7 +24,12 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
     ) {
         print("CarPlay connected!")
         self.interfaceController = interfaceController
-        
+
+        // Request MusicKit authorization early
+        Task {
+            _ = await MusicPlayerService.shared.requestAuthorization()
+        }
+
         // Set up the root template
         let rootTemplate = createSongListTemplate()
         interfaceController.setRootTemplate(rootTemplate, animated: false, completion: { success, error in
@@ -119,31 +124,22 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
     }
     
     // MARK: - Helper Methods
-    
+
     private func openAppleMusic(id appleMusicId: String?, name songName: String) {
         guard let appleMusicId = appleMusicId, !appleMusicId.isEmpty else {
             print("No Apple Music ID for song: \(songName)")
             return
         }
 
-        print("Opening Apple Music for song: \(songName) with ID: \(appleMusicId)")
-        
-        // Try multiple URL formats for Apple Music
-        let urlStrings = [
-            "music://music.apple.com/us/song/\(appleMusicId)",
-            "https://music.apple.com/us/song/\(appleMusicId)"
-        ]
-        
-        for urlString in urlStrings {
-            if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url) { success in
-                    print("Apple Music opened with \(urlString): \(success)")
-                }
-                return
+        Task {
+            await MusicPlayerService.shared.play(appleMusicId: appleMusicId, songName: songName)
+
+            // Push to Now Playing screen after playback starts
+            await MainActor.run {
+                let nowPlayingTemplate = CPNowPlayingTemplate.shared
+                interfaceController?.pushTemplate(nowPlayingTemplate, animated: true, completion: nil)
             }
         }
-        
-        print("Unable to open Apple Music with ID: \(appleMusicId)")
     }
 }
 #endif

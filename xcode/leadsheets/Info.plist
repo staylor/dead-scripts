@@ -84,6 +84,7 @@
 
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>fetch</string>
 	</array>
 
@@ -114,8 +115,8 @@
 		<string>musics</string>
 	</array>
 	
-	<!-- Privacy Description (optional but recommended) -->
+	<!-- Privacy Description for MusicKit -->
 	<key>NSAppleMusicUsageDescription</key>
-	<string>This app opens songs in Apple Music to play them.</string>
+	<string>Dead Sheets uses Apple Music to play songs when you select them.</string>
 </dict>
 </plist>
