@@ -6,7 +6,7 @@ struct PlatformListView<Item: Identifiable, RowContent: View, EmptyContent: View
     let emptyContent: EmptyContent
     let rowContent: (Item) -> RowContent
     let onSelect: (Item) -> Void
-    
+
     init(
         items: [Item],
         @ViewBuilder emptyContent: () -> EmptyContent,
@@ -18,7 +18,7 @@ struct PlatformListView<Item: Identifiable, RowContent: View, EmptyContent: View
         self.rowContent = rowContent
         self.onSelect = onSelect
     }
-    
+
     var body: some View {
         Group {
             if items.isEmpty {
@@ -31,9 +31,9 @@ struct PlatformListView<Item: Identifiable, RowContent: View, EmptyContent: View
             }
         }
     }
-    
+
     // MARK: - Platform-Specific Cell
-    
+
     @ViewBuilder
     private func itemCell(for item: Item) -> some View {
         #if os(macOS)

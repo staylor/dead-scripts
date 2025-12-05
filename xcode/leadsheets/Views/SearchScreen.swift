@@ -14,6 +14,7 @@ struct SearchScreen: View {
     @Binding var searchText: String
     let songs: [Song]
     let onSelect: (Song) -> Void
+    var selectedSong: Song? = nil
 
     @State private var selectedFilter: SearchFilter = .allSongs
     @State private var selectedAlbum: Album?
@@ -227,14 +228,6 @@ struct SearchScreen: View {
                     }
                     .buttonStyle(.plain)
                 }
-                Button(action: { showSettings = true }) {
-                    Image(systemName: "gearshape")
-                        .foregroundColor(.secondary)
-                }
-                .buttonStyle(.plain)
-                .popover(isPresented: $showSettings) {
-                    SettingsView()
-                }
             }
             .padding()
             #elseif os(tvOS)
@@ -350,14 +343,15 @@ struct SearchScreen: View {
     private var contentView: some View {
         switch selectedFilter {
         case .allSongs:
-            SongsListView(songs: songs, onSelect: onSelect)
+            SongsListView(songs: songs, onSelect: onSelect, selectedSong: selectedSong)
         case .byAlbum:
             if let selectedAlbum {
                 DetailView(
                     backButtonTitle: "Albums",
                     songs: selectedAlbum.sortedSongs,
                     onBack: { self.selectedAlbum = nil },
-                    onSelect: onSelect
+                    onSelect: onSelect,
+                    selectedSong: selectedSong
                 )
             } else {
                 AlbumsListView(albums: filteredAlbums) { album in
@@ -370,7 +364,8 @@ struct SearchScreen: View {
                     backButtonTitle: "Artists",
                     songs: selectedArtist.songs?.sorted { $0.name < $1.name } ?? [],
                     onBack: { self.selectedArtist = nil },
-                    onSelect: onSelect
+                    onSelect: onSelect,
+                    selectedSong: selectedSong
                 )
             } else {
                 ArtistsListView(artists: filteredArtists) { artist in
@@ -383,7 +378,8 @@ struct SearchScreen: View {
                     backButtonTitle: "Singers",
                     songs: selectedSinger.songs?.sorted { $0.name < $1.name } ?? [],
                     onBack: { self.selectedSinger = nil },
-                    onSelect: onSelect
+                    onSelect: onSelect,
+                    selectedSong: selectedSong
                 )
             } else {
                 SingersListView(singers: filteredSingers) { singer in
@@ -396,7 +392,8 @@ struct SearchScreen: View {
                     backButtonTitle: "Writers",
                     songs: selectedGroupedWriter.songs,
                     onBack: { self.selectedGroupedWriter = nil },
-                    onSelect: onSelect
+                    onSelect: onSelect,
+                    selectedSong: selectedSong
                 )
             } else {
                 GroupedWritersListView(groupedWriters: cachedGroupedWriters) { groupedWriter in
@@ -410,7 +407,7 @@ struct SearchScreen: View {
                 }
             }
         case .covers:
-            CoversListView(songs: coverSongs, onSelect: onSelect)
+            CoversListView(songs: coverSongs, onSelect: onSelect, selectedSong: selectedSong)
         }
     }
     
@@ -452,7 +449,8 @@ struct SearchScreen: View {
         let songs: [Song]
         let onBack: () -> Void
         let onSelect: (Song) -> Void
-        
+        var selectedSong: Song? = nil
+
         var body: some View {
             VStack(spacing: 0) {
                 // Back Button Header
@@ -476,7 +474,7 @@ struct SearchScreen: View {
                         EmptyStateView(filter: .allSongs)
                     },
                     rowContent: { song in
-                        SongRowView(song: song)
+                        SongRowView(song: song, isSelected: selectedSong?.id == song.id)
                     },
                     onSelect: onSelect
                 )

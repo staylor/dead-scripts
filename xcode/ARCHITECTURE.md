@@ -194,7 +194,7 @@ leadsheets/
     ├─────────────────┤    ├─────────────────┤    ├─────────────────┤
     │ Full-screen PDF │    │ 3-column split  │    │ Image viewer    │
     │ Lyrics overlay  │    │ Songs|PDF|Lyrics│    │ Focus navigation│
-    │ CarPlay support │    │ Inspector panel │    │ No PDF support  │
+    │ CarPlay support │    │ Toolbar settings│    │ No PDF support  │
     │ CloudKit sync   │    │ CloudKit sync   │    │ Zoom controls   │
     │ Watch pairing   │    │ MusicKit play   │    │                 │
     │ MusicKit play   │    │                 │    │                 │
@@ -247,7 +247,10 @@ leadsheets/
 
 - Uses CloudKit private database
 - Syncs selected song slug across iPhone, iPad, Mac
-- Polls CloudKit every 5 seconds when enabled
+- Hybrid sync strategy:
+  - Foreground: Polls CloudKit every 3 seconds for responsive updates
+  - Background: CloudKit subscription for push notifications
+  - Polling stops when app enters background (battery efficient)
 - Stores device type (phone/pad/mac) for tracking
 - Prevents echoing selection back to sender device
 - Forwards selections to Watch via WatchConnectivityManager
@@ -312,7 +315,7 @@ leadsheets/
 - @Environment for ModelContext injection
 - @Query for automatic SwiftData binding
 - @State for local UI state
-- @StateObject for singleton managers
+- @ObservedObject for singleton managers (not @StateObject, since instances already exist)
 - @AppStorage for user preferences
 - @Binding for parent-child communication
 
@@ -330,6 +333,9 @@ leadsheets/
 - ~500 songs with lazy loading uses ~5MB vs ~50MB if all in memory
 - PDFs loaded on-demand, not preloaded
 - Images loaded via ImageLoader with caching
+- Views use conditional rendering (not opacity) to remove hidden views from memory
+- Lyrics parsing memoized with @State to avoid recalculation on each render
+- Writer grouping computation cached and only recalculated when search text changes
 
 **Import Optimization:**
 
@@ -380,6 +386,7 @@ leadsheets/
 | `Views/ImageViewerScreen.swift`     | tvOS image viewer with zoom          |
 | `Views/LyricsInspector.swift`       | macOS sidebar lyrics panel           |
 | `Views/LyricsOverlay.swift`         | iOS draggable lyrics modal           |
+| `Views/SettingsView.swift`          | Sync preferences with iCloud check   |
 | `Utilities/PDFKitView+iOS/macOS.swift` | Platform-specific PDF rendering   |
 | `CarPlaySceneDelegate.swift`        | CarPlay interface                    |
 
@@ -426,6 +433,18 @@ leadsheets/
 - Uses shared ModelContainer with main app
 - Listens for `.songsDidImport` to refresh list
 - Requests MusicKit authorization on connect
+
+## Settings & User Preferences
+
+**SettingsView:**
+
+- Toggle for cross-device sync
+- Validates iCloud account status before enabling sync
+- Shows alert with "Open Settings" button if not signed in
+- Auto-disables sync if iCloud becomes unavailable
+- Platform-specific settings URLs (iOS Settings app vs macOS System Settings)
+- macOS: Settings gear in toolbar (next to sidebar toggle)
+- iOS: Settings gear in header area
 
 ## Platform Comparison
 

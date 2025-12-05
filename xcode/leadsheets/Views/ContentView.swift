@@ -10,6 +10,9 @@ struct ContentView: View {
     @State private var searchText = ""
     @State private var selected: Song?
     @State private var importManager: DataImportManager?
+    #if os(macOS)
+    @State private var showSettings = false
+    #endif
 
     #if os(iOS) || os(watchOS)
     @ObservedObject private var watchConnectivity = WatchConnectivityManager.shared
@@ -79,10 +82,21 @@ struct ContentView: View {
                     songs: songs,
                     onSelect: { song in
                         selectSong(song)
-                    }
+                    },
+                    selectedSong: selected
                 )
             }
             .navigationSplitViewColumnWidth(min: 450, ideal: 450, max: 550)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: { showSettings = true }) {
+                        Image(systemName: "gearshape")
+                    }
+                    .popover(isPresented: $showSettings) {
+                        SettingsView()
+                    }
+                }
+            }
         } content: {
             // Column 2: PDF Viewer (content column)
             if importManager?.isImporting == true {
@@ -92,14 +106,14 @@ struct ContentView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.white)
-                .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: .infinity)
+                .navigationSplitViewColumnWidth(min: 800, ideal: 1200, max: .infinity)
             } else if let song = selected {
                 PDFViewerScreen(song: song, onBack: {
                     selected = nil
                 })
                 .navigationTitle(song.name)
                 .navigationSubtitle(subtitleText(for: song))
-                .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: .infinity)
+                .navigationSplitViewColumnWidth(min: 800, ideal: 1200, max: .infinity)
             } else {
                 ContentUnavailableView(
                     "Select a Song",
@@ -107,20 +121,20 @@ struct ContentView: View {
                     description: Text("Choose a song from the list to view its lead sheet")
                 )
                 .toolbar(removing: .title)
-                .navigationSplitViewColumnWidth(min: 500, ideal: 700, max: .infinity)
+                .navigationSplitViewColumnWidth(min: 800, ideal: 1200, max: .infinity)
             }
         } detail: {
             // Column 3: Lyrics
             if let song = selected {
                 LyricsInspector(songID: song.persistentModelID)
-                    .navigationSplitViewColumnWidth(min: 250, ideal: 300, max: 400)
+                    .navigationSplitViewColumnWidth(min: 300, ideal: 400, max: 500)
             } else {
                 ContentUnavailableView(
                     "Lyrics",
                     systemImage: "text.quote",
                     description: Text("Select a song to view its lyrics")
                 )
-                .navigationSplitViewColumnWidth(min: 250, ideal: 300, max: 400)
+                .navigationSplitViewColumnWidth(min: 300, ideal: 400, max: 500)
             }
         }
         .navigationSplitViewStyle(.balanced)

@@ -2,7 +2,8 @@ import SwiftUI
 
 struct SongRowView: View {
     let song: Song
-    
+    var isSelected: Bool = false
+
     var body: some View {
         HStack(spacing: 16) {
             CachedImage(
@@ -52,6 +53,6 @@ struct SongRowView: View {
                 }
             }
         }
-        .rowContainer()
+        .rowContainer(isSelected: isSelected)
     }
 }
