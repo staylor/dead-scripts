@@ -8,7 +8,7 @@ struct PDFViewerScreen: View {
     @State private var showInfo = false
     @State private var overlayPosition = CGPoint.zero
     @Environment(\.scenePhase) private var scenePhase
-    @StateObject private var musicPlayer = MusicPlayerService.shared
+    @ObservedObject private var musicPlayer = MusicPlayerService.shared
     
     var body: some View {
         GeometryReader { geometry in

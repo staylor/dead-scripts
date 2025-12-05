@@ -113,12 +113,13 @@ struct LyricsOverlay: View {
                         .padding(.vertical, 8)
                     
                     if let lyrics = song.lyrics, !lyrics.isEmpty {
+                        let lines = lyrics.components(separatedBy: "\n")
                         VStack(alignment: .leading, spacing: 4) {
-                            ForEach(Array(lyrics.components(separatedBy: "\n").enumerated()), id: \.offset) { index, line in
-                                Text(line)
+                            ForEach(lines.indices, id: \.self) { index in
+                                Text(lines[index])
                                     .font(.body)
                                     .foregroundColor(.primary)
-                                    .bold(line.hasPrefix("Chorus"))
+                                    .bold(lines[index].hasPrefix("Chorus"))
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)

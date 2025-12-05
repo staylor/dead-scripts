@@ -6,7 +6,7 @@ import SwiftData
 /// macOS-specific lyrics inspector view for displaying song lyrics in an inspector panel
 struct LyricsInspector: View {
     @Environment(\.modelContext) private var modelContext
-    @StateObject private var musicPlayer = MusicPlayerService.shared
+    @ObservedObject private var musicPlayer = MusicPlayerService.shared
     let songID: PersistentIdentifier
 
     private var song: Song? {
@@ -57,12 +57,13 @@ struct LyricsInspector: View {
                         
                         // Lyrics Content
                         if let lyrics = song.lyrics, !lyrics.isEmpty {
+                            let lines = lyrics.components(separatedBy: "\n")
                             VStack(alignment: .leading, spacing: 4) {
-                                ForEach(Array(lyrics.components(separatedBy: "\n").enumerated()), id: \.offset) { index, line in
-                                    Text(line)
+                                ForEach(lines.indices, id: \.self) { index in
+                                    Text(lines[index])
                                         .font(.body)
                                         .foregroundColor(.primary)
-                                        .bold(line.hasPrefix("Chorus"))
+                                        .bold(lines[index].hasPrefix("Chorus"))
                                         .textSelection(.enabled)
                                 }
                             }

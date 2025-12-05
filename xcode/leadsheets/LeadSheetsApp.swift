@@ -18,6 +18,8 @@ enum SharedModelContainer {
 struct LeadSheetsApp: App {
     #if os(iOS)
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    #elseif os(macOS)
+    @NSApplicationDelegateAdaptor(MacAppDelegate.self) var appDelegate
     #endif
 
     init() {
@@ -41,8 +43,27 @@ struct LeadSheetsApp: App {
 }
 
 #if os(iOS)
-// AppDelegate to handle CarPlay setup
+// AppDelegate to handle CarPlay setup and remote notifications
 class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
+        // Register for remote notifications (required for CloudKit subscriptions)
+        application.registerForRemoteNotifications()
+        return true
+    }
+
+    func application(
+        _ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
+    ) {
+        // Forward CloudKit notifications to sync manager
+        CloudSyncManager.shared.handleRemoteNotification(userInfo: userInfo)
+        completionHandler(.newData)
+    }
+
     func application(
         _ application: UIApplication,
         configurationForConnecting connectingSceneSession: UISceneSession,
@@ -63,6 +84,23 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             )
             return configuration
         }
+    }
+}
+#endif
+
+#if os(macOS)
+import AppKit
+
+// MacAppDelegate to handle remote notifications for CloudKit subscriptions
+class MacAppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        // Register for remote notifications (required for CloudKit subscriptions)
+        NSApplication.shared.registerForRemoteNotifications()
+    }
+
+    func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String: Any]) {
+        // Forward CloudKit notifications to sync manager
+        CloudSyncManager.shared.handleRemoteNotification(userInfo: userInfo)
     }
 }
 #endif

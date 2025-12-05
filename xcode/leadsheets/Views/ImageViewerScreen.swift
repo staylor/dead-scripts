@@ -16,6 +16,7 @@ struct ImageViewerScreen: View {
     @State private var zoomScale: CGFloat = 1.0
     @State private var scrollOffset: CGFloat = 0
     @State private var scrollID = UUID()
+    @State private var lyricsParagraphs: [[String]] = []
 
     enum Field {
         case backButton
@@ -161,17 +162,16 @@ struct ImageViewerScreen: View {
                 }
 
                 // Right: Lyrics (if available)
-                if let lyrics = song.lyrics, !lyrics.isEmpty {
-                    let paragraphs = parseLyricsParagraphs(lyrics)
-
+                if !lyricsParagraphs.isEmpty {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 0) {
                             // Group lyrics into paragraphs, each paragraph is focusable
-                            ForEach(Array(paragraphs.enumerated()), id: \.offset) { index, paragraph in
+                            ForEach(lyricsParagraphs.indices, id: \.self) { index in
+                                let paragraph = lyricsParagraphs[index]
                                 Button(action: {}) {
                                     VStack(alignment: .leading, spacing: 4) {
-                                        ForEach(Array(paragraph.enumerated()), id: \.offset) { _, line in
-                                            Text(line)
+                                        ForEach(paragraph.indices, id: \.self) { lineIndex in
+                                            Text(paragraph[lineIndex])
                                                 .font(.body)
                                                 .lineSpacing(6)
                                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -183,7 +183,7 @@ struct ImageViewerScreen: View {
                                 .focusable(true)
                                 .focused($focusedField, equals: index == 0 ? .lyrics : nil)
 
-                                if index < paragraphs.count - 1 {
+                                if index < lyricsParagraphs.count - 1 {
                                     Color.clear
                                         .frame(height: 20)
                                 }
@@ -201,6 +201,10 @@ struct ImageViewerScreen: View {
         .onAppear {
             // Set initial focus to back button
             focusedField = .backButton
+            // Parse lyrics once on appear
+            if let lyrics = song.lyrics, !lyrics.isEmpty {
+                lyricsParagraphs = parseLyricsParagraphs(lyrics)
+            }
         }
     }
 

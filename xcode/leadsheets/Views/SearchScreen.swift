@@ -21,12 +21,13 @@ struct SearchScreen: View {
     @State private var selectedSinger: Singer?
     @State private var selectedGroupedWriter: GroupedWriter?
     @State private var showSettings = false
+    @State private var cachedGroupedWriters: [GroupedWriter] = []
+    @State private var lastWritersSearchText: String = ""
     @Environment(\.modelContext) private var modelContext
     @Query private var albums: [Album]
     @Query private var artists: [Artist]
     @Query private var singers: [Singer]
     @Query private var writers: [Writer]
-    @Query(sort: \Song.name) private var allSongs: [Song]
 
     @FocusState private var isSearchFieldFocused: Bool
     
@@ -61,32 +62,32 @@ struct SearchScreen: View {
         }.sorted { $0.name < $1.name }
     }
     
-    // Filtered writers based on search - returns GroupedWriter
-    private var filteredGroupedWriters: [GroupedWriter] {
+    // Compute grouped writers - called only when needed via updateGroupedWritersIfNeeded()
+    private func computeGroupedWriters(for searchText: String) -> [GroupedWriter] {
         let baseWriters = searchText.isEmpty ? writers : writers.filter { writer in
             writer.name.localizedCaseInsensitiveContains(searchText) ||
             writer.contribution.localizedCaseInsensitiveContains(searchText)
         }
-        
+
         // Step 1: Group writers by name to combine multiple contributions by same person
         let groupedByName = Dictionary(grouping: baseWriters) { $0.name }
-        
+
         var individualWriterGroups: [GroupedWriter] = []
-        
+
         for (name, writersWithSameName) in groupedByName {
             // Get all unique songs from all contributions for this writer
             let allSongsForWriter = Set(writersWithSameName.flatMap { $0.songs ?? [] })
-            
+
             // Check if all writer instances (different contributions) have the exact same songs
             let allHaveSameSongs = writersWithSameName.allSatisfy { writer in
                 Set(writer.songs ?? []) == allSongsForWriter
             }
-            
+
             if allHaveSameSongs && writersWithSameName.count > 1 {
                 // Combine contributions for this writer (e.g., "Music & Lyrics")
                 let contributions = writersWithSameName.map { $0.contribution }
                 let songs = Array(allSongsForWriter).sorted { $0.name < $1.name }
-                
+
                 individualWriterGroups.append(GroupedWriter(
                     names: [name],
                     contributions: contributions,
@@ -105,41 +106,41 @@ struct SearchScreen: View {
                 }
             }
         }
-        
+
         // Step 2: Find writers who ONLY collaborate together (never write separately)
         var finalGroups: [GroupedWriter] = []
         var processedIndices = Set<Int>()
-        
+
         for (i, group1) in individualWriterGroups.enumerated() {
             if processedIndices.contains(i) { continue }
-            
+
             // Find potential collaborators who have identical song sets
             var collaborators: [GroupedWriter] = [group1]
             var collaboratorIndices: [Int] = [i]
-            
+
             for (j, group2) in individualWriterGroups.enumerated() {
                 if i == j || processedIndices.contains(j) { continue }
-                
+
                 // Check if they have exactly the same songs
                 if Set(group1.songs) == Set(group2.songs) {
                     collaborators.append(group2)
                     collaboratorIndices.append(j)
                 }
             }
-            
+
             // If multiple writers share ALL the same songs, combine them
             if collaborators.count > 1 {
                 let allNames = collaborators.flatMap { $0.names }
                 let allContributions = Array(Set(collaborators.flatMap { $0.contributions }))
                 let sharedSongs = group1.songs
-                
+
                 finalGroups.append(GroupedWriter(
                     names: allNames,
                     contributions: allContributions,
                     songs: sharedSongs,
                     imageFileName: collaborators.first?.imageFileName
                 ))
-                
+
                 // Mark all collaborators as processed
                 collaboratorIndices.forEach { processedIndices.insert($0) }
             } else {
@@ -148,8 +149,15 @@ struct SearchScreen: View {
                 processedIndices.insert(i)
             }
         }
-        
+
         return finalGroups.sorted { $0.displayName < $1.displayName }
+    }
+
+    private func updateGroupedWritersIfNeeded() {
+        if lastWritersSearchText != searchText {
+            lastWritersSearchText = searchText
+            cachedGroupedWriters = computeGroupedWriters(for: searchText)
+        }
     }
     
     // Filtered cover songs
@@ -391,8 +399,14 @@ struct SearchScreen: View {
                     onSelect: onSelect
                 )
             } else {
-                GroupedWritersListView(groupedWriters: filteredGroupedWriters) { groupedWriter in
+                GroupedWritersListView(groupedWriters: cachedGroupedWriters) { groupedWriter in
                     selectedGroupedWriter = groupedWriter
+                }
+                .onAppear {
+                    updateGroupedWritersIfNeeded()
+                }
+                .onChange(of: searchText) { _, _ in
+                    updateGroupedWritersIfNeeded()
                 }
             }
         case .covers:

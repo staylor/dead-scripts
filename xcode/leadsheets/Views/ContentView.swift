@@ -179,17 +179,19 @@ struct ContentView: View {
                         }
                     }
                     #else
-                    // iOS/iPadOS: Keep existing ZStack approach with opacity
-                    FilteredSongsView(searchText: searchText) { songs in
-                        SearchScreen(
-                            searchText: $searchText,
-                            songs: songs,
-                            onSelect: { song in
-                                selectSong(song)
-                            }
-                        )
+                    // iOS/iPadOS: Conditional rendering for better memory management
+                    if selected == nil {
+                        FilteredSongsView(searchText: searchText) { songs in
+                            SearchScreen(
+                                searchText: $searchText,
+                                songs: songs,
+                                onSelect: { song in
+                                    selectSong(song)
+                                }
+                            )
+                        }
+                        .transition(.opacity)
                     }
-                    .opacity(selected == nil ? 1 : 0)
 
                     // Viewer Screen (slides in from right)
                     #if !os(watchOS)

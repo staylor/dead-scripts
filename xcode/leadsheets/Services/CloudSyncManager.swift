@@ -19,9 +19,10 @@ class CloudSyncManager: ObservableObject {
 
     private let container = CKContainer.default()
     private let recordType = "SongSelection"
+    private let subscriptionID = "song-selection-changes"
     private let recordID = CKRecord.ID(recordName: "currentSelection")
     private var cancellables = Set<AnyCancellable>()
-    private var timerCancellable: AnyCancellable?
+    private var pollingTimer: AnyCancellable?
 
     private var currentIdiom: String {
         #if os(macOS)
@@ -52,39 +53,142 @@ class CloudSyncManager: ObservableObject {
         // Observe sync setting changes
         UserDefaults.standard.publisher(for: \.syncWithOtherDevices)
             .sink { [weak self] enabled in
-                self?.updateTimerState(enabled: enabled)
+                self?.updateSyncState(enabled: enabled)
             }
             .store(in: &cancellables)
 
-        // Start timer if sync is already enabled
+        // Listen for app lifecycle to start/stop polling
+        #if os(iOS)
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+            .sink { [weak self] _ in
+                self?.startPollingIfEnabled()
+            }
+            .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
+            .sink { [weak self] _ in
+                self?.stopPolling()
+            }
+            .store(in: &cancellables)
+        #elseif os(macOS)
+        NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)
+            .sink { [weak self] _ in
+                self?.startPollingIfEnabled()
+            }
+            .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: NSApplication.willResignActiveNotification)
+            .sink { [weak self] _ in
+                self?.stopPolling()
+            }
+            .store(in: &cancellables)
+        #endif
+
+        // Setup subscription for background notifications + start polling for foreground
         if syncEnabled {
-            startPollingTimer()
+            setupSubscription()
+            startPolling()
+            fetchCurrentSelection()
         }
 
         initializeSchema()
     }
 
-    private func updateTimerState(enabled: Bool) {
+    private func updateSyncState(enabled: Bool) {
         if enabled {
-            startPollingTimer()
+            setupSubscription()
+            startPolling()
             fetchCurrentSelection()
         } else {
-            stopPollingTimer()
+            removeSubscription()
+            stopPolling()
         }
     }
 
-    private func startPollingTimer() {
-        guard timerCancellable == nil else { return }
-        timerCancellable = Timer.publish(every: 5, on: .main, in: .common)
+    private func startPollingIfEnabled() {
+        if syncEnabled {
+            startPolling()
+            fetchCurrentSelection()
+        }
+    }
+
+    private func startPolling() {
+        guard pollingTimer == nil else { return }
+        pollingTimer = Timer.publish(every: 3, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
                 self?.fetchCurrentSelection()
             }
     }
 
-    private func stopPollingTimer() {
-        timerCancellable?.cancel()
-        timerCancellable = nil
+    private func stopPolling() {
+        pollingTimer?.cancel()
+        pollingTimer = nil
+    }
+
+    // MARK: - CloudKit Subscription
+
+    private func setupSubscription() {
+        Task {
+            do {
+                // Check if subscription already exists
+                let existingSubscriptions = try await container.privateCloudDatabase.allSubscriptions()
+                if existingSubscriptions.contains(where: { $0.subscriptionID == subscriptionID }) {
+                    print("CloudKit: Subscription already exists")
+                    return
+                }
+
+                // Create a query subscription that triggers on any change to SongSelection records
+                let predicate = NSPredicate(value: true)
+                let subscription = CKQuerySubscription(
+                    recordType: recordType,
+                    predicate: predicate,
+                    subscriptionID: subscriptionID,
+                    options: [.firesOnRecordCreation, .firesOnRecordUpdate]
+                )
+
+                let notificationInfo = CKSubscription.NotificationInfo()
+                notificationInfo.shouldSendContentAvailable = true
+                subscription.notificationInfo = notificationInfo
+
+                try await container.privateCloudDatabase.save(subscription)
+                print("CloudKit: Subscription created successfully")
+            } catch {
+                print("CloudKit subscription error: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func removeSubscription() {
+        Task {
+            do {
+                try await container.privateCloudDatabase.deleteSubscription(withID: subscriptionID)
+                print("CloudKit: Subscription removed")
+            } catch {
+                // Subscription may not exist - ignore
+            }
+        }
+    }
+
+    /// Call this from AppDelegate when receiving a remote notification
+    func handleRemoteNotification(userInfo: [AnyHashable: Any]) {
+        print("CloudKit: Received remote notification")
+
+        guard syncEnabled else {
+            print("CloudKit: Sync disabled, ignoring notification")
+            return
+        }
+
+        if let notification = CKNotification(fromRemoteNotificationDictionary: userInfo) {
+            print("CloudKit: Notification subscription ID: \(notification.subscriptionID ?? "nil")")
+            guard notification.subscriptionID == subscriptionID else {
+                print("CloudKit: Subscription ID mismatch, ignoring")
+                return
+            }
+        }
+
+        print("CloudKit: Fetching current selection...")
+        fetchCurrentSelection()
     }
 
     private func initializeSchema() {
