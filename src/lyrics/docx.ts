@@ -19,21 +19,23 @@ function createParagraph(text: string, opts = {}, textOpts = {}) {
 
 export async function createDocxFile(song: Song) {
   const filename = `${process.cwd()}/docx/${song.slug}.docx`;
-  if (fs.existsSync(filename)) {
-    return filename;
-  }
+  // if (fs.existsSync(filename)) {
+  //   return filename;
+  // }
+
+  const lines = song.lyrics.split('\n');
 
   const document = new Document({
     revision: 1,
     sections: [
       {
         properties: {
-          // This sets the page to Letter instead of A4 when opening in Pages
+          // This sets the page to Legal instead of A4 when opening in Pages
           page: {
             size: {
               orientation: 'portrait',
-              width: 12240, // 8.5 inches × 1440 = 12240 twips
-              height: 15840, // 11 inches × 1440 = 15840 twips
+              width: 8.5 * 1440, // 8.5 inches × 1440 = 12240 twips
+              height: 14 * 1440, // 14 inches × 1440 = 15840 twips
             },
           },
         },
@@ -48,6 +50,7 @@ export async function createDocxFile(song: Song) {
               bold: true,
             }
           ),
+          createParagraph(' ', {}, { size: 24 }),
           ...song.authors.map((text) => createParagraph(text, { heading: HeadingLevel.HEADING_3 })),
         ],
       },
@@ -55,12 +58,12 @@ export async function createDocxFile(song: Song) {
         properties: {
           type: 'continuous',
           column: {
-            count: 2,
+            count: lines.length > 50 ? 2 : 1,
             equalWidth: true,
           },
         },
         children: [
-          ...song.lyrics.split('\n').map((line) => {
+          ...lines.map((line) => {
             const trimmed = line.trim();
             let text = trimmed;
             if (['[chorus]', '[chorus - repeated]'].includes(text)) {
@@ -69,7 +72,7 @@ export async function createDocxFile(song: Song) {
             return createParagraph(
               text,
               {},
-              { size: 24, bold: text === 'Chorus' || text === 'Chorus - repeated' }
+              { size: 26, bold: text === 'Chorus' || text === 'Chorus - repeated' }
             );
           }),
         ],

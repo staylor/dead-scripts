@@ -2,8 +2,13 @@
 .cache
 .env
 .env.*
+*.p8
+*.db
 
 node_modules
 
 docx
 pdf
+src/prisma/client
+xcode/leadsheets/Resources/images
+xcode/leadsheets/Resources/pdfs

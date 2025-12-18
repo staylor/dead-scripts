@@ -1,0 +1,2489 @@
+{
+  "artists": [
+    {
+      "name": "Grateful Dead",
+      "imageFileName": "grateful-dead.jpg",
+      "albums": [
+        {
+          "name": "Grateful Dead",
+          "slug": "grateful-dead",
+          "releaseYear": 1967,
+          "coverArtFileName": "grateful-dead-album.jpg",
+          "songs": [
+            {
+              "trackNumber": 7,
+              "songType": "cover",
+              "name": "Morning Dew",
+              "slug": "morning-dew",
+              "fileName": "Morning Dew Score.pdf",
+              "lyrics": "Walk me out in the morning dew my honey,\nWalk me out in the morning dew today.\nI cant walk you out in the morning dew my honey,\nI cant walk you out in the morning dew today.\n\nI thought i heard a baby cry this morning,\nI thought i heard a baby cry this today.\nYou didn’t hear no baby cry this morning,\nYou didn’t hear no baby cry today.\n\nWhere have all the people gone my honey,\nWhere have all the people gone today.\nTheres no need for you to be worrying about all those people,\nYou never see those people anyway.\n\nI thought i heard a young man morn this morning,\nI thought i heard a young man morn today.\nI thought i heard a young man morn this morning,\nI cant walk you out in the morning dew today.\nWalk me out in the morning dew my honey,\nWalk me out in the morning dew today.\nIll walk you out in the morning dew my honey,\nI guess it doesn’t really matter anyway,\nI guess it doesn’t matter anyway,\nI guess it doesn’t matter anyway,\nGuess it doesn’t matter anyway.",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "bonnie-dobson",
+                  "lyrics"
+                ],
+                [
+                  "tim-rose",
+                  "lyrics"
+                ],
+                [
+                  "bonnie-dobson",
+                  "music"
+                ],
+                [
+                  "tim-rose",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1178259529"
+            },
+            {
+              "trackNumber": 9,
+              "songType": "cover",
+              "name": "Viola Lee Blues",
+              "slug": "viola-lee-blues",
+              "fileName": "Viola Lee Blues Score.pdf",
+              "lyrics": "The judge decreed it, the clerk he wrote it.\nClerk he wrote it down indeed-e\nJudge decreed it, clerk he wrote it down\nGive you this jail sentence you'll be Nashville bound\n\nSome got six month some got one solid.\nSome got one solid year indeed-e\nSome got six month some got one solid.\nBut me and my buddies all got lifetime here\n\nI wrote a letter I mailed in the air, Mailed it on the air indeed-e\nI wrote a letter I mailed in the air.\nYou may know by that I've got a friend somewhere",
+              "singer": "pigpen",
+              "writers": [
+                [
+                  "noah-lewis",
+                  "lyrics"
+                ],
+                [
+                  "noah-lewis",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1178259531"
+            }
+          ]
+        },
+        {
+          "name": "Anthem of the Sun",
+          "slug": "anthem-of-the-sun",
+          "releaseYear": 1968,
+          "coverArtFileName": "anthem-of-the-sun.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "The Other One",
+              "slug": "the-other-one",
+              "fileName": "The Other One Score.pdf",
+              "lyrics": "Spanish lady comes to me, she lays on me this roes.\nIt rainbow spirals round and round it trembles and explodes.\nIt left a smoking crater of my mind I like to blow away.\nBut the heat came 'round and busted me for smiling on a cloudy day.\n\nChorus\nComin', comin', comin' around, comin', around,\ncomin', around, in a circle\nComin', comin', comin' around, comin' around, in a circle,\nComin', comin', comin' around, comin' in a circle.\n\nSkippin' through the lily fields I came across an empty space,\nIt trembled and exploded, left a bus stop in it's place.\nThe bus came by and I got on, that's when it all began,\nThere was cowboy Neal at the wheel of the bus to never ever land.\n\nChorus",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "bob-weir",
+                  "lyrics"
+                ],
+                [
+                  "bill-kreutzmann",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1374273412"
+            }
+          ]
+        },
+        {
+          "name": "Aoxomoxoa",
+          "slug": "aoxomoxoa",
+          "releaseYear": 1969,
+          "coverArtFileName": "aoxomoxoa.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "St. Stephen",
+              "slug": "st-stephen",
+              "fileName": "St. Stephen Score.pdf",
+              "lyrics": "Saint Stephen with a rose\nIn and out of the garden he goes\nCountry garland in the wind and the rain\nWherever he goes the people all complain\n\nStephen prosper in his time\nWell he may, and he may decline\nDid it matter, does it now?\nStephen would answer if he only knew how\n\nWishing well with a golden bell\nBucket hanging clear to hell\nHell half way twixt now and then\nStephen fill it up and lower down, and lower down again\n\nLady finger, dipped in moonlight\nWriting \"What for?\" across the morning sky\nSunlight splatters dawn with answers\nDarkness shrugs and bids the day goodbye\n\nSpeeding arrow, sharp and narrow\nWhat a lot of fleeting matters you have spurned\nSeveral seasons with their treasons\nWrap the babe in scarlet colors, call it your own\n\nDid he doubt or did he try?\nAnswers a-plenty in the by and by\nTalk about your plenty, talk about your ills\nOne man gathers what another man spills\n\nSaint Stephen will remain\nAll he's lost he shall regain\nSeashore washed by the suds and the foam\nBeen here so long he's got to calling it home\n\nFortune comes a-crawling, Calliope woman\nSpinning that curious sense of your own\nCan you answer? Yes I can\nBut what would be the answer to the answer man?\n\n-----(William Tell Bridge)-----\nHigh green chilly winds and windy vines in loops\nAround the twining shafts of lavender (Note 4)\nThey're crawling to the sun\n\nUnderfoot the ground is patched\nWith climbing arms of ivy wrapped\nAround the manzanita stark and shiny in the breeze\n\nWonder who will water all the children of the garden\nWhen they sigh about the barren lack\nOf rain and droop so hungry 'neath the sky\n\nWilliam Tell has stretched his bow\nTill it won't stretch no furthermore\nAnd/or it will require a change that hasn't come before (Note 5)",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ],
+                [
+                  "phil-lesh",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1457545333"
+            }
+          ]
+        },
+        {
+          "name": "Live Dead",
+          "slug": "live-dead",
+          "releaseYear": 1969,
+          "coverArtFileName": "live-dead.jpg",
+          "songs": [
+            {
+              "trackNumber": 4,
+              "name": "Turn On Your Lovelight",
+              "slug": "turn-on-your-lovelight",
+              "fileName": "Turn On Your Lovelight Score.pdf",
+              "lyrics": "Without a warning you broke my heart, takin' it baby, tore it apart\nAnd you left me standin' in the dark, said your love for me was dyin'\n\nCome on baby, baby please come on baby, cause I'm on my knees\nTurn on your lights let it shine on me shine on your love light\nLet it shine on me let shine, let it shine\n\nWhen I get lonely in the middle of the night\nAnd I need you darlin' to make things all right\n\nSo come on baby, baby please and I'm beggin' you baby cause I'm on my knees,\nTurn on your lights let it shine on me\nTurn on your love light let it shine on me\nLet it shine, let it shine, let it\n\nWithout a warning you broke my heart, takin' it baby, tore it apart\nAnd you left me standin' in the dark, shine your love for me was dark\n\nCome on baby, baby please come on baby, cause I'm on my knees\nTurn on your lights let it shine on me turn on your love light\nLet it shine, let shine",
+              "singer": "pigpen",
+              "writers": [
+                [
+                  "don-robey",
+                  "lyrics"
+                ],
+                [
+                  "joseph-scott",
+                  "lyrics"
+                ],
+                [
+                  "don-robey",
+                  "music"
+                ],
+                [
+                  "joseph-scott",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "20885561"
+            },
+            {
+              "trackNumber": 5,
+              "songType": "cover",
+              "name": "Death Don't Have No Mercy",
+              "slug": "death-dont-have-no-mercy",
+              "fileName": "Death Don't Have No Mercy Score.pdf",
+              "lyrics": "Y' Know Death Don't Have No Mercy In This Land\nDeath Don't Have No Mercy In This Land, In This Land\nCome To Your House, You Know He Don't Take Long\nLook In Bed This Morning, Children Find Your Mother Gone.\n\nI Said Death Don't Have No Mercy In This Land.\nDeath Will Leave You Standing And Crying In This Land,\nDeath Will Leave You Standing And Crying In This Land, In This Land, Yeah!\n\nWhoa! Come To Your House, Y' Know He Don't Stay Long,\nY' Look In Bed This Morning,\nChildren You Find That Your Brothers And Sisters Are Gone.\nI Said Death Don't Have No Mercy In This Land.\n\nDeath Will Go In Any Family In This Land.\nDeath Will Go In Any Family In This Land.\nCome To Your House, you know he don't take long.\nLook in the bed on the morning, Children Find That Your Family's Gone.\n\nI Said Death Don't Have No Mercy In This Land.\nDeath Will Leave You Standing And Crying In This Land,\nIn This Land. Whoa! Come To Your House,\nY' Know It Don't Stay Long, Y' Look In Bed This Morning,\nChildren Find That Your Brothers And Sisters Are Gone.\n\nI Said Death Don't, Death Don't Have No Mercy In This Land.",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "reverend-gary-davis",
+                  "lyrics"
+                ],
+                [
+                  "reverend-gary-davis",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "20885566"
+            }
+          ]
+        },
+        {
+          "name": "Workingman's Dead",
+          "slug": "workingmans-dead",
+          "releaseYear": 1970,
+          "coverArtFileName": "workingmans-dead.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "Uncle John's Band",
+              "slug": "uncle-johns-band",
+              "fileName": "Uncle John's Band Score.pdf",
+              "lyrics": "Well the first days are the hardest days, don't you worry any more\n'Cause when life looks like easy street, there is danger at your door\nThink this through with me, let me know your mind\nWo-oh, what I want to know is, are you kind?\n\nIt's a buck dancer's choice my friend, better take my advice\nYou know all the rules by now, and the fire from the ice\nWill you come with me, won't you come with me?\nWo-oh, what I want to know, will you come with me?\n\nGod damn, well I declare, have you seen the like?\nTheir walls are built of cannon balls\nTheir motto is \"don't\" tread on me\"\n\nCome hear Uncle John's Band, playing to the tide\nCome with me or go alone\nHe's come to take his children home\n\nIt's the same story the crow told me, it's the only one he knows\nLike the morning sun you come and like the wind you go\nAin't no time to hate, barely time to wait\nWo-oh, what I want to know, where does the time go?\n\nI live in a silver mine and I call it beggar's tomb\nI got me a violin and I beg you call the tune\nAnybody's choice, I can hear your voice\nWo-oh, what I want to know, how does the song go?\n\nCome hear Uncle John's Band, by the river side\nGot some things to talk about\nHere beside the rising tide\n\nCome hear Uncle John's Band, playing to the tide\nCome with me or go alone\nHe's come to take his children home\n\nWo-oh what I want to know, how does the song go?\n\nCome hear Uncle John's Band, by the river side\nGot some things to talk about\nHere beside the rising tide",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663696339"
+            },
+            {
+              "trackNumber": 2,
+              "name": "High Time",
+              "slug": "high-time",
+              "fileName": "High Time Score.pdf",
+              "lyrics": "You told me goodbye\nHow was I to know\nYou didn't mean goodbye\nYou meant please don't let me go\nI was having a high time\nLiving the good life\nWell I know\n\nThe wheels are muddy\nGot a ton of hay\nNow listen here baby\n'Cause I mean what I say\nI'm having a hard time\nLiving the good life\nWell I know\n\nI was losing time, I had nothing to do\nNo-one to fight, I came to you\nWheels broke down, the leader won't draw\nThe line is busted, the last one I saw\n\nTomorrow comes trouble\nTomorrow comes pain\nNow don't think too hard, baby\n'Cause you know what I'm saying\nI could show you a high time\nLiving the good life\nDon't be that way\n\nNothing's for certain\nIt could always go wrong\nCome in when it's raining\nGo on out when it's gone\nWe could have us a high time\nLiving the good life\nWell I know",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663696344"
+            },
+            {
+              "trackNumber": 3,
+              "name": "Dire Wolf",
+              "slug": "dire-wolf",
+              "fileName": "Dire Wolf Score.pdf",
+              "lyrics": "In the timbers of Fennario the wolves are running round\nThe winter was so hard and cold, froze ten feet 'neath the ground\n\nChorus\nDon't murder me, I beg of you don't murder me\nPlease don't murder me\n\nI sat down to supper, 'twas a bottle of red whiskey\nI said my prayers and went to bed, that's the last they saw of me\nChorus\n\nWhen I awoke, the dire wolf, six hundred pounds of sin\nWas grinning at my window, all I said was \"Come on in\"\nChorus\n\nThe wolf came in, I got my cards, we sat down for a game\nI cut my deck to the queen of spades but the cards were all the same\nChorus\n\nIn the back-wash of Fennario, the black and bloody mire\nThe dire wolf collects his due while the boys sing round the fire\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663696345"
+            },
+            {
+              "trackNumber": 4,
+              "name": "New Speedway Boogie",
+              "slug": "new-speedway-boogie",
+              "fileName": "New Speedway Boogie Score.pdf",
+              "lyrics": "Please don't dominate the rap, Jack\nIf you got nothing new to say\nIf you please, don't back up the track\nThis train's got to run today\n\nI spent a little time in the mountain\nSpent a little time on the hill\nI heard some say \"better run away\"\nOthers say \"better stand still\"\n\nNow I don't know but I've been told\nIt's hard to run with the weight of gold\nOther hand I heard it said\nIt's just as hard with the weight of lead\n\nWho can deny? Who can deny?\nIt's not just a change in style\nOne step done and another begun\nIn I wonder how many miles?\n\nI spent a little time on the mountain\nSpent a little time on the hill\nThings went down we don't understand\nBut I think in time we will\n\nNow I don't know but I was told\nIn the heat of the sun a man died of cold\nDo we keep on coming or stand and wait\nWith the sun so dark and the hour so late?\n\nYou can't overlook the lack Jack\nOf any other highway to ride\nIt's got no signs or dividing lines\nAnd very few rules to guide\n\nI spent a little time on the mountain\nSpent a little time on the hill\nI saw things getting out of hand\nI guess they always will\n\nNow, I don't know but I've been told\nIf the horse don't pull, you got to carry the load\nI don't know whose back's that strong\nMaybe find out before too long\n\nOne way or another\nOne way or another\nOne way or another\nThis darkness got to give\n[etc]",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663696346"
+            },
+            {
+              "trackNumber": 5,
+              "name": "Cumberland Blues",
+              "slug": "cumberland-blues",
+              "fileName": "Cumberland Blues Score.pdf",
+              "lyrics": "I can't stay here much longer, Melinda\nThe sun is getting high\nI can't help you with your troubles\nIf you won't help with mine\nI gotta get down\nI gotta get down\nGotta get down to the mine\n\nYou keep me up just one more night\nI can't sleep here no more\nLittle Ben clock says quarter to eight\nYou kept me up till four\nI gotta get down\nI gotta get down\nOr I can't work there no more\n\nLotta poor man make a five dollar bill\nWill keep him happy all the time\nSome other fellow's making nothing at all\nAnd you can hear him cry\n\nCan I go, buddy, can I go down\nTake your shift at the mine\nGotta get down to the Cumberland mine\nThat's where I mainly spend my time\n\nMake good money, five dollars a day\nIf I made any more I might move away\n\nLotta poor man got the Cumberland Blues\nHe can't win for losing\nLotta poor man got to walk the line\nJust to pay his union dues\n\nI don't know now, I just don't know\nIf I'm going back again\nI don't know now, I just don't know\nIf I'm going back again",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ],
+                [
+                  "phil-lesh",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663696347"
+            },
+            {
+              "trackNumber": 6,
+              "name": "Black Peter",
+              "slug": "black-peter",
+              "fileName": "Black Peter Score.pdf",
+              "lyrics": "All of my friends come to see me last night\nI was laying in my bed and dying\nAnnie Beauneu from Saint Angel\nSay \"the weather down here so fine\"\n\nJust then the wind came squalling through the door\nBut who can the weather command\nJust want to have a little peace to die\nAnd a friend or two I love at hand\n\nFever roll up to a hundred and five\nRoll on up, gonna roll back down\nOne more day I find myself alive\nTomorrow maybe go beneath the ground\n\nSee here how everything\nLead up to this day\nAnd it's just like any other day\nThat's ever been\nSun going up and then\nThe sun going down\nShine through my window\nAnd my friends they come around\nCome around, come around\n\nThe people might know, but the people don't care\nThat a man can be as poor as me\nTake a look at poor Peter, he's lying in pain\nNow let's come run and see\nRun and see\nRun and see\nRun, run and see, and see",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663696348"
+            },
+            {
+              "trackNumber": 8,
+              "name": "Casey Jones",
+              "slug": "casey-jones",
+              "fileName": "Casey Jones Score.pdf",
+              "lyrics": "Chorus\nDriving that train, high on cocaine\nCasey Jones you'd better watch your speed\nTrouble ahead, trouble behind\nAnd you know that notion just crossed my mind\n\nThis old engine makes it on time\nLeaves Central Station 'bout a quarter to nine\nHits River Junction at seventeen to\nAt a quarter to ten you know it's travelling again\n\nChorus\n\nTrouble ahead, the lady in red\nTake my advice you'd be better off dead\nSwitchman's sleeping, train Hundred and Two\nIs on the wrong track and headed for you\n\nChorus\n\nTrouble with you is the trouble with me\nGot two good eyes but we still don't see\nCome round the bend, you know it's the end\nThe fireman screams and the engine just gleams\n\nChorus - repeated",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663696490"
+            }
+          ]
+        },
+        {
+          "name": "American Beauty",
+          "slug": "american-beauty",
+          "releaseYear": 1970,
+          "coverArtFileName": "american-beauty.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "Box of Rain",
+              "slug": "box-of-rain",
+              "fileName": "Box of Rain Score.pdf",
+              "lyrics": "Look out of any window\nAny morning, any evening, any day\nMaybe the sun is shining\nBirds are winging, no rain is falling from a heavy sky\nWhat do you want me to do\nTo do for you to see you through?\nFor this is all a dream we dreamed one afternoon long ago\n\nWalk out of any doorway\nFeel your way like the day before\nMaybe you'll find direction\nAround some corner where it's been waiting to meet you\nWhat do you want me to do\nTo watch for you while you're sleeping?\nThen please don't be surprised when you find me dreaming too\n\n\nLook into any eyes\nYou find by you; you can see clear to another day\nMaybe been seen before\nThrough other eyes on other days while going home\nWhat do you want me to do\nTo do for you to see you through?\nIt's all a dream we dreamed one afternoon long ago\n\nWalk into splintered sunlight\nInch your way through dead dreams to another land\nMaybe you're tired and broken\nYour tongue is twisted with words half spoken and thoughts unclear\nWhat do you want me to do\nTo do for you, to see you through?\nA box of rain will ease the pain and love will see you through\n\nJust a box of rain, wind and water\nBelieve it if you need it, if you don't just pass it on\nSun and shower, wind and rain\nIn and out the window like a moth before a flame\n\nAnd it's just a box of rain, I don't know who put it there\nBelieve it if you need it or leave it if you dare\nAnd it's just a box of rain, or a ribbon for your hair\nSuch a long, long time to be gone and a short time to be there",
+              "singer": "phil-lesh",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "phil-lesh",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "664831837"
+            },
+            {
+              "trackNumber": 2,
+              "name": "Friend of the Devil",
+              "slug": "friend-of-the-devil",
+              "fileName": "Friend of the Devil Score.pdf",
+              "lyrics": "I lit out from Reno, I was trailed by twenty hounds\nDidn't get to sleep that night till the morning came around\n\nChorus\nSet out running but I take my time\nA friend of the devil is a friend of mine\nIf I get home before daylight I just might get some sleep\nTonight\n\nI ran into the devil babe, he loaned me twenty bills\nI spent the night in Utah in a cave up in the hills\n\nChorus\n\nI ran down to the levee but the devil caught me there\nHe took my twenty dollar bill and vanished in the air\n\nChorus\n\nGot two reasons why I cry away each lonely night\nThe first one's named sweet Anne Marie and she's my heart's delight\nSecond one is prison baby, sheriff's on my trail\nAnd if he catches up with me I'll spend my life in jail\n\nGot a wife in Chino babe, and one in Cherokee\nFirst one says she's got my child but it don't look like me\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ],
+                [
+                  "john-dawson",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "664831838"
+            },
+            {
+              "trackNumber": 3,
+              "name": "Sugar Magnolia",
+              "slug": "sugar-magnolia",
+              "fileName": "Sugar Magnolia Score.pdf",
+              "lyrics": "Sugar Magnolia, blossoms blooming\nHead's all empty and I don't care\nSaw my baby down by the river\nKnew she'd have to come up soon for air\n\nSweet blossom, come on under the willow\nWe can have high times if you'll abide\nWe can discover the wonders of nature\nRolling in the rushes down by the riverside\n\nShe's got everything delightful\nShe's got everything I need\nTakes the wheel when I'm seeing double\nPays my ticket when I speed\n\nShe comes skimming through rays of violet\nShe can wade in a drop of dew\nShe don't come and I don't follow\nWaits backstage while I sing to you\n\nShe can dance  a Cajun rhythm\nJump like a Willys in four wheel drive\nShe's a summer love in the spring, fall and winter\nShe can make happy any man alive\n\nSugar Magnolia\nRinging that bluebell\nCaught up in sunlight\nCome on out singing and I'll walk you in the sunshine\nCome on honey, come along with me\n\nShe's got everything delightful\nShe's got everything I need\nA breeze in the pines and the summer night moonlight\nLazing in the sunlight, yes indeed\n\nSometimes when the cuckoo's crying\nWhen the moon is half way down\nSometimes when the night is dying\nI take me out and I wander around\nI wander round\n\nSunshine Daydream\n\nSunshine daydream\nWalk you in the tall trees\nGoing where the wind goes\nBlooming like a red rose\nBreathing more freely\nLight out singing\nI'll walk you in the morning sunshine\nSunshine daydream\nSunshine daydream\nWalking in the sunshine\n[etc]",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "664831839"
+            },
+            {
+              "trackNumber": 5,
+              "name": "Candyman",
+              "slug": "candyman",
+              "fileName": "Candyman Score.pdf",
+              "lyrics": "Come all you pretty women with your hair a-hanging down\nOpen up your windows, 'cause the Candyman's in town\nCome on boys and gamble\nRoll those laughing bones\nSeven come eleven, boys, I'll take your money home\n\nChorus\nLook out, look out, the Candyman\nHere he comes and he's gone again\nPretty lady ain't got no friend\nTill the Candyman comes around again\n\nI come in from Memphis where I learnt to talk the jive\nWhen I get back to Memphis, be one less man alive\nGood morning, Mister Benson\nI see you're doing well\nIf I had me a shotgun, I'd blow you straight to hell\n\nChorus\n\nCome on boys and wager, if you have got the mind\nIf you've got a dollar, boys, lay it on the line\nHand me my old guitar\nPass the whiskey round\nWon't you tell everybody you meet that the Candyman's in town\n\nChorus\n\nLook out, look out, the Candyman\nHere he come and he's gone again\n[repeat and fade]",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "664831853"
+            },
+            {
+              "trackNumber": 6,
+              "name": "Ripple",
+              "slug": "ripple",
+              "fileName": "Ripple Score.pdf",
+              "lyrics": "If my words did glow with the gold of sunshine\nAnd my tunes were played on the harp unstrung\nWould you hear my voice come through the music?\nWould you hold it near, as it were your own?\n\nIt's a hand-me-down, the thoughts are broken\nPerhaps they're better left unsung\nI don't know, don't really care\nLet there be songs to fill the air\n\nRipple in still water\nWhen there is no pebble tossed\nNor wind to blow\n\nReach out your hand if your cup be empty\nIf your cup is full may it be again\nLet it be known there is a fountain\nThat was not made by the hands of man\n\nThere is a road, no simple highway\nBetween the dawn and the dark of night\nAnd if you go, no one may follow\nThat path is for your steps alone\n\nRipple in still water\nWhen there is no pebble tossed\nNor wind to blow\n\nYou who choose to lead must follow\nBut if you fall, you fall alone\nIf you should stand, then who's to guide you?\nIf I knew the way, I would take you home",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "664831854"
+            },
+            {
+              "trackNumber": 7,
+              "name": "Brokedown Palace",
+              "slug": "brokedown-palace",
+              "fileName": "Brokedown Palace Score.pdf",
+              "lyrics": "Fare you well, my honey\nFare you well, my only true one\nAll the birds that were singing\nAre flown, except you alone\n\nGonna leave this brokedown palace\nOn my hands and my knees, I will roll, roll, roll\nMake myself a bed by the waterside\nIn my time, in my time, I will roll, roll, roll\n\nIn a bed, in a bed\nBy the waterside I will lay my head\nListen to the river sing sweet songs\nTo rock my soul\n\nRiver gonna take me, sing me sweet and sleepy\nSing me sweet and sleepy all the way back home\nIt's a far gone lullaby sung many years ago\nMama, Mama, many worlds I've come since I first left home\n\nGoing home, going home\nBy the waterside I will rest my bones\nListen to the river sing sweet songs\nTo rock my soul\n\nGoing to plant a weeping willow\nOn the bank's green edge it will grow, grow, grow\nSinging a lullaby beside the water\nLovers come and go, the river will roll, roll, roll\n\nFare you well, fare you well\nI love you more than words can tell\nListen to the river sing sweet songs\nTo rock my soul",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "664831855"
+            },
+            {
+              "trackNumber": 9,
+              "name": "Attics of My Life",
+              "slug": "attics-of-my-life",
+              "fileName": "Attics of My Life Score.pdf",
+              "lyrics": "In the attics of my life\nFull of cloudy dreams unreal\nFull of tastes no tongue can know\nAnd lights no eye can see\nWhen there was no ear to hear\nYou sang to me\n\nI have spent my life\nSeeking all that's still unsung\nBent my ear to hear the tune\nAnd closed my eyes to see\nWhen there were no strings to play\nYou played to me\n\nIn the book of love's own dreams\nWhere all the print is blood\nWhere all the pages are my days\nAnd all my lights grow old\n\nWhen I had no wings to fly\nYou flew to me\nYou flew to me\n\nIn the secret space of dreams\nWhere I dreaming lay amazed\nWhen the secrets all are told\nAnd the petals all unfold\nWhen there was no dream of mine\nYou dreamed of me",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "664831857"
+            },
+            {
+              "trackNumber": 10,
+              "name": "Truckin'",
+              "slug": "truckin",
+              "fileName": "Truckin' Score.pdf",
+              "lyrics": "Truckin' got my chips cashed in\nKeep truckin' like the doodah man\nTogether, more or less in line\nJust keep truckin' on\n\nArrows of neon and flashing marquees out on Main Street\nChicago, New York, Detroit and it's all the same street\nYour typical city involved in a typical daydream\nHang it up and see what tomorrow brings\n\nDallas got a soft machine\nHouston too close to New Orleans\nNew York got the ways and means\nBut just won't let you be\n\nMost of the cats that you meet on the street speak of true love\nMost of the time they're sitting and crying at home\nOne of these days they know they gotta get going\nOut of the door and down to the street all alone\n\nTruckin' like the doodah man\nOnce told me \"Gotta play your hand\nSometimes the cards ain't worth a dime\nIf you don't lay them down\"\n\nSometimes the lights all shining on me\nOther times I can barely see\nLately it occurs to me\nWhat a long strange trip it's been\n\nWhat in the world ever became of sweet Jane?\nShe lost her sparkle you know she isn't the same\nLiving on reds and vitamin C and cocaine\nAll her friends can say is ain't it a shame\n\nTruckin' up to Buffalo\nBeen thinking you got to mellow slow\nTakes time, you pick a place to go\nJust keep truckin' on\n\nSitting and staring out of the hotel window\nGot a tip they're gonna kick the door in again\nLike to get some sleep before I travel\nBut if you got a warrant I guess you're gonna come in\n\nBusted down on Bourbon Street\nSet up like a bowling pin\nKnocked down, it gets to wearing thin\nThey just won't let you be\n\nYou're sick of hanging around, you'd like to travel\nGet tired of travelling you want to settle down\nI guess they can't revoke your soul for trying\nGet out of the door, light out and look all around\n\nSometimes the lights all shining on me\nOther times I can barely see\nLately it occurs to me\nWhat a long strange trip it's been\n\nTruckin' I'm a going home\nWhoa, whoa, baby, back where I belong\nBack home, sit down and patch my bones\nAnd get back truckin' on",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ],
+                [
+                  "phil-lesh",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "664831858"
+            }
+          ]
+        },
+        {
+          "name": "Grateful Dead (Skull & Roses)",
+          "slug": "skull-and-roses",
+          "releaseYear": 1971,
+          "coverArtFileName": "skull-and-roses.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "Bertha",
+              "slug": "bertha",
+              "fileName": "Bertha Score.pdf",
+              "lyrics": "I had a hard run\nRunning from your window\nI was all night running, running\nLord, I wonder if you care\nI had a run in\nRun around and a run down\nRun around the corner, corner\nLord, I ran smack into a tree\n\nChorus\nI had to move\nReally had to move\nThat's why if you please\nI am on my bended knees\nBertha, don't you come around here any more\n\nDressed myself in green\nLord I went down unto the sea\nTry to see what's going down\nLord, try to read between the lines\nI had a feeling I was falling, falling, falling\nLord, I turned round to see\nHeard a voice a-calling\nLord you was coming after me\n\nChorus\n\nRan into a rain-storm\nDucked into a bar door\nIt was all night pouring, pouring rain\nLord but not a drop on me\nTest me, test me, test me, test me, test me\nWhy don't you arrest me\nThrow me in the jail house\nLord, until the sun go down\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1558946358"
+            },
+            {
+              "trackNumber": 2,
+              "songType": "cover",
+              "name": "Mama Tried",
+              "slug": "mama-tried",
+              "fileName": "Mama Tried Score.pdf",
+              "lyrics": "The first thing I remember knowin'\nWas a lonesome whistle blowin'\nAnd a youngin's dream of growin' up to ride\nOn a freight train leavin' town\nNot knowin' where I'm bound\nAnd no one could change my mind, but Mama tried\n\nThe only rebel child\nFrom a family meek and mild\nMy mama seemed to know what lay in store\nBut all my Sunday learnin'\nTowards the bad I kept on turnin'\n'Til Mama couldn't hold me anymore\n\nChorus\nAnd I turned twenty-one in prison doin' life without parole\nNo one could steer me right, but Mama tried, Mama tried\nMama tried to raise me better, but her pleadin' I denied\nThat leaves only me to blame 'cause Mama tried\n\nDear old Daddy, rest his soul\nLeft my mom a heavy load\nShe tried so very hard to fill his shoes\nWorkin' hours without rest\nWanted me to have the best\nShe tried to raise me right but I refused\n\nChorus\n\nChorus\n\nThat leaves only me to blame 'cause Mama tried",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "merle-haggard",
+                  "music"
+                ],
+                [
+                  "merle-haggard",
+                  "lyrics"
+                ]
+              ],
+              "appleMusicId": "1558946360"
+            },
+            {
+              "trackNumber": 3,
+              "songType": "cover",
+              "name": "Big Railroad Blues",
+              "slug": "big-railroad-blues",
+              "fileName": "Big Railroad Blues Score.pdf",
+              "lyrics": "Well my mama told me, my papa told me too\nWell my mama told me, my papa told me too\nWell I shouldn't be here trying to sing these railroad blues\n\nWish I had listened to oh what mama said\nWish I had listened to oh what mama said\nWell I wouldn't be here trying to sleep in this cold iron bed\n\nWell I went to the depot, I never got there on time\nWent down to the depot, never got there on time\nWell that train's rolling down, she's rolling down the line\n\nMister jailer go away now, don't tell me no lies\nMister jailer go away now, don't tell me no lies\nWell that train's going down, she's rolling down the line\n\nWell my mama told me, my papa told me too\nWell my mama told me, papa told me too\nWell I shouldn't be here trying to sing these railroad blues\n\nWish I had listened to oh what mama said\nWish I had listened to oh what mama said\nWell I wouldn't be here trying to sleep in this cold iron bed",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "noah-lewis",
+                  "lyrics"
+                ],
+                [
+                  "noah-lewis",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1558946361"
+            },
+            {
+              "trackNumber": 4,
+              "name": "Playing in the Band",
+              "slug": "playing-in-the-band",
+              "fileName": "Playing in the Band Score.pdf",
+              "lyrics": "Some folks trust to reason, others trust to might\nI don't trust to nothing, but I know it come out right\nSay it once again now, whoa I hope you understand\nWhen it's done and over, Lord, a man is just a man\n\nChorus\nPlaying, playing in the band\nDaybreak, daybreak on the land\n\nSome folks look for answers, others look for fights\nSome folks up in tree tops, just looking for their kites\nI can tell your future, whoa just look what's in your hand\nI can't stop for nothing, I'm just playing in the band\n\nChorus\n\nStanding on a tower, world at my command\nYou just keep a-turning, while I'm playing in the band\nIf a man among you, got no sin upon his hand\nLet him cast a stone at me for playing in the band\n\nChorus\n\nChorus\nChorus\nPlaying, like a wave upon the sand\nDaybreak, while I'm playing in the band",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ],
+                [
+                  "mickey-hart",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1558946363"
+            },
+            {
+              "trackNumber": 6,
+              "songType": "cover",
+              "name": "Me & My Uncle",
+              "slug": "me-and-my-uncle",
+              "fileName": "Me & My Uncle Score.pdf",
+              "lyrics": "Me and my uncle went ridin' down\nTo South Colorado, West Texas bound\nWe stopped over in Santa Fe\nThat day on the pony, just about halfway\nAnd you know it was the hottest part of the day\n\nAnd I took the horses up to the stall\nWent to the barroom, ordered drinks for all\nThree days in the saddle, you know my body hurt\nIt being summer, I took off my shirt\nAnd I tried to wash off some of that dusty dirt\n\nWest Texas cowboys, they was all around\nWheat, liquor and money, they loaded down\nSo soon after payday, no, it seemed a shame\nYou know my uncle, he starts playin' the game\nHey now, high-low jack and the winner take the hand\n\nMy uncle start winning, the cowboys got sore\nOne of them called him, and then two more\nAccused him of cheatin', oh no, it couldn't be\nI know my uncle, he's as honest as me\nHey now, I'm as honest as a Denver man can be, that's right\n\nOne of them cowboys, he starts to draw\nAnd I shot him down, Lord, he never saw\nShot me another, hot damn, he won't grow old\nIn the confusion, my uncle grabbed the gold\nAnd we hightail it down to Mexico\n\nNow I love those cowboys, I love their gold\nLove my uncle, God rest his soul\nTaught me good, Lord, taught me all I know\nTaught me so well, that I grabbed that gold\nI left his dead ass there by the side of the road, yeah",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "john-phillips",
+                  "lyrics"
+                ],
+                [
+                  "john-phillips",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1558946365"
+            },
+            {
+              "trackNumber": 10,
+              "name": "Wharf Rat",
+              "slug": "wharf-rat",
+              "fileName": "Wharf Rat Score.pdf",
+              "lyrics": "Old man down\nWay down, down by the docks of the city\nBlind and dirty\nAsked me for a dime, a dime for a cup of coffee\nI got no dime, but I got some time to hear his story\n\nMy name is August West\nAnd I love my Pearly Baker best, more than my wine\nMore than my wine\nMore than my maker, though he's no friend of mine\n\nEveryone said\nI'd come to no good\nI knew I would\nPearly, believed them\nHalf of my life\nSpent doing time for some other fucker's crime\nThe other half found me\nStumbling around, drunk on burgundy wine\n\nBut I'll get back on my feet someday\nThe good lord willing, if he says I may\nI know that the life I'm living's no good\nI'll get a new start, live the life I should\nI'll get up and fly away\nI'll get up and fly away\n\nPearly's been true\nTrue to me, true to my dying day, he said\nI said to him\nI said to him, I'm sure she's been\nI said to him, I'm sure she's been true to you\n\nI got up and wandered\nWandered downtown, nowhere to go but just to hang around\nI've got a girl\nNamed Bonny Lee, I know that girl's been true to me\nI know she's been, I'm sure she's been true to me",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1558946369"
+            },
+            {
+              "trackNumber": 11,
+              "songType": "cover",
+              "name": "Goin' Down the Road Feeling Bad",
+              "slug": "goin-down-the-road-feeling-bad",
+              "fileName": "Goin' Down the Road Feeling Bad Score.pdf",
+              "lyrics": "Chorus\nGoing down the road feeling bad\nGoing down the road feeling bad\nGoing down the road feeling bad, hey hey hey, yeah\nDon't wanna be treated this a way\n\nGoing where the climate suits my clothes\nI'm going where the climate suits my clothes\nGoing where the climate suits my clothes\nDon't wanna be treated this a way\n\nChorus\n\nGoing where the water tastes like wine\nWell I'm going where the water tastes like wine\nGoing where the water tastes like wine\nI don't wanna be treated this a way\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "traditional",
+                  "lyrics"
+                ],
+                [
+                  "traditional",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1558946370"
+            },
+            {
+              "trackNumber": 11,
+              "songType": "cover",
+              "name": "Not Fade Away",
+              "slug": "not-fade-away",
+              "fileName": "Not Fade Away Score.pdf",
+              "lyrics": "I wanna tell you how it's gonna be, you're gonna give your love to me,\nI wanna love you night and day, you know my love not fade away.\n\nYou know my love not fade away, not fade away!\n\nMy love is bigger than a Cadillac, I try to show you but you drive me back,\nYour love for me has got to be real, your gonna know just how I feel.\n\nOur love is real, not fade away, not fade away!",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "buddy-holly",
+                  "lyrics"
+                ],
+                [
+                  "norman-petty",
+                  "lyrics"
+                ],
+                [
+                  "buddy-holly",
+                  "music"
+                ],
+                [
+                  "norman-petty",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1558946370"
+            }
+          ]
+        },
+        {
+          "name": "Europe '72",
+          "slug": "europe-72",
+          "releaseYear": 1972,
+          "coverArtFileName": "europe-72.jpg",
+          "songs": [
+            {
+              "trackNumber": 2,
+              "name": "He's Gone",
+              "slug": "hes-gone",
+              "fileName": "He's Gone Score.pdf",
+              "lyrics": "Rat in a drain ditch, caught on a limb\nYou know better, but I know him\n\nLike I told you, what I said\nSteal your face right off your head\n\nChorus\nAnd now he's gone\nNow he's gone, Lord he's gone\nHe's gone\nLike a steam locomotive rolling down the track\nHe's gone, gone, and nothing's gonna bring him back\nHe's gone\n\nNine mile skid on a ten mile ride\nHot as a pistol but cool inside\n\nCat on a tin roof, dogs in a pile\nNothing left to do but smile, smile, smile\n\nChorus\n\nGoing where the wind don't blow so strange\nMaybe off on some high cold mountain range\nLost one round but the price wasn't anything\nA knife in the back and more of the same\n\nSame old\nRat in a drain ditch, caught on a limb\nYou know better, but I know him\n\nLike I told you, like I said\nSteal your face right off your head\n\nChorus\n\nOoh, nothing's gonna bring him back\nOoh, nothing's gonna bring him back\nOoh, nothing's gonna bring him back\n[etc]",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "20885465"
+            },
+            {
+              "trackNumber": 3,
+              "name": "One More Saturday Night",
+              "slug": "one-more-saturday-night",
+              "fileName": "One More Saturday Night Score.pdf",
+              "lyrics": "Went down to the mountain, I was drinking some wine\nLooked up in the Heaven, Lord, I saw a mighty sign\nWritten fire across the heaven, plain as black and white\n'Get prepared, there's gonna be a party tonight'\n\nChorus\nUh uh hey, Saturday night\nHey uh uh, one more Saturday night\nHey, Saturday night\n\nNow everybody's dancin' down the local armory\nWith a basement full of dynamite and live artillery\nTemperature keeps risin', everybody gettin' high\nCome the rockin' stroke of midnight, the place is gonna fly\n\nChorus\n\nTurn on channel six, the President comes on the news\nSays, \"I get no satisfaction, that's why I sing the blues\"\nHis wife say, \"Don't get crazy, Lord, you know just what to do\nCrank up that old Victrola, put on your rockin' shoes\"\n\nChorus\n\nThen God way up in Heaven, for whatever it was worth\nThought He'd have a big old party, thought He'd call it Planet Earth\nDon't worry about tomorrow, Lord, you'll know it when it comes\nWhen the rock and roll music meets the risin' Planet Sun\n\nChorus\n\nHey, another Saturday night\nHey, another Saturday night\nEverybody's get high\nHey, another Saturday night\nOne more Saturday, one more Saturday night",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "bob-weir",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "20885467"
+            },
+            {
+              "trackNumber": 4,
+              "name": "Jack Straw",
+              "slug": "jack-straw",
+              "fileName": "Jack Straw Score.pdf",
+              "lyrics": "[All]\nWe can share the women, we can share the wine\nWe can share what we got of yours, 'cause we done shared all of mine\nKeep on rolling, just a mile to go\nKeep on rolling, my old buddy, you're moving much too slow\n\n[Jerry] x\nI just jumped the watchman right outside the fence\nTook his rings, four bucks in change, ain't that heaven sent\n[Bob]\nHurts my ears to listen, Shannon, burns my eyes to see\nCut down a man in cold blood, Shannon, might as well be me\n\n[Bob]\nWe used to play for silver now we play for life\nAnd one's for sport, and one's for blood at the point of a knife\nAnd now the die is shaken, now the die must fall\nThere ain't a winner in the game\nHe don't go home with all, not with all\n\n[All]\nLeaving Texas, fourth day of July\nSun so hot, the clouds so low, the eagles filled the sky\nCatch the Detroit Lightning out of Santa Fe\nThe Great Northern out of Cheyenne, from sea to shining sea\n\n[Jerry]\nGotta go to Tulsa, first train we can ride\nGotta settle one old score, one small point of pride\n[Bob]\nThere ain't a place a man can hide, Shannon, will keep him from the sun\nAin't a bed can give us rest now, you keep us on the run\n\n[All]\nJack Straw from Wichita cut his buddy down\nAnd dug for him a shallow grave, and laid his body down\nHalf a mile from Tucson, by the morning light\n\nOne man gone and another to go\nMy old buddy you're moving much too slow\n\nWe can share the women we can share the wine",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "20885469"
+            },
+            {
+              "trackNumber": 6,
+              "name": "China Cat Sunflower",
+              "slug": "china-cat-sunflower",
+              "fileName": "China Cat Sunflower Score.pdf",
+              "lyrics": "Look for a while at the China Cat Sunflower\nproud-walking jingle in the midnight sun\nCopper-dome bodhi drip a silver kimono\nlike a crazy-quilt star gown\nthrough a dream night wind\n\nChorus\nChina cat\nChina cat\nChina cat\nChina cat\n\nKrazy Kat peeking through a lace bandana\nlike a one-eyed Cheshire\nlike a diamond-eyed jack\nA leaf of all colors plays\na golden string fiddle\nto a double-e waterfall over my back\n\nChorus\n\nComic book colors on a violin river\ncrying Leonardo words\nfrom out a silk trombone\nI rang a silent bell\nbeneath a shower of pearls\nin the eagle winged palace\nof the queen Chinee\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "20885474"
+            },
+            {
+              "trackNumber": 7,
+              "songType": "cover",
+              "name": "I Know You Rider",
+              "slug": "i-know-you-rider",
+              "fileName": "I Know You Rider Score.pdf",
+              "lyrics": "Chorus\nI know you, rider, gonna miss me when I'm gone;\nI know you, rider, gonna miss me when I'm gone;\nGonna miss your baby, from rolling in your arms.\n\nLaid down last night, Lord, I could not take my rest;\nLaid down last night, Lord, I could not take my rest;\nMy mind was wandering like the wild geese in the West.\n\nThe Sun will shine in my back door someday.\nThe Sun will shine in my back door someday.\nMarch winds will blow all my troubles away.\n\nI wish I was a headlight, on a North bound train;\nI wish I was a headlight, on a North bound train;\nI'd shine my light through cool Colorado rain.\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "traditional",
+                  "lyrics"
+                ],
+                [
+                  "traditional",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "20885476"
+            },
+            {
+              "trackNumber": 8,
+              "name": "Brown-Eyed Women",
+              "slug": "brown-eyed-women",
+              "fileName": "Brown-Eyed Women Score.pdf",
+              "lyrics": "Gone are the days when the ox fall down\nTake up the yoke and plow the fields around\nGone are the days when the ladies said \"please\nGentle Jack Jones won't you come to me\"\n\nChorus\nBrown-eyed women and red grenadine\nThe bottle was dusty but the liquor was clean\nSound of the thunder with the rain pouring down\nAnd it looks like the old man's getting on\n\nNineteen twenty when he stepped to the bar\nDrank to the dregs of the whiskey jar\nNineteen thirty when the Wall caved in\nHe made his way selling red-eyed gin\n\nChorus\n\nDelilah Jones was the mother of twins\nTwo times over and the rest were sins\nRaised eight boys, only I turned bad\nDidn't get the lickings that the other ones had\n\nChorus\n\nTumble-down shack in Big Foot County\nSnowed so hard that the roof caved in\nDelilah Jones went to meet her God\nAnd the old man never was the same again\n\nDaddy made whiskey and he made it well\nCost two dollars and it burned like hell\nI cut hickory just to fire the still\nDrink down a bottle and you're ready to kill ,\n\nChorus\n\nAnd it looks like the old man's getting on",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "20885478"
+            },
+            {
+              "trackNumber": 9,
+              "songType": "cover",
+              "name": "Hurts Me Too",
+              "slug": "hurts-me-too",
+              "fileName": "Hurts Me Too Score.pdf",
+              "lyrics": "You said you was hurtin', almost lost your mind\n'Cause the man you love hurt you all the time\nBut when things go wrong, wrong with you\nIt hurts me too\n\nYou love him a little more, when you should love him less\nWhy pick up behind him and take his mess\n'Cause when things go wrong, wrong with you\nIt hurts me too\n\nYou love another man, little girl you know I love you\nBut you love him and stick to him just about like glue\n'Cause when things go wrong, wrong with you\nIt hurts me too\n\nWell he'd better leave you, or you'd best put him down\n'Cause you know I just can't stand to see, see you pushed around\n'Cause when things go wrong, wrong with you\nIt hurts me too",
+              "singer": "pigpen",
+              "writers": [
+                [
+                  "elmore-james",
+                  "music"
+                ],
+                [
+                  "elmore-james",
+                  "lyrics"
+                ]
+              ],
+              "appleMusicId": "20885483"
+            },
+            {
+              "trackNumber": 10,
+              "name": "Ramble On Rose",
+              "slug": "ramble-on-rose",
+              "fileName": "Ramble on Rose Score.pdf",
+              "lyrics": "Just like Jack the Ripper\nJust like Mojo Hand\nJust like Billy Sunday\nIn a shotgun rag-time band\n\nJust like New York City\nJust like Jericho\nPace the halls and climb the walls\nAnd get out when they blow\n\nChorus\nDid you say your name was Rambling Rose?\nRamble on baby, settle down easy\nRamble on Rose\n\nJust like Jack and Jill\nMama told the sailor\nOne heat up and one cool down\nLeave nothing for the tailor\n\nJust like Jack and Jill\nPapa told the jailer\nOne go up and one come down\nDo yourself a favour\n\nChorus\n\nBridge\nI'm gonna sing you\nA hundred verses in ragtime\nI know this song\nIt ain't never gonna end\nI'm gonna march you up and down\nThe local county line\nTake you to the leader\nOf the band\n\nJust like Crazy Otto\nJust like Wolfman Jack\nSitting plush with a royal flush\nAces back to back\n\nJust like Mary Shelley\nJust like Frankenstein\nClank your chains and count your change\nAnd try to walk the line\n\nChorus\n[bridge]\n\nGoodbye Mama and Papa\nGoodbye Jack and Jill\nThe grass ain't greener, the wine ain't sweeter\nEither side of the hill\n\nChorus\n\nRamble on Rose",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "20885485"
+            },
+            {
+              "trackNumber": 12,
+              "name": "Mr. Charlie",
+              "slug": "mr-charlie",
+              "fileName": "Mr. Charlie Score.pdf",
+              "lyrics": "I take a little powder\nI take a little salt\nI put it in my shotgun\nAnd I go walking out\n\nChorus\nChooba chooba (chooba chooba)\nWooly Bully (wooly bully)\nLooking high (looking high)\nLooking low (looking low)\nGonna scare you up and shoot ya\n'Cause Mister Charlie told me so\n\nI won't even take your life\nWon't even take a limb\nJust unload my shotgun\nAnd take a little skin\n\nChorus\n\nWell you take a silver dollar\nTake a silver dime\nMix it up together\nIn some alligator wine\n\nI can hear the drums\nVoodoo all night long\nMister Charlie telling me\nI can't do nothing wrong\n\nChorus\n\nMister Charlie told me\nThought you'd like to know\nGive you a little warning\nBefore I let you go\n\nChorus\n\nGonna scare you up and shoot you\nMister Charlie told me, Mister Charlie told me so",
+              "singer": "pigpen",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "ron-mckernan",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "20885489"
+            },
+            {
+              "trackNumber": 13,
+              "name": "Tennessee Jed",
+              "slug": "tennessee-jed",
+              "fileName": "Tennessee Jed Score.pdf",
+              "lyrics": "Cold iron shackles, ball and chain\nListen to the whistle of the evening train\nYou know you bound to wind up dead\nIf you don't head back to Tennessee Jed\n\nRich man step on my poor head\nWhen you get back you better butter my bread\nWell you know it's like I said\nYou better head back to Tennessee Jed\n\nChorus\nTennessee, Tennessee\nThere ain't no place I'd rather be\nBaby won't you carry me\nBack to Tennessee\n\nDrink all day and rock all night\nThe law come to get you if you don't walk right\nGot a letter this morning, baby, and all it read\nYou better head back to Tennessee Jed\n\nI dropped four flights and cracked my spine\nBuddy come quick with the iodine\nCatch a few winks, baby, under the bed\nThen you head back to Tennessee Jed\n\nChorus\n\nI ran into Charlie Phogg\nBlacked my eye and he kicked my dog\nMy doggie turned to me and he said\nLet's head back to Tennessee Jed\n\nI woke up feeling mean\nI went down to play the slot machine\nThe wheels turned around and the letters read\nYou better head back to Tennessee Jed\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "20885491"
+            }
+          ]
+        },
+        {
+          "name": "Wake of the Flood",
+          "slug": "wake-of-the-flood",
+          "releaseYear": 1973,
+          "coverArtFileName": "wake-of-the-flood.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "Mississippi Half-Step Uptown Toodeloo",
+              "slug": "mississippi-half-step-uptown-toodeloo",
+              "fileName": "Mississippi Half-Step Uptown Toodeloo Score.pdf",
+              "lyrics": "On the day that I was born Daddy sat down and cried\nI had the mark just as plain as day, I could not be denied\nThey say that Cain caught Abel rolling loaded dice\nAce of spades behind his ear and him not thinking twice\n\nChorus\nHalf step, Mississippi uptown toodleloo\nHello baby I'm gone goodbye\nHalf a cup of rock and rye\nFarewell to you old southern skies\nI'm on my way, on my way\n\nIf all you got to live for is what you left behind\nGet yourself a powder charge and seal that silver mine\nLost my boots in transit babe, pile of smoking leather\nNailed a retread to my feet and prayed for better weather\n\nChorus\n\nThey say that when your ship comes in, first man takes the sails\nSecond takes the after deck, third the planks and rails\nWhat's the point of calling shots, this cue ain't straight in line\nCue ball's made of styrofoam and no-one's got the time\n\nChorus\n\nAcross the Rio Grand-eo\nAcross the lazy river\n[etc]",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1698127921"
+            },
+            {
+              "trackNumber": 3,
+              "name": "Row Jimmy",
+              "slug": "row-jimmy",
+              "fileName": "Row Jimmy Score.pdf",
+              "lyrics": "Julie catch a rabbit by his hair\nCome back step, like to walk on air\nGet back home where you belong\nAnd don't you run off no more\n\nDon't hang your head, let the two-time roll\nGrass shack nailed to a pine wood floor\nAsk the time baby I don't know\nCome back later, gonna let it show\n\nChorus\nAnd I say row, Jimmy, row\nGonna get there, I don't know\nSeems a common way to go\nGet down and row, row, row, row, row\n\nHere's a half a dollar if you dare\nDouble twist when you hit the air\nLook at Julie down below\nThe levee doing the dopaso\n\nChorus\n\nBroken heart don't feel so bad\nYou ain't got half of what you thought you had\nRock your baby to and fro\nNot too fast and not too slow\n\nChorus\n\nThat's the way it's been in town\nEver since they tore the juke box down\nTwo bit piece don't buy no more\nNot so much as it done before\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1698127924"
+            },
+            {
+              "trackNumber": 4,
+              "name": "Stella Blue",
+              "slug": "stella-blue",
+              "fileName": "Stella Blue Score.pdf",
+              "lyrics": "All the years combine\nThey melt into a dream\nA broken angel sings\nFrom a guitar\n\nIn the end there's just a song\nComes crying up the night\nThrough all the broken dreams\nAnd vanished years\n\nStella Blue\nStella Blue\n\nWhen all the cards are down\nThere's nothing left to see\nThere's just the pavement left\nAnd broken dreams\n\nIn the end there's still that song\nComes crying like the wind\nDown every lonely street\nThat's ever been\n\nStella Blue\nStella Blue\n\nI've stayed in every blue light cheap hotel\nCan't win for trying\nDust off those rusty strings just one more time\nGonna make them shine\n\nIt all rolls into one\nAnd nothing comes for free\nThere's nothing you can hold\nFor very long\n\nAnd when you hear that song\nCome crying like the wind\nIt seems like all this life\nWas just a dream\n\nStella Blue\nStella Blue",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1698127926"
+            },
+            {
+              "trackNumber": 5,
+              "name": "Here Comes Sunshine",
+              "slug": "here-comes-sunshine",
+              "fileName": "Here Comes Sunshine Score.pdf",
+              "lyrics": "Wake of the flood, laughing water, forty nine\nGet out the pans, don't just stand there dreaming, get out the way\nGet out the way\n\nChorus\nHere comes sunshine\nHere comes sunshine\n\nLine up a long shot, maybe try it two times, maybe more\nGood to know you got shoes to wear, when you find the floor\nWhy hold out for more\n\nChorus\n\nAsking you nice now, keep the mother rolling, one more time\nBeen down before, you just don't have to go no more\nNo more\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1698127927"
+            },
+            {
+              "trackNumber": 6,
+              "name": "Eyes of the World",
+              "slug": "eyes-of-the-world",
+              "fileName": "Eyes of the World Score.pdf",
+              "lyrics": "Right outside this lazy summer home\nYou ain't got time to call your soul a critic, no\nRight outside the lazy gate\nOf winter's summer home\nWondering where the nuthatch winters\nWings a mile long\nJust carried the bird away\n\nChorus\nWake up to find out that you are the eyes of the world\nBut the heart has its beaches, its homeland and thoughts of its own\nWake now discover that you are the song that the morning brings\nBut the heart has its seasons, its evenings and songs of its own\n\nThere comes a redeemer and he slowly, too, fades away\nAnd there follows his wagon behind him that's loaded with clay\nAnd the seeds that were silent all burst into bloom and decay\nAnd night comes so quiet, it's close on the heels of the day\n\nChorus\n\nSometimes we live no particular way but our own\nAnd sometimes we visit your country and live in your home\nSometimes we ride on your horses, sometimes we walk alone\nSometimes the songs that we hear are just songs of our own\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1698127930"
+            }
+          ]
+        },
+        {
+          "name": "From the Mars Hotel",
+          "slug": "from-the-mars-hotel",
+          "releaseYear": 1974,
+          "coverArtFileName": "from-the-mars-hotel.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "U.S. Blues",
+              "slug": "us-blues",
+              "fileName": "U.S. Blues Score.pdf",
+              "lyrics": "Red and white, blue suede shoes\nI'm Uncle Sam, how do you do\nGimme five, still alive\nAin't no luck, I learned to duck\n\nCheck my pulse, it don't change\nStay seventy two, come shine or rain\nWave the flag, pop the bag\nRock the boat, skin the goat\n\nChorus\nWave that flag, wave it wide and high\nSummertime done come and gone, my oh my\n\nI'm Uncle Sam, that's who I am\nBeen hiding out, in a rock and roll band\nShake the hand that shook the hand\nOf P. T. Barnum and Charlie Chan\n\nShine your shoes, light your fuse\nCan you use them old U.S. Blues\nI'll drink your health, share your wealth\nRun your life, steal your wife\n\nChorus\n\nBack to back, chicken shack\nSon of a gun, better change your act\nWe're all confused, what's to lose\nYou can call this song the United States Blues\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663668217"
+            },
+            {
+              "trackNumber": 2,
+              "name": "China Doll",
+              "slug": "china-doll",
+              "fileName": "China Doll Score.pdf",
+              "lyrics": "A pistol shot at five o'clock\nThe bells of heaven ring\nTell me what you done it for\n\"No I won't tell you a thing\n\n\"Yesterday I begged you\nBefore I hit the ground --\nAll I leave behind me\nIs only what I found\n\n\"If you can abide it\nLet the hurdy gurdy play\nStranger ones have come by here\nBefore they flew away\n\n\"I will not condemn you\nNor yet would I deny ...\"\nI would ask the same of you\nBut failing, will not die ...\n\nTake up your china doll\nIt's only fractured --\nJust a little nervous from the fall\n\nLa la la la la la la",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663668218"
+            },
+            {
+              "trackNumber": 4,
+              "name": "Loose Lucy",
+              "slug": "loose-lucy",
+              "fileName": "Loose Lucy Score.pdf",
+              "lyrics": "Loose Lucy is my delight\nShe comes running and we ball all night\nRound and round and round and round\nDon't take much to get me on the ground\nShe's my yo-yo, I'm her string\nListen to the birds on the hot wire sing\n\nChorus\nSinging yeah, yeah, yeah, yeah\nSinging thank you, for a real good time\n\nI got jumped coming home last night\nShadow in the alley turned out all my lights\nRound and round and round and round\nDon't take much to get me on the ground\nLoose Lucy, she was sore\nSays I know you can't want my love no more,\n\nChorus\n\nBebop baby, how can this be\nI know you've been out a cheating on me\nRound and round and round and round\nDon't take much to get the word around\nCross my heart and hope to die\nI was just hanging out with the other guys\n\nChorus\n\nWent back home with two black eyes\nYou know I'll love her till the day I die\nRound and round and round and round\nDon't take much to get the word around\nI like your smile but I ain't your type\nDon't shake the tree when the fruit ain't ripe\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663668220"
+            },
+            {
+              "trackNumber": 5,
+              "name": "Scarlet Begonias",
+              "slug": "scarlet-begonias",
+              "fileName": "Scarlet Begonias Score.pdf",
+              "lyrics": "As I was walking round Grosvenor Square\nNot a chill to the winter but a nip to the air\nFrom the other direction she was calling my eye\nIt could be an illusion, but I might as well try\nMight as well try\n\nShe had rings on her fingers and bells on her shoes\nAnd I knew without asking she was into the blues\nShe wore scarlet begonias, tucked into her curls\nI knew right away she was not like other girls\nOther girls\n\nIn the thick of the evening when the dealing got rough\nShe was too pat to open and too cool to bluff\nAs I picked up my matches and was closing the door\nI had one of those flashes I had been there before\nBeen there before\n\nWell I ain't often right but I've never been wrong\nIt seldom turns out the way it does in the song\nOnce in a while you get shown the light\nIn the strangest of places if you look at it right\n\nWell there ain't nothing wrong with the way she moves\nScarlet begonias or a touch of the blues\nAnd there's nothing wrong with the look that's in her eyes\nI had to learn the hard way to let her pass by\nLet her pass by\n\nThe wind in the willows playing Tea for Two\nThe sky was yellow and the sun was blue\nStrangers stopping strangers just to shake their hand\nEverybody is playing in the heart of gold band\nHeart of gold band",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663668221"
+            },
+            {
+              "trackNumber": 8,
+              "name": "Ship of Fools",
+              "slug": "ship-of-fools",
+              "fileName": "Ship of Fools Score.pdf",
+              "lyrics": "Went to see the captain, strangest I could find\nLaid my proposition down, laid it on the line\nI won't slave for beggar's pay, likewise gold and jewels\nBut I would slave to learn the way to sink your ship of fools\n\nChorus\nShip of fools on a cruel sea\nShip of fools sail away from me\nIt was later than I thought when I first believed you\nBut now I cannot share your laughter, ship of fools\n\nSaw your first ship sink and drown from rocking of the boat\nAnd all that could not sink or swim was just left there to float\nI won't leave you drifting down but whoa it makes me wild\nWith thirty years upon my head to have you call me child\n\nChorus\n\nThe bottles stand as empty now, as they were filled before\nTime there was and plenty, but from that cup no more\nThough I could not caution all, I still might warn a few\nDon't lend your hand to raise no flag atop no ship of fools\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663668225"
+            }
+          ]
+        },
+        {
+          "name": "Blues for Allah",
+          "slug": "blues-for-allah",
+          "releaseYear": 1975,
+          "coverArtFileName": "blues-for-allah.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "Help On the Way / Slipknot!",
+              "slug": "help-on-the-way-slipknot",
+              "fileName": "Help on the Way Score.pdf",
+              "lyrics": "Paradise waits\nOn the crest of a wave her angels in flame\nShe has no pain\nLike a child she is pure, she is not to blame\nPoised for flight, wings spread bright\nSpring from night into the sun\nDon't stop to run\nShe can fly like a lie, she can't be outdone\n\nTell me the cost\nI can pay, let me go, tell me love is not lost\nSell everything\nWithout love day to day, insanity's king\nI will pay, day by day\nAnyway, lock, bolt and key\nCrippled but free\nI was blind all the time I was learning to see\n\nHelp on the way\nWell I know only this, I've got you today\nDon't fly away\n'Cause I love what I love and I want it that way\nI will stay, one more day\nLike I say, honey, it's you\nMaking it too\nWithout love in the dream it'll never come true",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663665028"
+            },
+            {
+              "trackNumber": 2,
+              "name": "Franklin's Tower",
+              "slug": "franklins-tower",
+              "fileName": "Franklin's Tower Score.pdf",
+              "lyrics": "In another time's forgotten space\nYour eyes looked from your mother's face\nWildflower seed on the sand and stone\nMay the four winds blow you safely home\n\nChorus\nRoll away the dew\nRoll away the dew\nRoll away the dew\nRoll away the dew\n\nI'll tell you where the four winds dwell\nIn Franklin's tower there hangs a bell\nIt can ring, turn night to day\nIt can ring like fire when you lose your way\n\nChorus\n\nGod save the child who rings that bell\nIt may have one good ring, baby, you can't tell\nOne watch by night, one watch by day\nIf you get confused, listen to the music play\n\nChorus\n\nSome come to laugh their past away\nSome come to make it just one more day\nWhichever way your pleasure tends\nIf you plant ice, you're gonna harvest wind\n\nChorus\n\nIn Franklin's tower the four winds sleep\nLike four lean hounds the lighthouse keep\nWildflower seed in the sand and wind\nMay the four winds blow you home again\n\nChorus\nChorus\n[etc]",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ],
+                [
+                  "bill-kreutzmann",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663665049"
+            },
+            {
+              "trackNumber": 4,
+              "name": "The Music Never Stopped",
+              "slug": "the-music-never-stopped",
+              "fileName": "The Music Never Stopped Score.pdf",
+              "lyrics": "There's mosquitoes on the river\nFish are rising up like birds\nIt's been hot for seven weeks now\nToo hot to even speak now\nDid you hear what I just heard?\n\nSay, it might have been a fiddle\nOr it could have been the wind\nBut there seems to be a beat now\nI can feel it in my feet now\nListen here it comes again\n\nThere's a band out on the highway\nThey're high-stepping into town\nIt's a rainbow full of sound\nIt's fireworks, calliopes and clowns\nEverybody's dancing\n\nCome on children, come on children\nCome on clap your hands\n\nSun went down in honey\nAnd the moon came up in wine\nYou know stars were spinning dizzy\nLord the band kept us so busy\nWe forgot about the time\n\nThey're a band beyond description\nLike Jehovah's favourite choir\nPeople joining hand in hand\nWhile the music plays the band\nLord they're setting us on fire\n\nCrazy rooster crowing midnight\nBalls of lightning roll along\nOld men sing about their dreams\nWomen laugh and children scream\nAnd the band keeps playing on\n\nKeep on dancing through to daylight\nGreet the morning air with song\nNo one's noticed but the band's all packed and gone\nWas it ever here at all?\nBut they kept on dancing\n\nCome on children, come on children\nCome on clap your hands\n\nWell the cool breeze came on Tuesday\nAnd the corn's a bumper crop\nAnd the fields are full of dancing\nFull of singing and romancing\nThe music never stopped",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663665051"
+            },
+            {
+              "trackNumber": 5,
+              "name": "Crazy Fingers",
+              "slug": "crazy-fingers",
+              "fileName": "Crazy Fingers Score.pdf",
+              "lyrics": "Your rain falls like crazy fingers\nPeals of fragile thunder\nKeeping time\nRecall the days that still are to come\nSome sing blue\n\nHang your heart on laughing willow\nStray down to the water\nDeep sea of love\nBeneath the sweet calm face of the sea\nSwift undertow\n\nLife may be sweeter for this, I don't know\nSee how it feels in the end\nMay Lady Lullaby sing plainly for you\nSoft, strong, sweet and true\n\nCloud hands reaching from a rainbow\nTapping at the window\nTouch your hair\nSo swift and bright, strange figures of light\nFloat in air\n\nWho can stop what must arrive now?\nSomething new is waiting\nTo be born\nDark as the night you're still by my side\nShining side\n\nGone are the days we stopped to decide\nWhere we should go, we just ride\nGone are the broken eyes\nWe saw through in dreams\nGone, both dream and lie\n\nLife may be sweeter for this, I don't know\nFeels like it might be alright\nMay Lady Lullaby sings plainly for you\nLove still rings true\n\nMidnight on a carousel ride\nReaching for the gold ring\nDown inside\nNever could reach it, just slips away\nBut I try",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663665055"
+            }
+          ]
+        },
+        {
+          "name": "Shakedown Street",
+          "slug": "shakedown-street",
+          "releaseYear": 1978,
+          "coverArtFileName": "shakedown-street.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "songType": "cover",
+              "name": "Good Lovin'",
+              "slug": "good-lovin",
+              "fileName": "Good Lovin' Score.pdf",
+              "lyrics": "Well, I was feelin' so bad, asked my family doctor 'bout what I had,\nI said, \"Doctor, Doctor, Mister M.D., can you tell me, what's ailing me?\"\n\nHe said, \"Yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah\"\nAll you need, all you really need: good lovin'\nBecause you got to have lovin' (good lovin')\nEverybody got to have lovin' (good lovin')\nA little good lovin' now baby, good lovin'.\n\nSo come on baby, squeeze me tight\nDon't you want your daddy to be all right?\nI said baby, now it's for sure,\nI've got the fever, you got the cure.\n\nHe said, \"Yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah\"\nAll you need, all you really need: good lovin'\nBecause you got to have lovin' (good lovin')\nEverybody got to have lovin' (good lovin')\nA little good lovin' now baby, good lovin'.\n\nHey, got to have lovin' (good lovin')\nWell, you got to have lovin' (good lovin')\nCome on now and give me good lovin' (good lovin').\n\nWell, I was feelin' sort of bad now,\nAsked my family doctor 'bout what I had,\nI said, \"Doctor, Doctor, mister M.D.,\nCan you tell me, what's ailing me?\"\n\nHe said, \"Yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah\"\nAll you need, all you really need: good lovin'\nHey, now you got to have lovin' (good lovin')\nEverybody got to have lovin' (good lovin')\nGive me, give me, give me some lovin' (good lovin').\n\nCome on now, everybody get right, (got to have lovin)\nYou may be weak or you may be blind (got to have lovin')\nBut even a blind man knows when the sun is shining (got to have lovin')\nSo turn it on now (got to have lovin')\nTurn on, turn on your light (got to have lovin').\n\nGimme, gimme, gimme some lovin' (good lovin')\nHey, now you got to have lovin' (good lovin')\nYou need it, I need it, well you got to have lovin' (good lovin')\nSay it again now, good lovin'.\n\nWell turn on your light, you won't regret it (good lovin')\nYou got to go for the good and get it (good lovin')\nEverybody, they got to have lovin' (good lovin')\nHey, now you got to have lovin'.",
+              "singer": "bob-weir",
+              "writers": [],
+              "appleMusicId": "663672832"
+            },
+            {
+              "trackNumber": 3,
+              "name": "Shakedown Street",
+              "slug": "shakedown-street",
+              "fileName": "Shakedown Street Score.pdf",
+              "lyrics": "You tell me this town ain't got no heart\n(Well, well, well, you can never tell)\nThe sunny side of the street is dark\n(Well, well, well, you can never tell)\nMaybe that's 'cause it's midnight (note 1\nAnd the dark of the moon besides\nMaybe the dark is from your eyes\n(Maybe the dark is from your eyes)\nMaybe the dark is from your eyes\n(Maybe the dark is from your eyes)\nMaybe the dark is from your eyes\n(Maybe the dark is from your eyes)\nYou know you got such dark eyes\n\nChorus\nNothing shaking on Shakedown Street\nUsed to be the heart of town\nDon't tell me this town ain't got no heart\nYou just got to poke around\n\nYou think you've seen this town clear through\n(Well, well, well, you can never tell)\nNothing here could interest you\n(Well, well, well, you can never tell)\nIt's not because you missed out\nOn the thing that we had to start\nMaybe you had too much too fast\n(Maybe you had too much too fast)\nMaybe you had too much too fast\n(Maybe you had too much too fast)\nMaybe you had too much too fast\n(Maybe you had too much too fast)\nAnd just overplayed your part\n\nChorus\n\nSince I'm passing your way today\n(Well, well, well, you can never tell)\nI just stopped in 'cause I want to say\n(Well, well, well, you can never tell)\nI recall your darkness\nWhen it crackled like a thunder cloud\nDon't tell me this town ain't got no heart\n(Don't tell me this town ain't got no heart)\nDon't tell me this town ain't got no heart\n(Don't tell me this town ain't got no heart)\nDon't tell me this town ain't got no heart\n(Don't tell me this town ain't got no heart)\nI can hear it beat out loud\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663672836"
+            },
+            {
+              "trackNumber": 5,
+              "name": "Fire On the Mountain",
+              "slug": "fire-on-the-mountain",
+              "fileName": "Fire on the Mountain Score.pdf",
+              "lyrics": "Long distance runner, what you standing there for?\nGet up, get off, get out of the door\nYou're playing cold music on the bar room floor\nDrowned in your laughter and dead to the core\n\nThere's a dragon with matches that's loose on the town\nTake a whole pail of water just to cool him down\n\nChorus\nFire, fire on the mountain\nFire, fire on the mountain\nFire, fire on the mountain\nFire, fire on the mountain\n\nAlmost ablaze, still you don't feel the heat\nIt takes all you got just to stay on the beat\nYou say it's a living, we all gotta eat\nBut you're here alone, there's no one to compete\nIf mercy's in business, I wish it for you\nMore than just ashes when your dreams come true\n\nChorus\n\nBaby's in scarlet, her shackles in gray\nIf loves to love she's got it salted away\nOut of the rat trap and under the wire\nOut of the frying pan and into the fire\nPut it down heavy, strip it down lean\nGot to lay it down dirty and play it back clean\n\nChorus\n\nFireman, fireman, call off your dog\nThis isn't a blaze, it's just a hog in the log\nCut up in sections, squirming alive\nLost to the world on that fifty-cent jive\nThere's a fire on the mountain, running around\nWhat doesn't go up can never come down\n\nChorus\n\nLong distance runner, what you holding out for\nCaught in slow motion in a dash to the door\nThe flame from your stage has now spread to the floor\nYou gave all you had, why you want to give more?\nThe more that you give, the more it will take\nTo the thin line beyond which you really can't fake\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "mickey-hart",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663672878"
+            },
+            {
+              "trackNumber": 6,
+              "name": "I Need a Miracle",
+              "slug": "i-need-a-miracle",
+              "fileName": "I Need a Miracle Score.pdf",
+              "lyrics": "I need a woman 'bout twice my age\nA lady of nobility, gentility and rage\nA splendour in the dark, lightning on the draw\nWho'll go right through the book and break each and every law\n\nI got a feelin'\nAnd it won't go away, oh no\nJust one thing and I'll be OK\nI need a miracle every day\n\nI need a woman 'bout twice my height\nStatuesque, raven-tressed, a goddess of the night\nA secret incantation, candle burning blue\nWe'll consult the spirits, maybe they'll know what to do\n\nAnd it's real\nAnd it won't go away, oh no\nCan't get around and I can't run away\nI need a miracle every day\n\nI need a woman 'bout twice my weight\nA ton of fun who packs a gun with all that other freight\nFind her in a side-show, leave her in LA\nRide her like a surfer riding on a tidal wave\n\nAnd it's real\nBelieve what I say\nJust one thing that I gotta say\nI need a miracle very day\n\nIt takes dynamite to get me up\nToo much of everything is just enough\nOne more thing that I gotta say\nI need a miracle every day",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663672884"
+            },
+            {
+              "trackNumber": 9,
+              "songType": "cover",
+              "name": "All New Minglewood Blues",
+              "slug": "all-new-minglewood-blues",
+              "fileName": "All New Minglewood Blues Score.pdf",
+              "lyrics": "I was born in a desert, raised in a lion's den\nI was born in a desert, raised in a lion's den\nAnd my number one occupation is stealing women from their men\n\nWell I'm a wanted man in Texas, busted jail and I'm gone for good\nYes I'm a wanted man in Texas, busted jail and I'm gone for good\nWell the sheriff couldn't catch me\nBut his little girl sure wished she would\n\nYes and the doctor call me crazy, some says I am some says I ain't\nYes and the doctor call me crazy, some says I am some says I ain’t\nThe preacher man call me a sinner, but his little girl call me a saint\n\nWell a couple of shots of whiskey, women round here start lookin' good\nYes and a couple of shots of whiskey, women round here start lookin' good\nCouple more shots of whiskey, I'm goin' down to Minglewood\n\nYes I was born in a desert, raised in a lion's den\nI was born in a desert, raised in a lion's den\nAnd my number one occupation is stealing women from their men\nAnd my number one occupation is stealing women from their men\n[etc]",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "noah-lewis",
+                  "lyrics"
+                ],
+                [
+                  "noah-lewis",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663672952"
+            }
+          ]
+        },
+        {
+          "name": "Terrapin Station",
+          "slug": "terrapin-station",
+          "releaseYear": 1977,
+          "coverArtFileName": "terrapin-station.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "Estimated Prophet",
+              "slug": "estimated-prophet",
+              "fileName": "Estimated Prophet Score.pdf",
+              "lyrics": "My time coming any day, don't worry 'bout me, no\nBeen so long I felt this way, I'm in no hurry no\nRainbows end down that highway where ocean breezes blow\nMy time coming, voices saying, they tell me where to go\nDon't you worry 'bout me--oh no no, don't worry 'bout me, no\nAnd I'm in no hurry--oh no no no, I know where to go\n\nCalifornia, preaching on the burning shore\nCalifornia, I'll be knocking on the golden door\nLike an angel, standing in a shaft of light\nRising up to paradise, I know I'm gonna shine\n\nMy time coming any day, don't worry 'bout me, no\nIt's gonna be just like they say, them voices tell me so\nSeems so long I felt this way and time sure passing slow\nStill I know I lead the way, they tell me where I go\n\nDon't you worry 'bout me--oh, no, no, don't worry 'bout me, no\nAnd I'm in no hurry--oh, no, no, no, I know where to go\n\nCalifornia, a prophet on the burning shore\nCalifornia, I'll be knocking on the golden door\nLike an angel, standing in a shaft of light\nRising up to paradise, I know I'm gonna shine\n\nYou've all been asleep, you would not believe me\nThem voices telling me, you will soon receive me\nWe're standing on the beach, the sea will part before me\nFire wheel burning in the air\nYou will follow me and we will ride to glory\nWay up in the middle of the air\nAnd I'll call down thunder and speak the same\nAnd my words fills the sky with flame\nAnd might and glory gonna be my name\nAnd men gonna light my way\n\nMy time coming any day, don't worry 'bout me, no\nIt's gonna be just like they say, them voices tell me so\nSeems so long I felt this way and time sure passing slow\nMy time coming any day, don't worry 'bout me, no\nDon't you worry 'bout me--oh, no, no, don't worry 'bout me, no\nAnd I'm in no hurry--oh, no, no, don't worry 'bout me, no\nAnd I'm in no hurry--oh, no, no, no, I know where to go\n[etc]",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663667315"
+            },
+            {
+              "trackNumber": 2,
+              "songType": "cover",
+              "name": "Dancin' In the Streets",
+              "slug": "dancin-in-the-streets",
+              "fileName": "Dancin' in the Streets Score.pdf",
+              "lyrics": "Hey, comin' out around the world be ready for a brand new beat\nOh, summer's here and the time is right, oh, for dancing in the street\nDancing in Chicago (dancing in the street)\nDown in New Orleans (dancing in the street)\nIn New York City (dancing in the street)\n\nAll we need is music, sweet music (sweet, sweet music)\nThey'll be music everywhere (everywhere)\nThey'll be laughing, singing, music swinging and dancing in the street\n\nIt doesn't matter what you wear just as long as you are there\nThey're dancing (dancing in the street) oh oh\n\nThis is an invitation across the nation the chance for folks to meet\nThere'll be swinging, swaying, music playing and dancing in the street\n\nPhiladelphia, PA now (dancing in the street)\nBaltimore and D.C. (dancing in the street)\nCan't forget them other cities (dancing in the street)",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "marvin-gaye",
+                  "lyrics"
+                ],
+                [
+                  "william-stevenson",
+                  "lyrics"
+                ],
+                [
+                  "ivy-jo-hunter",
+                  "lyrics"
+                ],
+                [
+                  "marvin-gaye",
+                  "music"
+                ],
+                [
+                  "william-stevenson",
+                  "music"
+                ],
+                [
+                  "ivy-jo-hunter",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663667318"
+            },
+            {
+              "trackNumber": 3,
+              "name": "Passenger",
+              "slug": "passenger",
+              "fileName": "Passenger Score.pdf",
+              "lyrics": "Firefly\nCan you see me?\nShine on, glowing\nBrief and brightly\n\nCould you imagine\nOne summer day\nThat same night\nBe on your way\n\nDo you remember?\nHearts were too cold\nSeasons had frozen us\nInto our souls\n\nPeople were saying\nThe whole world is burning\nAshes were scattered\nToo hard to turn\n\nUpside out\nOr inside down\nFalse alarm, the only game in town\nNo man's land, the only game in town\nTerrible, the only game in town\n\nPassenger\nDon't you hear me?\nDestination\nSeen unclearly\n\nWhat is a man\nDeep down inside\nBut a raging beast\nWith nothing to hide",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "phil-lesh",
+                  "music"
+                ],
+                [
+                  "peter-monk",
+                  "lyrics"
+                ]
+              ],
+              "appleMusicId": "663667319"
+            },
+            {
+              "trackNumber": 4,
+              "name": "Samson and Delilah",
+              "slug": "samson-and-delilah",
+              "fileName": "Samson and Delilah Score.pdf",
+              "lyrics": "If I had my way\nI would tear this whole building down\n\nDelilah was a woman, she was fine and fair\nShe had good looks - God knows - and coal black hair\nDelilah she gained old Samson's mind\nWhen first he saw this woman, she looked so fine\n\nDelilah she climbed up on Samson's knee\nSaid tell me where your strength lies, if you please\nThen she spoke so kind, she talked so fair\nThat Samson said, Delilah you cut off my hair\nYou can shave my head, clean as my hand\nMy strength become as natural as any old man\n\nChorus\nIf I had my way\nIf I had my way\nIf I had my way\nI would tear this whole building down\n\nYou read about Samson, all from his birth\nHe was the strongest man ever has lived on earth\nOne day while Samson was walking along\nLooked down on the ground he saw an old jaw bone\nThen he stretched out his arm and his chains broke like threads\nAnd when he got to move, ten thousand was dead\n\nChorus\n\nNow Samson and the lion, they got in attack\nAnd Samson he crawled up on the lion's back\nYou read about this lion, he killed a man with his paws\nSamson got hands up round the lion's jaws\nHe ripped that beast, killed him dead\nAnd the bees made honey in the lion's head\n\nChorus\n\nChorus\n\nI would tear this whole building down",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "traditional",
+                  "lyrics"
+                ],
+                [
+                  "traditional",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663667320"
+            },
+            {
+              "trackNumber": 6,
+              "name": "Terrapin Station Medley",
+              "slug": "terrapin-station",
+              "fileName": "Terrapin Station Score.pdf",
+              "lyrics": "Inspiration, move me brightly\nLight the song with sense and color\nHold away despair\nMore than this I will not ask\nFaced with mysteries dark and vast\nStatements just seem vain at last\nSome rise, some fall, some climb\nTo get to Terrapin\n\nCounting stars by candlelight\nAll are dim but one is bright\nThe spiral light of Venus\nRising first and shining best\nOh, from the north-west corner\nOf a brand new crescent moon\nCrickets and cicadas sing\nA rare and different tune\nTerrapin Station\nIn the shadow of the moon\nTerrapin Station\nAnd I know we'll be there soon\n\n(Terrapin)\nI can't figure out\n(Terrapin)\nIf it's the end or beginning\n(Terrapin)\nBut the train's put it brakes on\n(Terrapin)\nAnd the whistle is screaming\nTerrapin",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663667322"
+            }
+          ]
+        },
+        {
+          "name": "Go to Heaven",
+          "slug": "go-to-heaven",
+          "releaseYear": 1980,
+          "coverArtFileName": "go-to-heaven.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "Alabama Getaway",
+              "slug": "alabama-getaway",
+              "fileName": "Alabama Getaway Score.pdf",
+              "lyrics": "Thirty-two teeth in a jawbone\nAlabama's tryin' for none\nBefore I have to hit him\nI hope he's got the sense to run\n\nReason the poor girls love him\nPromise them everything\nWhy they all believe him?\nHe wears a big diamond ring\n\nChorus\nAlabama getaway, get away\nAlabama getaway, get away\nOnly way to please me\nJust get down and leave and walk away\n\nMajordomo Billy Bojangles\nSat down and had a drink with me\nSaid what about Alabama\nThat keeps a-coming back to me?\n\nI heard your plea in the court house\nWitness box began to rock and rise\nForty nine sister states\nHad Alabama in their eyes\n\nChorus\n\nMajor said why don't we give him\nRope enough to hang himself?\nNo need to worry the jury\nThey'll probably take care of themselves\n\nTwenty third psalm Majordomo\nReserve me a table for three\nDown in the valley of the shadow\nJust you, Alabama and me\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663697472"
+            },
+            {
+              "trackNumber": 3,
+              "name": "Althea",
+              "slug": "althea",
+              "fileName": "Althea Score.pdf",
+              "lyrics": "I told Althea I was feeling lost\nLacking in some direction\nAlthea told me upon scrutiny\nThat my back might need protection\nI told Althea that treachery\nWas tearing me limb from limb\nAlthea told me, now cool down boy\nSettle back easy, Jim\n\nYou may be Saturday's child all grown\nMoving with a pinch of grace\nYou may be a clown in the burying ground\nOr just another pretty face\nYou may be the fate of Ophelia\nSleeping and perchance to dream\nHonest to the point of recklessness\nSelf-centred to the extreme\n\nAin't nobody messin' with you but you\nYour friends are getting most concerned\nLoose with the truth, maybe its your fire\nBaby, I hope you don't get burned\nWhen the smoke has cleared, she said\nThat's what she said to me\nYou're gonna want a bed to lay your head\nAnd a little sympathy\n\nThere are things you can replace\nAnd others you cannot\nThe time has come to weigh those things\nThis space is gettin' hot\nYou know this space is gettin' hot\n\nI told Althea, I'm a roving sign\nThat I was born to be a bachelor\nAlthea told me, OK that's fine\nSo now I'm trying to catch her\nCan't talk to you without talking to me\nWe're guilty of the same old thing\nThinking a lot about less and less\nAnd forgetting the love we bring",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663697474"
+            },
+            {
+              "trackNumber": 4,
+              "name": "Feel Like a Stranger",
+              "slug": "feel-like-a-stranger",
+              "fileName": "Feel Like a Stranger Score.pdf",
+              "lyrics": "Inside you're burning\nI can see clear through\nYour eyes tell more than you mean them to\n\nLit up and flashing\nLike the reds and blues\nOut there on the neon avenue\n\nBut I feel like a stranger\nFeel like a stranger\n\nWell the music's thundering\nWe're restless and hot\nYou keep firing glances across the room\n\nAnd I can't stop wondering\nJust what you got\nGet the feeling I'm gonna find out real soon\n\nStill I feel like a stranger\nFeel like a stranger\nWell you know it's gonna get stranger\nSo let's get on with the show\n\nYes and the wheel\nGets smoking round midnight\nYou shoot me a look that said let's go\n\nYes and it feels\nJust like running a red light\nThere ain't no point in looking behind us, no\n\nBut I feel like a stranger\nFeel like a stranger\nYou know it keeps getting stranger and stranger\nIf it's love then how would I know?\n\nYes and it's gonna get stranger\nSome things you just know\n\nIf this were love then how would I know\n(Feel like a stranger)\n(Feel like a stranger)\nFeel like a stranger\n(Feel like a stranger)\nIt's gonna be a long hot crazy night\nIt's gonna be a long long crazy crazy night\nYeah crazy night\nSilky silky, crazy crazy night",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663697475"
+            },
+            {
+              "trackNumber": 5,
+              "name": "Lost Sailor",
+              "slug": "lost-sailor",
+              "fileName": "Lost Sailor Score.pdf",
+              "lyrics": "Compass card is spinning\nHelm is swingin' to and fro\nOoh where's the dog star\nOoh where's the moon\nYou're lost sailor\nYou've been too long at sea\n\nSome days the gales are howling\nSome days the sea is still as glass\nOoh reef the mainsail\nOoh lash the mast\nYou're lost sailor\nYou've been too long at sea\n\nNow the shore-lights beckon\nYeah there's a price for being free\n\nYeah the sea birds cry\nThere's a ghost wind blowin'\nIt's calling you to that misty swirling sea\nTill the chains of your dreams are broken\nNo place in this world you can be\n\nYou're lost sailor\nYou've been way too long at sea\nNow the shore-lights beckon\nYeah there's a price for being free\n\nDrifting yeah drifting\nYeah drifting and dreaming\n\n'Cause there's a place you've never been\nMaybe a place you've never seen\nYou can hear her calling on the wind\nGo on and drift your life away\nYeah just drifting and dreaming\nMaybe drift your life away\nDrifting and dreaming\nYes I'm going on a dream\nMaybe going on a dream\nMaybe going on a dream\nMaybe going on a dream",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663697476"
+            },
+            {
+              "trackNumber": 6,
+              "name": "Saint of Circumstance",
+              "slug": "saint-of-circumstance",
+              "fileName": "Saint of Circumstance Score.pdf",
+              "lyrics": "This must be heaven\nLast station on the line\nYou must be the angel\nI thought I might never find\n\nWas it you I heard singing\nOh when I was chasing dreams\n\nDriven on the wind\nLike the dust that blows around\nAnd the rain fallin' down\n\nI never know now\nJust don't ever know, no, no\n\nGot to be heaven\n'Cause here's where the rainbow ends\nAnd if this ain't the real thing\nWell it's close enough to pretend\n\nWhen that wind blows\nAnd the night's about to fall\nI can hear the siren's call\nIt's a certain sort of sound\nAnd the rain fallin' down\nRain fallin' down\nRain falling down now\nRain falling down now\nRain falling down\n\nHoles in what's left of my reason\nHoles in the knees of my blues\nOdds against me been increasing\nBut I'll pull through\n\nNever could read no road-map\nNo I don't know what the weather might do\nBut hear that witch wind whining\nSee that dog star shining\nI got a feelin' there's no time to lose\nNo time to lose\n\nI never know, no, no\nJust don't ever know\nNever know, no\n\nWell it's been heaven\nBut even rainbows will end\nNow my sails are filling\nThe wind is willing\nAnd I'm good as gone again\nI'm still walkin'\nSo I'm sure that I can dance\nJust a saint of circumstance\nJust a tiger in a trance\nAnd the rain fallin' down\nRain falling down\nRain falling down\nRain falling down\nRain falling down\n\nWell I never know now\nJust don't ever know, no, no\nSure don't know what I'm goin' for\nBut I'm gonna go for it for sure\nSure don't know what I'm goin' for\nBut I'm gonna go for it for sure\nListen\nSure don't know what I'm goin' for\nBut I'm gonna go for it for sure\nHey\nSure don't know what I'm goin' for\nMaybe just going on a dream now\nBut I'm gonna go for it for sure\nHey, ya\nSure don't know what I'm goin' for\nWell I just don't know, [and I'm the same]\nBut I'm gonna go for it for sure\nI just go for it for sure now\nListen\nSure don't know what I'm goin' for\nMake [?], that's what I say now\nBut I'm gonna go for it for sure\nGotta go, go, go for sure\nSure don't know what I'm goin' for\n[falsetto] Maybe going on a dream now\nBut I'm gonna go for it for sure\n[falsetto] Maybe going on a dream, dream",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663697477"
+            },
+            {
+              "trackNumber": 9,
+              "songType": "cover",
+              "name": "Don't Ease Me In",
+              "slug": "dont-ease-me-in",
+              "fileName": "Don't Ease Me In Score.pdf",
+              "lyrics": "Chorus\nDon't ease, don't ease\nDon't ease me in\nI've been all night long coming home\nDon't ease me in\n\nI was standing at the corner\nTalking to Miss Brown\nWell I turned around, sweet mama\nShe was way cross town\n\nSo I'm walking down the street\nWith a dollar in my hand\nI've been looking for a woman, sweet mama\nAin't got no man\n\nChorus\n\nThe girl I love\nShe's sweet and true\nYou know the dress she wears, sweet mama\nIt's pink and blue\n\nShe brings me coffee\nYou know she brings me tea\nShe brings 'bout every damn thing\nBut the jailhouse key\n\nChorus\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "traditional",
+                  "lyrics"
+                ],
+                [
+                  "traditional",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663697480"
+            }
+          ]
+        },
+        {
+          "name": "In the Dark",
+          "slug": "in-the-dark",
+          "releaseYear": 1987,
+          "coverArtFileName": "in-the-dark.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "Touch of Grey",
+              "slug": "touch-of-grey",
+              "fileName": "Touch of Grey Score.pdf",
+              "lyrics": "It must be getting early\nClocks are running late\nPaint by numbers morning sky\nLooks so phony\n\nDawn is breaking everywhere\nLight a candle, curse the glare\nDraw the curtains, I don't care\n'Cause it's alright\n\nI will get by\nI will get by\nI will get by\nI will survive\n\nI see you got your list out\nSay your piece and get out\nYes I got the gist of it\nBut it's alright\n\nSorry that you feel that way\nThe only thing there is to say\nEvery silver lining's got a\nTouch of grey\n\nIt's a lesson to me\nThe Ables and the Bakers and the C's\nThe A B C's\nWe all must face\nAnd try to keep a little grace\n\nI know the rent is in arrears\nThe dog has not been fed in years\nIt's even worse than it appears\nBut it's alright\n\nCows are giving kerosene\nThe kid can't read at seventeen\nThe words he knows are all obscene\nBut it's alright\n\nI will get by\nI will get by\nI will get by\nI will survive\n\nIt's a lesson to me\nThe Deltas and the East and the Freeze\nThe A B C's\nWe all think of\nAnd try to keep a little love\n\nThe shoe is on the hand it fits\nThere's really nothing much to it\nWhistle through your teeth and spit\n'Cause it's alright\n\nOh well a touch of grey\nKind of suits you anyway\nThat was all I had to say\nAnd it's alright\n\nI will get by\nI will get by\nI will get by\nI will survive\n\nWe will get by\nWe will get by\nWe will get by\nWe will survive",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663662731"
+            },
+            {
+              "trackNumber": 2,
+              "name": "Hell In a Bucket",
+              "slug": "hell-in-a-bucket",
+              "fileName": "Hell in a Bucket Score.pdf",
+              "lyrics": "Well I was drinking last night with a biker\nAnd I showed him a picture of you\nI said \"pal, get to know her, you'll like her\"\nSeemed like the least I could do\n\n'Cause when he's charging his chopper\nUp and down your carpeted halls\nYou will think me by contrast quite proper\nNever mind how I stumble and fall\nNever mind how I stumble and fall\n\nChorus\nYou imagine sipping champagne from your boot\nFor a taste of your elegant pride\nI may be going to hell in a bucket\nBut at least I'm enjoying the ride\nAt least I'm enjoying the ride\nYeah at least I'm enjoying the ride\n\nAhh miss sweetie little soft-core pretender\nSomehow baby got hard as it gets\nWith her black leather chrome spiked suspenders\nAnd her chair and her whip and her pets\n\nWell we know you're the reincarnation\nOf the ravenous Catherine the Great\nAnd we know how you love your ovations\nAnd the Z-rated scenes you create\nAnd the Z-rated scenes you create\n\nChorus\n\nYou analyse me, attempt to despise me\nAnd you laugh when I stumble and fall\nThere may come a day I will dance on your grave\nIf unable to dance I will crawl across it\nUnable to dance I will crawl\nYeah, unable to dance I'll crawl\n\nYou must really consider the circus\n'Cause it just might be your kind of zoo\nI can't think of a place that's more perfect\nFor a person as perfect as you\n\nAnd it's not like I'm leaving you lonely\n'Cause I wouldn't know where to begin\nBut I know that you'll think of me only\nWhen the snakes come marching in\nWhen the snakes come marching in\n\nChorus\n\nRide, ride, ride, ride\nAt least I'm enjoying the ride\nRide, ride, ride, ride\nAt least I'm enjoying the ride\nRide, ride, ride\nAt least I'm enjoying the ride",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ],
+                [
+                  "brent-mydland",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663662732"
+            },
+            {
+              "trackNumber": 4,
+              "name": "West L.A. Fadeaway",
+              "slug": "west-la-fadeaway",
+              "fileName": "West L.A. Fadeaway Score.pdf",
+              "lyrics": "Looking for a chateau\nTwenty one rooms but one will do\nLooking for a chateau\nTwenty one rooms but one will do\nI don't want to buy it\nI just want to rent it for an hour or two\n\nMet an old mistake\nWalking down the street today\nMet an old mistake\nWalking down the street today\nI didn't want to be mean about it\nBut I, I didn't have one good word to say\n\nChorus\nWest L.A. fadeaway\nWest L.A. fadeaway\nLittle red light on the highway\nBig green light on the speedway, hey, hey, hey\n\nI had a steady job\nHauling items for the mob\nI had a steady job\nHauling items for the mob\nYou know the pay was pathetic\nIt's a shame those boys couldn't be more copacetic\n\nI met a west L.A. girl\nAlready know what I need to know\nI met a west L.A. girl\nAlready know what I need to know\nName, address and phone number, Lord\nAnd just how far to go\n\nChorus\n\nLooking for a chateau\nTwenty one rooms but one will do\nLooking for a chateau\nTwenty one rooms but one will do\nI don't want to rent it\nI just what to use it for a minute or two\n\nChorus\n\nLittle red light on the highway\nBig green light on the speedway, hey, hey, hey\nLittle red light on the highway\nBig green light on the speedway, hey, hey, hey",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663662734"
+            },
+            {
+              "trackNumber": 6,
+              "name": "Throwing Stones",
+              "slug": "throwing-stones",
+              "fileName": "Throwing Stones Score.pdf",
+              "lyrics": "Picture a bright blue ball just spinning, spinning free\nDizzy with eternity\nPaint it with a skin of sky, brush in some clouds and sea\nCall it home for you and me\nA peaceful place, or so it looks from space\nA closer look reveals the human race\nFull of hope, full of grace, is the human race\nBut afraid we may lay our home to waste\n\nThere's a fear down here we can't forget\nHasn't got a name just yet\nAlways awake, always around\nSinging ashes, ashes, all fall down\nAshes, ashes, all fall down\n\nNow watch as the ball revolves and the night-time falls\nAnd again the hunt begins and again the blood wind calls\nBy and by, again, the morning sun will rise\nBut the darkness never goes from some men's eyes\n(Well I know)\nIt strolls the sidewalk and it rolls the streets\nStaking turf, dividing up meat\nNightmare spook, piece of heat\nIt's you and me, you and me\n\nClick flash blade in ghetto night\nRudy's looking for a fight\nRat cat alley, roll them bones\nNeed that cash to feed that Jones\nAnd the politicians throwing stones\nSinging ashes, ashes, all fall down\nAshes, ashes, all fall down\n\nCommissars and pinstripe bosses roll the dice\nAnyway they fall, guess who gets to pay the price?\nMoney green, or proletarian gray\nSelling guns instead of food today\nSo the kids they dance and shake their bones\nAnd the politicians throwing stones\nSinging ashes, ashes, all fall down\nAshes, ashes, all fall down\n\nHeartless powers try to tell us what to think\nIf the spirit's sleeping then the flesh is ink\nHistory's page will be neatly carved in stone\nThe future's here, we are it, we are on our own\nOn our own, on our own, we are on our own\n\nIf the game is lost, then we're all the same\nNo one left to place or take the blame\nWe will leave this place an empty stone\nOr that shining ball of blue we call our home\n\nSo the kids, they dance, they shake their bones\nAnd the politicians throwing stones\nSinging ashes, ashes, all fall down\nAshes, ashes, all fall down\n\nShipping powders back and forth\nSinging black goes south and white comes north\nAnd the whole world full of petty wars\nSinging I got mine and you got yours\nWhile the current fashions set the pace\nLose your step, fall out of grace\nThe radical, he rant and rage\nSinging someone got to turn the page\nAnd the rich man in his summer home\nSinging just leave well enough alone\nBut his pants are down, his cover's blown\nAnd the politicians throwing stones\nSo the kids, they dance, they shake their bones\n'Cause it's all too clear we're on our own\nSinging ashes, ashes, all fall down\nAshes, ashes, all fall down\n\nPicture a bright blue ball just spinning, spinning free\nIt's dizzying, the possibilities\n\nAshes, ashes, all fall down\n[Ashes, ashes, all fall down]\nAshes, ashes, all fall down\n[Ashes, ashes, all fall down]\nAshes, ashes, all fall down\n[Ashes, ashes, all fall down]\nAshes, ashes, all fall down\n[Ashes, ashes, all fall down]\n[etc]",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663662736"
+            },
+            {
+              "trackNumber": 7,
+              "name": "Black Muddy River",
+              "slug": "black-muddy-river",
+              "fileName": "Black Muddy River Score.pdf",
+              "lyrics": "When the last rose of summer pricks my fingers\nAnd the hot sun chills me to the bone\nWhen I can't hear the song for the singer\nAnd I can't tell my pillow from a stone\n\nI will walk alone by the black muddy river\nAnd sing me a song of my own\nI will walk alone by the black muddy river\nSing me a song of my own\n\nWhen the last bolt of sunshine hits the mountain\nAnd the stars seem to splatter in the sky\nWhen the moon splits the south west horizon\nAnd scream of an eagle on the fly\n\nI will walk alone by the black muddy river\nAnd listen to the ripples as they moan\nI will walk alone by the black muddy river\nSing me a song of my own\n\nBlack muddy river\nRoll on forever\nI don't care how deep and wide\nIf you got another side\nRoll muddy river\nRoll muddy river\nBlack muddy river, roll\n\nWhen it seems like the night will last forever\nAnd there's nothing left to do but count the years\nWhen the strings of my heart start to sever\nAnd stones fall from my eyes instead of tears\n\nI will walk alone by the black muddy river\nAnd dream me a dream of my own\nI will walk alone by the black muddy river\nSing me a song of my own\nAnd sing me a song of my own",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663662737"
+            }
+          ]
+        },
+        {
+          "name": "Built to Last",
+          "slug": "built-to-last",
+          "releaseYear": 1989,
+          "coverArtFileName": "built-to-last.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "Foolish Heart",
+              "slug": "foolish-heart",
+              "fileName": "Foolish Heart Score.pdf",
+              "lyrics": "Carve your name, carve your name in ice and wind\nSearch for where, search for where the rivers end\nOr where the rivers start\nDo everything that's in you, you feel to be your part\nBut never give your love my friend unto a foolish heart\nUnto a foolish heart\n\nDare to leap, leap from ledges high and wild \nLearn to speak, speak with wisdom like a child\nDirectly to the heart \nCrown yourself the king of clowns or stand way back apart \nBut never give your love my friend unto a foolish heart\nUnto a foolish heart\n\nShun a friend, shun a brother and a friend\nNever look, never look around the bend\nOr check the weather chart\nSign the Mona Lisa with a spray can, call it art\nBut never give your love my friend unto a foolish heart\nUnto a foolish heart\n\nA foolish heart will call on you to toss your dreams away\nThen turn around and blame you for the way you went astray\nA foolish heart will cost you sleep and often make you curse \nA selfish heart is trouble, but a foolish heart is worse\n\nBite the hand, bite the hand that bakes your bread\nDare to leap, where the angels fear to tread <\nTill you are torn apart\nStoke the fires of paradise with coals from hell to start\nBut never give you love my friend unto a foolish heart\nUnto a foolish heart",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663965011"
+            },
+            {
+              "trackNumber": 4,
+              "name": "Blow Away",
+              "slug": "blow-away",
+              "fileName": "Blow Away Score.pdf",
+              "lyrics": "A man and a woman come together as strangers\nWhen they part they're usually strangers still\nIt's like a practical joke played on us by our Maker\nEmpty bottles that can't be filled\n\nChorus\nBaby who's to say it could have been different now that it's done\nBaby who's to say that it should have been, anyway\nBaby who's to say that it even matters in the long run\nGive it just a minute\nAnd it will blow away\nIt'll blow away\n\nYou fancy me to be the master of your feelings\nYou barely bruise me with your looks to kill\nThough I admit we were sometimes brutal in our dealings\nI never held you against your will\n\nChorus\n\nYour case against me is so very clearly stated\nI plead no contest, I just turn and shrug\nI've come to figure all importance overestimated\nYou must mean water when you beg for blood\n\nChorus\n\nLike a feather in a whirlwind\nBlow away\nJust as sure as the world spins\nBlow away\n[etc]",
+              "singer": "brent-mydland",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "brent-mydland",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663965026"
+            },
+            {
+              "trackNumber": 7,
+              "name": "Standing On the Moon",
+              "slug": "standing-on-the-moon",
+              "fileName": "Standing on the Moon Score.pdf",
+              "lyrics": "Standing on the moon, I got no cobweb on my shoe\nStanding on the moon, I'm feeling so alone and blue\nI see the Gulf of Mexico as tiny as a tear\nThe coast of California must be somewhere over here\nOver here\n\nStanding on the moon, I see the battle rage below\nStanding on the moon, I see the soldiers come and go\nThere's a metal flag beside me someone planted long ago\nOld glory standing stiffly, crimson, white and indigo\nOld glory standing stiffly, crimson, white and indigo\nIndigo\n\nI see all of South East Asia; I can see El Salvador\nI hear the cries of children and the other songs of war\nIt's like a mighty melody that rings down from the sky\nStanding here upon the moon I watch it all roll by\nAll roll by\nAll roll by\nAll roll by\n\nStanding on the moon, I see a shadow on the sun\nStanding on the moon, the stars go fading one by one\nI hear a cry of victory, another of defeat\nA scrap of age-old lullaby down some forgotten street\n\nStanding on the moon, where talk is cheap and vision true\nStanding on the moon, but I would rather be with you\nSomewhere in San Francisco on a back porch in July\nJust looking up to heaven at this crescent in the sky\nIn the sky\n\nStanding on the moon with nothing left to do\nA lovely view of heaven but I'd rather be with you\nA lovely view of heaven but I'd rather be with you\nBe with you\nI'd rather be with you\n[etc]",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663965089"
+            }
+          ]
+        },
+        {
+          "name": "So Many Roads",
+          "slug": "so-many-roads",
+          "releaseYear": 1999,
+          "coverArtFileName": "so-many-roads.jpg",
+          "songs": [
+            {
+              "name": "Days Between",
+              "slug": "days-between",
+              "fileName": "Days Between Score.pdf",
+              "lyrics": "There were days, and there were days\nAnd there were days between\nSummer flies and August dies\nThe world grows dark and mean\nComes the shimmer of the moon\nOn black infested trees\nThe singing man is at his song\nThe holy on their knees\nThe reckless are out wrecking\nThe timid plead their pleas\nNo one knows much more of this\nThan anyone can see\nAnyone can see\n\nThere were days, and there were days\nAnd there were days besides\nWhen phantom ships with phantom sails\nSet to sea on phantom tides\nComes the lightning of the sun\nOn bright unfocused eyes\nThe blue of yet another day\nA springtime wet with sighs\nA hopeful candle lingers\nIn the land of lullabies\nWhere headless horsemen vanish\nWith wild and lonely cries\nLonely cries\n\nThere were days, and there were days\nAnd there were days I know\nWhen all we ever wanted\nWas to learn and love and grow\nOnce we grew into our shoes\nWe told them where to go\nWalked halfway around the world\nOn promise of the glow\nStood upon a mountain top\nWalked barefoot in the snow\nGave the best we had to give\nHow much we'll never know\nWe'll never know\n\nThere were days, and there were days\nAnd there were days between\nPolished like a golden bowl\nThe finest ever seen\nHearts of Summer held in trust\nStill tender young and green\nLeft on shelves collecting dust\nNot knowing what they mean\nValentines of flesh and blood\nAs soft as velveteen\nHoping love would not forsake\nThe days that lie between\nLie between",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "307939170"
+            }
+          ]
+        },
+        {
+          "name": "Ladies and Gentleman... The Grateful Dead",
+          "slug": "ladies-and-gentlman-the-grateful-dead",
+          "releaseYear": 2000,
+          "coverArtFileName": "ladies-and-gentlman-the-grateful-dead.jpg",
+          "songs": [
+            {
+              "songType": "cover",
+              "name": "El Paso",
+              "slug": "el-paso",
+              "fileName": "El Paso Score.pdf",
+              "lyrics": "Out in the West Texas town of El Paso\nI fell in love with a Mexican girl.\nNighttime would find me in Rose's Cantina,\nMusic would play and Felina would whirl.\n\nBlack as the night were the eyes of Felina,\nWicked and evil while casting a spell.\nMy love was strong for this Mexican maiden,\nI was in love, but in vain I could tell.\n\nOne night a wild young cowboy came in, wild as the West Texas wind...\nDashing and daring, a drink he was sharing,\nWith wicked Felina, the girl that I love.\n\nSo in anger I challenged his right for the love of this maiden;\nDown went his hand for the gun that he wore.\nMy challenge was answered, in less than a heartbeat\nThe handsome young stranger lay dead on the floor.\n\nJust for a moment I stood there in silence,\nShocked by the foul evil deed I had done.\nMany thoughts ran through my mind as I stood there;\nI had but one chance and that was to run.\n\nOut through the back door of Rose's I ran, out where the horses were tied...\nI picked a good one; he looked like he could run,\nUp on his back and away I did ride.\n\nJust as fast as I could from the West Texas town of El Paso,\nOut through the badlands of New Mexico.\nBack in El Paso my life would be worthless;\nEverything's gone in life nothing is left.\n\nBut it's been so long since I've seen the young maiden,\nMy love is stronger that my fear of death.\nI saddled up and away I did go, riding alone in the dark...\nMaybe tomorrow a bullet may find me,\nTonight nothing's worse than this pain in my heart.\n\nAnd at last here I am on the hill overlooking El Paso,\nI can see Rose's Cantina below.\nMy love is strong and it pushes me onward,\ndown off the hill to Felina I go.\n\nOff to my right I see five mounted cowboys,\nOff to my left ride a dozen or more.\nshouting and shooting; I can't let them catch me,\nI've got to make it to Rose's back door.\n\nSomething is dreadfully wrong for I feel a deep burning pain in my side\nIt's getting harder to stay in the saddle.\nI'm getting weary, unable to ride.\n\nBut my love for Felina is strong and I rise where I've fallen;\nThough I am weary, I can't stop to rest.\nI see the white puff of smoke from the rifle,\nI feel the bullet go deep in my chest.\n\nFrom out of nowhere, Felina has found me,\nKissing my cheek as she kneels by my side.\nCradled by two loving arms that I'll die for,\nOne little kiss and Felina good-bye.",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "marty-robbins",
+                  "lyrics"
+                ],
+                [
+                  "marty-robbins",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "307793596"
+            }
+          ]
+        },
+        {
+          "name": "Crimson, White & Indigo",
+          "slug": "crimson-white-and-indigo",
+          "releaseYear": 2010,
+          "coverArtFileName": "crimson-white-and-indigo.jpg",
+          "songs": [
+            {
+              "songType": "cover",
+              "name": "Knockin' On Heaven's Door",
+              "slug": "knockin-on-heavens-door",
+              "fileName": "Knockin' on Heaven's Door Score.pdf",
+              "lyrics": "Mama take this badge from me\nI can't use it anymore\nIt's gettin' dark, too dark to see\nFeels like I'm knockin' on Heaven's door\n\nChorus\nKnock knock knockin' on Heaven's door\nKnock knock knockin' on Heaven's door\nKnock knock knockin' on Heaven's door\nKnock knock knockin' on Heaven's door\n\nMama put my guns in the ground\nI can't shoot them anymore\nThat cold black cloud is comin' down\nFeels like I'm knockin' on Heaven's door\n\nChorus\n\nYou just better start sniffin' your own rank subjugation Jack\n'Cause it's just you against your tattered libido, the bank and the mortician\nForever man\nAnd it wouldn't be luck if you could get out of life alive\n\nChorus\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "bob-dylan",
+                  "lyrics"
+                ],
+                [
+                  "bob-dylan",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "366394914"
+            },
+            {
+              "trackNumber": 2,
+              "songType": "cover",
+              "name": "Iko Iko",
+              "slug": "iko-iko",
+              "fileName": "Iko Iko Score.pdf",
+              "lyrics": "My grandma see your grandpa\nSitting by the Bayou\nMy grandma see your granpa\nGonna fix your chicken wire\n\nChorus\nHey now (hey now)\nHey now (hey now)\nIko iko un day\nJockomo feeno ah na nay\nJockomo feena nay\n\nMy spy dog see your spy dog\nSitting by the Bayou\nMy spy dog see your spy dog\nGonna set your tail on fire\n\nChorus\n\nMy little boy see your little boy\nSitting by the Bayou\nMy little boy see your little boy\nGonna fix your chicken wire\n\nChorus\n\nMy grandma see your grandma\nSitting by the Bayou\nMy grandma see your grandma\nGonna fix your chicken wire\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "traditional",
+                  "lyrics"
+                ],
+                [
+                  "traditional",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "366394247"
+            }
+          ]
+        },
+        {
+          "name": "So Glad You Made It",
+          "slug": "so-glad-you-made-it",
+          "releaseYear": 2012,
+          "coverArtFileName": "so-glad-you-made-it.jpg",
+          "songs": [
+            {
+              "songType": "cover",
+              "name": "Let the Good Times Roll",
+              "slug": "let-the-good-times-roll",
+              "fileName": "Good Times Score.pdf",
+              "lyrics": "Chorus\nGet in the groove and let the good times roll\nWe're gonna stay here till we soothe our soul\nIf it takes all night long\nCome on and let the good times roll\nWe're gonna stay here till we soothe our soul\nIf it takes all night long\n\nThe evening sun is sinking low\nThe clock on the wall says it's time to go\nI got plans, and I got plans for you\nI tell you exactly what we're all gonna do\n\nChorus\n\nIt might be twelve o'clock and it might be three\nTime doesn't mean that much to me\nAin't felt this way since I don't know when\nMight not feel this way again\n\nChorus\n\nIt might be six o'clock and it might be eight\nIt don't matter that it's getting late\nWe're gonna make the band play one more song\nGet in the groove if it takes all night long\n\nChorus\n\nAll night (all night)\nAll night (all night)\nIf it takes all night (all night)\nYou know it might take all night long (all night)\nAll night long (all night)\nAll night long (all night)\n\n[etc]\n\nGet in the groove and let the good times roll\nWe're gonna stay here till we soothe our soul\nIf it takes all night long",
+              "writers": [
+                [
+                  "sam-cooke",
+                  "lyrics"
+                ],
+                [
+                  "sam-cooke",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "558274268"
+            }
+          ]
+        },
+        {
+          "name": "Complete Studio Rarities Collection",
+          "slug": "complete-studio-rarities-collection",
+          "releaseYear": 2013,
+          "coverArtFileName": "complete-studio-rarities-collection.jpg",
+          "songs": [
+            {
+              "songType": "cover",
+              "name": "Peggy-O",
+              "slug": "peggy-o",
+              "fileName": "Peggy-O Score.pdf",
+              "lyrics": "As we rode out to Fennario\nAs we rode out to Fennario\nOur captain fell in love with a lady like a dove\nAnd he called her by name pretty Peggy-O\n\nWill you marry me, pretty Peggy-O\nWill you marry me, pretty Peggy-O\nIf you will marry me, I will set your cities free\nAnd free all the ladies in the area-O\n\nI would marry you, sweet William-O\nI would marry you, sweet William-O\nI would marry you, but your guineas are too few\nAnd I fear my mama would be angry-O\n\nWhat would your mama think, pretty Peggy-O\nWhat would your mama think, pretty Peggy-O\nWhat would your mama think if she heard my guineas clink\nAnd saw me marching at the head of my soldiers-O\n\nIf ever I return, pretty Peggy-O\nIf ever I return, pretty Peggy-O\nIf ever I return, all your cities I will burn\nDestroy all the ladies in the area-O\n\nCome stepping down the stairs, pretty Peggy-O\nCome stepping down the stairs, pretty Peggy-O\nCome stepping down the stairs, combing back your yellow hair\nAnd bid a last farewell to young William-O\n\nSweet William he is dead, pretty Peggy-O\nSweet William he is dead, pretty Peggy-O\nSweet William he is dead, and he died for a maid\nAnd he's buried in the Louisiana country-O\n\nAs we rode out to Fennario\nAs we rode out to Fennario\nOur captain fell in love with a lady like a dove\nAnd he called her by name pretty Peggy-O",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "traditional",
+                  "lyrics"
+                ],
+                [
+                  "traditional",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663700919"
+            }
+          ]
+        },
+        {
+          "name": "Truckin' Up to Buffalo",
+          "slug": "truckin-up-to-buffalo",
+          "releaseYear": 2005,
+          "coverArtFileName": "truckin-up-to-buffalo.jpg",
+          "songs": [
+            {
+              "trackNumber": 11,
+              "songType": "cover",
+              "name": "Man Smart, Woman Smarter",
+              "slug": "man-smart-woman-smarter",
+              "fileName": "Man Smart, Woman Smarter Score.pdf",
+              "lyrics": "Let us put men and women together\nSee which one is smarter\nSome say men, but I say no\nThe women got the men like a puppet show\n\nChorus\nBelieve me, it's the people that say\nThat the men are leading the women astray\nBut I say that the women today\nAre smarter than the men in every way\nThat's right, the women are smarter\nThat's right, the women are smarter\nThat's right, the women are smarter\nThe women are smarter than the men today\n\nLittle boy sit on the corner and cry\nBig man come and he ask him why\nSays I can't do what the big boys do\nMan sat down and he cried too\n\nChorus\n\nEver since the world began\nWomen been imitating the ways of men\nBut listen cause I've got a plan\nGive it up, just don't try to understand\n\nChorus\n\nLet us put men and women together\nSee which one is smarter\nSome say men, but I say no\nThe women got the men like a puppet show\n\nChorus",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "norman-span",
+                  "lyrics"
+                ],
+                [
+                  "norman-span",
+                  "music"
+                ]
+              ],
+              "appleMusicId": null
+            }
+          ]
+        },
+        {
+          "name": "30 Trips Around the Sun",
+          "slug": "30-trips-around-the-sun",
+          "releaseYear": 2015,
+          "coverArtFileName": "30-trips-around-the-sun.jpg",
+          "songs": [
+            {
+              "trackNumber": 3,
+              "discNumber": 78,
+              "name": "Wang Dang Doodle",
+              "slug": "wang-dang-doodle",
+              "fileName": "Wang Dang Doodle Score.pdf",
+              "lyrics": "Tell automatic Slim\nTo tell razor toting Jim\nTo tell butcher knife toting Annie\nTo tell fast-talking Fanny\nWe're gonna pitch a ball\nDown to the union hall\nWe're gonna romp and stomp till midnight\nWe're gonna fuss and fight till daylight\n\nWe're gonna pitch a wang dang doodle all night long\nAll night long\nAll night long\nAll night long\nAll night long\nWe're gonna pitch a wang dang doodle all night long\n\nTell cedar crawling Red\nTo tell Abyssinian Ned\nTo tell old Pistol Pete\nTo tell everybody he meet\nTonight we need no rest\nWe gonna really throw a mess\nWe're gonna kick out all the windows\nWe're gonna knock down all the doors\n\nChorus\n\nTell Fats and Washboard Sam\nThat everybody's gonna jam\nTell Shakey and Boxcar Joe\nWe got sawdust on the floor\nTell Peg and Carol Dine\nWe gonna have a hell of a time\nAnd when the fish scent fill the air\nThere'll be snuff juice everywhere\n\nChorus\n\nAll night long\nAll night long\nAll night long",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "willie-dixon",
+                  "music"
+                ],
+                [
+                  "willie-dixon",
+                  "lyrics"
+                ]
+              ],
+              "appleMusicId": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bob Weir",
+      "imageFileName": "bob-weir.jpg",
+      "albums": [
+        {
+          "name": "Ace",
+          "slug": "ace",
+          "releaseYear": 1972,
+          "coverArtFileName": "ace.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "Greatest Story Ever Told",
+              "slug": "greatest-story-ever-told",
+              "fileName": "Greatest Story Ever Told Score.pdf",
+              "lyrics": "Moses come riding up on a quasar \nHis spurs was a-jingling, the door was ajar\nHis buckle was silver, his manner was bold \nI asked him to come on in out of the cold\nHis brain was boiling, his reason was spent\nNothing is borrowed, nothing is lent\nI asked him for mercy, he gave me a gun\nNow and again these things just got to be done\n\nAbraham and Isaac sitting on a fence \nGet right to work if you have any sense\nYou know the one thing we need is a left-hand monkey wrench\n\nGideon come in with his eyes on the floor\nSays, \"you ain't got a hinge, you can't close the door\"\nMoses stood up a full six foot ten\nSaid \"you can't close the door when the wall's caved in\"\nI asked him for water he poured me some wine \nWe finished the bottle then broke into mine\nYou get what you come for, you're ready to go\nAnd it's one in ten thousand done come for the show\n\nAbraham and Isaac digging on a well \nMama come quick with the water witch spell\nCool clear water where you can't never tell",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1647459820"
+            },
+            {
+              "trackNumber": 2,
+              "name": "Black-Throated Wind",
+              "slug": "black-throated-wind",
+              "fileName": "Black-Throated Wind Score.pdf",
+              "lyrics": "Bringing me down, I'm running aground\nBlind in the light of the interstate cars\nPassing me by, the buses and semis\nPlunging like stones from a slingshot on Mars\n\nBut I'm here by the road, bound to the load\nThat I picked up in ten thousand cafes and bars\nAlone with the rush of the drivers who won't pick me up\nThe highway, the moon, the clouds, and the stars\n\nThe black throated wind keeps on pouring in\nWith its words of a life where nothing is new\nAh, Mother American Night, I'm lost from the light\nOh I'm drowning in you\n\nI left Saint Louis, City of Blues\nIn the midst of a storm I'd rather forget\nI tried to pretend it came to an end\n'Cause you weren't the woman I once thought I'd met\n\nBut I can't deny, that times have gone by\nWhere I never had doubts or thoughts of regrets\nAnd I was a man when all this began\nWho wouldn't think twice about being there yet\n\nThe black throated wind whispering sin,\nAnd it speaks of a life that passes like dew\nIt forced me to see\nThat you've done better by me\nBetter by me than I've done by you\n\nNow what's to found, racing around\nYou carry your pain wherever you go\nFull of the blues, and trying to lose\nYou ain't going to learn what you don't want to know\n\nSo I give you my eyes, and all of their lies\nPlease help them to learn as well as to see\nAnd capture a glance, whoa and make it a dance\nOf looking at you looking at me\n\nThe black throated wind keeps on pouring in\nWith its words of a life that could almost be true\nAh, Mother American Night, here comes the light\nI'm turning around that's what I'm going to do\nGoing back home that's what I'm gonna do",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1647459821"
+            },
+            {
+              "trackNumber": 5,
+              "name": "Looks Like Rain",
+              "slug": "looks-like-rain",
+              "fileName": "Looks Like Rain Score.pdf",
+              "lyrics": "I woke today, and felt your side of bed\nThe covers were still warm where you'd been layin'\nYou were gone, my heart was filled with dread\nYou might not be sleeping here again\n\nIt's all right, 'cause I love you\nAnd that's not gonna change\nRun me round, make me hurt again and again\nBut I'll still sing you love songs\nWritten in the letters of your name\nAnd brave the storm to come\nFor it surely looks like rain\n\nDid you ever waken to the sound of street cats making love\nAnd guess from their cries you were listening to a fight\nWell you know, hate's just the last thing they're thinking of\nThey're only trying to make it through the night\n\nI only want to hold you, I don't want to tie you down\nOr fence you in the lines I might have drawn\nIt's just that I have gotten used to having you around\nMy landscape would be empty if you were gone\n\nIt's all right, 'cause I love you\nAnd that's not gonna change\nRun me round, make me hurt again and again\nBut I'll still sing you love songs\nWritten in the letters of your name\nAnd brave the storm to come\nFor it surely looks like rain",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1647459824"
+            },
+            {
+              "trackNumber": 6,
+              "name": "Mexicali Blues",
+              "slug": "mexicali-blues",
+              "fileName": "Mexicali Blues Score.pdf",
+              "lyrics": "Laid back in an old saloon, with a peso in my hand\nWatching flies and children on the street\nAnd I catch a glimpse of black-eyed girls who giggle when I smile\nThere's a little boy that wants to shine my feet\nAnd it's three days ride from Bakersfield\nAnd I don't know why I came\nI guess I came to keep from payin' dues\nSo instead I've got a bottle and a girl who's just fourteen\nAnd a damned good case of the Mexicali blues\n\nChorus\nIs there anything a man don't stand to lose\nWhen the devil wants to take it all away\nCherish well your thoughts, keep a tight grip on your booze\n'Cause thinking and drinking are all I have today\n\nShe said her name was Billie Jean and she was fresh in town\nI didn't know her stage-line ran from hell\nShe had raven hair, a ruffled dress, a necklace made of gold\nAnd all the french perfume you'd care to smell\nShe took me up in to her room and whispered in my ear\nGo on my friend, do anything you choose\nNow I'm payin' for those happy hours I spent there in her arms\nWith a lifetime's worth of the Mexicali blues\n\n[chorus]\n\nAnd then a man rode in to town, some thought he was the law\nBillie Jean was waiting when he came\nShe told me he would take her if I didn't use my gun\nAnd I'd have no one but myself to blame\nI went down to those dusty streets, blood was on my mind\nI guess that stranger hadn't heard the news\n'Cause I shot first and killed him, Lord he didn't even draw\nAnd he made me trade the gallows for the Mexicali blues \n\nIs there anything a man don't stand to lose\nWhen he lets a woman hold him in her hands\nYou just might find yourself out there on horseback in the dark\nJust riding and running across those desert sands",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1647459825"
+            },
+            {
+              "trackNumber": 8,
+              "name": "Cassidy",
+              "slug": "cassidy",
+              "fileName": "Cassidy (Studio) Score.pdf",
+              "lyrics": "I have seen where the wolf has slept by the silver stream\nI can tell by the mark he left, you were in his dream\nAh child of countless trees\nAh child of boundless seas\nWhat you are, what you're meant to be\nSpeaks his name, though you were born to me\nBorn to me, Cassidy\n\nLost now on the country miles in his Cadillac\nI can tell by the way you smile, he is rolling back\nCome wash the night-time clean\nCome grow the scorched ground green\nBlow the horn, tap the tambourine\nClose the gap of the dark years in between\nYou and me, Cassidy\n\nQuick beats in an icy heart\nCatch colt draws a coffin cart\nThere he goes and now here she starts\nHear her cry\n\nFlight of the seabirds\nScattered like lost words\nWheel to the storm and fly\n\nFaring thee well now\nLet your life proceed by its own designs\nNothing to tell now\nLet the words be yours, I'm done with mine\n\nFaring thee well now\nLet your life proceed by its own designs\nNothing to tell now\nLet the words be yours, I'm done with mine\n\nFlight of the seabirds \nScattered like lost words\nWheel to the storm and fly",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1647460157"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Jerry Garcia",
+      "imageFileName": "jerry-garcia.jpg",
+      "albums": [
+        {
+          "name": "Garcia",
+          "slug": "garcia",
+          "releaseYear": 1972,
+          "coverArtFileName": "garcia.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "Deal",
+              "slug": "deal",
+              "fileName": "Deal Score.pdf",
+              "lyrics": "Since it cost a lot to win\nAnd even more to lose\nYou and me bound to spend some time\nWondering what to choose\n\nChorus\nGoes to show, you don't ever know\nWatch each card you play and play it slow\nWait until that deal come round\nDon't you let that deal go down, no, no\n\nI've been gambling here abouts\nFor ten good solid years\nIf I told you all that went down\nIt would burn off both your ears\n\nChorus\n\nSince you poured the wine for me\nAnd tightened up my shoes\nI hate to leave you sitting there\nComposing lonesome blues\n\nChorus\nWait until that deal come round\nDon't you let that deal go down\n[repeat etc]",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1139010672"
+            },
+            {
+              "trackNumber": 2,
+              "name": "Bird Song",
+              "slug": "bird-song",
+              "fileName": "Bird Song (Studio) Score.pdf",
+              "lyrics": "All I know is something like a bird within her sang\nAll I know she sang a little while and then flew on\nTell me all that you know\nI'll show you\nSnow and rain\n\nIf you hear that same sweet song again, will you know why?\nAnyone who sings a tune so sweet is passing by\nLaugh in the sunshine\nSing, cry in the dark\nFly through the night\n\nDon't cry now\nDon't you cry\nDon't you cry any more\nLa da da da\n\nSleep in the stars\nDon't you cry\nDry your eyes on the wind\nLa da da da da da\n\nAll I know is something like a bird within her sang\nAll I know she sang a little while and then flew on\nTell me all that you know\nI'll show you\nSnow and rain",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1139010681"
+            },
+            {
+              "trackNumber": 3,
+              "name": "Sugaree",
+              "slug": "sugaree",
+              "fileName": "Sugaree Score.pdf",
+              "lyrics": "When they come to take you down\nWhen they bring that wagon round\nWhen they come to call on you\nAnd drag your poor body down\n\nChorus\nJust one thing I ask of you\nJust one thing for me\nPlease forget you knew my name\nMy darling, Sugaree\n\nShake it, shake it, Sugaree\nJust don't tell them that you know me\nShake it, shake it, Sugaree\nJust don't tell them that you know me\n\nYou thought you was the cool fool\nAnd never would do no wrong\nYou had everything sewed up tight\nHow come you lay awake all night long\n\nChorus\n\nWell in spite of all you gained\nYou still have to stand out in the pouring rain\nOne last voice is calling you\nAnd I guess it's time you go\n\nChorus\n\nWell shake it up now, Sugaree\nI'll meet you at the jubilee\nAnd if that jubilee don't come\nMaybe I'll meet you on the run\n\nChorus",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1139010689"
+            },
+            {
+              "trackNumber": 4,
+              "name": "Loser",
+              "slug": "loser",
+              "fileName": "Loser Score.pdf",
+              "lyrics": "If I had a gun for every ace that I had drawn\nI could arm a town the size of Abilene\nDon't you push me baby, 'cause I'm moaning low\nAnd you know I'm only in it for the gold\n\nAll that I am asking for is ten gold dollars\nAnd I could pay you back with one good hand\nYou can look around at the wide world over\nBut you'll never find another honest man\n\nLast fair deal in the country, sweet Susie\nLast fair deal in the town\nPut your gold money where your love is baby\nBefore you let my deal go down\n\nDon't you push me baby, 'cause I'm moaning low\nWell I know a little something you won't ever know\nDon't you touch hard liquor, just a cup of cold coffee\nGonna get up in the morning and go\n\nEverybody's bragging and drinking that wine\nI can tell the Queen of Diamonds by the way she shines\nCome to daddy on an inside straight\nWell I got no chance of losing this time\nWell I got no chance of losing this time",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1139010695"
+            },
+            {
+              "trackNumber": 8,
+              "name": "To Lay Me Down",
+              "slug": "to-lay-me-down",
+              "fileName": "To Lay Me Down Score.pdf",
+              "lyrics": "To lay me down once more, to lay me down\nWith my head in sparkling clover\nLet the world go by, all lost in dreaming\nTo lay me down one last time, to lay me down\n\nTo be with you once more, to be with you\nWith our bodies close together\nLet the world go by, like clouds a-streaming\nTo lay me down one last time, to lay me down\n\nTo lay me down, to lay me down\nTo lay me down one last time, to lay me down\n\nTo lie with you once more, to lie with you\nWith our dreams entwined together\nTo wake beside you, my love still sleeping\nTo tell sweet lies one last time and say goodnight\n\nTo lay me down, to lay me down\nTo lay me down one last time, to lay me down",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1139010553"
+            },
+            {
+              "trackNumber": 10,
+              "name": "The Wheel",
+              "slug": "the-wheel",
+              "fileName": "The Wheel Score.pdf",
+              "lyrics": "Chorus 1\nThe wheel is turning and you can't slow down\nYou can't let go and you can't hold on\nYou can't go back and you can't stand still\nIf the thunder don't get you then the lightning will\n\nChorus 2\nWon't you try just a little bit harder\nCouldn't you try just a little bit more\nWon't you try just a little bit harder\nCouldn't you try just a little bit more\n\nRound, round, Robin run around\nGotta get back where you belong\nLittle bit harder, just a little bit more\nLittle bit further than you gone before\n\nChorus 1\n\nSmall wheel turning by the fire and rod\nBig wheel turning by the grace of God\nEvery time that wheel turn round\nBound to cover just a little more ground\n\nChorus 1\n\nChorus 2 ",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ],
+                [
+                  "bill-kreutzmann",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1139010920"
+            }
+          ]
+        },
+        {
+          "name": "Reflections",
+          "slug": "reflections",
+          "releaseYear": 1976,
+          "coverArtFileName": "reflections.jpg",
+          "songs": [
+            {
+              "trackNumber": 3,
+              "name": "They Love Each Other",
+              "slug": "they-love-each-other",
+              "fileName": "They Love Each Other Score.pdf",
+              "lyrics": "Merry run around\nSailing up and down\nLooking for a shove in some direction\nGot it from the top\nIt's nothing you can stop\nLord, you know they made a fine connection\n\nChorus\nThey love each other\nLord, you can see it's true\nLord, you can see it's true\nLord, you can see it's true\n\nHe could pass his time\nAround some other line\nBut you know he chose this place beside her\nDon't get in the way\nThere's nothing you can say\nNothing that you need to add or do\n\nChorus\n\nIt's nothing, they explain\nIt's like a diesel train\nBetter not be there when it rolls over\nAnd when that train rolls in\nYou won't know where it's been\nYou gotta try to see a little further\n\nChorus\n\nThough you'll make a noise\nThey just can't hear your voice\nThey're on a dizzy ride and you're cold sober\n\nChorus\n\nHope you will believe what I say is true\nEverything I did, I heard it first from you\n\nHeard your news report\nYou know you're falling short\nPretty soon won't trust you for the weather\nWhen that ship comes in\nYou won't know where it's been\nYou got to try to see a little further",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1139060473"
+            },
+            {
+              "trackNumber": 8,
+              "name": "Comes A Time",
+              "slug": "comes-a-time",
+              "fileName": "Comes a Time Score.pdf",
+              "lyrics": "Chorus\nComes a time when the blind man takes your hand \nSays \"don't you see?\"\nGotta make it somehow\nOn the dreams you still believe\nDon't give it up\nYou got an empty cup\nOnly love can fill\nOnly love can fill\n\nBeen walking all morning\nWent walking all night\nI can't see much difference \nBetween the dark and light\nAnd I feel the wind \nAnd I taste the rain\nNever in my mind\nTo cause so much pain\n\n  [chorus]\n\nFrom day to day\nJust letting it ride \nYou get so far away\nFrom how it feels inside\nYou can't let go\n'Cause you're afraid to fall\nBut the day may come\nWhen you can't feel at all\n\n  [chorus]",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1139060274"
+            }
+          ]
+        },
+        {
+          "name": "Cats Under the Stars",
+          "slug": "cats-under-the-stars",
+          "releaseYear": 1978,
+          "coverArtFileName": "cats-under-the-stars.jpg",
+          "songs": [
+            {
+              "trackNumber": 1,
+              "name": "Reuben and Cherise",
+              "slug": "reuben-and-cherise",
+              "fileName": "Reuben and Cherise Score.pdf",
+              "lyrics": "Cérise was brushing her long hair gently down\nIt was the afternoon of Carnival\nAs she brushes it gently down\n\nReuben was strumming his painted mandolin \nIt was enlaid with a pretty face in jade\nPlayed the Carnival Parade \n\nCérise was dressing as Pirouette in white\nWhen a fatal vision gripped her tight \nCérise, beware tonight\n\nReuben, Reuben, tell me truly true\nI feel afraid and I don't know why I do\nIs there another girl for you\n\nIf you could see in my heart\nYou would know it's true\nThere is none, Cérise, except for you\nExcept for you\nI swear to it on my very soul \nIf I lie may I fall down cold\n\nWhen Reuben played on his painted mandolin \nThe breeze would stop and listen in \nBefore going its way again\n\nMasquerade began when nightfall finally woke\nLike waves against the bandstand dancers broke\nTo the painted mandolin\n\nLooking out on the crowd, who is standing there? \nSweet Ruby Claire at Reuben stared\nAt Reuben stared\nShe was dressed as Pirouette in red\nAnd her hair hung gently down\n\nThe crowd pressed round, Ruby stood as though alone\nReuben's song took on a different tone\nAnd he played it just for her\n\nThe song that he played was the Carnival Parade\nEach note cut a thread of Cérise's fate\nIt cut through like a blade\n\nReuben was playing his painted mandolin \nWhen Ruby froze and turned to stone\nFor the strings played all alone\n\nIf you could see in my heart \nYou would know it's true\nThere is none, Cérise, except for you\nExcept for you\n\nThe voice of Cérise from the face of the mandolin\nSinging Reuben, Reuben, tell me true\nFor I have no one but you\n\nIf you could see my heart\nYou would know it's true\nThere is none, Cérise, except for you\nExcept for you\nI swear to it on my very soul \nIf I lie, may I fall down cold\n\nThe truth of love an unsung song must tell \nThe course of love must follow blind\nWithout a look behind \n\nReuben walked the streets of New Orleans till dawn\nCérise so lightly in his arms \nAnd her hair hung gently down",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "jerry-garcia",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1138999181"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "singers": [
+    {
+      "name": "Jerry Garcia",
+      "slug": "jerry-garcia",
+      "imageFileName": "jerry-garcia.jpg"
+    },
+    {
+      "name": "Ron \"Pigpen\" McKernan",
+      "slug": "pigpen",
+      "imageFileName": "pigpen.jpg"
+    },
+    {
+      "name": "Bob Weir",
+      "slug": "bob-weir",
+      "imageFileName": "bob-weir.jpg"
+    },
+    {
+      "name": "Phil Lesh",
+      "slug": "phil-lesh",
+      "imageFileName": "phil-lesh.jpg"
+    },
+    {
+      "name": "Brent Mydland",
+      "slug": "brent-mydland",
+      "imageFileName": "brent-mydland.jpg"
+    }
+  ],
+  "writers": [
+    {
+      "name": "Bonnie Dobson",
+      "slug": "bonnie-dobson",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Tim Rose",
+      "slug": "tim-rose",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Bonnie Dobson",
+      "slug": "bonnie-dobson",
+      "contribution": "music"
+    },
+    {
+      "name": "Tim Rose",
+      "slug": "tim-rose",
+      "contribution": "music"
+    },
+    {
+      "name": "Noah Lewis",
+      "slug": "noah-lewis",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Noah Lewis",
+      "slug": "noah-lewis",
+      "contribution": "music"
+    },
+    {
+      "name": "Bob Weir",
+      "slug": "bob-weir",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Bill Kreutzmann",
+      "slug": "bill-kreutzmann",
+      "contribution": "music"
+    },
+    {
+      "name": "Robert Hunter",
+      "slug": "robert-hunter",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Jerry Garcia",
+      "slug": "jerry-garcia",
+      "contribution": "music"
+    },
+    {
+      "name": "Phil Lesh",
+      "slug": "phil-lesh",
+      "contribution": "music"
+    },
+    {
+      "name": "Don Robey",
+      "slug": "don-robey",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Joseph Scott",
+      "slug": "joseph-scott",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Don Robey",
+      "slug": "don-robey",
+      "contribution": "music"
+    },
+    {
+      "name": "Joseph Scott",
+      "slug": "joseph-scott",
+      "contribution": "music"
+    },
+    {
+      "name": "Reverend Gary Davis",
+      "slug": "reverend-gary-davis",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Reverend Gary Davis",
+      "slug": "reverend-gary-davis",
+      "contribution": "music"
+    },
+    {
+      "name": "John Dawson",
+      "slug": "john-dawson",
+      "contribution": "music"
+    },
+    {
+      "name": "Bob Weir",
+      "slug": "bob-weir",
+      "contribution": "music"
+    },
+    {
+      "name": "Merle Haggard",
+      "slug": "merle-haggard",
+      "contribution": "music"
+    },
+    {
+      "name": "Merle Haggard",
+      "slug": "merle-haggard",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Mickey Hart",
+      "slug": "mickey-hart",
+      "contribution": "music"
+    },
+    {
+      "name": "John Phillips",
+      "slug": "john-phillips",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "John Phillips",
+      "slug": "john-phillips",
+      "contribution": "music"
+    },
+    {
+      "name": "Traditional",
+      "slug": "traditional",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Traditional",
+      "slug": "traditional",
+      "contribution": "music"
+    },
+    {
+      "name": "Buddy Holly",
+      "slug": "buddy-holly",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Norman Petty",
+      "slug": "norman-petty",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Buddy Holly",
+      "slug": "buddy-holly",
+      "contribution": "music"
+    },
+    {
+      "name": "Norman Petty",
+      "slug": "norman-petty",
+      "contribution": "music"
+    },
+    {
+      "name": "Elmore James",
+      "slug": "elmore-james",
+      "contribution": "music"
+    },
+    {
+      "name": "Elmore James",
+      "slug": "elmore-james",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Ron McKernan",
+      "slug": "ron-mckernan",
+      "contribution": "music"
+    },
+    {
+      "name": "John Barlow",
+      "slug": "john-barlow",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Marvin Gaye",
+      "slug": "marvin-gaye",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "William Stevenson",
+      "slug": "william-stevenson",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Ivy Jo Hunter",
+      "slug": "ivy-jo-hunter",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Marvin Gaye",
+      "slug": "marvin-gaye",
+      "contribution": "music"
+    },
+    {
+      "name": "William Stevenson",
+      "slug": "william-stevenson",
+      "contribution": "music"
+    },
+    {
+      "name": "Ivy Jo Hunter",
+      "slug": "ivy-jo-hunter",
+      "contribution": "music"
+    },
+    {
+      "name": "Peter Monk",
+      "slug": "peter-monk",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Brent Mydland",
+      "slug": "brent-mydland",
+      "contribution": "music"
+    },
+    {
+      "name": "Marty Robbins",
+      "slug": "marty-robbins",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Marty Robbins",
+      "slug": "marty-robbins",
+      "contribution": "music"
+    },
+    {
+      "name": "Bob Dylan",
+      "slug": "bob-dylan",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Bob Dylan",
+      "slug": "bob-dylan",
+      "contribution": "music"
+    },
+    {
+      "name": "Sam Cooke",
+      "slug": "sam-cooke",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Sam Cooke",
+      "slug": "sam-cooke",
+      "contribution": "music"
+    },
+    {
+      "name": "Norman Span",
+      "slug": "norman-span",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Norman Span",
+      "slug": "norman-span",
+      "contribution": "music"
+    },
+    {
+      "name": "Willie Dixon",
+      "slug": "willie-dixon",
+      "contribution": "music"
+    },
+    {
+      "name": "Willie Dixon",
+      "slug": "willie-dixon",
+      "contribution": "lyrics"
+    }
+  ]
+}

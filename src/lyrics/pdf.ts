@@ -4,6 +4,8 @@ import type { Browser } from 'puppeteer';
 
 import { htmlToPdf } from '~/utils';
 
+import { cleanupChorus } from './utils';
+
 interface Song {
   title: string;
   authors: string[];
@@ -20,9 +22,8 @@ export async function jsonToPdf(browser: Browser, song: Song) {
 
   console.log('Creating PDF for:', song.title);
 
-  const lines = song.lyrics.split('\n');
-
-  let lastLine = '';
+  const lines = cleanupChorus(song.lyrics).split('\n');
+  let hasChorus = false;
 
   const styledHtml = `
     <html>
@@ -33,10 +34,10 @@ export async function jsonToPdf(browser: Browser, song: Song) {
         h2 { font-size: 12pt; line-height: 1.2; font-weight: normal; margin: 0; padding: 0; }
         h3 { font-size: 11pt; line-height: 1.2; font-weight: normal; margin: 0; padding: 0; }
         h3:last-of-type { margin-bottom: 18pt; }
-        p { font-size: ${lines.length > 75 ? '10.5pt' : '12pt'}; line-height: 1.2; margin: 0; padding: 0; }
+        p { font-size: 13pt; line-height: 1.2; margin: 0; padding: 0; }
         .break { margin-bottom: 12pt; }
         .chorus { margin: 12pt 0; }
-        ${lines.length > 40 ? `.columns { column-count: 2; column-gap: 40px; }` : ''}
+        ${lines.length > 50 ? `.columns { column-count: 2; column-gap: 40px; }` : ''}
         strong { font-weight: bold; }
         em { font-style: italic; }
       </style>
@@ -48,30 +49,21 @@ export async function jsonToPdf(browser: Browser, song: Song) {
       ${lines
         .map((line) => {
           const trimmed = line.trim();
-          let text = trimmed;
+          const text = trimmed;
 
-          if (text === '') {
+          if (line === '') {
             return `<p class="break"></p>`;
           }
 
-          if (text === 'Chorus') {
-            lastLine = text;
+          if (line === 'Chorus' || line === 'Chorus - repeated') {
+            const chorus = `<p${hasChorus ? ' class="chorus"' : ''}><strong>${line}</strong></p>`;
 
-            return `<p><strong>${text}</strong></p>`;
-          }
-
-          if (['[chorus]', '[chorus - repeated]'].includes(text)) {
-            if (lastLine?.startsWith('[chorus')) {
-              return '';
+            if (line === 'Chorus') {
+              hasChorus = true;
             }
 
-            lastLine = text;
-
-            text = text.replace(/[\[\]]/g, '').replace('chorus', 'Chorus');
-            return `<p class="chorus"><strong>${text}</strong></p>`;
+            return chorus;
           }
-
-          lastLine = text;
 
           return `<p>${text}</p>`;
         })

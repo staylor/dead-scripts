@@ -35,7 +35,7 @@
   },
   {
     "title": "Bird Song",
-    "files": ["B/Bird Song/bird-song.pdf", "B/Bird Song/Bird Song Score.pdf"]
+    "files": ["B/Bird Song/bird-song.pdf", "B/Bird Song/Bird Song (Studio) Score.pdf"]
   },
   {
     "title": "Black Muddy River",
@@ -87,7 +87,7 @@
   },
   {
     "title": "Cassidy",
-    "files": ["C/Cassidy/cassidy.pdf", "C/Cassidy/Cassidy Score.pdf"]
+    "files": ["C/Cassidy/cassidy.pdf", "C/Cassidy/Cassidy (Studio) Score.pdf"]
   },
   {
     "title": "China Cat Sunflower",
@@ -101,11 +101,8 @@
     "files": ["C/China Doll/china-doll.pdf", "C/China Doll/China Doll Score.pdf"]
   },
   {
-    "title": "Cold Rain and Snow",
-    "files": [
-      "C/Cold Rain and Snow/cold-rain-and-snow.pdf",
-      "C/Cold Rain and Snow/Cold Rain and Snow Score.pdf"
-    ]
+    "title": "Comes a Time",
+    "files": ["C/Comes a Time/comes-a-time.pdf", "C/Comes a Time/Comes a Time Score.pdf"]
   },
   {
     "title": "Crazy Fingers",
@@ -126,10 +123,6 @@
     ]
   },
   {
-    "title": "Dark Star",
-    "files": ["D/Dark Star/dark-star.pdf", "D/Dark Star/Dark Star Score.pdf"]
-  },
-  {
     "title": "Days Between",
     "files": ["D/Days Between/days-between.pdf", "D/Days Between/Days Between Score.pdf"]
   },
@@ -144,6 +137,13 @@
   {
     "title": "Dire Wolf",
     "files": ["D/Dire Wolf/dire-wolf.pdf", "D/Dire Wolf/Dire Wolf Score.pdf"]
+  },
+  {
+    "title": "Don't Ease Me In",
+    "files": [
+      "D/Don't Ease Me In/dont-ease-me-in.pdf",
+      "D/Don't Ease Me In/Don't Ease Me In Score.pdf"
+    ]
   },
   { "title": "El Paso", "files": ["E/El Paso/el-paso.pdf", "E/El Paso/El Paso Score.pdf"] },
   {
@@ -175,6 +175,13 @@
     ]
   },
   {
+    "title": "Foolish Heart",
+    "files": [
+      "F/Foolish Heart/foolish-heart.pdf",
+      "F/Foolish Heart/Foolish Heart Score.pdf"
+    ]
+  },
+  {
     "title": "Franklin's Tower",
     "files": [
       "F/Franklin's Tower/franklins-tower.pdf",
@@ -196,15 +203,29 @@
     ]
   },
   {
-    "title": "Good Times",
-    "files": ["G/Good Times/good-times.pdf", "G/Good Times/Good Times Score.pdf"]
+    "title": "Good Lovin'",
+    "files": ["G/Good Lovin'/Good Lovin' Score.pdf"]
+  },
+  {
+    "title": "Greatest Story Ever Told",
+    "files": [
+      "G/Greatest Story Ever Told/greatest-story-ever-told.pdf",
+      "G/Greatest Story Ever Told/Greatest Story Ever Told Score.pdf"
+    ]
   },
   {
     "title": "He's Gone",
     "files": ["H/He's Gone/hes-gone.pdf", "H/He's Gone/He's Gone Score.pdf"]
   },
   {
-    "title": "Help on the Way",
+    "title": "Hell in a Bucket",
+    "files": [
+      "H/Hell in a Bucket/hell-in-a-bucket.pdf",
+      "H/Hell in a Bucket/Hell in a Bucket Score.pdf"
+    ]
+  },
+  {
+    "title": "Help on the Way / Slipknot!",
     "files": [
       "H/Help on the Way/help-on-the-way.pdf",
       "H/Help on the Way/Help on the Way Score.pdf"
@@ -222,6 +243,12 @@
     "files": ["H/High Time/high-time.pdf", "H/High Time/High Time Score.pdf"]
   },
   {
+    "title": "Hurts Me Too",
+    "files": [
+      "H/Hurts Me Too/Hurts Me Too Score.pdf"
+    ]
+  },
+  {
     "title": "I Know You Rider",
     "files": [
       "I/I Know You Rider/i-know-you-rider.pdf",
@@ -236,6 +263,13 @@
     ]
   },
   {
+    "title": "Iko Iko",
+    "files": [
+      "I/Iko Iko/iko-iko.pdf",
+      "I/Iko Iko/Iko Iko Score.pdf"
+    ]
+  },
+  {
     "title": "Jack Straw",
     "files": ["J/Jack Straw/jack-straw.pdf", "J/Jack Straw/Jack Straw Score.pdf"]
   },
@@ -247,10 +281,10 @@
     ]
   },
   {
-    "title": "Lady With a Fan",
+    "title": "Let the Good Times Roll",
     "files": [
-      "L/Lady With a Fan/lady-with-a-fan.pdf",
-      "L/Lady With a Fan/Lady With a Fan Score.pdf"
+      "L/Let the Good Times Roll/good-times.pdf",
+      "L/Let the Good Times Roll/Good Times Score.pdf"
     ]
   },
   {
@@ -270,8 +304,20 @@
     "files": ["L/Lost Sailor/lost-sailor.pdf", "L/Lost Sailor/Lost Sailor Score.pdf"]
   },
   {
+    "title": "Mama Tried",
+    "files": ["M/Mama Tried/Mama Tried Score.pdf"]
+  },
+  {
+    "title": "Man Smart, Woman Smarter",
+    "files": ["M/Man Smart, Woman Smarter/Man Smart, Woman Smarter Score.pdf"]
+  },
+  {
     "title": "Me & My Uncle",
     "files": ["M/Me & My Uncle/me-and-my-uncle.pdf", "M/Me & My Uncle/Me & My Uncle Score.pdf"]
+  },
+  {
+    "title": "Mexicali Blues",
+    "files": ["M/Mexicali Blues/mexicali-blues.pdf", "M/Mexicali Blues/Mexicali Blues Score.pdf"]
   },
   {
     "title": "Mississippi Half-Step Uptown Toodeloo",
@@ -285,11 +331,8 @@
     "files": ["M/Morning Dew/morning-dew.pdf", "M/Morning Dew/Morning Dew Score.pdf"]
   },
   {
-    "title": "New, New Minglewood Blues",
-    "files": [
-      "N/New, New Minglewood Blues/new-new-minglewood-blues.pdf",
-      "N/New, New Minglewood Blues/New, New Minglewood Blues Score.pdf"
-    ]
+    "title": "Mr. Charlie",
+    "files": ["M/Mr. Charlie/mister-charlie.pdf", "M/Mr. Charlie/Mr. Charlie Score.pdf"]
   },
   {
     "title": "New Speedway Boogie",
@@ -303,6 +346,18 @@
     "files": ["N/Not Fade Away/not-fade-away.pdf", "N/Not Fade Away/Not Fade Away Score.pdf"]
   },
   {
+    "title": "One More Saturday Night",
+    "files": ["O/One More Saturday Night/One More Saturday Night Score.pdf"]
+  },
+  {
+    "title": "Passenger",
+    "files": ["P/Passenger/Passenger Score.pdf"]
+  },
+  {
+    "title": "Peggy-O",
+    "files": ["P/Peggy-O/Peggy-O Score.pdf"]
+  },
+  {
     "title": "Playing in the Band",
     "files": [
       "P/Playing in the Band/playing-in-the-band.pdf",
@@ -314,12 +369,27 @@
     "files": ["R/Ramble on Rose/ramble-on-rose.pdf", "R/Ramble on Rose/Ramble on Rose Score.pdf"]
   },
   {
+    "title": "Reuben and Cherise",
+    "files": ["R/Reuben and Cherise/reuben-and-cherise.pdf", "R/Reuben and Cherise/Reuben and Cherise Score.pdf"]
+  },
+  {
     "title": "Ripple",
     "files": ["R/Ripple/ripple.pdf", "R/Ripple/Ripple Score.pdf"]
   },
   {
     "title": "Row Jimmy",
     "files": ["R/Row Jimmy/row-jimmy.pdf", "R/Row Jimmy/Row Jimmy Score.pdf"]
+  },
+  {
+    "title": "Saint of Circumstance",
+    "files": [
+      "S/Saint of Circumstance/saint-of-circumstance.pdf",
+      "S/Saint of Circumstance/Saint of Circumstance Score.pdf"
+    ]
+  },
+  {
+    "title": "Samson and Delilah",
+    "files": ["S/Samson and Delilah/Samson and Delilah Score.pdf"]
   },
   {
     "title": "Scarlet Begonias",
@@ -338,6 +408,10 @@
   {
     "title": "Ship of Fools",
     "files": ["S/Ship of Fools/ship-of-fools.pdf", "S/Ship of Fools/Ship of Fools Score.pdf"]
+  },
+  {
+    "title": "St. Stephen",
+    "files": ["S/St. Stephen/saint-stephen.pdf", "S/St. Stephen/St. Stephen Score.pdf"]
   },
   {
     "title": "Standing on the Moon",
@@ -370,12 +444,34 @@
     ]
   },
   {
+    "title": "The Music Never Stopped",
+    "files": [
+      "T/The Music Never Stopped/music-never-stopped-the.pdf",
+      "T/The Music Never Stopped/The Music Never Stopped Score.pdf"
+    ]
+  },
+  {
     "title": "The Other One",
     "files": ["T/The Other One/the-other-one.pdf", "T/The Other One/The Other One Score.pdf"]
   },
   {
     "title": "The Wheel",
     "files": ["T/The Wheel/the-wheel.pdf", "T/The Wheel/The Wheel Score.pdf"]
+  },
+  {
+    "title": "They Love Each Other",
+    "files": ["T/They Love Each Other/they-love-each-other.pdf", "T/They Love Each Other/They Love Each Other Score.pdf"]
+  },
+  {
+    "title": "Throwing Stones",
+    "files": [
+      "T/Throwing Stones/throwing-stones.pdf",
+      "T/Throwing Stones/Throwing Stones Score.pdf"
+    ]
+  },
+  {
+    "title": "To Lay Me Down",
+    "files": ["T/To Lay Me Down/to-lay-me-down.pdf", "T/To Lay Me Down/To Lay Me Down Score.pdf"]
   },
   {
     "title": "Touch of Grey",
@@ -402,6 +498,14 @@
       "U/Uncle John's Band/uncle-johns-band.pdf",
       "U/Uncle John's Band/Uncle John's Band Score.pdf"
     ]
+  },
+  {
+    "title": "Viola Lee Blues",
+    "files": ["V/Viola Lee Blues/Viola Lee Blues Score.pdf"]
+  },
+  {
+    "title": "Wang Dang Doodle",
+    "files": ["W/Wang Dang Doodle/Wang Dang Doodle Score.pdf"]
   },
   {
     "title": "West L.A. Fadeaway",

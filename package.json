@@ -4,12 +4,18 @@
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
+    "postinstall": "prisma generate",
     "lyrics": "tsx src/lyrics/generate.ts",
-    "real-book": "tsx src/real-book/generate.ts"
+    "real-book": "tsx src/real-book/generate.ts",
+    "xcode": "tsx src/xcode/generate.ts",
+    "apple-music": "tsx src/apple-music/search.ts"
   },
   "dependencies": {
+    "@dotenvx/dotenvx": "1.51.1",
+    "@prisma/client": "6.19.0",
     "docx": "9.5.1",
     "jsdom": "26.1.0",
+    "jsonwebtoken": "9.0.2",
     "pdf-lib": "1.17.1",
     "puppeteer": "24.15.0",
     "slugify": "1.6.6",
@@ -17,6 +23,8 @@
   },
   "devDependencies": {
     "@types/jsdom": "21.1.7",
-    "@wonderboymusic/eslint-config": "1.0.2"
+    "@types/jsonwebtoken": "9.0.10",
+    "@wonderboymusic/eslint-config": "1.0.2",
+    "prisma": "6.19.0"
   }
 }

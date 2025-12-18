@@ -2,18 +2,13 @@ import { existsSync, copyFileSync } from 'node:fs';
 
 import puppeteer from 'puppeteer';
 
+import { readJSON, saveJSON } from '~/utils';
+
 import { slugify } from '../slugify';
 
 import { createDocxFile } from './docx';
 import { jsonToPdf } from './pdf';
-import {
-  getAuthorFile,
-  getIcloudFile,
-  getLyricsFromContent,
-  getSongFile,
-  readJSON,
-  saveJSON,
-} from './utils';
+import { getAuthorFile, getIcloudFile, getLyricsFromContent, getSongFile } from './utils';
 
 const lyricists = [
   ['robert-hunter', 'Robert Hunter', 'https://whitegum.com/cgi-bin/cgiwrap/acsa/findhun3.pl'],
