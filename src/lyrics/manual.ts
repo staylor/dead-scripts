@@ -1,18 +1,22 @@
 import { PrismaClient } from '~/prisma/client/client';
 import { slugify } from '~/slugify';
-import song from '~/songs/wang-dang-doodle.json';
+
+import song from '.cache/lyrics/let-it-grow.json';
 
 const prisma = new PrismaClient();
 
-const authors = song.authors.map((text) => {
-  const [contribution, name] = text.split(': ').map((part) => part.trim());
-  return {
+const authors = song.authors.flatMap((text) => {
+  const [contribution, field] = text.split(': ').map((part) => part.trim());
+
+  const names = field.split(',').map((text) => text.trim());
+  return names.map((name) => ({
     name,
     slug: slugify(name),
     contribution: contribution.toLowerCase(),
-  };
+  }));
 });
-const writers = await Promise.all(
+
+const writerRecords = await Promise.all(
   authors.map((author) =>
     prisma.writer.upsert({
       where: { slug_contribution: { slug: author.slug, contribution: author.contribution } },
@@ -21,12 +25,15 @@ const writers = await Promise.all(
     })
   )
 );
+const writers = {
+  connect: writerRecords.map(({ id }) => ({ id })),
+};
 
 const slug = slugify(song.title);
-const album = await prisma.album.findUnique({ where: { slug: '30-trips-around-the-sun' } });
+const album = await prisma.album.findUnique({ where: { slug: 'wake-of-the-flood' } });
 const singer = await prisma.singer.findUnique({ where: { slug: 'bob-weir' } });
-const discNumber = 78;
-const trackNumber = 3;
+const discNumber = undefined;
+const trackNumber = 7;
 const data = {
   name: song.title,
   slug,
@@ -34,20 +41,19 @@ const data = {
   fileName: `${song.title} Score.pdf`,
   trackNumber,
   discNumber,
+  appleMusicId: '1698127935',
   album: {
     connect: { id: album?.id },
   },
   singer: {
     connect: { id: singer?.id },
   },
-  writers: {
-    connect: writers.map(({ id }) => ({ id })),
-  },
+  writers,
 };
 
 await prisma.song.upsert({
   where: { slug },
-  update: { lyrics: song.lyrics },
+  update: { lyrics: song.lyrics, writers },
   create: data,
 });
 

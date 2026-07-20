@@ -101,6 +101,10 @@
     "files": ["C/China Doll/china-doll.pdf", "C/China Doll/China Doll Score.pdf"]
   },
   {
+    "title": "Cold Rain and Snow",
+    "files": ["C/Cold Rain and Snow/cold-rain-and-snow.pdf", "C/Cold Rain and Snow/Cold Rain and Snow Score.pdf"]
+  },
+  {
     "title": "Comes a Time",
     "files": ["C/Comes a Time/comes-a-time.pdf", "C/Comes a Time/Comes a Time Score.pdf"]
   },
@@ -144,6 +148,10 @@
       "D/Don't Ease Me In/dont-ease-me-in.pdf",
       "D/Don't Ease Me In/Don't Ease Me In Score.pdf"
     ]
+  },
+  {
+    "title": "Easy Wind",
+    "files": ["E/Easy Wind/easy-wind.pdf", "E/Easy Wind/Easy Wind Score.pdf"]
   },
   { "title": "El Paso", "files": ["E/El Paso/el-paso.pdf", "E/El Paso/El Paso Score.pdf"] },
   {
@@ -278,6 +286,13 @@
     "files": [
       "K/Knockin' on Heaven's Door/knockin-on-heavens-door.pdf",
       "K/Knockin' on Heaven's Door/Knockin' on Heaven's Door Score.pdf"
+    ]
+  },
+  {
+    "title": "Let It Grow",
+    "files": [
+      "L/Let It Grow/let-it-grow.pdf",
+      "L/Let It Grow/Let It Grow Score.pdf"
     ]
   },
   {
@@ -449,6 +464,10 @@
       "T/The Music Never Stopped/music-never-stopped-the.pdf",
       "T/The Music Never Stopped/The Music Never Stopped Score.pdf"
     ]
+  },
+  {
+    "title": "The Eleven",
+    "files": ["T/The Eleven/the-eleven.pdf", "T/The Eleven/The Eleven Score.pdf"]
   },
   {
     "title": "The Other One",

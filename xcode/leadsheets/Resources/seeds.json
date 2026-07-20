@@ -11,6 +11,25 @@
           "coverArtFileName": "grateful-dead-album.jpg",
           "songs": [
             {
+              "trackNumber": 4,
+              "name": "Cold Rain and Snow",
+              "slug": "cold-rain-and-snow",
+              "fileName": "Cold Rain and Snow Score.pdf",
+              "lyrics": "I Well she's coming down the stairs, combing back her yellow hair\nAnd I ain't gonna be treated this-a-way\nThis-a-way\nAnd I ain't gonna be treated this-a-way\n\nWell she went up to her room and she sang a fateful tune\nAnd I'm going where those chilly winds don't blow\nWinds don't blow\nAnd I'm going where those chilly winds don't blow\n\nWell I married me a wife, she's been trouble all my life\nRun me out in the cold rain and snow\nRain and snow\nRun me out in the cold rain and snow",
+              "singer": "jerry-garcia",
+              "writers": [
+                [
+                  "traditional",
+                  "lyrics"
+                ],
+                [
+                  "traditional",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1178259490"
+            },
+            {
               "trackNumber": 7,
               "songType": "cover",
               "name": "Morning Dew",
@@ -123,6 +142,24 @@
           "releaseYear": 1969,
           "coverArtFileName": "live-dead.jpg",
           "songs": [
+            {
+              "trackNumber": 3,
+              "name": "The Eleven",
+              "slug": "the-eleven",
+              "fileName": "The Eleven Score.pdf",
+              "lyrics": "Weir & Lesh\nNo more time to tell how\nThis is the season of what\nGarcia\nEight-sided whispering hallelujah hatrack\nWeir & Lesh\nTime of returning\nThought jewels polished and gleaming\nGarcia\nSix proud walkers on the jingle-bell rainbow \nWeir & Lesh\nTime past believing\nThe child has relinquished the reign\nGarcia\nFive men writing with fingers of gold \nWeir & Lesh\nNow is the test of the boomerang\nGarcia\nThree girls waiting in a foreign dominion\n{Weir & Lesh\n{Tossed in the night of redeeming\n{Garcia\n{Riding in the whalebelly, fade away in moonlight\nGarcia\nSink beneath the waters to the coral sands below",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "phil-lesh",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "20885559"
+            },
             {
               "trackNumber": 4,
               "name": "Turn On Your Lovelight",
@@ -293,6 +330,25 @@
                 ]
               ],
               "appleMusicId": "663696348"
+            },
+            {
+              "trackNumber": 7,
+              "name": "Easy Wind",
+              "slug": "easy-wind",
+              "fileName": "Easy Wind Score.pdf",
+              "lyrics": "I've been balling  a shiny black steel jack-hammer\nBeen chipping up rocks for the great highway \nI'll live five years if I take my time\nBalling that jack and drinking my wine\n\nI been chipping them rocks from dawn till doom\nWhile my rider hide my bottle in the other room \nDoctor say better stop balling that jack\nIf I live five years I'm gonna bust my back, yes I will \n\n  Chorus\nEasy wind, cross the Bayou today \n'Cause there's a whole lotta women, Mama\nOut in red on the streets today \nAnd the river keeps a talking\nBut you never heard a word it said\n\nGotta find a woman be good to me\nWon't hide my liquor, try to serve me tea\n'Cause I'm a stone jack baller and my heart is true\nAnd I'll give everything that I got to you, yes I will\n\n  [chorus]",
+              "singer": "pigpen",
+              "writers": [
+                [
+                  "robert-hunter",
+                  "lyrics"
+                ],
+                [
+                  "robert-hunter",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "663696329"
             },
             {
               "trackNumber": 8,
@@ -967,6 +1023,25 @@
                 ]
               ],
               "appleMusicId": "1698127930"
+            },
+            {
+              "trackNumber": 7,
+              "name": "Let It Grow",
+              "slug": "let-it-grow",
+              "fileName": "Let It Grow Score.pdf",
+              "lyrics": "Morning comes, she follows the path to the river shore\nLightly sung, her song is the latch on the morning's door \nSee the sun sparkle in the reeds; silver beads pass into the sea\n\nShe comes from a town where they call her the woodcutter's daughter\nShe's brown as the bank where she kneels down to gather her water\nAnd she bears it away with a love that the river has taught her\nLet it flow, greatly flow, wide and clear\n\nRound and round, the cut of the plow in the furrowed field\nSeasons round, the bushels of corn and the barley meal \nBroken ground, open and beckoning to the spring; black dirt live again\n\nThe plowman is broad as the back of the land he is sowing\nAs he dances the circular track of the plow ever knowing\nThat the work of his day measures more than the planting and growing\nLet it grow, let it grow, greatly yield \n\n  Chorus\nWhat shall we say, shall we call it by a name\nAs well to count the angels dancing on a pin\nWater bright as the sky from which it came\nAnd the name is on the earth that takes it in\nWe will not speak but stand inside the rain\nAnd listen to the thunder shout\nI am, I am, I am, I am\n\nSo it goes, we make what we made since the world began\nNothing more, the love of the women, work of men\nSeasons round, creatures great and small, up and down, as we rise and fall\n\n  [chorus]",
+              "singer": "bob-weir",
+              "writers": [
+                [
+                  "john-barlow",
+                  "lyrics"
+                ],
+                [
+                  "bob-weir",
+                  "music"
+                ]
+              ],
+              "appleMusicId": "1698127935"
             }
           ]
         },
@@ -1174,7 +1249,24 @@
               "fileName": "Good Lovin' Score.pdf",
               "lyrics": "Well, I was feelin' so bad, asked my family doctor 'bout what I had,\nI said, \"Doctor, Doctor, Mister M.D., can you tell me, what's ailing me?\"\n\nHe said, \"Yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah\"\nAll you need, all you really need: good lovin'\nBecause you got to have lovin' (good lovin')\nEverybody got to have lovin' (good lovin')\nA little good lovin' now baby, good lovin'.\n\nSo come on baby, squeeze me tight\nDon't you want your daddy to be all right?\nI said baby, now it's for sure,\nI've got the fever, you got the cure.\n\nHe said, \"Yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah\"\nAll you need, all you really need: good lovin'\nBecause you got to have lovin' (good lovin')\nEverybody got to have lovin' (good lovin')\nA little good lovin' now baby, good lovin'.\n\nHey, got to have lovin' (good lovin')\nWell, you got to have lovin' (good lovin')\nCome on now and give me good lovin' (good lovin').\n\nWell, I was feelin' sort of bad now,\nAsked my family doctor 'bout what I had,\nI said, \"Doctor, Doctor, mister M.D.,\nCan you tell me, what's ailing me?\"\n\nHe said, \"Yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah\"\nAll you need, all you really need: good lovin'\nHey, now you got to have lovin' (good lovin')\nEverybody got to have lovin' (good lovin')\nGive me, give me, give me some lovin' (good lovin').\n\nCome on now, everybody get right, (got to have lovin)\nYou may be weak or you may be blind (got to have lovin')\nBut even a blind man knows when the sun is shining (got to have lovin')\nSo turn it on now (got to have lovin')\nTurn on, turn on your light (got to have lovin').\n\nGimme, gimme, gimme some lovin' (good lovin')\nHey, now you got to have lovin' (good lovin')\nYou need it, I need it, well you got to have lovin' (good lovin')\nSay it again now, good lovin'.\n\nWell turn on your light, you won't regret it (good lovin')\nYou got to go for the good and get it (good lovin')\nEverybody, they got to have lovin' (good lovin')\nHey, now you got to have lovin'.",
               "singer": "bob-weir",
-              "writers": [],
+              "writers": [
+                [
+                  "rudy-clark",
+                  "lyrics"
+                ],
+                [
+                  "rudy-clark",
+                  "music"
+                ],
+                [
+                  "arthur-resnick",
+                  "music"
+                ],
+                [
+                  "arthur-resnick",
+                  "lyrics"
+                ]
+              ],
               "appleMusicId": "663672832"
             },
             {
@@ -2226,6 +2318,16 @@
   ],
   "writers": [
     {
+      "name": "Traditional",
+      "slug": "traditional",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Traditional",
+      "slug": "traditional",
+      "contribution": "music"
+    },
+    {
       "name": "Bonnie Dobson",
       "slug": "bonnie-dobson",
       "contribution": "lyrics"
@@ -2311,6 +2413,11 @@
       "contribution": "music"
     },
     {
+      "name": "Robert Hunter",
+      "slug": "robert-hunter",
+      "contribution": "music"
+    },
+    {
       "name": "John Dawson",
       "slug": "john-dawson",
       "contribution": "music"
@@ -2343,16 +2450,6 @@
     {
       "name": "John Phillips",
       "slug": "john-phillips",
-      "contribution": "music"
-    },
-    {
-      "name": "Traditional",
-      "slug": "traditional",
-      "contribution": "lyrics"
-    },
-    {
-      "name": "Traditional",
-      "slug": "traditional",
       "contribution": "music"
     },
     {
@@ -2393,6 +2490,26 @@
     {
       "name": "John Barlow",
       "slug": "john-barlow",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Rudy Clark",
+      "slug": "rudy-clark",
+      "contribution": "lyrics"
+    },
+    {
+      "name": "Rudy Clark",
+      "slug": "rudy-clark",
+      "contribution": "music"
+    },
+    {
+      "name": "Arthur Resnick",
+      "slug": "arthur-resnick",
+      "contribution": "music"
+    },
+    {
+      "name": "Arthur Resnick",
+      "slug": "arthur-resnick",
       "contribution": "lyrics"
     },
     {
