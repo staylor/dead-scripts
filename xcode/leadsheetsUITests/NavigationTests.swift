@@ -60,6 +60,18 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
+    func testSettingsShowAboutInformation() {
+        let app = launch()
+        app.buttons["Settings"].tap()
+
+        XCTAssertTrue(app.switches["Sync with Other Devices"].waitForExistence(timeout: 5))
+        attachScreenshot("Settings", of: app)
+        XCTAssertTrue(app.buttons["Privacy Policy"].exists)
+        let version = NSPredicate(format: "label CONTAINS %@ OR value CONTAINS %@", "1.0 (1)", "1.0 (1)")
+        XCTAssertTrue(app.descendants(matching: .any).matching(version).firstMatch.exists)
+    }
+
+    @MainActor
     private func launch() -> XCUIApplication {
         let app = XCUIApplication()
         app.launch()

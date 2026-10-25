@@ -4,8 +4,8 @@ import Foundation
 import PDFKit
 import AppKit
 
-let pdfDir = "leadsheets/Resources/pdfs"
-let outputDir = "leadsheets/Resources/images"
+let pdfDir = "Sheets/pdfs"
+let outputDir = "Sheets/images"
 
 // Create output directory
 let fileManager = FileManager.default
@@ -42,7 +42,7 @@ for (index, pdfURL) in pdfFiles.enumerated() {
     // Get page bounds
     let pageBounds = page.bounds(for: .mediaBox)
 
-    // Create high-resolution image (2x for Retina, suitable for TV)
+    // 3x keeps the notation sharp on Apple TV 4K, including when the viewer zooms in.
     let scale: CGFloat = 3.0
     let imageSize = CGSize(
         width: pageBounds.width * scale,

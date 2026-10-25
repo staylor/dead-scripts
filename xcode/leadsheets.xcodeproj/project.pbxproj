@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4CB41EA14212CF18E949AAF0 /* pdfs in Resources */ = {isa = PBXBuildFile; fileRef = 350EB5D0807F532E22CD7BC8 /* pdfs */; platformFilters = (ios, macos, ); };
+		EEC448EF50454D2371C693DD /* images in Resources */ = {isa = PBXBuildFile; fileRef = D698DED2394277506E7BB204 /* images */; platformFilters = (tvos, ); };
 		782F84053EEDDA165F834C4D /* DeadSheetsKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0C7C14719702CBD7C7587B22 /* DeadSheetsKit */; };
 		99CA6CFDBF6E0AC0CCCFDE7A /* DeadSheetsKit in Frameworks */ = {isa = PBXBuildFile; productRef = D3EDC39D983F8DED6FC0A629 /* DeadSheetsKit */; };
 		D2AF766A2EC4E950006C0FCE /* leadsheets.watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -47,17 +49,19 @@
 		D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = leadsheets.watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2E1EB562E9DE20C00E5456E /* Dead Sheets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dead Sheets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA9088CBCF8223078DF1C74D /* leadsheetsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = leadsheetsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D698DED2394277506E7BB204 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		350EB5D0807F532E22CD7BC8 /* pdfs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pdfs; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		D2INFOPLIST00001 /* Exceptions for "leadsheets" folder in "leadsheets" target */ = {
+		81E9F349F684958EF00D5041 /* Exceptions for "leadsheets" folder in "leadsheets" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = D2E1EB552E9DE20C00E5456E /* leadsheets */;
 		};
-		D2INFOPLIST00002 /* Exceptions for "leadsheets.watch" folder in "leadsheets.watch" target */ = {
+		673973FC861E619E62BC5204 /* Exceptions for "leadsheets.watch" folder in "leadsheets.watch" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -70,7 +74,7 @@
 		D2AF76612EC4E94E006C0FCE /* leadsheets.watch */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				D2INFOPLIST00002 /* Exceptions for "leadsheets.watch" folder in "leadsheets.watch" target */,
+				673973FC861E619E62BC5204 /* Exceptions for "leadsheets.watch" folder in "leadsheets.watch" target */,
 			);
 			path = leadsheets.watch;
 			sourceTree = "<group>";
@@ -78,7 +82,7 @@
 		D2E1EB582E9DE20C00E5456E /* leadsheets */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				D2INFOPLIST00001 /* Exceptions for "leadsheets" folder in "leadsheets" target */,
+				81E9F349F684958EF00D5041 /* Exceptions for "leadsheets" folder in "leadsheets" target */,
 			);
 			path = leadsheets;
 			sourceTree = "<group>";
@@ -121,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				D2E1EB582E9DE20C00E5456E /* leadsheets */,
+				6D571899E92B469310C9999A /* Sheets */,
 				D2AF76612EC4E94E006C0FCE /* leadsheets.watch */,
 				69A35E1CB55CDD00F1DB80F9 /* leadsheetsUITests */,
 				D2E1EB572E9DE20C00E5456E /* Products */,
@@ -135,6 +140,15 @@
 				DA9088CBCF8223078DF1C74D /* leadsheetsUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		6D571899E92B469310C9999A /* Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				350EB5D0807F532E22CD7BC8 /* pdfs */,
+				D698DED2394277506E7BB204 /* images */,
+			);
+			path = Sheets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,6 +283,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CB41EA14212CF18E949AAF0 /* pdfs in Resources */,
+				EEC448EF50454D2371C693DD /* images in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,6 +458,7 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -500,6 +517,7 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
@@ -530,7 +548,6 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = wonderboymusic.leadsheets;
 				PRODUCT_NAME = "Dead Sheets";
-				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx appletvos appletvsimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -572,7 +589,6 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = wonderboymusic.leadsheets;
 				PRODUCT_NAME = "Dead Sheets";
-				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx appletvos appletvsimulator";
 				SUPPORTS_MACCATALYST = NO;
