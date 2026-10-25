@@ -111,7 +111,6 @@ struct ContentView: View {
                         .controlSize(.large)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.white)
                 .navigationSplitViewColumnWidth(min: MacColumnWidth.score.min, ideal: MacColumnWidth.score.ideal, max: .infinity)
             } else if let song = selected {
                 PDFViewerScreen(song: song, onBack: {
@@ -144,7 +143,6 @@ struct ContentView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
-        .background(Color.white)
         .modifier(ImportManagerModifier(
             modelContext: modelContext,
             importManager: $importManager
@@ -159,12 +157,6 @@ struct ContentView: View {
         // iOS/iPadOS layout
         NavigationStack {
             ZStack {
-                #if !os(tvOS)
-                // White background for entire app
-                Color.white
-                    .ignoresSafeArea(.all)
-                #endif
-
                 if importManager?.isImporting == true {
                     // Show loading indicator during import
                     VStack {

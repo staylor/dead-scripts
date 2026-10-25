@@ -8,14 +8,8 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
 
     var interfaceController: CPInterfaceController?
     var modelContext: ModelContext?
-    private var importObserver: NSObjectProtocol?
+    private var importObserver: (any NSObjectProtocol)?
 
-    deinit {
-        if let observer = importObserver {
-            NotificationCenter.default.removeObserver(observer)
-        }
-    }
-    
     // MARK: - CPTemplateApplicationSceneDelegate
     
     func templateApplicationScene(
@@ -46,7 +40,9 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.refreshSongList()
+            MainActor.assumeIsolated {
+                self?.refreshSongList()
+            }
         }
     }
 
@@ -57,11 +53,15 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
         interfaceController.setRootTemplate(updatedTemplate, animated: true, completion: nil)
     }
     
-    private func templateApplicationScene(
+    func templateApplicationScene(
         _ templateApplicationScene: CPTemplateApplicationScene,
-        didDisconnect interfaceController: CPInterfaceController
+        didDisconnectInterfaceController interfaceController: CPInterfaceController
     ) {
         print("CarPlay disconnected")
+        if let importObserver {
+            NotificationCenter.default.removeObserver(importObserver)
+        }
+        importObserver = nil
         self.interfaceController = nil
     }
     

@@ -265,7 +265,7 @@ struct SearchScreen: View {
                     Spacer()
                 }
             }
-            .background(Color(.systemBackground))
+            .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(14)
             .overlay(
                 RoundedRectangle(cornerRadius: 14)

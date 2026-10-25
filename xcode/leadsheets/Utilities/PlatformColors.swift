@@ -5,7 +5,7 @@ struct PlatformColors {
     /// Background color for row cards with rounded corners and shadows
     static var rowBackground: Color {
         #if os(iOS)
-        return Color(.systemBackground)
+        return Color(.secondarySystemGroupedBackground)
         #elseif os(tvOS) || os(watchOS)
         return Color.white.opacity(0.1)
         #else

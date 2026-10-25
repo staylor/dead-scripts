@@ -474,11 +474,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=appletvos*]" = "Brand Assets";
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=appletv*]" = "Brand Assets";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = leadsheets/leadsheets.entitlements;
-				"CODE_SIGN_ENTITLEMENTS[sdk=appletvos*]" = "leadsheets/leadsheets-tvOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=appletv*]" = "leadsheets/leadsheets-tvOS.entitlements";
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "leadsheets/leadsheets-macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -516,11 +516,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=appletvos*]" = "Brand Assets";
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=appletv*]" = "Brand Assets";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = leadsheets/leadsheets.entitlements;
-				"CODE_SIGN_ENTITLEMENTS[sdk=appletvos*]" = "leadsheets/leadsheets-tvOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=appletv*]" = "leadsheets/leadsheets-tvOS.entitlements";
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "leadsheets/leadsheets-macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

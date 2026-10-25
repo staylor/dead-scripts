@@ -1,8 +1,8 @@
 import Foundation
 import SwiftData
 
-/// Service responsible for importing seed data from JSON files into SwiftData
-actor DataImportService {
+// Main-actor isolated (the project default) because it writes to the main context.
+struct DataImportService {
     // MARK: - Enhanced JSON Structure (for future imports)
     
     /// Enhanced structure with additional metadata
@@ -53,7 +53,7 @@ actor DataImportService {
     
     // MARK: - Import Methods
     /// Import from enhanced JSON format (with additional metadata like release dates, etc.)
-    func importEnhancedJSON(from fileName: String, into context: ModelContext) async throws {
+    func importEnhancedJSON(from fileName: String, into context: ModelContext) throws {
         guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
             throw ImportError.fileNotFound
         }

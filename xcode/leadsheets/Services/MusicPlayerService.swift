@@ -19,9 +19,31 @@ class MusicPlayerService: ObservableObject {
     @Published private(set) var authorizationStatus: MusicAuthorization.Status = .notDetermined
     @Published private(set) var currentSongId: String?
 
+    private var playerObservation: AnyCancellable?
+
     private init() {
-        Task {
-            authorizationStatus = MusicAuthorization.currentStatus
+        authorizationStatus = MusicAuthorization.currentStatus
+        let player = ApplicationMusicPlayer.shared
+        // Playback can change outside the app (Control Center, CarPlay, the track ending), and
+        // objectWillChange fires before the player updates, so read its state on the next pass.
+        playerObservation = Publishers.Merge(
+            player.state.objectWillChange.map { _ in },
+            player.queue.objectWillChange.map { _ in }
+        )
+        .receive(on: RunLoop.main)
+        .sink { [weak self] in
+            self?.syncWithPlayer()
+        }
+        syncWithPlayer()
+    }
+
+    private func syncWithPlayer() {
+        let player = ApplicationMusicPlayer.shared
+        isPlaying = player.state.playbackStatus == .playing
+        if case .song(let song)? = player.queue.currentEntry?.item {
+            currentSongId = song.id.rawValue
+        } else {
+            currentSongId = nil
         }
     }
 
@@ -42,31 +64,22 @@ class MusicPlayerService: ObservableObject {
         }
 
         let player = ApplicationMusicPlayer.shared
-
-        // If resuming the same song, just call play
-        if currentSongId == appleMusicId && !isPlaying {
-            print("MusicPlayerService: Resuming \(songName)")
-            isLoading = true
-            loadingSongId = appleMusicId
-            defer {
-                isLoading = false
-                loadingSongId = nil
-            }
-            do {
-                try await player.play()
-                isPlaying = true
-                return
-            } catch {
-                print("MusicPlayerService: Resume failed, will restart: \(error)")
-            }
-        }
-
-        // Set loading state
         isLoading = true
         loadingSongId = appleMusicId
         defer {
             isLoading = false
             loadingSongId = nil
+            syncWithPlayer()
+        }
+
+        if currentSongId == appleMusicId && !isPlaying {
+            print("MusicPlayerService: Resuming \(songName)")
+            do {
+                try await player.play()
+                return
+            } catch {
+                print("MusicPlayerService: Resume failed, will restart: \(error)")
+            }
         }
 
         print("MusicPlayerService: Attempting to play \(songName) (ID: \(appleMusicId))")
@@ -106,8 +119,6 @@ class MusicPlayerService: ObservableObject {
             player.queue = [song]
             print("MusicPlayerService: Starting playback...")
             try await player.play()
-            currentSongId = appleMusicId
-            isPlaying = true
             print("MusicPlayerService: Now playing \(songName)")
         } catch {
             print("MusicPlayerService: Playback error - \(error)")
@@ -119,14 +130,13 @@ class MusicPlayerService: ObservableObject {
     /// Stop playback
     func stop() {
         ApplicationMusicPlayer.shared.stop()
-        isPlaying = false
-        currentSongId = nil
+        syncWithPlayer()
     }
 
     /// Pause playback
     func pause() {
         ApplicationMusicPlayer.shared.pause()
-        isPlaying = false
+        syncWithPlayer()
     }
 
     /// Check if a specific song is currently playing

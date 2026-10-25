@@ -49,8 +49,7 @@ class DataImportManager {
 
             print("📥 Importing data from seeds.json...")
 
-            let importService = DataImportService()
-            try await importService.importEnhancedJSON(from: "seeds", into: modelContext)
+            try DataImportService().importEnhancedJSON(from: "seeds", into: modelContext)
 
             // Store the new hash only after successful import
             lastSeedsHash = newHash
