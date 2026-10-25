@@ -5,7 +5,7 @@ import DeadSheetsKit
 
 /// macOS-specific lyrics inspector view for displaying song lyrics in an inspector panel
 struct LyricsInspector: View {
-    @ObservedObject private var musicPlayer = MusicPlayerService.shared
+    private let musicPlayer = MusicPlayerService.shared
     let song: Song
 
     var body: some View {
@@ -25,7 +25,7 @@ struct LyricsInspector: View {
                                 musicPlayer.pause()
                             } else {
                                 Task {
-                                    await musicPlayer.play(appleMusicId: appleMusicId, songName: song.title)
+                                    await musicPlayer.play(appleMusicID: appleMusicId, title: song.title)
                                 }
                             }
                         }) {

@@ -9,7 +9,7 @@ struct PDFViewerScreen: View {
     @State private var showInfo = false
     @State private var overlayPosition = CGPoint.zero
     @Environment(\.scenePhase) private var scenePhase
-    @ObservedObject private var musicPlayer = MusicPlayerService.shared
+    private let musicPlayer = MusicPlayerService.shared
     
     var body: some View {
         GeometryReader { geometry in
@@ -62,7 +62,7 @@ struct PDFViewerScreen: View {
                                     musicPlayer.pause()
                                 } else {
                                     Task {
-                                        await musicPlayer.play(appleMusicId: appleMusicId, songName: song.title)
+                                        await musicPlayer.play(appleMusicID: appleMusicId, title: song.title)
                                     }
                                 }
                             }) {

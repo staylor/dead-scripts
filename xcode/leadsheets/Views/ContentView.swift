@@ -21,7 +21,7 @@ struct ContentView: View {
     #endif
 
     #if os(iOS) || os(macOS)
-    @ObservedObject private var cloudSync = CloudSyncManager.shared
+    private let cloudSync = CloudSyncManager.shared
     #endif
 
     #if os(macOS)
@@ -94,6 +94,7 @@ struct ContentView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
+        .playbackAlerts()
         .onChange(of: cloudSync.selectedSongSlug) { _, newValue in
             guard let slug = newValue, selected?.id != slug, let song = catalog.song(id: slug) else { return }
             selected = song
@@ -131,6 +132,7 @@ struct ContentView: View {
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: selected)
         #if os(iOS)
+        .playbackAlerts()
         .onChange(of: watchConnectivity.selectedSongID) { _, newValue in
             guard UIDevice.current.userInterfaceIdiom == .phone,
                   let slug = newValue,

@@ -1,12 +1,12 @@
 import SwiftUI
-import CloudKit
 
 #if os(iOS) || os(macOS)
 struct SettingsView: View {
-    @AppStorage("syncWithOtherDevices") private var syncWithOtherDevices = false
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
     @State private var showingICloudAlert = false
-    @State private var iCloudStatus: CKAccountStatus = .couldNotDetermine
+
+    private let cloudSync = CloudSyncManager.shared
 
     var body: some View {
         #if os(macOS)
@@ -17,11 +17,11 @@ struct SettingsView: View {
         .formStyle(.grouped)
         .frame(width: 300, height: 100)
         .padding()
-        .onAppear(perform: checkICloudStatus)
+        .task(disableSyncIfICloudIsUnavailable)
         .alert("iCloud Required", isPresented: $showingICloudAlert) {
             Button("Open System Settings") {
                 if let url = URL(string: "x-apple.systempreferences:com.apple.preferences.AppleIDPrefPane") {
-                    NSWorkspace.shared.open(url)
+                    openURL(url)
                 }
             }
             Button("Cancel", role: .cancel) {}
@@ -47,11 +47,11 @@ struct SettingsView: View {
                 }
             }
         }
-        .onAppear(perform: checkICloudStatus)
+        .task(disableSyncIfICloudIsUnavailable)
         .alert("iCloud Required", isPresented: $showingICloudAlert) {
             Button("Open Settings") {
                 if let url = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(url)
+                    openURL(url)
                 }
             }
             Button("Cancel", role: .cancel) {}
@@ -63,26 +63,26 @@ struct SettingsView: View {
 
     private var syncBinding: Binding<Bool> {
         Binding(
-            get: { syncWithOtherDevices },
-            set: { newValue in
-                if newValue && iCloudStatus != .available {
-                    showingICloudAlert = true
-                } else {
-                    syncWithOtherDevices = newValue
+            get: { cloudSync.isEnabled },
+            set: { enable in
+                guard enable else {
+                    cloudSync.isEnabled = false
+                    return
+                }
+                Task {
+                    if await cloudSync.isAccountAvailable() {
+                        cloudSync.isEnabled = true
+                    } else {
+                        showingICloudAlert = true
+                    }
                 }
             }
         )
     }
 
-    private func checkICloudStatus() {
-        CKContainer.default().accountStatus { status, _ in
-            DispatchQueue.main.async {
-                iCloudStatus = status
-                // If sync was enabled but iCloud is no longer available, disable it
-                if syncWithOtherDevices && status != .available {
-                    syncWithOtherDevices = false
-                }
-            }
+    private func disableSyncIfICloudIsUnavailable() async {
+        if cloudSync.isEnabled, await !cloudSync.isAccountAvailable() {
+            cloudSync.isEnabled = false
         }
     }
 }

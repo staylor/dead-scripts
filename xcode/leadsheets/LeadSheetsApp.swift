@@ -38,25 +38,22 @@ struct LeadSheetsApp: App {
 }
 
 #if os(iOS)
-// AppDelegate to handle CarPlay setup and remote notifications
-class AppDelegate: NSObject, UIApplicationDelegate {
+final class AppDelegate: NSObject, UIApplicationDelegate {
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        // Register for remote notifications (required for CloudKit subscriptions)
+        // CloudKit subscriptions deliver changes as silent pushes.
         application.registerForRemoteNotifications()
         return true
     }
 
     func application(
         _ application: UIApplication,
-        didReceiveRemoteNotification userInfo: [AnyHashable: Any],
-        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
-    ) {
-        // Forward CloudKit notifications to sync manager
-        CloudSyncManager.shared.handleRemoteNotification(userInfo: userInfo)
-        completionHandler(.newData)
+        didReceiveRemoteNotification userInfo: [AnyHashable: Any]
+    ) async -> UIBackgroundFetchResult {
+        await CloudSyncManager.shared.handleRemoteNotification(userInfo: userInfo)
+        return .newData
     }
 
     func application(
@@ -86,16 +83,16 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 #if os(macOS)
 import AppKit
 
-// MacAppDelegate to handle remote notifications for CloudKit subscriptions
-class MacAppDelegate: NSObject, NSApplicationDelegate {
+final class MacAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Register for remote notifications (required for CloudKit subscriptions)
+        // CloudKit subscriptions deliver changes as silent pushes.
         NSApplication.shared.registerForRemoteNotifications()
     }
 
     func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String: Any]) {
-        // Forward CloudKit notifications to sync manager
-        CloudSyncManager.shared.handleRemoteNotification(userInfo: userInfo)
+        Task {
+            await CloudSyncManager.shared.handleRemoteNotification(userInfo: userInfo)
+        }
     }
 }
 #endif
