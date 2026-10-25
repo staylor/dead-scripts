@@ -280,6 +280,7 @@
 /* Begin PBXTargetDependency section */
 		D2AF76692EC4E950006C0FCE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = D2AF765F2EC4E94E006C0FCE /* leadsheets.watch */;
 			targetProxy = D2AF76682EC4E950006C0FCE /* PBXContainerItemProxy */;
 		};
