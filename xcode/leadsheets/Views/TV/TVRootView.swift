@@ -6,7 +6,7 @@ import SwiftUI
 struct TVRootView: View {
     var body: some View {
         TabView {
-            ForEach(LibraryCategory.allCases) { category in
+            ForEach(LibraryCategory.browsable) { category in
                 Tab(category.title, systemImage: category.systemImage) {
                     TVLibraryTab(category: category)
                 }

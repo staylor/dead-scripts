@@ -7,4 +7,5 @@ extension Logger {
     static let carPlay = Logger(subsystem: subsystem, category: "CarPlay")
     static let music = Logger(subsystem: subsystem, category: "Music")
     static let sync = Logger(subsystem: subsystem, category: "Sync")
+    static let userData = Logger(subsystem: subsystem, category: "UserData")
 }

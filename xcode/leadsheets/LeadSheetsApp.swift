@@ -1,5 +1,6 @@
 import DeadSheetsKit
 import os
+import SwiftData
 import SwiftUI
 
 #if os(iOS)
@@ -36,6 +37,9 @@ struct LeadSheetsApp: App {
         }
         #if os(macOS)
         .defaultSize(width: 1280, height: 860)
+        #endif
+        #if os(iOS) || os(macOS)
+        .modelContainer(UserData.container)
         #endif
         #if os(iOS) || os(macOS)
         .commands {

@@ -28,12 +28,19 @@ struct SheetView: View {
                 ToolbarItemGroup(placement: .bottomBar) {
                     previousButton
                     Spacer()
+                    FavoriteButton(songID: song.id)
+                    AddToSetlistMenu(songID: song.id)
+                    Spacer()
                     nextButton
                 }
                 #else
                 ToolbarItemGroup(placement: .navigation) {
                     previousButton
                     nextButton
+                }
+                ToolbarItemGroup {
+                    FavoriteButton(songID: song.id)
+                    AddToSetlistMenu(songID: song.id)
                 }
                 #endif
                 if let appleMusicID = song.appleMusicID {
