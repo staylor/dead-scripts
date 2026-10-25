@@ -10,55 +10,45 @@ struct SettingsView: View {
 
     var body: some View {
         #if os(macOS)
-        Form {
-            Toggle("Sync with Other Devices", isOn: syncBinding)
-                .toggleStyle(.switch)
-        }
-        .formStyle(.grouped)
-        .frame(width: 300, height: 100)
-        .padding()
-        .task(disableSyncIfICloudIsUnavailable)
-        .alert("iCloud Required", isPresented: $showingICloudAlert) {
-            Button("Open System Settings") {
-                if let url = URL(string: "x-apple.systempreferences:com.apple.preferences.AppleIDPrefPane") {
-                    openURL(url)
-                }
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Sign in to iCloud in System Settings to sync song selections across your devices.")
-        }
+        form
+            .formStyle(.grouped)
+            .frame(width: 420)
+            .fixedSize(horizontal: false, vertical: true)
         #else
         NavigationStack {
-            Form {
-                Section {
-                    Toggle("Sync with Other Devices", isOn: syncBinding)
-                } footer: {
-                    Text("When enabled, song selections will sync across your iPhone, iPad, Mac, and Apple Watch.")
-                }
-            }
-            .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        dismiss()
+            form
+                .navigationTitle("Settings")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") {
+                            dismiss()
+                        }
                     }
                 }
+        }
+        #endif
+    }
+
+    private var form: some View {
+        Form {
+            Section {
+                Toggle("Sync with Other Devices", isOn: syncBinding)
+            } footer: {
+                Text("Songs you open appear on your other iPhone, iPad, Mac and Apple Watch signed in to the same iCloud account.")
             }
         }
         .task(disableSyncIfICloudIsUnavailable)
         .alert("iCloud Required", isPresented: $showingICloudAlert) {
-            Button("Open Settings") {
-                if let url = URL(string: UIApplication.openSettingsURLString) {
+            Button("Open \(Self.settingsApp)") {
+                if let url = Self.iCloudSettingsURL {
                     openURL(url)
                 }
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("Sign in to iCloud in Settings to sync song selections across your devices.")
+            Text("Sign in to iCloud in \(Self.settingsApp) to sync song selections across your devices.")
         }
-        #endif
     }
 
     private var syncBinding: Binding<Bool> {
@@ -85,5 +75,17 @@ struct SettingsView: View {
             cloudSync.isEnabled = false
         }
     }
+
+    #if os(macOS)
+    private static let settingsApp = "System Settings"
+    private static let iCloudSettingsURL = URL(string: "x-apple.systempreferences:com.apple.preferences.AppleIDPrefPane")
+    #else
+    private static let settingsApp = "Settings"
+    private static let iCloudSettingsURL = URL(string: UIApplication.openSettingsURLString)
+    #endif
+}
+
+#Preview {
+    SettingsView()
 }
 #endif

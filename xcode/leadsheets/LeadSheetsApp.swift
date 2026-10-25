@@ -34,6 +34,20 @@ struct LeadSheetsApp: App {
         WindowGroup {
             ContentView()
         }
+        #if os(macOS)
+        .defaultSize(width: 1280, height: 860)
+        #endif
+        #if os(iOS) || os(macOS)
+        .commands {
+            SongCommands()
+        }
+        #endif
+
+        #if os(macOS)
+        Settings {
+            SettingsView()
+        }
+        #endif
     }
 }
 

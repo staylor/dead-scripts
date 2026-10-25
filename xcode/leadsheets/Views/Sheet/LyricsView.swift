@@ -32,6 +32,7 @@ struct LyricsView: View {
                                 ForEach(Array(paragraph.enumerated()), id: \.offset) { _, line in
                                     Text(line)
                                         .bold(Song.isChorusHeading(line))
+                                        .accessibilityAddTraits(Song.isChorusHeading(line) ? .isHeader : [])
                                 }
                             }
                         }
@@ -44,5 +45,11 @@ struct LyricsView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
         }
+    }
+}
+
+#Preview {
+    if let song = Catalog.bundled.song(id: "ripple") {
+        LyricsView(song: song)
     }
 }

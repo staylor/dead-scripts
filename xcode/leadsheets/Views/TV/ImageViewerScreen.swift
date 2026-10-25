@@ -22,12 +22,9 @@ struct ImageViewerScreen: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(song.title)
                         .font(.headline)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.primary)
-                    
                     Text(song.creditsText)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
 
                 Spacer()
@@ -127,15 +124,11 @@ struct ImageViewerScreen: View {
                         }
                     }
                 } else {
-                    // Fallback if image not found
-                    VStack {
-                        Image(systemName: "photo")
-                            .font(.system(size: 64))
-                            .foregroundColor(.gray)
-                        Text("Image not found")
-                            .font(.title2)
-                            .foregroundColor(.gray)
-                    }
+                    ContentUnavailableView(
+                        "Lead Sheet Missing",
+                        systemImage: "doc.questionmark",
+                        description: Text("“\(song.sheetFileName)” isn’t in this build.")
+                    )
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .focusable(false)
                 }
@@ -157,7 +150,7 @@ struct ImageViewerScreen: View {
                                                 .frame(maxWidth: .infinity, alignment: .leading)
                                         }
                                     }
-                                    .foregroundColor(.primary)
+                                    .foregroundStyle(.primary)
                                 }
                                 .buttonStyle(.plain)
                                 .focusable(true)

@@ -46,6 +46,20 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
+    func testCategoriesBecomeAMenuAtAccessibilityTextSizes() {
+        let app = XCUIApplication()
+        app.launchArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"]
+        app.launch()
+
+        XCTAssertTrue(app.buttons["Browse"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.segmentedControls.firstMatch.exists)
+        app.buttons["Browse"].tap()
+        app.buttons["Albums"].tap()
+        XCTAssertTrue(app.navigationBars["Albums"].waitForExistence(timeout: 5))
+        attachScreenshot("Accessibility text size", of: app)
+    }
+
+    @MainActor
     private func launch() -> XCUIApplication {
         let app = XCUIApplication()
         app.launch()

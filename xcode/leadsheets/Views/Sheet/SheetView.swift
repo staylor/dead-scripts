@@ -33,6 +33,8 @@ struct SheetView: View {
                     }
                 }
             }
+            .focusedSceneValue(\.shownSong, song)
+            .focusedSceneValue(\.showsLyrics, $showsLyrics)
             .inspector(isPresented: $showsLyrics) {
                 LyricsView(song: song)
                     .inspectorColumnWidth(min: 240, ideal: 320, max: 420)
@@ -63,6 +65,14 @@ struct SheetView: View {
         subtitle += " · \(song.creditsText)"
         #endif
         return subtitle
+    }
+}
+
+#Preview {
+    if let song = Catalog.bundled.song(id: "ripple") {
+        NavigationStack {
+            SheetView(song: song)
+        }
     }
 }
 #endif

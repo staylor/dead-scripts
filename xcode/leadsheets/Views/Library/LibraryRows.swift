@@ -87,16 +87,19 @@ private struct LibraryRow<Thumbnail: View>: View {
     let subtitle: String
     @ViewBuilder let thumbnail: Thumbnail
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
+        let wraps = dynamicTypeSize.isAccessibilitySize
         HStack(spacing: 12) {
             thumbnail
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .lineLimit(2)
+                    .lineLimit(wraps ? nil : 2)
                 Text(subtitle)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                    .lineLimit(1)
+                    .lineLimit(wraps ? nil : 1)
             }
         }
         .accessibilityElement(children: .combine)
@@ -111,5 +114,26 @@ enum Counts {
 
     static func albums(_ count: Int) -> String {
         String(AttributedString(localized: "^[\(count) album](inflect: true)").characters)
+    }
+}
+
+#Preview {
+    let catalog = Catalog.bundled
+    List {
+        if let song = catalog.song(id: "ripple") {
+            SongRow(song: song)
+        }
+        if let album = catalog.album(id: "american-beauty") {
+            AlbumRow(album: album)
+        }
+        if let artist = catalog.artists.first {
+            ArtistRow(artist: artist)
+        }
+        if let singer = catalog.singers.first {
+            SingerRow(singer: singer)
+        }
+        if let group = catalog.writerGroups().first {
+            WriterGroupRow(group: group)
+        }
     }
 }

@@ -84,6 +84,15 @@ struct SongList: View {
         List(songs, selection: $selection) { song in
             SongRow(song: song)
         }
+        .contextMenu(forSelectionType: Song.ID.self) { songIDs in
+            if let song = songs.first(where: { songIDs.contains($0.id) }), let appleMusicID = song.appleMusicID {
+                Button("Play in Apple Music", systemImage: "play.fill") {
+                    Task {
+                        await MusicPlayerService.shared.play(appleMusicID: appleMusicID, title: song.title)
+                    }
+                }
+            }
+        }
         #endif
     }
 }
@@ -91,15 +100,27 @@ struct SongList: View {
 struct CategoryPicker: View {
     @Binding var selection: LibraryCategory
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
-        Picker("Browse", selection: $selection) {
+        let picker = Picker("Browse", selection: $selection) {
             ForEach(LibraryCategory.allCases) { category in
-                Text(category.title)
+                Label(category.title, systemImage: category.systemImage)
                     .tag(category)
             }
         }
-        .pickerStyle(.segmented)
         .labelsHidden()
+
+        // Six segments truncate at accessibility text sizes.
+        if dynamicTypeSize.isAccessibilitySize {
+            picker
+                .pickerStyle(.menu)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+            picker
+                .pickerStyle(.segmented)
+                .labelStyle(.titleOnly)
+        }
     }
 }
 

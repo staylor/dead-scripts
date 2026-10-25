@@ -14,7 +14,9 @@ struct SplitRootView: View {
     @State private var searchText = ""
     @State private var selectedSongID: Song.ID?
     @State private var compactColumn: NavigationSplitViewColumn = .sidebar
+    #if os(iOS)
     @State private var showsSettings = false
+    #endif
 
     private let cloudSync = CloudSyncManager.shared
     #if os(iOS)
@@ -35,18 +37,15 @@ struct SplitRootView: View {
                             .padding(.horizontal)
                             .padding(.bottom, 8)
                     }
+                    #if os(iOS)
                     .toolbar {
                         ToolbarItem(placement: .primaryAction) {
                             Button("Settings", systemImage: "gearshape") {
                                 showsSettings = true
                             }
-                            #if os(macOS)
-                            .popover(isPresented: $showsSettings) {
-                                SettingsView()
-                            }
-                            #endif
                         }
                     }
+                    #endif
             }
             .navigationSplitViewColumnWidth(min: 360, ideal: 400, max: 480)
         } detail: {
