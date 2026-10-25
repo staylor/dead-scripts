@@ -7,16 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5072D75D51D2C58AB2AFD560 /* Models/Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1497658284B154007313B8ED /* Models/Song.swift */; };
-		66F8E9D91B23C567890BCDEF /* Services/DataImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E6F7D80A12B456789ABCDE /* Services/DataImportManager.swift */; };
-		9D86052835241646C210E833 /* Services/DataImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D8B25E8B9AEC7899DC2004 /* Services/DataImportService.swift */; };
-		A1B2C3D4E5F6789012345678 /* Models/Singer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4B5A69780FEDCBA98 /* Models/Singer.swift */; };
-		A1B2C3D4E5F6789012345679 /* Models/Writer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4B5A69780FEDCBA97 /* Models/Writer.swift */; };
-		B2C3D4E5F67890123456789A /* Models/Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D3C4B5A69780FEDCBA9876 /* Models/Artist.swift */; };
-		C3D4E5F67890123456789ABC /* Models/Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C4B5A69780FEDCBA987654 /* Models/Album.swift */; };
+		782F84053EEDDA165F834C4D /* DeadSheetsKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0C7C14719702CBD7C7587B22 /* DeadSheetsKit */; };
+		99CA6CFDBF6E0AC0CCCFDE7A /* DeadSheetsKit in Frameworks */ = {isa = PBXBuildFile; productRef = D3EDC39D983F8DED6FC0A629 /* DeadSheetsKit */; };
 		D2AF766A2EC4E950006C0FCE /* leadsheets.watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		E4F5A6B7C8D9E0F12345678A /* Services/WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4B5A69780FEDCBA99 /* Services/WatchConnectivityManager.swift */; };
-		FB71896928D39BB8CF2BCDB6 /* Resources/seeds.json in Resources */ = {isa = PBXBuildFile; fileRef = B5A4C57973005496DCFF812B /* Resources/seeds.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,17 +37,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1497658284B154007313B8ED /* Models/Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models/Song.swift; sourceTree = "<group>"; };
-		44D8B25E8B9AEC7899DC2004 /* Services/DataImportService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Services/DataImportService.swift; sourceTree = "<group>"; };
-		55E6F7D80A12B456789ABCDE /* Services/DataImportManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Services/DataImportManager.swift; sourceTree = "<group>"; };
-		B5A4C57973005496DCFF812B /* Resources/seeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Resources/seeds.json; sourceTree = "<group>"; };
 		D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = leadsheets.watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2E1EB562E9DE20C00E5456E /* Dead Sheets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dead Sheets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D3C4B5A69780FEDCBA987654 /* Models/Album.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models/Album.swift; sourceTree = "<group>"; };
-		E2D3C4B5A69780FEDCBA9876 /* Models/Artist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models/Artist.swift; sourceTree = "<group>"; };
-		F1E2D3C4B5A69780FEDCBA97 /* Models/Writer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models/Writer.swift; sourceTree = "<group>"; };
-		F1E2D3C4B5A69780FEDCBA98 /* Models/Singer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models/Singer.swift; sourceTree = "<group>"; };
-		F1E2D3C4B5A69780FEDCBA99 /* Services/WatchConnectivityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Services/WatchConnectivityManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -98,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				782F84053EEDDA165F834C4D /* DeadSheetsKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99CA6CFDBF6E0AC0CCCFDE7A /* DeadSheetsKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,7 +101,6 @@
 			isa = PBXGroup;
 			children = (
 				D2E1EB582E9DE20C00E5456E /* leadsheets */,
-				D2SHAREDFILES123456789ABC /* Shared */,
 				D2AF76612EC4E94E006C0FCE /* leadsheets.watch */,
 				D2E1EB572E9DE20C00E5456E /* Products */,
 			);
@@ -128,23 +113,6 @@
 				D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		D2SHAREDFILES123456789ABC /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				1497658284B154007313B8ED /* Models/Song.swift */,
-				F1E2D3C4B5A69780FEDCBA99 /* Services/WatchConnectivityManager.swift */,
-				F1E2D3C4B5A69780FEDCBA98 /* Models/Singer.swift */,
-				F1E2D3C4B5A69780FEDCBA97 /* Models/Writer.swift */,
-				E2D3C4B5A69780FEDCBA9876 /* Models/Artist.swift */,
-				D3C4B5A69780FEDCBA987654 /* Models/Album.swift */,
-				44D8B25E8B9AEC7899DC2004 /* Services/DataImportService.swift */,
-				55E6F7D80A12B456789ABCDE /* Services/DataImportManager.swift */,
-				B5A4C57973005496DCFF812B /* Resources/seeds.json */,
-			);
-			name = Shared;
-			path = leadsheets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -167,6 +135,7 @@
 			);
 			name = leadsheets.watch;
 			packageProductDependencies = (
+				0C7C14719702CBD7C7587B22 /* DeadSheetsKit */,
 			);
 			productName = leadsheets.watch;
 			productReference = D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */;
@@ -191,6 +160,7 @@
 			);
 			name = leadsheets;
 			packageProductDependencies = (
+				D3EDC39D983F8DED6FC0A629 /* DeadSheetsKit */,
 			);
 			productName = leadsheets;
 			productReference = D2E1EB562E9DE20C00E5456E /* Dead Sheets.app */;
@@ -223,6 +193,9 @@
 			);
 			mainGroup = D2E1EB4D2E9DE20C00E5456E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F7EC30DA84937E7B2B2585C4 /* XCLocalSwiftPackageReference "DeadSheetsKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D2E1EB572E9DE20C00E5456E /* Products */;
 			projectDirPath = "";
@@ -239,7 +212,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB71896928D39BB8CF2BCDB6 /* Resources/seeds.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,14 +229,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5072D75D51D2C58AB2AFD560 /* Models/Song.swift in Sources */,
-				A1B2C3D4E5F6789012345678 /* Models/Singer.swift in Sources */,
-				A1B2C3D4E5F6789012345679 /* Models/Writer.swift in Sources */,
-				B2C3D4E5F67890123456789A /* Models/Artist.swift in Sources */,
-				C3D4E5F67890123456789ABC /* Models/Album.swift in Sources */,
-				9D86052835241646C210E833 /* Services/DataImportService.swift in Sources */,
-				66F8E9D91B23C567890BCDEF /* Services/DataImportManager.swift in Sources */,
-				E4F5A6B7C8D9E0F12345678A /* Services/WatchConnectivityManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -585,6 +549,24 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		F7EC30DA84937E7B2B2585C4 /* XCLocalSwiftPackageReference "DeadSheetsKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = DeadSheetsKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0C7C14719702CBD7C7587B22 /* DeadSheetsKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DeadSheetsKit;
+		};
+		D3EDC39D983F8DED6FC0A629 /* DeadSheetsKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DeadSheetsKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D2E1EB4E2E9DE20C00E5456E /* Project object */;
 }

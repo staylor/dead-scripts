@@ -32,6 +32,7 @@ const artists = await prisma.artist.findMany({
 for (const node of artists) {
   const artist = {
     name: node.name,
+    slug: node.slug,
     imageFileName: node.imageFileName,
     albums: [] as any[],
   };
@@ -105,7 +106,7 @@ await Promise.all(
   })
 );
 
-const file = path.join(appDir, 'seeds.json');
+const file = path.join(process.cwd(), 'xcode', 'DeadSheetsKit', 'Sources', 'DeadSheetsKit', 'Resources', 'seeds.json');
 saveJSON(file, data);
 
 // generate images for tvOS

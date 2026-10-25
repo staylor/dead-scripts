@@ -1,13 +1,8 @@
 import SwiftUI
 
-// Type alias for UIKit/AppKit compatibility
-#if canImport(UIKit)
-typealias NSUIImage = UIImage
-#elseif canImport(AppKit)
-typealias NSUIImage = NSImage
-#endif
-
 #if os(tvOS)
+import DeadSheetsKit
+
 struct ImageViewerScreen: View {
     let song: Song
     let onBack: () -> Void
@@ -16,7 +11,6 @@ struct ImageViewerScreen: View {
     @State private var zoomScale: CGFloat = 1.0
     @State private var scrollOffset: CGFloat = 0
     @State private var scrollID = UUID()
-    @State private var lyricsParagraphs: [[String]] = []
 
     enum Field {
         case backButton
@@ -41,12 +35,12 @@ struct ImageViewerScreen: View {
                 .focused($focusedField, equals: .backButton)
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(song.name)
+                    Text(song.title)
                         .font(.headline)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
                     
-                    Text(song.writersDisplayText)
+                    Text(song.creditsText)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -117,8 +111,8 @@ struct ImageViewerScreen: View {
             // Main Content: Image + Lyrics side-by-side
             HStack(spacing: 40) {
                 // Left: Sheet Music Image (zoomable and pannable)
-                if let imageURL = song.imageURL,
-                   let image = NSUIImage(contentsOfFile: imageURL.path) {
+                if let imageURL = song.sheetImageURL,
+                   let image = UIImage(contentsOfFile: imageURL.path(percentEncoded: false)) {
                     GeometryReader { geometry in
                         let imageAspect = image.size.height / image.size.width
                         let imageHeight = geometry.size.width * imageAspect
@@ -162,6 +156,7 @@ struct ImageViewerScreen: View {
                 }
 
                 // Right: Lyrics (if available)
+                let lyricsParagraphs = song.lyricParagraphs
                 if !lyricsParagraphs.isEmpty {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 0) {
@@ -199,40 +194,8 @@ struct ImageViewerScreen: View {
         }
         .background(Color.black)
         .onAppear {
-            // Set initial focus to back button
             focusedField = .backButton
-            // Parse lyrics once on appear
-            if let lyrics = song.lyrics, !lyrics.isEmpty {
-                lyricsParagraphs = parseLyricsParagraphs(lyrics)
-            }
         }
-    }
-
-    // Helper function to parse lyrics into paragraphs (separated by blank lines)
-    private func parseLyricsParagraphs(_ lyrics: String) -> [[String]] {
-        let lines = lyrics.components(separatedBy: "\n")
-        var paragraphs: [[String]] = []
-        var currentParagraph: [String] = []
-
-        for line in lines {
-            if line.trimmingCharacters(in: .whitespaces).isEmpty {
-                // Blank line - end current paragraph
-                if !currentParagraph.isEmpty {
-                    paragraphs.append(currentParagraph)
-                    currentParagraph = []
-                }
-            } else {
-                // Non-blank line - add to current paragraph
-                currentParagraph.append(line)
-            }
-        }
-
-        // Add last paragraph if not empty
-        if !currentParagraph.isEmpty {
-            paragraphs.append(currentParagraph)
-        }
-
-        return paragraphs
     }
 }
 #endif

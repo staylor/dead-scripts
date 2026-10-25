@@ -1,3 +1,4 @@
+import DeadSheetsKit
 import SwiftUI
 
 struct AlbumRowView: View {
@@ -6,7 +7,7 @@ struct AlbumRowView: View {
     var body: some View {
         HStack(spacing: 16) {
             CachedImage(
-                fileName: album.coverArtFileName,
+                fileName: album.coverFileName,
                 size: 80,
                 clipShape: RoundedRectangle(cornerRadius: 12)
             ) {
@@ -19,19 +20,18 @@ struct AlbumRowView: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(album.name)
+                Text(album.title)
                     .font(.headline)
                     .foregroundColor(.primary)
                     .lineLimit(2)
 
-                if let artistName = album.artist?.name, !artistName.isEmpty {
-                    Text(artistName)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .lineLimit(1)
-                }
+                Text(album.artistName)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
 
-                if let songCount = album.songs?.count, songCount > 0 {
+                let songCount = album.songIDs.count
+                if songCount > 0 {
                     Text("\(songCount) song\(songCount == 1 ? "" : "s")")
                         .font(.caption)
                         .foregroundColor(.secondary)

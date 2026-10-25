@@ -1,3 +1,4 @@
+import DeadSheetsKit
 import SwiftUI
 
 #if !os(watchOS)
@@ -81,45 +82,41 @@ struct LyricsOverlay: View {
             // Lyrics Content
             ScrollView {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(song.name)
+                    Text(song.title)
                         .font(.title3)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
                     
-                    Text(song.writersDisplayText)
+                    Text(song.creditsText)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     
                     HStack {
-                        if let artist = song.artist {
-                            Text(artist.name)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        
-                        if let album = song.album {
-                            Text("•")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                            
-                            Text(album.name)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                                .italic()
-                        }
+                        Text(song.artistName)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+
+                        Text("•")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+
+                        Text(song.albumTitle)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .italic()
                     }
 
                     Divider()
                         .padding(.vertical, 8)
                     
-                    if let lyrics = song.lyrics, !lyrics.isEmpty {
-                        let lines = lyrics.components(separatedBy: "\n")
+                    if !song.lyrics.isEmpty {
+                        let lines = song.lyricLines
                         VStack(alignment: .leading, spacing: 4) {
                             ForEach(lines.indices, id: \.self) { index in
                                 Text(lines[index])
                                     .font(.body)
                                     .foregroundColor(.primary)
-                                    .bold(lines[index].hasPrefix("Chorus"))
+                                    .bold(Song.isChorusHeading(lines[index]))
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)

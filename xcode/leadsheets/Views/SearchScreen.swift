@@ -1,5 +1,5 @@
+import DeadSheetsKit
 import SwiftUI
-import SwiftData
 
 enum SearchFilter: String, CaseIterable {
     case allSongs = "All Songs"
@@ -12,168 +12,19 @@ enum SearchFilter: String, CaseIterable {
 
 struct SearchScreen: View {
     @Binding var searchText: String
-    let songs: [Song]
     let onSelect: (Song) -> Void
     var selectedSong: Song? = nil
 
+    @Environment(\.catalog) private var catalog
     @State private var selectedFilter: SearchFilter = .allSongs
     @State private var selectedAlbum: Album?
     @State private var selectedArtist: Artist?
-    @State private var selectedSinger: Singer?
-    @State private var selectedGroupedWriter: GroupedWriter?
+    @State private var selectedSinger: Person?
+    @State private var selectedWriterGroup: WriterGroup?
     @State private var showSettings = false
-    @State private var cachedGroupedWriters: [GroupedWriter] = []
-    @State private var lastWritersSearchText: String = ""
-    @Environment(\.modelContext) private var modelContext
-    @Query private var albums: [Album]
-    @Query private var artists: [Artist]
-    @Query private var singers: [Singer]
-    @Query private var writers: [Writer]
 
     @FocusState private var isSearchFieldFocused: Bool
-    
-    // Filtered albums based on search
-    private var filteredAlbums: [Album] {
-        if searchText.isEmpty {
-            return albums.sorted { $0.name < $1.name }
-        }
-        return albums.filter { album in
-            album.name.localizedCaseInsensitiveContains(searchText) ||
-            album.artist?.name.localizedCaseInsensitiveContains(searchText) == true
-        }.sorted { $0.name < $1.name }
-    }
-    
-    // Filtered artists based on search
-    private var filteredArtists: [Artist] {
-        if searchText.isEmpty {
-            return artists.sorted { $0.name < $1.name }
-        }
-        return artists.filter { artist in
-            artist.name.localizedCaseInsensitiveContains(searchText)
-        }.sorted { $0.name < $1.name }
-    }
-    
-    // Filtered singers based on search
-    private var filteredSingers: [Singer] {
-        if searchText.isEmpty {
-            return singers.sorted { $0.name < $1.name }
-        }
-        return singers.filter { singer in
-            singer.name.localizedCaseInsensitiveContains(searchText)
-        }.sorted { $0.name < $1.name }
-    }
-    
-    // Compute grouped writers - called only when needed via updateGroupedWritersIfNeeded()
-    private func computeGroupedWriters(for searchText: String) -> [GroupedWriter] {
-        let baseWriters = searchText.isEmpty ? writers : writers.filter { writer in
-            writer.name.localizedCaseInsensitiveContains(searchText) ||
-            writer.contribution.localizedCaseInsensitiveContains(searchText)
-        }
 
-        // Step 1: Group writers by name to combine multiple contributions by same person
-        let groupedByName = Dictionary(grouping: baseWriters) { $0.name }
-
-        var individualWriterGroups: [GroupedWriter] = []
-
-        for (name, writersWithSameName) in groupedByName {
-            // Get all unique songs from all contributions for this writer
-            let allSongsForWriter = Set(writersWithSameName.flatMap { $0.songs ?? [] })
-
-            // Check if all writer instances (different contributions) have the exact same songs
-            let allHaveSameSongs = writersWithSameName.allSatisfy { writer in
-                Set(writer.songs ?? []) == allSongsForWriter
-            }
-
-            if allHaveSameSongs && writersWithSameName.count > 1 {
-                // Combine contributions for this writer (e.g., "Music & Lyrics")
-                let contributions = writersWithSameName.map { $0.contribution }
-                let songs = Array(allSongsForWriter).sorted { $0.name < $1.name }
-
-                individualWriterGroups.append(GroupedWriter(
-                    names: [name],
-                    contributions: contributions,
-                    songs: songs,
-                    imageFileName: writersWithSameName.first?.imageFileName
-                ))
-            } else {
-                // Keep separate entries for different song sets
-                for writer in writersWithSameName {
-                    individualWriterGroups.append(GroupedWriter(
-                        names: [writer.name],
-                        contributions: [writer.contribution],
-                        songs: (writer.songs ?? []).sorted { $0.name < $1.name },
-                        imageFileName: writer.imageFileName
-                    ))
-                }
-            }
-        }
-
-        // Step 2: Find writers who ONLY collaborate together (never write separately)
-        var finalGroups: [GroupedWriter] = []
-        var processedIndices = Set<Int>()
-
-        for (i, group1) in individualWriterGroups.enumerated() {
-            if processedIndices.contains(i) { continue }
-
-            // Find potential collaborators who have identical song sets
-            var collaborators: [GroupedWriter] = [group1]
-            var collaboratorIndices: [Int] = [i]
-
-            for (j, group2) in individualWriterGroups.enumerated() {
-                if i == j || processedIndices.contains(j) { continue }
-
-                // Check if they have exactly the same songs
-                if Set(group1.songs) == Set(group2.songs) {
-                    collaborators.append(group2)
-                    collaboratorIndices.append(j)
-                }
-            }
-
-            // If multiple writers share ALL the same songs, combine them
-            if collaborators.count > 1 {
-                let allNames = collaborators.flatMap { $0.names }
-                let allContributions = Array(Set(collaborators.flatMap { $0.contributions }))
-                let sharedSongs = group1.songs
-
-                finalGroups.append(GroupedWriter(
-                    names: allNames,
-                    contributions: allContributions,
-                    songs: sharedSongs,
-                    imageFileName: collaborators.first?.imageFileName
-                ))
-
-                // Mark all collaborators as processed
-                collaboratorIndices.forEach { processedIndices.insert($0) }
-            } else {
-                // This writer doesn't always collaborate, keep them separate
-                finalGroups.append(group1)
-                processedIndices.insert(i)
-            }
-        }
-
-        return finalGroups.sorted { $0.displayName < $1.displayName }
-    }
-
-    private func updateGroupedWritersIfNeeded() {
-        if lastWritersSearchText != searchText {
-            lastWritersSearchText = searchText
-            cachedGroupedWriters = computeGroupedWriters(for: searchText)
-        }
-    }
-    
-    // Filtered cover songs
-    private var coverSongs: [Song] {
-        let covers = songs.filter { $0.songType?.lowercased() == "cover" }
-        if searchText.isEmpty {
-            return covers.sorted { $0.name < $1.name }
-        }
-        return covers.filter { song in
-            song.name.localizedCaseInsensitiveContains(searchText) ||
-            song.artist?.name.localizedCaseInsensitiveContains(searchText) == true ||
-            song.singer?.name.localizedCaseInsensitiveContains(searchText) == true
-        }.sorted { $0.name < $1.name }
-    }
-    
     var body: some View {
         VStack(spacing: 0) {
             searchHeaderView
@@ -343,18 +194,18 @@ struct SearchScreen: View {
     private var contentView: some View {
         switch selectedFilter {
         case .allSongs:
-            SongsListView(songs: songs, onSelect: onSelect, selectedSong: selectedSong)
+            SongsListView(songs: catalog.songs(matching: searchText), onSelect: onSelect, selectedSong: selectedSong)
         case .byAlbum:
             if let selectedAlbum {
                 DetailView(
                     backButtonTitle: "Albums",
-                    songs: selectedAlbum.sortedSongs,
+                    songs: catalog.songs(on: selectedAlbum),
                     onBack: { self.selectedAlbum = nil },
                     onSelect: onSelect,
                     selectedSong: selectedSong
                 )
             } else {
-                AlbumsListView(albums: filteredAlbums) { album in
+                AlbumsListView(albums: catalog.albums(matching: searchText)) { album in
                     selectedAlbum = album
                 }
             }
@@ -362,13 +213,13 @@ struct SearchScreen: View {
             if let selectedArtist {
                 DetailView(
                     backButtonTitle: "Artists",
-                    songs: selectedArtist.songs?.sorted { $0.name < $1.name } ?? [],
+                    songs: catalog.songs(by: selectedArtist),
                     onBack: { self.selectedArtist = nil },
                     onSelect: onSelect,
                     selectedSong: selectedSong
                 )
             } else {
-                ArtistsListView(artists: filteredArtists) { artist in
+                ArtistsListView(artists: catalog.artists(matching: searchText)) { artist in
                     selectedArtist = artist
                 }
             }
@@ -376,38 +227,32 @@ struct SearchScreen: View {
             if let selectedSinger {
                 DetailView(
                     backButtonTitle: "Singers",
-                    songs: selectedSinger.songs?.sorted { $0.name < $1.name } ?? [],
+                    songs: catalog.songs(sungBy: selectedSinger),
                     onBack: { self.selectedSinger = nil },
                     onSelect: onSelect,
                     selectedSong: selectedSong
                 )
             } else {
-                SingersListView(singers: filteredSingers) { singer in
+                SingersListView(singers: catalog.singers(matching: searchText)) { singer in
                     selectedSinger = singer
                 }
             }
         case .byWriter:
-            if let selectedGroupedWriter {
+            if let selectedWriterGroup {
                 DetailView(
                     backButtonTitle: "Writers",
-                    songs: selectedGroupedWriter.songs,
-                    onBack: { self.selectedGroupedWriter = nil },
+                    songs: selectedWriterGroup.songs,
+                    onBack: { self.selectedWriterGroup = nil },
                     onSelect: onSelect,
                     selectedSong: selectedSong
                 )
             } else {
-                GroupedWritersListView(groupedWriters: cachedGroupedWriters) { groupedWriter in
-                    selectedGroupedWriter = groupedWriter
-                }
-                .onAppear {
-                    updateGroupedWritersIfNeeded()
-                }
-                .onChange(of: searchText) { _, _ in
-                    updateGroupedWritersIfNeeded()
+                WriterGroupsListView(groups: catalog.writerGroups(matching: searchText)) { group in
+                    selectedWriterGroup = group
                 }
             }
         case .covers:
-            CoversListView(songs: coverSongs, onSelect: onSelect, selectedSong: selectedSong)
+            CoversListView(songs: catalog.covers(matching: searchText), onSelect: onSelect, selectedSong: selectedSong)
         }
     }
     
@@ -422,7 +267,7 @@ struct SearchScreen: View {
         selectedAlbum = nil
         selectedArtist = nil
         selectedSinger = nil
-        selectedGroupedWriter = nil
+        selectedWriterGroup = nil
     }
     
     #if os(macOS)

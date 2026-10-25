@@ -1,10 +1,10 @@
 import Foundation
 import CloudKit
 import Combine
+import DeadSheetsKit
 import SwiftUI
 #if os(iOS)
 import UIKit
-import WatchConnectivity
 #elseif os(macOS)
 import AppKit
 #endif
@@ -44,7 +44,7 @@ class CloudSyncManager: ObservableObject {
                 .compactMap { $0 }
                 .removeDuplicates()
                 .sink { slug in
-                    WatchConnectivityManager.shared.sendSelectedSong(songID: slug, songName: "")
+                    WatchConnectivityManager.shared.sendSelectedSong(id: slug)
                 }
                 .store(in: &cancellables)
         }

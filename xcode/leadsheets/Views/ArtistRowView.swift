@@ -1,3 +1,4 @@
+import DeadSheetsKit
 import SwiftUI
 
 struct ArtistRowView: View {
@@ -23,14 +24,16 @@ struct ArtistRowView: View {
                     .lineLimit(2)
 
                 HStack(spacing: 8) {
-                    if let songCount = artist.songs?.count, songCount > 0 {
+                    let songCount = artist.songIDs.count
+                    if songCount > 0 {
                         Text("\(songCount) song\(songCount == 1 ? "" : "s")")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
 
-                    if let albumCount = artist.albums?.count, albumCount > 0 {
-                        if artist.songs?.count ?? 0 > 0 {
+                    let albumCount = artist.albumIDs.count
+                    if albumCount > 0 {
+                        if songCount > 0 {
                             Text("•")
                                 .font(.caption)
                                 .foregroundColor(.secondary)

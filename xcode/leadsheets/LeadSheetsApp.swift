@@ -1,18 +1,10 @@
+import DeadSheetsKit
+import os
 import SwiftUI
-import SwiftData
 
 #if os(iOS)
 import CarPlay
 #endif
-
-// MARK: - Shared Model Container
-enum SharedModelContainer {
-    static let shared: ModelContainer = {
-        let schema = Schema([Song.self, Artist.self, Album.self, Singer.self, Writer.self])
-        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
-        return try! ModelContainer(for: schema, configurations: [config])
-    }()
-}
 
 @main
 struct LeadSheetsApp: App {
@@ -23,8 +15,12 @@ struct LeadSheetsApp: App {
     #endif
 
     init() {
-        // Initialize Watch Connectivity early
-        #if os(iOS) || os(watchOS)
+        LegacyStoreCleanup.run()
+        for problem in Catalog.bundled.problems {
+            Logger.catalog.fault("\(problem, privacy: .public)")
+        }
+
+        #if os(iOS)
         _ = WatchConnectivityManager.shared
         #endif
 
@@ -38,7 +34,6 @@ struct LeadSheetsApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(SharedModelContainer.shared)
     }
 }
 

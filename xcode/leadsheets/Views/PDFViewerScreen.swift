@@ -1,3 +1,4 @@
+import DeadSheetsKit
 import SwiftUI
 
 #if !os(watchOS) && !os(tvOS)
@@ -14,7 +15,7 @@ struct PDFViewerScreen: View {
         GeometryReader { geometry in
             ZStack {
                 // Full-screen PDF View
-                if let pdfURL = song.pdfURL {
+                if let pdfURL = song.sheetURL {
                     PDFKitView(url: pdfURL)
                         .id(pdfURL) // Keep PDF view stable across scene phase changes
                         #if os(iOS)
@@ -53,7 +54,7 @@ struct PDFViewerScreen: View {
                         Spacer()
                         
                         // Apple Music Button
-                        if let appleMusicId = song.appleMusicId, !appleMusicId.isEmpty {
+                        if let appleMusicId = song.appleMusicID {
                             let isThisSongPlaying = musicPlayer.isPlayingSong(appleMusicId)
                             let isThisSongLoading = musicPlayer.isLoadingSong(appleMusicId)
                             Button(action: {
@@ -61,7 +62,7 @@ struct PDFViewerScreen: View {
                                     musicPlayer.pause()
                                 } else {
                                     Task {
-                                        await musicPlayer.play(appleMusicId: appleMusicId, songName: song.name)
+                                        await musicPlayer.play(appleMusicId: appleMusicId, songName: song.title)
                                     }
                                 }
                             }) {

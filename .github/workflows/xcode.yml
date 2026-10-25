@@ -81,3 +81,12 @@ jobs:
             -destination "${{ matrix.destination }}" \
             CODE_SIGNING_ALLOWED=NO \
             | xcbeautify --renderer github-actions
+
+  test:
+    name: Test DeadSheetsKit
+    runs-on: macos-26
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - name: Test
+        run: swift test --package-path xcode/DeadSheetsKit

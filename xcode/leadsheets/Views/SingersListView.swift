@@ -1,8 +1,9 @@
+import DeadSheetsKit
 import SwiftUI
 
 struct SingersListView: View {
-    let singers: [Singer]
-    let onSelectSinger: (Singer) -> Void
+    let singers: [Person]
+    let onSelectSinger: (Person) -> Void
 
     var body: some View {
         PlatformListView(

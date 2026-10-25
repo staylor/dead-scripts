@@ -1,7 +1,10 @@
+import DeadSheetsKit
 import SwiftUI
 
 struct SingerRowView: View {
-    let singer: Singer
+    let singer: Person
+
+    @Environment(\.catalog) private var catalog
 
     var body: some View {
         HStack(spacing: 16) {
@@ -22,7 +25,8 @@ struct SingerRowView: View {
                     .foregroundColor(.primary)
                     .lineLimit(2)
 
-                if let songCount = singer.songs?.count, songCount > 0 {
+                let songCount = catalog.songs(sungBy: singer).count
+                if songCount > 0 {
                     Text("\(songCount) song\(songCount == 1 ? "" : "s")")
                         .font(.caption)
                         .foregroundColor(.secondary)

@@ -1,11 +1,10 @@
+import DeadSheetsKit
 import SwiftUI
-import SwiftData
-import WatchConnectivity
 
 @main
 struct LeadSheetsWatchApp: App {
     init() {
-        // Initialize Watch Connectivity early
+        LegacyStoreCleanup.run()
         _ = WatchConnectivityManager.shared
     }
 
@@ -13,6 +12,5 @@ struct LeadSheetsWatchApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [Song.self, Artist.self, Album.self, Singer.self, Writer.self])
     }
 }

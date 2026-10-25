@@ -1,15 +1,11 @@
+import DeadSheetsKit
 import SwiftUI
-import SwiftData
-#if !os(watchOS) && !os(tvOS)
-import PDFKit
-#endif
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.catalog) private var catalog
 
     @State private var searchText = ""
     @State private var selected: Song?
-    @State private var importManager: DataImportManager?
     #if os(macOS)
     @State private var showSettings = false
 
@@ -20,103 +16,59 @@ struct ContentView: View {
     }
     #endif
 
-    #if os(iOS) || os(watchOS)
-    @ObservedObject private var watchConnectivity = WatchConnectivityManager.shared
+    #if os(iOS)
+    private let watchConnectivity = WatchConnectivityManager.shared
     #endif
 
     #if os(iOS) || os(macOS)
     @ObservedObject private var cloudSync = CloudSyncManager.shared
     #endif
 
-    private func findSong(bySlug slug: String) -> Song? {
-        let predicate = #Predicate<Song> { $0.slug == slug }
-        var descriptor = FetchDescriptor(predicate: predicate)
-        descriptor.fetchLimit = 1
-        return try? modelContext.fetch(descriptor).first
-    }
-    
-    // MARK: - Helper Methods
-
     #if os(macOS)
     private func subtitleText(for song: Song) -> String {
-        var subtitle = ""
-        if let album = song.album {
-            subtitle += album.name
-            if let year = album.releaseYear { subtitle += " (\(year))" }
-            subtitle += " • "
+        var subtitle = song.albumTitle
+        if let year = song.albumReleaseYear {
+            subtitle += " (\(year))"
         }
-        subtitle += song.writersDisplayText
-        let singer = song.singerDisplayText
-        if !singer.isEmpty { subtitle += " • \(singer)" }
+        subtitle += " • \(song.creditsText)"
+        if let singer = song.singer {
+            subtitle += " • Original singer: \(singer.name)"
+        }
         return subtitle
     }
     #endif
 
     private func selectSong(_ song: Song) {
         selected = song
-
-        #if DEBUG
-        print("selectSong: \(song.name), slug: \(song.slug ?? "nil")")
-        #endif
-
-        guard let slug = song.slug else {
-            #if DEBUG
-            print("selectSong: no slug, skipping sync")
-            #endif
-            return
-        }
-
         #if os(iOS)
-        // Direct Watch sync (iPhone only)
-        watchConnectivity.sendSelectedSong(songID: slug, songName: song.name)
-        // CloudKit sync (for iPad → iPhone → Watch flow)
-        cloudSync.sendSelection(slug: slug)
+        watchConnectivity.sendSelectedSong(id: song.id)
+        cloudSync.sendSelection(slug: song.id)
         #elseif os(macOS)
-        // CloudKit sync from Mac
-        cloudSync.sendSelection(slug: slug)
+        cloudSync.sendSelection(slug: song.id)
         #endif
     }
-    
+
     var body: some View {
         #if os(macOS)
-        // macOS native three-column layout: Song List | PDF | Lyrics
         NavigationSplitView {
-            // Column 1: Song list
-            FilteredSongsView(searchText: searchText) { songs in
-                SearchScreen(
-                    searchText: $searchText,
-                    songs: songs,
-                    onSelect: { song in
-                        selectSong(song)
-                    },
-                    selectedSong: selected
-                )
-            }
-            .navigationSplitViewColumnWidth(min: MacColumnWidth.sidebar.min, ideal: MacColumnWidth.sidebar.ideal, max: MacColumnWidth.sidebar.max)
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button(action: { showSettings = true }) {
-                        Image(systemName: "gearshape")
-                    }
-                    .popover(isPresented: $showSettings) {
-                        SettingsView()
+            SearchScreen(searchText: $searchText, onSelect: selectSong, selectedSong: selected)
+                .navigationSplitViewColumnWidth(min: MacColumnWidth.sidebar.min, ideal: MacColumnWidth.sidebar.ideal, max: MacColumnWidth.sidebar.max)
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button(action: { showSettings = true }) {
+                            Image(systemName: "gearshape")
+                        }
+                        .popover(isPresented: $showSettings) {
+                            SettingsView()
+                        }
                     }
                 }
-            }
         } content: {
-            // Column 2: PDF Viewer (content column)
-            if importManager?.isImporting == true {
-                VStack {
-                    ProgressView("Importing songs...")
-                        .controlSize(.large)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .navigationSplitViewColumnWidth(min: MacColumnWidth.score.min, ideal: MacColumnWidth.score.ideal, max: .infinity)
-            } else if let song = selected {
+            if let song = selected {
                 PDFViewerScreen(song: song, onBack: {
                     selected = nil
                 })
-                .navigationTitle(song.name)
+                .navigationTitle(song.title)
                 .navigationSubtitle(subtitleText(for: song))
                 .navigationSplitViewColumnWidth(min: MacColumnWidth.score.min, ideal: MacColumnWidth.score.ideal, max: .infinity)
             } else {
@@ -129,9 +81,8 @@ struct ContentView: View {
                 .navigationSplitViewColumnWidth(min: MacColumnWidth.score.min, ideal: MacColumnWidth.score.ideal, max: .infinity)
             }
         } detail: {
-            // Column 3: Lyrics
             if let song = selected {
-                LyricsInspector(songID: song.persistentModelID)
+                LyricsInspector(song: song)
                     .navigationSplitViewColumnWidth(min: MacColumnWidth.lyrics.min, ideal: MacColumnWidth.lyrics.ideal, max: MacColumnWidth.lyrics.max)
             } else {
                 ContentUnavailableView(
@@ -143,118 +94,61 @@ struct ContentView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
-        .modifier(ImportManagerModifier(
-            modelContext: modelContext,
-            importManager: $importManager
-        ))
         .onChange(of: cloudSync.selectedSongSlug) { _, newValue in
-            guard let slug = newValue,
-                  selected?.slug != slug,
-                  let matchingSong = findSong(bySlug: slug) else { return }
-            selected = matchingSong
+            guard let slug = newValue, selected?.id != slug, let song = catalog.song(id: slug) else { return }
+            selected = song
         }
         #else
-        // iOS/iPadOS layout
         NavigationStack {
             ZStack {
-                if importManager?.isImporting == true {
-                    // Show loading indicator during import
-                    VStack {
-                        ProgressView("Importing songs...")
-                            .padding()
-                            #if os(iOS)
-                            .background(Color(.systemBackground))
-                            #elseif os(tvOS) || os(watchOS)
-                            .background(Color.white.opacity(0.1))
-                            #else
-                            .background(Color(nsColor: .windowBackgroundColor))
-                            #endif
-                            .cornerRadius(12)
-                            .shadow(radius: 10)
-                    }
+                #if os(tvOS)
+                // Conditional rather than layered views, so focus moves to the visible screen.
+                if let song = selected {
+                    ImageViewerScreen(song: song, onBack: {
+                        selected = nil
+                    })
                 } else {
-                    #if os(tvOS)
-                    // tvOS: Conditional rendering (no opacity trick, for proper focus)
-                    if let song = selected {
-                        ImageViewerScreen(song: song, onBack: {
-                            selected = nil
-                        })
-                    } else {
-                        FilteredSongsView(searchText: searchText) { songs in
-                            SearchScreen(
-                                searchText: $searchText,
-                                songs: songs,
-                                onSelect: { song in
-                                    selected = song
-                                }
-                            )
-                        }
-                    }
-                    #else
-                    // iOS/iPadOS: Conditional rendering for better memory management
-                    if selected == nil {
-                        FilteredSongsView(searchText: searchText) { songs in
-                            SearchScreen(
-                                searchText: $searchText,
-                                songs: songs,
-                                onSelect: { song in
-                                    selectSong(song)
-                                }
-                            )
-                        }
-                        .transition(.opacity)
-                    }
-
-                    // Viewer Screen (slides in from right)
-                    #if !os(watchOS)
-                    if let song = selected {
-                        PDFViewerScreen(song: song, onBack: {
-                            selected = nil
-                        })
-                        .transition(.asymmetric(
-                            insertion: .move(edge: .trailing),
-                            removal: .move(edge: .trailing)
-                        ))
-                        .zIndex(1)
-                    }
-                    #endif
-                    #endif
+                    SearchScreen(searchText: $searchText, onSelect: { selected = $0 })
                 }
+                #else
+                if selected == nil {
+                    SearchScreen(searchText: $searchText, onSelect: selectSong)
+                        .transition(.opacity)
+                }
+
+                if let song = selected {
+                    PDFViewerScreen(song: song, onBack: {
+                        selected = nil
+                    })
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing),
+                        removal: .move(edge: .trailing)
+                    ))
+                    .zIndex(1)
+                }
+                #endif
             }
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: selected)
-        .modifier(ImportManagerModifier(
-            modelContext: modelContext,
-            importManager: $importManager
-        ))
         #if os(iOS)
-        // Listen for song selections from Watch (iPhone only) and forward to CloudKit
         .onChange(of: watchConnectivity.selectedSongID) { _, newValue in
             guard UIDevice.current.userInterfaceIdiom == .phone,
                   let slug = newValue,
-                  selected?.slug != slug,
-                  let matchingSong = findSong(bySlug: slug) else { return }
-            selected = matchingSong
-            // Forward Watch selection to CloudKit so iPad can see it
+                  selected?.id != slug,
+                  let song = catalog.song(id: slug) else { return }
+            selected = song
+            // Forward the watch's selection so an iPad following along sees it too.
             cloudSync.sendSelection(slug: slug)
         }
-        // Listen for song selections from CloudKit (from other devices)
         .onChange(of: cloudSync.selectedSongSlug) { _, newValue in
-            guard let slug = newValue,
-                  selected?.slug != slug,
-                  let matchingSong = findSong(bySlug: slug) else { return }
-            selected = matchingSong
+            guard let slug = newValue, selected?.id != slug, let song = catalog.song(id: slug) else { return }
+            selected = song
         }
         #endif
         #endif
     }
 }
 
-// MARK: - Preview
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            .modelContainer(for: [Song.self, Artist.self, Album.self, Singer.self, Writer.self], inMemory: true)
-            .previewDevice("iPad Pro (12.9-inch) (6th generation)")
-    }
+#Preview {
+    ContentView()
 }

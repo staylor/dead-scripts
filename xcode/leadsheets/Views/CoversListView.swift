@@ -1,3 +1,4 @@
+import DeadSheetsKit
 import SwiftUI
 
 struct CoversListView: View {

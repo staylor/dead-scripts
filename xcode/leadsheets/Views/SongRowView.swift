@@ -1,3 +1,4 @@
+import DeadSheetsKit
 import SwiftUI
 
 struct SongRowView: View {
@@ -7,7 +8,7 @@ struct SongRowView: View {
     var body: some View {
         HStack(spacing: 16) {
             CachedImage(
-                fileName: song.album?.coverArtFileName,
+                fileName: song.coverFileName,
                 size: 60,
                 clipShape: RoundedRectangle(cornerRadius: 12)
             ) {
@@ -20,32 +21,22 @@ struct SongRowView: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(song.name)
+                Text(song.title)
                     .font(.headline)
                     .foregroundColor(.primary)
                     .lineLimit(2)
 
-                if let artistName = song.artist?.name, !artistName.isEmpty {
-                    HStack(spacing: 4) {
-                        Text(artistName)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .lineLimit(1)
+                HStack(spacing: 4) {
+                    Text(song.artistName)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
 
-                        if let albumName = song.album?.name, !albumName.isEmpty {
-                            Text("•")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
+                    Text("•")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
 
-                            Text(albumName)
-                                .font(.subheadline)
-                                .italic()
-                                .foregroundColor(.secondary)
-                                .lineLimit(1)
-                        }
-                    }
-                } else if let albumName = song.album?.name, !albumName.isEmpty {
-                    Text(albumName)
+                    Text(song.albumTitle)
                         .font(.subheadline)
                         .italic()
                         .foregroundColor(.secondary)
