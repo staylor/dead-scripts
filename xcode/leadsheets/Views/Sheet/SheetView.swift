@@ -5,12 +5,14 @@ import SwiftUI
 /// A song's lead sheet, with playback and its lyrics in an inspector.
 struct SheetView: View {
     let song: Song
+    var navigation = SongNavigation(previous: nil, next: nil)
 
     #if os(macOS)
     @AppStorage("showsLyrics") private var showsLyrics = true
     #else
     @State private var showsLyrics = false
     #endif
+    @AppStorage(SettingsKey.keepsScreenOn) private var keepsScreenOn = true
 
     var body: some View {
         sheet
@@ -22,6 +24,18 @@ struct SheetView: View {
             .frame(minWidth: 480)
             #endif
             .toolbar {
+                #if os(iOS)
+                ToolbarItemGroup(placement: .bottomBar) {
+                    previousButton
+                    Spacer()
+                    nextButton
+                }
+                #else
+                ToolbarItemGroup(placement: .navigation) {
+                    previousButton
+                    nextButton
+                }
+                #endif
                 if let appleMusicID = song.appleMusicID {
                     ToolbarItem {
                         PlayButton(appleMusicID: appleMusicID, title: song.title)
@@ -35,12 +49,29 @@ struct SheetView: View {
             }
             .focusedSceneValue(\.shownSong, song)
             .focusedSceneValue(\.showsLyrics, $showsLyrics)
+            .focusedSceneValue(\.songNavigation, navigation)
+            .pageTurnerKeys(navigation)
+            .keepsScreenOn(keepsScreenOn)
             .inspector(isPresented: $showsLyrics) {
                 LyricsView(song: song)
                     .inspectorColumnWidth(min: 240, ideal: 320, max: 420)
                     .presentationDetents([.medium, .large])
                     .presentationBackgroundInteraction(.enabled(upThrough: .medium))
             }
+    }
+
+    private var previousButton: some View {
+        Button("Previous Song", systemImage: "chevron.backward") {
+            navigation.previous?()
+        }
+        .disabled(navigation.previous == nil)
+    }
+
+    private var nextButton: some View {
+        Button("Next Song", systemImage: "chevron.forward") {
+            navigation.next?()
+        }
+        .disabled(navigation.next == nil)
     }
 
     @ViewBuilder

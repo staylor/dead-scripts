@@ -174,6 +174,7 @@ struct ImageViewerScreen: View {
         .onAppear {
             focusedField = .image
         }
+        .keepsScreenOn()
     }
 }
 #endif

@@ -5,6 +5,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
     @State private var showingICloudAlert = false
+    @AppStorage(SettingsKey.keepsScreenOn) private var keepsScreenOn = true
 
     private let cloudSync = CloudSyncManager.shared
 
@@ -32,6 +33,12 @@ struct SettingsView: View {
 
     private var form: some View {
         Form {
+            Section {
+                Toggle("Keep Screen On", isOn: $keepsScreenOn)
+            } footer: {
+                Text("While a lead sheet is open, the screen doesn’t dim or lock.")
+            }
+
             Section {
                 Toggle("Sync with Other Devices", isOn: syncBinding)
             } footer: {

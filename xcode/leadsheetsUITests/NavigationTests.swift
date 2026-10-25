@@ -72,6 +72,67 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
+    func testNextAndPreviousFollowTheAlbumsTrackOrder() {
+        let app = launch()
+        app.segmentedControls.buttons["Albums"].tap()
+        element("album-american-beauty", in: app).tap()
+        element("song-ripple", in: app).tap()
+        XCTAssertTrue(app.navigationBars["Ripple"].waitForExistence(timeout: 5))
+
+        app.buttons["Next Song"].tap()
+        XCTAssertTrue(app.navigationBars["Brokedown Palace"].waitForExistence(timeout: 5))
+
+        app.buttons["Previous Song"].tap()
+        app.buttons["Previous Song"].tap()
+        XCTAssertTrue(app.navigationBars["Candyman"].waitForExistence(timeout: 5))
+        attachScreenshot("Song navigation", of: app)
+    }
+
+    @MainActor
+    func testArrowKeysChangeSongs() {
+        let app = launch()
+        app.segmentedControls.buttons["Albums"].tap()
+        element("album-american-beauty", in: app).tap()
+        element("song-box-of-rain", in: app).tap()
+        XCTAssertTrue(app.navigationBars["Box of Rain"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["Previous Song"].isEnabled)
+
+        app.typeKey(XCUIKeyboardKey.rightArrow, modifierFlags: [])
+        XCTAssertTrue(app.navigationBars["Friend of the Devil"].waitForExistence(timeout: 5))
+
+        app.typeKey(XCUIKeyboardKey.leftArrow, modifierFlags: [])
+        XCTAssertTrue(app.navigationBars["Box of Rain"].waitForExistence(timeout: 5))
+    }
+
+    @MainActor
+    func testRelaunchingAfterTheSystemEndsTheAppReopensTheSong() {
+        let app = launch()
+        app.segmentedControls.buttons["Albums"].tap()
+        element("album-american-beauty", in: app).tap()
+        element("song-ripple", in: app).tap()
+        XCTAssertTrue(app.navigationBars["Ripple"].waitForExistence(timeout: 5))
+
+        XCUIDevice.shared.press(.home)
+        sleep(2)
+        app.terminate()
+        app.launch()
+
+        XCTAssertTrue(app.navigationBars["Ripple"].waitForExistence(timeout: 5))
+        app.navigationBars["Ripple"].buttons.firstMatch.tap()
+        XCTAssertTrue(app.segmentedControls.buttons["Albums"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.segmentedControls.buttons["Albums"].isSelected)
+
+        // Leave the restored state where the other tests expect to start.
+        app.segmentedControls.buttons["Songs"].tap()
+        XCUIDevice.shared.press(.home)
+        sleep(2)
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(app.segmentedControls.buttons["Songs"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.segmentedControls.buttons["Songs"].isSelected)
+    }
+
+    @MainActor
     private func launch() -> XCUIApplication {
         let app = XCUIApplication()
         app.launch()

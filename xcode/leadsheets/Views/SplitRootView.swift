@@ -9,10 +9,10 @@ struct SplitRootView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
 
-    @State private var category: LibraryCategory = .songs
+    @SceneStorage("category") private var category: LibraryCategory = .songs
     @State private var path: [LibraryRoute] = []
     @State private var searchText = ""
-    @State private var selectedSongID: Song.ID?
+    @SceneStorage("selectedSongID") private var selectedSongID: Song.ID?
     @State private var compactColumn: NavigationSplitViewColumn = .sidebar
     #if os(iOS)
     @State private var showsSettings = false
@@ -50,7 +50,7 @@ struct SplitRootView: View {
             .navigationSplitViewColumnWidth(min: 360, ideal: 400, max: 480)
         } detail: {
             if let song = selectedSongID.flatMap(catalog.song(id:)) {
-                SheetView(song: song)
+                SheetView(song: song, navigation: navigation(from: song))
                     .id(song.id)
             } else {
                 ContentUnavailableView(
@@ -71,6 +71,19 @@ struct SplitRootView: View {
         .onChange(of: category) {
             path = []
         }
+        .onAppear {
+            if selectedSongID != nil {
+                compactColumn = .detail
+            }
+        }
+        #if os(iOS)
+        .onChange(of: compactColumn) { _, column in
+            // Going back to the library on iPhone closes the song, so a relaunch doesn't reopen it.
+            if column == .sidebar, horizontalSizeClass == .compact {
+                selectedSongID = nil
+            }
+        }
+        #endif
         .onChange(of: cloudSync.selectedSongSlug) { _, slug in
             if let slug {
                 show(slug)
@@ -99,6 +112,30 @@ struct SplitRootView: View {
                 cloudSync.sendSelection(slug: songID)
             }
         )
+    }
+
+    /// The songs of the list the open song was chosen from, in the order shown.
+    private var openedFromSongs: [Song] {
+        if let route = path.last {
+            return route.songs(in: catalog)
+        }
+        switch category {
+        case .songs: return catalog.songs(matching: searchText)
+        case .covers: return catalog.covers(matching: searchText)
+        case .albums, .artists, .singers, .writers: return []
+        }
+    }
+
+    private func navigation(from song: Song) -> SongNavigation {
+        let songs = openedFromSongs
+        guard let index = songs.firstIndex(where: { $0.id == song.id }) else {
+            return SongNavigation(previous: nil, next: nil)
+        }
+        let selection = songSelection
+        func select(_ offset: Int) -> (() -> Void)? {
+            songs.indices.contains(index + offset) ? { selection.wrappedValue = songs[index + offset].id } : nil
+        }
+        return SongNavigation(previous: select(-1), next: select(1))
     }
 
     /// Shows a song selected on another device. Returns whether the selection changed.
