@@ -5,7 +5,6 @@ import DeadSheetsKit
 
 struct ImageViewerScreen: View {
     let song: Song
-    let onBack: () -> Void
 
     @FocusState private var focusedField: Field?
     @State private var zoomScale: CGFloat = 1.0
@@ -13,27 +12,13 @@ struct ImageViewerScreen: View {
     @State private var scrollID = UUID()
 
     enum Field {
-        case backButton
         case image
         case lyrics
     }
 
     var body: some View {
         VStack(spacing: 0) {
-            // Top Bar with Back Button
             HStack {
-                Button(action: onBack) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "chevron.left")
-                        Text("Back")
-                    }
-                    .font(.title3)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 12)
-                }
-                .buttonStyle(.card)
-                .focused($focusedField, equals: .backButton)
-
                 VStack(alignment: .leading, spacing: 8) {
                     Text(song.title)
                         .font(.headline)
@@ -194,7 +179,7 @@ struct ImageViewerScreen: View {
         }
         .background(Color.black)
         .onAppear {
-            focusedField = .backButton
+            focusedField = .image
         }
     }
 }

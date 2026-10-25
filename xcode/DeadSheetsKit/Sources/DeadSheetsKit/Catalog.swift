@@ -170,6 +170,11 @@ public struct Catalog: Sendable {
         self.songIDsByPerson = songIDsByPerson
     }
 
+    /// The artist with the most songs, whose name lists can leave out.
+    public var mainArtist: Artist? {
+        artists.max { $0.songIDs.count < $1.songIDs.count }
+    }
+
     // MARK: - Lookup
 
     public func song(id: Song.ID) -> Song? {

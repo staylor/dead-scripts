@@ -30,6 +30,11 @@ struct CatalogTests {
         #expect(catalog.artists.map(\.id) == ["grateful-dead", "jerry-garcia"])
     }
 
+    @Test func mainArtistHasTheMostSongs() {
+        #expect(catalog.mainArtist?.id == "grateful-dead")
+        #expect(Catalog.bundled.mainArtist?.name == "Grateful Dead")
+    }
+
     @Test func artistsListTheirAlbumsAndSongs() throws {
         let garcia = try #require(catalog.artist(id: "jerry-garcia"))
         #expect(garcia.albumIDs == ["garcia"])

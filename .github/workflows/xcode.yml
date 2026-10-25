@@ -92,3 +92,22 @@ jobs:
       - uses: actions/checkout@v5
       - name: Test
         run: swift test --package-path xcode/DeadSheetsKit
+
+  ui-test:
+    name: UI tests (iPhone)
+    runs-on: macos-26
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: xcode
+    steps:
+      - uses: actions/checkout@v5
+      - name: Test
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project leadsheets.xcodeproj \
+            -scheme leadsheets \
+            -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2" \
+            CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
+            | xcbeautify --renderer github-actions
