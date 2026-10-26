@@ -1,4 +1,4 @@
-import { exec } from 'child_process';
+import { execSync } from 'child_process';
 import { copyFile } from 'fs/promises';
 import path from 'path';
 
@@ -32,6 +32,7 @@ const artists = await prisma.artist.findMany({
 for (const node of artists) {
   const artist = {
     name: node.name,
+    slug: node.slug,
     imageFileName: node.imageFileName,
     albums: [] as any[],
   };
@@ -84,7 +85,7 @@ for (const node of artists) {
 data.singers.push(...Array.from(singerCache.values()));
 data.writers.push(...Array.from(writerCache.values()));
 
-const appDir = path.join(process.cwd(), 'xcode', 'leadsheets', 'Resources');
+const sheetsDir = path.join(process.cwd(), 'xcode', 'Sheets');
 
 await Promise.all(
   schema.map(async (entry) => {
@@ -99,14 +100,14 @@ await Promise.all(
 
     const pdf = score.split('/').pop();
     const src = path.join(ICLOUD_DIR, score);
-    const dest = path.join(appDir, 'pdfs', pdf!);
+    const dest = path.join(sheetsDir, 'pdfs', pdf!);
 
     return copyFile(src, dest);
   })
 );
 
-const file = path.join(appDir, 'seeds.json');
+const file = path.join(process.cwd(), 'xcode', 'DeadSheetsKit', 'Sources', 'DeadSheetsKit', 'Resources', 'seeds.json');
 saveJSON(file, data);
 
-// generate images for tvOS
-exec('cd xcode; swift ./convert_pdfs.swift');
+// tvOS has no PDFKit, so it shows PNG renderings of the sheets
+execSync('swift convert_pdfs.swift', { cwd: path.join(process.cwd(), 'xcode'), stdio: 'inherit' });

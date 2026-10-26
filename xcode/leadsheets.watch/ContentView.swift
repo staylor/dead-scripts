@@ -1,36 +1,29 @@
+import DeadSheetsKit
 import SwiftUI
-import SwiftData
-import WatchConnectivity
 import WatchKit
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query(sort: \Song.name) private var songs: [Song]
-    @ObservedObject private var connectivityManager = WatchConnectivityManager.shared
+    private let catalog = Catalog.bundled
+    private let connectivity = WatchConnectivityManager.shared
 
-    @State private var navigationPath = NavigationPath()
-    @State private var importManager: DataImportManager?
-    @State private var autoNavigatedSlug: String?
+    @State private var path: [Song] = []
+    @State private var songOpenedFromPhone: Song.ID?
 
     var body: some View {
-        NavigationStack(path: $navigationPath) {
-            List(songs) { song in
+        NavigationStack(path: $path) {
+            List(catalog.songs) { song in
                 NavigationLink(value: song) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(song.name)
+                        Text(song.title)
                             .font(.headline)
 
-                        if let artist = song.artist {
-                            Text(artist.name)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
+                        Text(song.artistName)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
 
-                        if let album = song.album {
-                            Text(album.name)
-                                .font(.caption2)
-                                .foregroundStyle(.tertiary)
-                        }
+                        Text(song.albumTitle)
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
                     }
                 }
             }
@@ -38,28 +31,17 @@ struct ContentView: View {
             .navigationDestination(for: Song.self) { song in
                 LyricsDetailView(song: song)
                     .onAppear {
-                        // Only send to iPhone if user manually selected (not auto-navigated from iPhone)
-                        if autoNavigatedSlug != song.slug {
-                            connectivityManager.sendSelectedSong(songID: song.slug ?? "", songName: song.name)
+                        if songOpenedFromPhone != song.id {
+                            connectivity.sendSelectedSong(id: song.id)
                         }
-                        autoNavigatedSlug = nil
+                        songOpenedFromPhone = nil
                     }
             }
-            .task {
-                if importManager == nil {
-                    importManager = DataImportManager(modelContext: modelContext)
-                }
-                await importManager?.performInitialImport()
-            }
-            .onChange(of: connectivityManager.selectedSongID) { _, newID in
-                // Navigate to the selected song when received from iPhone (match by slug)
-                if let newID = newID,
-                   let song = songs.first(where: { $0.slug == newID }) {
-                    autoNavigatedSlug = newID
-                    WKInterfaceDevice.current().play(.notification)
-                    navigationPath.removeLast(navigationPath.count) // Pop to root
-                    navigationPath.append(song)
-                }
+            .onChange(of: connectivity.selectedSongID) { _, songID in
+                guard let songID, let song = catalog.song(id: songID) else { return }
+                songOpenedFromPhone = songID
+                WKInterfaceDevice.current().play(.notification)
+                path = [song]
             }
         }
     }

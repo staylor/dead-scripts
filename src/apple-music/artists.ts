@@ -16,7 +16,7 @@ const artists = [
 ];
 
 artists.forEach(([slug, url]) => {
-  const resized = url.replace(/\{(w|h)\}/g, '1024');
+  const resized = url.replace(/\{(w|h)\}/g, '600');
 
   exec(`curl -o xcode/leadsheets/Resources/artists/${slug}.jpg ${resized}`);
 });

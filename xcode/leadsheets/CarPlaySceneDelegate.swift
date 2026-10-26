@@ -1,145 +1,90 @@
 #if os(iOS) && canImport(CarPlay)
 import CarPlay
-import SwiftData
+import DeadSheetsKit
+import os
 import UIKit
 
-@available(iOS 14.0, *)
-class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
+final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
+    private var interfaceController: CPInterfaceController?
 
-    var interfaceController: CPInterfaceController?
-    var modelContext: ModelContext?
-    private var importObserver: NSObjectProtocol?
-
-    deinit {
-        if let observer = importObserver {
-            NotificationCenter.default.removeObserver(observer)
-        }
-    }
-    
-    // MARK: - CPTemplateApplicationSceneDelegate
-    
     func templateApplicationScene(
         _ templateApplicationScene: CPTemplateApplicationScene,
         didConnect interfaceController: CPInterfaceController
     ) {
-        print("CarPlay connected!")
         self.interfaceController = interfaceController
-
-        // Request MusicKit authorization early
         Task {
-            _ = await MusicPlayerService.shared.requestAuthorization()
+            await MusicPlayerService.shared.requestAuthorization()
         }
-
-        // Set up the root template
-        let rootTemplate = createSongListTemplate()
-        interfaceController.setRootTemplate(rootTemplate, animated: false, completion: { success, error in
-            if let error = error {
-                print("Error setting root template: \(error)")
-            } else {
-                print("Root template set successfully")
+        interfaceController.setRootTemplate(makeSongList(), animated: false) { _, error in
+            if let error {
+                Logger.carPlay.error("Couldn't show the song list: \(error.localizedDescription, privacy: .public)")
             }
-        })
-
-        // Listen for import completion to refresh the list
-        importObserver = NotificationCenter.default.addObserver(
-            forName: .songsDidImport,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.refreshSongList()
         }
     }
 
-    private func refreshSongList() {
-        guard let interfaceController = interfaceController else { return }
-        print("Refreshing CarPlay song list after import...")
-        let updatedTemplate = createSongListTemplate()
-        interfaceController.setRootTemplate(updatedTemplate, animated: true, completion: nil)
-    }
-    
-    private func templateApplicationScene(
+    func templateApplicationScene(
         _ templateApplicationScene: CPTemplateApplicationScene,
-        didDisconnect interfaceController: CPInterfaceController
+        didDisconnectInterfaceController interfaceController: CPInterfaceController
     ) {
-        print("CarPlay disconnected")
         self.interfaceController = nil
     }
-    
-    // MARK: - Template Creation
-    
-    private func createSongListTemplate() -> CPListTemplate {
-        print("Creating song list template...")
 
-        // Use the shared model container
-        let context = ModelContext(SharedModelContainer.shared)
-        self.modelContext = context
-        
-        // Fetch all songs
-        let descriptor = FetchDescriptor<Song>(sortBy: [SortDescriptor(\.name)])
-        guard let songs = try? context.fetch(descriptor), !songs.isEmpty else {
-            print("No songs found in database")
-            // Return a template with a message
-            let emptyItem = CPListItem(text: "No songs available", detailText: "Import songs in the app")
-            let section = CPListSection(items: [emptyItem])
+    private func makeSongList() -> CPListTemplate {
+        let songs = Catalog.bundled.songs
+        guard !songs.isEmpty else {
+            let section = CPListSection(items: [CPListItem(text: "No songs available", detailText: nil)])
             return CPListTemplate(title: "Dead Sheets", sections: [section])
         }
-        
-        print("Found \(songs.count) songs")
-        
-        // Group songs by first letter
-        let groupedSongs = Dictionary(grouping: songs) { song -> String in
-            let firstChar = song.name.prefix(1).uppercased()
-            return firstChar.rangeOfCharacter(from: .letters) != nil ? firstChar : "#"
+
+        let songsByInitial = Dictionary(grouping: songs) { song in
+            let initial = song.title.prefix(1).uppercased()
+            return initial.rangeOfCharacter(from: .letters) == nil ? "#" : initial
         }
-        
-        // Create sections
-        let sections = groupedSongs.keys.sorted().map { letter -> CPListSection in
-            let songsInSection = groupedSongs[letter]?.sorted { $0.name < $1.name } ?? []
-            
-            let items = songsInSection.map { song -> CPListItem in
-                let item = CPListItem(
-                    text: song.name,
-                    detailText: song.artist?.name ?? ""
-                )
-
-                // Capture only the values needed, not the SwiftData model
-                let appleMusicId = song.appleMusicId
-                let songName = song.name
-
-                // Add handler to open Apple Music when tapped
+        let sections = songsByInitial.keys.sorted().map { initial in
+            let items = (songsByInitial[initial] ?? []).map { song in
+                let item = CPListItem(text: song.title, detailText: song.artistName)
                 item.handler = { [weak self] _, completion in
-                    self?.openAppleMusic(id: appleMusicId, name: songName)
+                    self?.play(song)
                     completion()
                 }
-
                 return item
             }
-            
-            return CPListSection(items: items, header: letter, sectionIndexTitle: letter)
+            return CPListSection(items: items, header: initial, sectionIndexTitle: initial)
         }
-        
-        let listTemplate = CPListTemplate(title: "Dead Sheets", sections: sections)
-        print("Template created with \(sections.count) sections")
-        return listTemplate
+        return CPListTemplate(title: "Dead Sheets", sections: sections)
     }
-    
-    // MARK: - Helper Methods
 
-    private func openAppleMusic(id appleMusicId: String?, name songName: String) {
-        guard let appleMusicId = appleMusicId, !appleMusicId.isEmpty else {
-            print("No Apple Music ID for song: \(songName)")
+    private func play(_ song: Song) {
+        guard let appleMusicID = song.appleMusicID else {
+            showAlert("“\(song.title)” isn’t in Apple Music.")
             return
         }
-
         Task {
-            await MusicPlayerService.shared.play(appleMusicId: appleMusicId, songName: songName)
-
-            // Push to Now Playing screen after playback starts
-            await MainActor.run {
-                let nowPlayingTemplate = CPNowPlayingTemplate.shared
-                interfaceController?.pushTemplate(nowPlayingTemplate, animated: true, completion: nil)
+            switch await MusicPlayerService.shared.start(appleMusicID: appleMusicID, title: song.title) {
+            case .playing:
+                showNowPlaying()
+            case .needsSubscription:
+                showAlert("Playing songs requires an Apple Music subscription.")
+            case .failed(let failure):
+                showAlert(failure.errorDescription ?? "Couldn’t play “\(song.title)”.")
             }
         }
+    }
+
+    private func showNowPlaying() {
+        guard let interfaceController, interfaceController.topTemplate !== CPNowPlayingTemplate.shared else { return }
+        interfaceController.pushTemplate(CPNowPlayingTemplate.shared, animated: true, completion: nil)
+    }
+
+    private func showAlert(_ message: String) {
+        let dismiss = CPAlertAction(title: "OK", style: .cancel) { [weak self] _ in
+            self?.interfaceController?.dismissTemplate(animated: true, completion: nil)
+        }
+        interfaceController?.presentTemplate(
+            CPAlertTemplate(titleVariants: [message], actions: [dismiss]),
+            animated: true,
+            completion: nil
+        )
     }
 }
 #endif
