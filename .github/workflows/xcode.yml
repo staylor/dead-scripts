@@ -44,7 +44,7 @@ jobs:
   ci:
     name: CI
     if: always()
-    needs: [changes, build, test, ui-test]
+    needs: [changes, build, test, ui-test, format]
     runs-on: ubuntu-latest
     steps:
       - name: Check results
@@ -135,6 +135,8 @@ jobs:
 
   format:
     name: Format
+    needs: changes
+    if: needs.changes.outputs.xcode == 'true'
     runs-on: macos-26
     timeout-minutes: 10
     defaults:
