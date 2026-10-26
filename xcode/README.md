@@ -49,13 +49,16 @@ The seed-integrity tests check that every song in `seeds.json` resolves its sing
 
 UI tests launch the app with `-inMemoryUserData`, so favorites and setlists start empty each time.
 
-CI (`.github/workflows/xcode.yml`) builds macOS, iOS + watchOS and tvOS, and runs the package tests, the UI tests and the format check, on every change under `xcode/`.
+CI (`.github/workflows/xcode.yml`) builds macOS, iOS + watchOS and tvOS, and runs the package tests, the UI tests and the format check, on every change under `xcode/`. On `main`, it then uploads the apps to TestFlight.
 
 ## Releasing
 
-- Bump the version with `xcrun agvtool new-marketing-version 1.1` and the build with `xcrun agvtool next-version -all`.
+Every merge to `main` that changes `xcode/` uploads TestFlight builds for iOS (with the watch app), macOS and tvOS once CI passes. To upload without a change, for example when the 90-day builds expire, run the Xcode workflow from the Actions tab.
+
+- The `testflight` environment, which only deploys from `main`, holds an App Store Connect team key with the Admin role: `ASC_KEY` (the contents of the `.p8`), `ASC_KEY_ID` and `ASC_ISSUER_ID`.
+- Archives are signed for development, which needs a registered device for each platform. CI has its own development certificate, `DEVELOPMENT_CERTIFICATE` (a base64 `.p12`) and `DEVELOPMENT_CERTIFICATE_PASSWORD`, which expires on 2027-10-26. To replace it, export a new Apple Development certificate as a `.p12` (Xcode → Settings → Accounts → Manage Certificates) and update both secrets. Until then, each job creates a certificate of its own.
+- Uploads are signed with cloud-managed distribution certificates, and Xcode gives each one the next build number for its platform (`ExportOptions.plist`), so only the version needs bumping: `xcrun agvtool new-marketing-version 1.1`.
 - Before the first TestFlight build, deploy the `SongSelection` record type to Production in the CloudKit Console. Production builds can't create it.
 - In App Store Connect, set App Privacy to "Data Not Collected", and use [`PRIVACY.md`](PRIVACY.md) as the privacy policy URL.
-- CarPlay needs the CarPlay audio entitlement on the App ID and provisioning profile.
 
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) for how the code fits together.
