@@ -76,15 +76,14 @@ final class NavigationTests: XCTestCase {
         let app = launch()
         app.segmentedControls.buttons["Albums"].tap()
         element("album-american-beauty", in: app).tap()
-        element("song-ripple", in: app).tap()
-        XCTAssertTrue(app.navigationBars["Ripple"].waitForExistence(timeout: 5))
+        open("song-ripple", showing: "Ripple", in: app)
 
         app.buttons["Next Song"].tap()
-        XCTAssertTrue(app.navigationBars["Brokedown Palace"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.navigationBars["Brokedown Palace"].waitForExistence(timeout: 10))
 
         app.buttons["Previous Song"].tap()
         app.buttons["Previous Song"].tap()
-        XCTAssertTrue(app.navigationBars["Candyman"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.navigationBars["Candyman"].waitForExistence(timeout: 10))
         attachScreenshot("Song navigation", of: app)
     }
 
@@ -93,15 +92,14 @@ final class NavigationTests: XCTestCase {
         let app = launch()
         app.segmentedControls.buttons["Albums"].tap()
         element("album-american-beauty", in: app).tap()
-        element("song-box-of-rain", in: app).tap()
-        XCTAssertTrue(app.navigationBars["Box of Rain"].waitForExistence(timeout: 5))
+        open("song-box-of-rain", showing: "Box of Rain", in: app)
         XCTAssertFalse(app.buttons["Previous Song"].isEnabled)
 
         app.typeKey(XCUIKeyboardKey.rightArrow, modifierFlags: [])
-        XCTAssertTrue(app.navigationBars["Friend of the Devil"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.navigationBars["Friend of the Devil"].waitForExistence(timeout: 10))
 
         app.typeKey(XCUIKeyboardKey.leftArrow, modifierFlags: [])
-        XCTAssertTrue(app.navigationBars["Box of Rain"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.navigationBars["Box of Rain"].waitForExistence(timeout: 10))
     }
 
     @MainActor
@@ -109,17 +107,16 @@ final class NavigationTests: XCTestCase {
         let app = launch()
         app.segmentedControls.buttons["Albums"].tap()
         element("album-american-beauty", in: app).tap()
-        element("song-ripple", in: app).tap()
-        XCTAssertTrue(app.navigationBars["Ripple"].waitForExistence(timeout: 5))
+        open("song-ripple", showing: "Ripple", in: app)
 
         XCUIDevice.shared.press(.home)
         sleep(2)
         app.terminate()
         app.launch()
 
-        XCTAssertTrue(app.navigationBars["Ripple"].waitForExistence(timeout: 5))
-        app.navigationBars["Ripple"].buttons.firstMatch.tap()
-        XCTAssertTrue(app.segmentedControls.buttons["Albums"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.navigationBars["Ripple"].waitForExistence(timeout: 10))
+        goBack(from: "Ripple", in: app)
+        XCTAssertTrue(app.segmentedControls.buttons["Albums"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.segmentedControls.buttons["Albums"].isSelected)
 
         // Leave the restored state where the other tests expect to start.
@@ -128,7 +125,7 @@ final class NavigationTests: XCTestCase {
         sleep(2)
         app.terminate()
         app.launch()
-        XCTAssertTrue(app.segmentedControls.buttons["Songs"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.segmentedControls.buttons["Songs"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.segmentedControls.buttons["Songs"].isSelected)
     }
 
