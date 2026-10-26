@@ -239,4 +239,17 @@ final class NavigationTests: XCTestCase {
     private func goBack(from title: String, in app: XCUIApplication) {
         app.navigationBars[title].buttons["BackButton"].tap()
     }
+
+    /// Taps a category until it's selected; a tap can be lost while a pop animation is still running.
+    @MainActor
+    private func select(_ category: String, in app: XCUIApplication) {
+        let segment = app.segmentedControls.buttons[category]
+        XCTAssertTrue(segment.waitForExistence(timeout: 10))
+        let selected = NSPredicate(format: "isSelected == true")
+        for _ in 0..<3 where !segment.isSelected {
+            segment.tap()
+            _ = XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: selected, object: segment)], timeout: 3)
+        }
+        XCTAssertTrue(segment.isSelected, "\(category) wasn't selected")
+    }
 }
