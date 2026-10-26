@@ -14,7 +14,7 @@ xcodebuild build -project leadsheets.xcodeproj -scheme leadsheets -destination '
 xcodebuild build -project leadsheets.xcodeproj -scheme leadsheets -destination 'generic/platform=tvOS Simulator' CODE_SIGNING_ALLOWED=NO
 
 # iPhone UI tests
-xcodebuild test -project leadsheets.xcodeproj -scheme leadsheets -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+xcodebuild test -project leadsheets.xcodeproj -scheme leadsheets -destination 'platform=iOS Simulator,name=iPhone 18 Pro' \
   CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=
 
 # Formatting
