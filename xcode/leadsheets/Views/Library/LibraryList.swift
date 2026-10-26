@@ -167,8 +167,8 @@ struct CategoryPicker: View {
     }
 }
 
-private extension View {
-    func emptyState(isEmpty: Bool, category: LibraryCategory, searchText: String) -> some View {
+extension View {
+    fileprivate func emptyState(isEmpty: Bool, category: LibraryCategory, searchText: String) -> some View {
         overlay {
             if isEmpty {
                 if searchText.isEmpty {

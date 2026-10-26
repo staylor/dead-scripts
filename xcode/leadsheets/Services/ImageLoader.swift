@@ -59,7 +59,8 @@ enum ImageLoader {
 
         // Second attempt: Load from file path in bundle
         if let path = Bundle.main.path(forResource: fileNameWithoutExt, ofType: ext),
-           let image = UIImage(contentsOfFile: path) {
+            let image = UIImage(contentsOfFile: path)
+        {
             return image
         }
 
@@ -75,7 +76,8 @@ enum ImageLoader {
 
         // Second attempt: Load from file path in bundle
         if let path = Bundle.main.path(forResource: fileNameWithoutExt, ofType: ext),
-           let image = NSImage(contentsOfFile: path) {
+            let image = NSImage(contentsOfFile: path)
+        {
             return image
         }
 

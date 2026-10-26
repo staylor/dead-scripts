@@ -1,8 +1,8 @@
 #!/usr/bin/env swift
 
+import AppKit
 import Foundation
 import PDFKit
-import AppKit
 
 let pdfDir = "Sheets/pdfs"
 let outputDir = "Sheets/images"
@@ -13,9 +13,11 @@ try? fileManager.createDirectory(atPath: outputDir, withIntermediateDirectories:
 
 // Get all PDFs
 let pdfURL = URL(fileURLWithPath: pdfDir)
-guard let pdfFiles = try? fileManager.contentsOfDirectory(at: pdfURL, includingPropertiesForKeys: nil)
-    .filter({ $0.pathExtension.lowercased() == "pdf" })
-    .sorted(by: { $0.lastPathComponent < $1.lastPathComponent }) else {
+guard
+    let pdfFiles = try? fileManager.contentsOfDirectory(at: pdfURL, includingPropertiesForKeys: nil)
+        .filter({ $0.pathExtension.lowercased() == "pdf" })
+        .sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
+else {
     print("❌ Could not read PDF directory")
     exit(1)
 }
@@ -34,7 +36,8 @@ for (index, pdfURL) in pdfFiles.enumerated() {
     print("[\(index + 1)/\(pdfFiles.count)] Converting: \(filename)")
 
     guard let pdfDocument = PDFDocument(url: pdfURL),
-          let page = pdfDocument.page(at: 0) else {
+        let page = pdfDocument.page(at: 0)
+    else {
         print("  ⚠️  Could not open PDF")
         continue
     }
@@ -50,18 +53,20 @@ for (index, pdfURL) in pdfFiles.enumerated() {
     )
 
     // Create bitmap context
-    guard let bitmapRep = NSBitmapImageRep(
-        bitmapDataPlanes: nil,
-        pixelsWide: Int(imageSize.width),
-        pixelsHigh: Int(imageSize.height),
-        bitsPerSample: 8,
-        samplesPerPixel: 4,
-        hasAlpha: true,
-        isPlanar: false,
-        colorSpaceName: .deviceRGB,
-        bytesPerRow: 0,
-        bitsPerPixel: 0
-    ) else {
+    guard
+        let bitmapRep = NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: Int(imageSize.width),
+            pixelsHigh: Int(imageSize.height),
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: .deviceRGB,
+            bytesPerRow: 0,
+            bitsPerPixel: 0
+        )
+    else {
         print("  ⚠️  Could not create bitmap")
         continue
     }

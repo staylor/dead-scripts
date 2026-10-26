@@ -75,8 +75,9 @@ extension PDFKitView {
 
         private func fitToWidth(pdfView: PDFView, width: CGFloat, scrollToTop: Bool = false) {
             guard let document = pdfView.document,
-                  let page = document.page(at: 0),
-                  width > 0 else { return }
+                let page = document.page(at: 0),
+                width > 0
+            else { return }
 
             // Unlock zoom first to allow scale change
             if let scrollView = pdfView.subviews.first as? UIScrollView {

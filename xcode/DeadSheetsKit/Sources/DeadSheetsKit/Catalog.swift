@@ -92,8 +92,8 @@ public struct Catalog: Sendable {
                     var credits: [Credit] = []
                     for entry in seedSong.writers ?? [] {
                         guard entry.count == 2, let role = Role(rawValue: entry[1]),
-                              knownCredits.contains(CreditKey(personID: entry[0], role: role)),
-                              let person = people[entry[0]]
+                            knownCredits.contains(CreditKey(personID: entry[0], role: role)),
+                            let person = people[entry[0]]
                         else {
                             problems.append("Song \(seedSong.slug) has unknown writer \(entry)")
                             continue
@@ -101,48 +101,51 @@ public struct Catalog: Sendable {
                         credits.append(Credit(person: person, role: role))
                     }
 
-                    albumSongs.append(Song(
-                        id: seedSong.slug,
-                        title: seedSong.name,
-                        sheetFileName: seedSong.fileName,
-                        lyrics: seedSong.lyrics ?? "",
-                        discNumber: seedSong.discNumber,
-                        trackNumber: seedSong.trackNumber,
-                        isCover: seedSong.songType?.lowercased() == "cover",
-                        appleMusicID: seedSong.appleMusicId.flatMap { $0.isEmpty ? nil : $0 },
-                        albumID: seedAlbum.slug,
-                        albumTitle: seedAlbum.name,
-                        albumReleaseYear: seedAlbum.releaseYear,
-                        coverFileName: seedAlbum.coverArtFileName,
-                        artistID: artistID,
-                        artistName: seedArtist.name,
-                        singer: singer,
-                        credits: credits
-                    ))
+                    albumSongs.append(
+                        Song(
+                            id: seedSong.slug,
+                            title: seedSong.name,
+                            sheetFileName: seedSong.fileName,
+                            lyrics: seedSong.lyrics ?? "",
+                            discNumber: seedSong.discNumber,
+                            trackNumber: seedSong.trackNumber,
+                            isCover: seedSong.songType?.lowercased() == "cover",
+                            appleMusicID: seedSong.appleMusicId.flatMap { $0.isEmpty ? nil : $0 },
+                            albumID: seedAlbum.slug,
+                            albumTitle: seedAlbum.name,
+                            albumReleaseYear: seedAlbum.releaseYear,
+                            coverFileName: seedAlbum.coverArtFileName,
+                            artistID: artistID,
+                            artistName: seedArtist.name,
+                            singer: singer,
+                            credits: credits
+                        ))
                 }
 
                 albumSongs.sort { ($0.discNumber ?? 0, $0.trackNumber ?? 0) < ($1.discNumber ?? 0, $1.trackNumber ?? 0) }
                 songs += albumSongs
                 artistAlbumIDs.append(seedAlbum.slug)
                 artistSongIDs += albumSongs.map(\.id)
-                albums.append(Album(
-                    id: seedAlbum.slug,
-                    title: seedAlbum.name,
-                    releaseYear: seedAlbum.releaseYear,
-                    coverFileName: seedAlbum.coverArtFileName,
-                    artistID: artistID,
-                    artistName: seedArtist.name,
-                    songIDs: albumSongs.map(\.id)
-                ))
+                albums.append(
+                    Album(
+                        id: seedAlbum.slug,
+                        title: seedAlbum.name,
+                        releaseYear: seedAlbum.releaseYear,
+                        coverFileName: seedAlbum.coverArtFileName,
+                        artistID: artistID,
+                        artistName: seedArtist.name,
+                        songIDs: albumSongs.map(\.id)
+                    ))
             }
 
-            artists.append(Artist(
-                id: artistID,
-                name: seedArtist.name,
-                imageFileName: seedArtist.imageFileName,
-                albumIDs: artistAlbumIDs,
-                songIDs: artistSongIDs
-            ))
+            artists.append(
+                Artist(
+                    id: artistID,
+                    name: seedArtist.name,
+                    imageFileName: seedArtist.imageFileName,
+                    albumIDs: artistAlbumIDs,
+                    songIDs: artistSongIDs
+                ))
         }
 
         let songsByID = Dictionary(uniqueKeysWithValues: songs.map { ($0.id, $0) })

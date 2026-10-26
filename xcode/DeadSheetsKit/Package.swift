@@ -6,7 +6,7 @@ let package = Package(
     name: "DeadSheetsKit",
     platforms: [.iOS(.v26), .macOS(.v26), .tvOS(.v26), .watchOS(.v26)],
     products: [
-        .library(name: "DeadSheetsKit", targets: ["DeadSheetsKit"]),
+        .library(name: "DeadSheetsKit", targets: ["DeadSheetsKit"])
     ],
     targets: [
         .target(

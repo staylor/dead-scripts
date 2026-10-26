@@ -19,9 +19,9 @@ struct SheetView: View {
             .navigationTitle(song.title)
             .navigationSubtitle(subtitle)
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.inline)
             #else
-            .frame(minWidth: 480)
+        .frame(minWidth: 480)
             #endif
             .toolbar {
                 #if os(iOS)

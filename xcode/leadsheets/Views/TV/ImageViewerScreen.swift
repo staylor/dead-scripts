@@ -94,7 +94,8 @@ struct ImageViewerScreen: View {
             HStack(spacing: 40) {
                 // Left: Sheet Music Image (zoomable and pannable)
                 if let imageURL = song.sheetImageURL,
-                   let image = UIImage(contentsOfFile: imageURL.path(percentEncoded: false)) {
+                    let image = UIImage(contentsOfFile: imageURL.path(percentEncoded: false))
+                {
                     GeometryReader { geometry in
                         let imageAspect = image.size.height / image.size.width
                         let imageHeight = geometry.size.width * imageAspect

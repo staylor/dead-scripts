@@ -1,4 +1,5 @@
 import Testing
+
 @testable import DeadSheetsKit
 
 struct WriterGroupsTests {
@@ -6,9 +7,10 @@ struct WriterGroupsTests {
 
     @Test func groupsEveryWriterOnce() {
         let groups = catalog.writerGroups()
-        #expect(groups.map(\.name) == [
-            "Al Smith & Luther Dixon", "Bonnie Dobson", "Jerry Garcia", "John Dawson", "Phil Lesh", "Robert Hunter",
-        ])
+        #expect(
+            groups.map(\.name) == [
+                "Al Smith & Luther Dixon", "Bonnie Dobson", "Jerry Garcia", "John Dawson", "Phil Lesh", "Robert Hunter",
+            ])
     }
 
     @Test func combinesAPersonsRolesOnTheSameSongs() throws {

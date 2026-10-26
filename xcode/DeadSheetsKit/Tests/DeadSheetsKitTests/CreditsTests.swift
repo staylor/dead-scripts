@@ -1,4 +1,5 @@
 import Testing
+
 @testable import DeadSheetsKit
 
 struct CreditsTests {
@@ -12,10 +13,10 @@ struct CreditsTests {
 
     @Test func showsAPlaceholderWithoutCredits() throws {
         let seeds = """
-        { "artists": [{ "name": "Grateful Dead", "albums": [{ "name": "Dead Set", "slug": "dead-set", "songs": [
-            { "name": "Space", "slug": "space", "fileName": "Space Score.pdf" }
-        ]}]}], "singers": [], "writers": [] }
-        """
+            { "artists": [{ "name": "Grateful Dead", "albums": [{ "name": "Dead Set", "slug": "dead-set", "songs": [
+                { "name": "Space", "slug": "space", "fileName": "Space Score.pdf" }
+            ]}]}], "singers": [], "writers": [] }
+            """
         let catalog = try Catalog(seedData: .init(seeds.utf8))
         #expect(catalog.song(id: "space")?.creditsText == "Unknown Writer")
     }

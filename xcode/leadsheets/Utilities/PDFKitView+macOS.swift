@@ -56,8 +56,9 @@ extension PDFKitView {
                 }
             } else if initialLoadComplete {
                 // Only update scale if size has actually changed significantly
-                let sizeChanged = abs(context.coordinator.lastSize.width - size.width) > 1.0 ||
-                                 abs(context.coordinator.lastSize.height - size.height) > 1.0
+                let sizeChanged =
+                    abs(context.coordinator.lastSize.width - size.width) > 1.0
+                    || abs(context.coordinator.lastSize.height - size.height) > 1.0
 
                 if sizeChanged {
                     // Force layout update before recalculating scale
@@ -80,7 +81,8 @@ extension PDFKitView {
 
         private func updateScaleFactor(for pdfView: PDFView, width: CGFloat, resetPosition: Bool) {
             guard let document = pdfView.document,
-                  let page = document.page(at: 0) else { return }
+                let page = document.page(at: 0)
+            else { return }
 
             let pageSize = page.bounds(for: .mediaBox).size
 

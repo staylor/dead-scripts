@@ -15,12 +15,11 @@ extension Catalog {
     /// Covers whose title, artist or singer contain `query`.
     public func covers(matching query: String) -> [Song] {
         songs.filter { song in
-            song.isCover && (
-                query.isEmpty
+            song.isCover
+                && (query.isEmpty
                     || song.title.localizedStandardContains(query)
                     || song.artistName.localizedStandardContains(query)
-                    || song.singer?.name.localizedStandardContains(query) == true
-            )
+                    || song.singer?.name.localizedStandardContains(query) == true)
         }
     }
 
