@@ -9,7 +9,7 @@ final class NavigationTests: XCTestCase {
     @MainActor
     func testReturningFromASongKeepsTheBrowsingState() {
         let app = launch()
-        app.segmentedControls.buttons["Albums"].tap()
+        select("Albums", in: app)
         open("album-american-beauty", showing: "American Beauty", in: app)
         open("song-ripple", showing: "Ripple", in: app)
         attachScreenshot("Sheet", of: app)
@@ -74,7 +74,7 @@ final class NavigationTests: XCTestCase {
     @MainActor
     func testNextAndPreviousFollowTheAlbumsTrackOrder() {
         let app = launch()
-        app.segmentedControls.buttons["Albums"].tap()
+        select("Albums", in: app)
         element("album-american-beauty", in: app).tap()
         open("song-ripple", showing: "Ripple", in: app)
 
@@ -90,7 +90,7 @@ final class NavigationTests: XCTestCase {
     @MainActor
     func testArrowKeysChangeSongs() {
         let app = launch()
-        app.segmentedControls.buttons["Albums"].tap()
+        select("Albums", in: app)
         element("album-american-beauty", in: app).tap()
         open("song-box-of-rain", showing: "Box of Rain", in: app)
         XCTAssertFalse(app.buttons["Previous Song"].isEnabled)
@@ -105,7 +105,7 @@ final class NavigationTests: XCTestCase {
     @MainActor
     func testRelaunchingAfterTheSystemEndsTheAppReopensTheSong() {
         let app = launch()
-        app.segmentedControls.buttons["Albums"].tap()
+        select("Albums", in: app)
         element("album-american-beauty", in: app).tap()
         open("song-ripple", showing: "Ripple", in: app)
 
@@ -119,7 +119,7 @@ final class NavigationTests: XCTestCase {
         XCTAssertTrue(app.segmentedControls.buttons["Albums"].isSelected)
 
         // Leave the restored state where the other tests expect to start.
-        app.segmentedControls.buttons["Songs"].tap()
+        select("Songs", in: app)
         sendToBackground(app)
         app.terminate()
         app.launch()
@@ -142,7 +142,7 @@ final class NavigationTests: XCTestCase {
     @MainActor
     func testFavoritesAppearInTheFavoritesFilter() {
         let app = launch()
-        app.segmentedControls.buttons["Albums"].tap()
+        select("Albums", in: app)
         element("album-american-beauty", in: app).tap()
         element("song-ripple", in: app).tap()
         app.buttons["Add to Favorites"].tap()
@@ -150,7 +150,8 @@ final class NavigationTests: XCTestCase {
 
         goBack(from: "Ripple", in: app)
         goBack(from: "American Beauty", in: app)
-        app.segmentedControls.buttons["Songs"].tap()
+        select("Songs", in: app)
+        XCTAssertTrue(app.buttons["Filter"].waitForExistence(timeout: 10))
         app.buttons["Filter"].tap()
         app.buttons["Favorites"].tap()
 
@@ -162,7 +163,7 @@ final class NavigationTests: XCTestCase {
     @MainActor
     func testSetlistsPlayInTheOrderSongsWereAdded() {
         let app = launch()
-        app.segmentedControls.buttons["Setlists"].tap()
+        select("Setlists", in: app)
         app.buttons["New Setlist"].firstMatch.tap()
         let alert = app.alerts["New Setlist"]
         XCTAssertTrue(alert.waitForExistence(timeout: 10))
