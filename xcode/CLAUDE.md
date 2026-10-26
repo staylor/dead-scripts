@@ -1,80 +1,31 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for coding agents working in `xcode/`. Read [`README.md`](README.md) for building and the data pipeline, and [`ARCHITECTURE.md`](ARCHITECTURE.md) for how the code fits together.
 
-## Build Commands
+## Commands
 
 ```bash
-# Build for macOS
-xcodebuild -project leadsheets.xcodeproj -scheme leadsheets -destination 'platform=macOS' build
+# Package tests: catalog, grouping, search, seed integrity
+swift test --package-path DeadSheetsKit
 
-# Build for iOS Simulator
-xcodebuild -project leadsheets.xcodeproj -scheme leadsheets -destination 'platform=iOS Simulator,name=iPhone 16' build
+# Builds (the iOS build includes the watch app)
+xcodebuild build -project leadsheets.xcodeproj -scheme leadsheets -destination 'generic/platform=macOS' CODE_SIGNING_ALLOWED=NO
+xcodebuild build -project leadsheets.xcodeproj -scheme leadsheets -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO
+xcodebuild build -project leadsheets.xcodeproj -scheme leadsheets -destination 'generic/platform=tvOS Simulator' CODE_SIGNING_ALLOWED=NO
 
-# Build for watchOS Simulator
-xcodebuild -project leadsheets.xcodeproj -scheme "leadsheets.watch" -destination 'platform=watchOS Simulator,name=Apple Watch Series 10 (46mm)' build
+# iPhone UI tests
+xcodebuild test -project leadsheets.xcodeproj -scheme leadsheets -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+  CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=
+
+# Formatting
+swift format lint --recursive --strict .
 ```
 
-## Custom Slash Commands
+## Rules
 
-- `/swift-check [file]` - Analyze Swift files for SwiftUI best practices, memory leaks, and performance issues
-
-## Architecture Overview
-
-**Dead Sheets** is a multi-platform SwiftUI app (iOS, macOS, watchOS, tvOS, CarPlay) for viewing music lead sheets (PDFs) with lyrics.
-
-### Key Architectural Patterns
-
-1. **Shared ModelContainer** - `SharedModelContainer.shared` in `LeadSheetsApp.swift` provides a singleton SwiftData container used by both the main app and CarPlay
-
-2. **Hash-based Import** - `DataImportManager` uses SHA256 to detect changes in `seeds.json`, only reimporting when the file changes
-
-3. **Cross-device Sync**:
-   - `CloudSyncManager` - CloudKit sync between iPhone/iPad/Mac (async/await APIs)
-   - `WatchConnectivityManager` - Direct iPhone↔Watch sync via WatchConnectivity
-
-4. **Platform Abstraction**:
-   - `#if os(iOS)` / `#if os(macOS)` for platform-specific code
-   - `PDFKitView+iOS.swift` / `PDFKitView+macOS.swift` for platform implementations
-   - `PlatformColors` / `PlatformListView` for cross-platform styling
-
-5. **Notification-based Updates** - `.songsDidImport` notification triggers CarPlay refresh after import completes
-
-### Data Flow
-
-```
-seeds.json → DataImportService (actor) → SwiftData Models → @Query in Views
-```
-
-### Project Structure
-
-```
-leadsheets/
-├── Models/          # SwiftData models (Song, Album, Artist, Singer, Writer)
-├── Views/           # SwiftUI views (*ListView, *RowView, *Screen)
-├── Services/        # Managers (DataImport, CloudSync, WatchConnectivity, ImageLoader)
-├── Utilities/       # Helpers (PDFKitView, PlatformColors, CachedImage)
-├── Resources/       # Assets, seeds.json, pdfs/, images/
-└── LeadSheetsApp.swift, CarPlaySceneDelegate.swift
-
-leadsheets.watch/    # watchOS target
-```
-
-### SwiftData Models
-
-- `Song` - Core entity with PDF filename, lyrics, Apple Music ID
-- `Album` - Has songs, cover art, release year
-- `Artist` - Performing band (has albums and songs)
-- `Singer` - Original vocalist (for bands with multiple singers)
-- `Writer` - Songwriter with contribution type (music/lyrics)
-- `GroupedWriter` - Non-persisted helper for UI grouping
-
-### Platform-specific Behaviors
-
-| Platform | PDF Viewer               | Lyrics            | Sync              |
-| -------- | ------------------------ | ----------------- | ----------------- |
-| iOS      | Full-screen PDFKit       | Draggable overlay | CloudKit + Watch  |
-| macOS    | 3-column split           | Inspector panel   | CloudKit          |
-| tvOS     | Image viewer (no PDFKit) | Side panel        | None              |
-| watchOS  | None                     | ScrollView        | WatchConnectivity |
-| CarPlay  | None                     | None              | Shared container  |
+- Keep every platform building: macOS, iOS + watchOS and tvOS. Shared views compile for tvOS, where `textSelection`, PDFKit and SwiftData-backed features don't exist.
+- Put logic that doesn't need UIKit, AppKit or SwiftData in DeadSheetsKit, and test it with Swift Testing.
+- Swift 6 with main-actor default isolation: mark delegate callbacks that arrive on background queues `nonisolated`. Use `@Observable`, `os.Logger` and async APIs, not `ObservableObject`, `print` or completion handlers.
+- Don't edit `seeds.json` by hand. It's generated by `yarn xcode`, and the seed-integrity tests guard it.
+- New user data goes in `Models/UserData.swift`, keyed by song slug, with no unique constraints and a default for every property.
+- Give new list rows an accessibility identifier, and add a UI test for new navigation.
