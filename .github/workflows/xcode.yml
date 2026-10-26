@@ -44,7 +44,7 @@ jobs:
   ci:
     name: CI
     if: always()
-    needs: [changes, build]
+    needs: [changes, build, test]
     runs-on: ubuntu-latest
     steps:
       - name: Check results
@@ -84,6 +84,8 @@ jobs:
 
   test:
     name: Test DeadSheetsKit
+    needs: changes
+    if: needs.changes.outputs.xcode == 'true'
     runs-on: macos-26
     timeout-minutes: 15
     steps:
