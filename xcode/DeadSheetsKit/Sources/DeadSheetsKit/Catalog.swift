@@ -232,7 +232,7 @@ struct CreditKey: Hashable {
 }
 
 extension Catalog {
-    /// The catalog generated into this package's `seeds.json` by `yarn xcode`.
+    /// The catalog generated into this package's `seeds.json` by `pnpm xcode`.
     public static let bundled: Catalog = {
         guard let url = Bundle.module.url(forResource: "seeds", withExtension: "json") else {
             return Catalog(problems: ["seeds.json is missing from the DeadSheetsKit bundle"])

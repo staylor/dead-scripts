@@ -24,11 +24,11 @@ The catalog (`DeadSheetsKit/Sources/DeadSheetsKit/Resources/seeds.json`), album 
 The scripts in the repository root produce everything under `xcode/` from the Prisma database and the score PDFs in iCloud Drive:
 
 ```sh
-yarn apple-music   # look up Apple Music IDs, and download 600 px covers and photos
-yarn xcode         # write seeds.json, copy the score PDFs, and render them for tvOS
+pnpm apple-music   # look up Apple Music IDs, and download 600 px covers and photos
+pnpm xcode         # write seeds.json, copy the score PDFs, and render them for tvOS
 ```
 
-`yarn xcode` writes:
+`pnpm xcode` writes:
 
 - `DeadSheetsKit/Sources/DeadSheetsKit/Resources/seeds.json`: the catalog.
 - `Sheets/pdfs/`: one `<Title> Score.pdf` per song, bundled for iOS and macOS.

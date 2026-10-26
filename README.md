@@ -34,6 +34,6 @@ The main advantages to programmatically creating this book are the following:
 - Page layout is determined by a schema written in JSON, PDFs are combined using `pdf-lib`
 - TODO: page numbers can be added to existing PDFs programmatically, so you never have to consider managing these manually
 
-## yarn xcode
+## `pnpm xcode`
 
-Exports the catalog and lead sheets to the Dead Sheets app in [`xcode/`](xcode/README.md): `seeds.json`, the score PDFs, and PNG renderings for Apple TV. `yarn apple-music` looks up Apple Music IDs and downloads album covers and band photos.
+Exports the catalog and lead sheets to the Dead Sheets app in [`xcode/`](xcode/README.md): `seeds.json`, the score PDFs, and PNG renderings for Apple TV. `pnpm apple-music` looks up Apple Music IDs and downloads album covers and band photos.
