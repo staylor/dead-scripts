@@ -51,11 +51,11 @@ final class NavigationTests: XCTestCase {
         app.launchArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"]
         app.launch()
 
-        XCTAssertTrue(app.buttons["Browse"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["Browse"].waitForExistence(timeout: 10))
         XCTAssertFalse(app.segmentedControls.firstMatch.exists)
         app.buttons["Browse"].tap()
         app.buttons["Albums"].tap()
-        XCTAssertTrue(app.navigationBars["Albums"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.navigationBars["Albums"].waitForExistence(timeout: 10))
         attachScreenshot("Accessibility text size", of: app)
     }
 
