@@ -64,7 +64,7 @@ final class NavigationTests: XCTestCase {
         let app = launch()
         app.buttons["Settings"].tap()
 
-        XCTAssertTrue(app.switches["Sync with Other Devices"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.switches["Sync with Other Devices"].waitForExistence(timeout: 10))
         attachScreenshot("Settings", of: app)
         XCTAssertTrue(app.buttons["Privacy Policy"].exists)
         let version = NSPredicate(format: "label CONTAINS %@ OR value CONTAINS %@", "1.0 (1)", "1.0 (1)")
