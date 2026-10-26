@@ -5,9 +5,10 @@ on:
   push:
     branches: [main]
 
+# A push to a pull request cancels its older run, but a run on main that has started is never cut short by the next merge.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
@@ -40,7 +41,8 @@ jobs:
           fi
 
   # The check that branch rules require. Jobs skipped because nothing under xcode/ changed count as passing,
-  # so this has to run even when a job it needs fails.
+  # so this has to run, and fail, when a job it needs fails or the run is cancelled. The step needs always() too,
+  # because a step's condition implicitly includes success(), which is false once the run is cancelled.
   ci:
     name: CI
     if: always()
@@ -48,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check results
-        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        if: always() && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled'))
         run: exit 1
 
   build:
