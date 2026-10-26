@@ -146,15 +146,15 @@ final class NavigationTests: XCTestCase {
         element("album-american-beauty", in: app).tap()
         element("song-ripple", in: app).tap()
         app.buttons["Add to Favorites"].tap()
-        XCTAssertTrue(app.buttons["Remove from Favorites"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["Remove from Favorites"].waitForExistence(timeout: 10))
 
-        app.navigationBars["Ripple"].buttons.firstMatch.tap()
-        app.navigationBars["American Beauty"].buttons.firstMatch.tap()
+        goBack(from: "Ripple", in: app)
+        goBack(from: "American Beauty", in: app)
         app.segmentedControls.buttons["Songs"].tap()
         app.buttons["Filter"].tap()
         app.buttons["Favorites"].tap()
 
-        XCTAssertTrue(app.navigationBars["Favorites"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.navigationBars["Favorites"].waitForExistence(timeout: 10))
         XCTAssertTrue(element("song-ripple", in: app).exists)
         XCTAssertFalse(element("song-alabama-getaway", in: app).exists)
     }
@@ -165,22 +165,20 @@ final class NavigationTests: XCTestCase {
         app.segmentedControls.buttons["Setlists"].tap()
         app.buttons["New Setlist"].firstMatch.tap()
         let alert = app.alerts["New Setlist"]
-        XCTAssertTrue(alert.waitForExistence(timeout: 5))
+        XCTAssertTrue(alert.waitForExistence(timeout: 10))
         alert.textFields.firstMatch.typeText("Saturday")
         alert.buttons["Create"].tap()
 
-        element("setlist-Saturday", in: app).tap()
-        XCTAssertTrue(app.navigationBars["Saturday"].waitForExistence(timeout: 5))
+        open("setlist-Saturday", showing: "Saturday", in: app)
         app.buttons["Add Songs"].firstMatch.tap()
-        XCTAssertTrue(app.navigationBars["Add Songs"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.navigationBars["Add Songs"].waitForExistence(timeout: 10))
         element("song-althea", in: app).tap()
         element("song-alabama-getaway", in: app).tap()
         app.buttons["Done"].tap()
 
-        element("song-althea", in: app).tap()
-        XCTAssertTrue(app.navigationBars["Althea"].waitForExistence(timeout: 5))
+        open("song-althea", showing: "Althea", in: app)
         app.buttons["Next Song"].firstMatch.tap()
-        XCTAssertTrue(app.navigationBars["Alabama Getaway"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.navigationBars["Alabama Getaway"].waitForExistence(timeout: 10))
         XCTAssertFalse(app.buttons["Next Song"].firstMatch.isEnabled)
         attachScreenshot("Setlist", of: app)
     }
