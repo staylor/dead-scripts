@@ -90,6 +90,9 @@ struct SheetView: View {
     private var sheet: some View {
         if let url = song.sheetURL {
             PDFKitView(url: url)
+                #if os(iOS)
+            .ignoresSafeArea(.container, edges: .vertical)
+                #endif
         } else {
             ContentUnavailableView(
                 "Lead Sheet Missing",

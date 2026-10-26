@@ -90,7 +90,7 @@ extension PDFKitView {
             if scrollToTop {
                 pdfView.go(to: page)
                 if let scrollView = pdfView.subviews.first as? UIScrollView {
-                    scrollView.setContentOffset(.zero, animated: false)
+                    scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.adjustedContentInset.top), animated: false)
                 }
             }
         }
