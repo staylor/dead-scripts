@@ -59,6 +59,11 @@ struct SheetView: View {
             .focusedSceneValue(\.songNavigation, navigation)
             .pageTurnerKeys(navigation)
             .keepsScreenOn(keepsScreenOn)
+            .userActivity(SongActivity.type) { activity in
+                activity.title = song.title
+                activity.userInfo = [SongActivity.songIDKey: song.id]
+                activity.isEligibleForHandoff = true
+            }
             .inspector(isPresented: $showsLyrics) {
                 LyricsView(song: song)
                     .inspectorColumnWidth(min: 240, ideal: 320, max: 420)

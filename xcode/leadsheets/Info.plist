@@ -104,6 +104,11 @@
 		</dict>
 	</dict>
 	
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>wonderboymusic.leadsheets.song</string>
+	</array>
+
 	<!-- Privacy Description for MusicKit -->
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Dead Sheets uses Apple Music to play songs when you select them.</string>

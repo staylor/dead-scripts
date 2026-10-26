@@ -6,6 +6,7 @@ import UIKit
 
 final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
     private var interfaceController: CPInterfaceController?
+    private var thumbnails: [String: UIImage] = [:]
 
     func templateApplicationScene(
         _ templateApplicationScene: CPTemplateApplicationScene,
@@ -15,9 +16,10 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         Task {
             await MusicPlayerService.shared.requestAuthorization()
         }
-        interfaceController.setRootTemplate(makeSongList(), animated: false) { _, error in
+        let tabs = CPTabBarTemplate(templates: [makeSongList(), makeAlbumList()])
+        interfaceController.setRootTemplate(tabs, animated: false) { _, error in
             if let error {
-                Logger.carPlay.error("Couldn't show the song list: \(error.localizedDescription, privacy: .public)")
+                Logger.carPlay.error("Couldn't show the library: \(error.localizedDescription, privacy: .public)")
             }
         }
     }
@@ -27,32 +29,80 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         didDisconnectInterfaceController interfaceController: CPInterfaceController
     ) {
         self.interfaceController = nil
+        thumbnails = [:]
     }
 
-    private func makeSongList() -> CPListTemplate {
-        let songs = Catalog.bundled.songs
-        guard !songs.isEmpty else {
-            let section = CPListSection(items: [CPListItem(text: "No songs available", detailText: nil)])
-            return CPListTemplate(title: "Dead Sheets", sections: [section])
-        }
+    // MARK: - Templates
 
-        let songsByInitial = Dictionary(grouping: songs) { song in
+    private func makeSongList() -> CPListTemplate {
+        let songsByInitial = Dictionary(grouping: Catalog.bundled.songs) { song in
             let initial = song.title.prefix(1).uppercased()
             return initial.rangeOfCharacter(from: .letters) == nil ? "#" : initial
         }
         let sections = songsByInitial.keys.sorted().map { initial in
-            let items = (songsByInitial[initial] ?? []).map { song in
-                let item = CPListItem(text: song.title, detailText: song.artistName)
-                item.handler = { [weak self] _, completion in
-                    self?.play(song)
-                    completion()
-                }
-                return item
-            }
-            return CPListSection(items: items, header: initial, sectionIndexTitle: initial)
+            CPListSection(
+                items: (songsByInitial[initial] ?? []).map(makeItem),
+                header: initial,
+                sectionIndexTitle: initial
+            )
         }
-        return CPListTemplate(title: "Dead Sheets", sections: sections)
+        let template = CPListTemplate(title: "Songs", sections: sections)
+        template.tabTitle = "Songs"
+        template.tabImage = UIImage(systemName: "music.note.list")
+        template.emptyViewTitleVariants = ["No Songs"]
+        return template
     }
+
+    private func makeAlbumList() -> CPListTemplate {
+        let catalog = Catalog.bundled
+        let items = catalog.albums.map { album in
+            var detail = Counts.songs(album.songIDs.count)
+            if let year = album.releaseYear {
+                detail = "\(year) · \(detail)"
+            }
+            let item = CPListItem(text: album.title, detailText: detail, image: thumbnail(for: album.coverFileName))
+            item.accessoryType = .disclosureIndicator
+            item.handler = { [weak self] _, completion in
+                self?.showSongs(on: album)
+                completion()
+            }
+            return item
+        }
+        let template = CPListTemplate(title: "Albums", sections: [CPListSection(items: items)])
+        template.tabTitle = "Albums"
+        template.tabImage = UIImage(systemName: "square.stack")
+        return template
+    }
+
+    private func showSongs(on album: Album) {
+        let songs = Catalog.bundled.songs(on: album)
+        let template = CPListTemplate(title: album.title, sections: [CPListSection(items: songs.map(makeItem))])
+        interfaceController?.pushTemplate(template, animated: true, completion: nil)
+    }
+
+    private func makeItem(for song: Song) -> CPListItem {
+        let item = CPListItem(text: song.title, detailText: song.albumTitle, image: thumbnail(for: song.coverFileName))
+        item.handler = { [weak self] _, completion in
+            self?.play(song)
+            completion()
+        }
+        return item
+    }
+
+    private func thumbnail(for fileName: String?) -> UIImage? {
+        guard let fileName else { return nil }
+        if let thumbnail = thumbnails[fileName] {
+            return thumbnail
+        }
+        let scale = interfaceController?.carTraitCollection.displayScale ?? 2
+        let size = CPListItem.maximumImageSize
+        let thumbnail = ImageLoader.loadImage(named: fileName)?
+            .preparingThumbnail(of: CGSize(width: size.width * scale, height: size.height * scale))
+        thumbnails[fileName] = thumbnail
+        return thumbnail
+    }
+
+    // MARK: - Playback
 
     private func play(_ song: Song) {
         guard let appleMusicID = song.appleMusicID else {

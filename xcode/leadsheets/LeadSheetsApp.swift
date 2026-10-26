@@ -28,6 +28,9 @@ struct LeadSheetsApp: App {
         // Initialize CloudKit sync
         #if os(iOS) || os(macOS)
         _ = CloudSyncManager.shared
+        Task {
+            await SongIndex.update()
+        }
         #endif
     }
 

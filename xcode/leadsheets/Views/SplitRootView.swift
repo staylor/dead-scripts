@@ -23,6 +23,7 @@ struct SplitRootView: View {
     #endif
 
     private let cloudSync = CloudSyncManager.shared
+    private let songRequests = SongRequests.shared
     #if os(iOS)
     private let watchConnectivity = WatchConnectivityManager.shared
     #endif
@@ -97,6 +98,16 @@ struct SplitRootView: View {
         .onAppear {
             if selectedSongID != nil {
                 compactColumn = .detail
+            }
+        }
+        .onChange(of: songRequests.pendingSongID, initial: true) { _, songID in
+            guard let songID else { return }
+            songRequests.pendingSongID = nil
+            songSelection.wrappedValue = songID
+        }
+        .onContinueUserActivity(SongActivity.type) { activity in
+            if let songID = activity.userInfo?[SongActivity.songIDKey] as? String, catalog.song(id: songID) != nil {
+                songSelection.wrappedValue = songID
             }
         }
         #if os(iOS)
