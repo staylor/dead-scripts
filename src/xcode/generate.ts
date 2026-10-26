@@ -1,10 +1,8 @@
-import { execSync } from 'child_process';
-import { copyFile } from 'fs/promises';
 import path from 'path';
 
 import { PrismaClient } from '~/prisma/client/client';
-import schema from '~/real-book/schema.json';
-import { saveJSON, ICLOUD_DIR } from '~/utils';
+import { saveJSON } from '~/utils';
+import { syncSheets } from '~/xcode/sheets';
 
 const prisma = new PrismaClient();
 
@@ -85,29 +83,19 @@ for (const node of artists) {
 data.singers.push(...Array.from(singerCache.values()));
 data.writers.push(...Array.from(writerCache.values()));
 
-const sheetsDir = path.join(process.cwd(), 'xcode', 'Sheets');
-
-await Promise.all(
-  schema.map(async (entry) => {
-    if (!entry.title) {
-      return;
-    }
-
-    const score = entry.files.find((file) => file.endsWith('Score.pdf'));
-    if (!score) {
-      return;
-    }
-
-    const pdf = score.split('/').pop();
-    const src = path.join(ICLOUD_DIR, score);
-    const dest = path.join(sheetsDir, 'pdfs', pdf!);
-
-    return copyFile(src, dest);
-  })
+const songs = artists.flatMap((artist) => artist.albums.flatMap((album) => album.songs));
+const { changed, rendered, removed } = await syncSheets(songs);
+console.log(
+  `Lead sheets: ${changed.length} PDFs updated, ${rendered.length} tvOS images rendered, ${removed.length} files removed`
 );
 
-const file = path.join(process.cwd(), 'xcode', 'DeadSheetsKit', 'Sources', 'DeadSheetsKit', 'Resources', 'seeds.json');
+const file = path.join(
+  process.cwd(),
+  'xcode',
+  'DeadSheetsKit',
+  'Sources',
+  'DeadSheetsKit',
+  'Resources',
+  'seeds.json'
+);
 saveJSON(file, data);
-
-// tvOS has no PDFKit, so it shows PNG renderings of the sheets
-execSync('swift convert_pdfs.swift', { cwd: path.join(process.cwd(), 'xcode'), stdio: 'inherit' });

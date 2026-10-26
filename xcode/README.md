@@ -17,24 +17,24 @@ Requirements: Xcode 26.3 or later.
 1. Open `leadsheets.xcodeproj`. The `leadsheets` scheme builds the iPhone, iPad, Mac and Apple TV app, and embeds the watch app in iOS builds.
 2. Choose a run destination and run. Signing uses team `LQR2VDPY65`.
 
-The catalog (`DeadSheetsKit/Sources/DeadSheetsKit/Resources/seeds.json`), album covers and band photos are in the repository. The lead sheets themselves aren't, so a fresh clone builds and runs with a "Lead Sheet Missing" placeholder until you generate them.
+Everything the app bundles is in the repository: the catalog (`DeadSheetsKit/Sources/DeadSheetsKit/Resources/seeds.json`), the lead sheets and their tvOS images (`Sheets/`), album covers and band photos. A fresh clone builds the complete app, and so does CI.
 
 ## Generating the data
 
-The scripts in the repository root produce everything under `xcode/` from the Prisma database and the score PDFs in iCloud Drive:
+The scripts in the repository root generate the data from the Prisma database and the scores in iCloud Drive. Their output is committed, so they only need to run on a machine with both, after something changes:
 
 ```sh
 pnpm apple-music   # look up Apple Music IDs, and download 600 px covers and photos
-pnpm xcode         # write seeds.json, copy the score PDFs, and render them for tvOS
+pnpm xcode         # write seeds.json, and update the lead sheets from iCloud Drive
 ```
 
 `pnpm xcode` writes:
 
 - `DeadSheetsKit/Sources/DeadSheetsKit/Resources/seeds.json`: the catalog.
-- `Sheets/pdfs/`: one `<Title> Score.pdf` per song, bundled for iOS and macOS.
+- `Sheets/pdfs/`: each song's score, named after its `fileName` in the catalog, bundled for iOS and macOS.
 - `Sheets/images/`: the same sheets as 3x PNGs (via `convert_pdfs.swift`), bundled for tvOS.
 
-`Sheets/` is ignored by Git apart from the `.gitkeep` files.
+`Sheets/schema.json` says where each song's score lives in the iCloud Drive scores folder, keyed by song slug. A new song needs an entry there, or `pnpm xcode` stops before writing anything. The script only rewrites PDFs whose content changed, renders tvOS images only for those, and removes sheets for songs that left the catalog. Commit whatever changes under `Sheets/`.
 
 ## Testing
 
@@ -45,7 +45,7 @@ xcodebuild test -project leadsheets.xcodeproj -scheme leadsheets \
 swift format lint --recursive --strict .                     # formatting
 ```
 
-The seed-integrity tests check that every song in `seeds.json` resolves its singer and writers and has lyrics, and that every cover and photo exists. Once `Sheets/` has been generated, they also check for a PDF and a tvOS image for every song.
+The seed-integrity tests check that every song in `seeds.json` resolves its singer and writers and has lyrics, and that every cover and photo exists. They also check that `Sheets/schema.json` covers exactly the catalog's songs, and that `Sheets/` has a PDF and a tvOS image for every song, and nothing else.
 
 UI tests launch the app with `-inMemoryUserData`, so favorites and setlists start empty each time.
 
