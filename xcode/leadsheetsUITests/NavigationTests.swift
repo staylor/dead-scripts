@@ -131,12 +131,13 @@ final class NavigationTests: XCTestCase {
     @MainActor
     private func sendToBackground(_ app: XCUIApplication) {
         XCUIDevice.shared.press(.home)
-        let inBackground = NSPredicate(
-            format: "state == %d OR state == %d",
-            XCUIApplication.State.runningBackground.rawValue,
-            XCUIApplication.State.runningBackgroundSuspended.rawValue
-        )
-        _ = XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: inBackground, object: app)], timeout: 15)
+        if !app.wait(for: .runningBackground, timeout: 5), !app.wait(for: .runningBackgroundSuspended, timeout: 1) {
+            // CI simulators sometimes ignore the Home button; bringing SpringBoard forward backgrounds the app too.
+            XCUIApplication(bundleIdentifier: "com.apple.springboard").activate()
+            _ = app.wait(for: .runningBackground, timeout: 10)
+        }
+        // The system writes the saved state to disk shortly after the app leaves the foreground.
+        sleep(2)
     }
 
     @MainActor
