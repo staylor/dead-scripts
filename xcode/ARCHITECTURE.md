@@ -22,7 +22,8 @@ xcode/
 │   └── Resources/                   asset catalog, album covers, band photos
 ├── leadsheets.watch/       watchOS app
 ├── leadsheetsUITests/      iPhone UI tests
-└── Sheets/                 generated lead sheets: pdfs/ (iOS, macOS) and images/ (tvOS)
+└── Sheets/                 lead sheets: pdfs/ (iOS, macOS), images/ (tvOS), and schema.json, which maps
+                            each song to its score in iCloud Drive
 ```
 
 ## Data

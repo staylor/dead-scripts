@@ -6,6 +6,8 @@ import PDFKit
 
 let pdfDir = "Sheets/pdfs"
 let outputDir = "Sheets/images"
+// With PDF file names as arguments, only those are rendered.
+let requested = Set(CommandLine.arguments.dropFirst())
 
 let fileManager = FileManager.default
 try? fileManager.createDirectory(atPath: outputDir, withIntermediateDirectories: true)
@@ -13,7 +15,7 @@ try? fileManager.createDirectory(atPath: outputDir, withIntermediateDirectories:
 let pdfURL = URL(fileURLWithPath: pdfDir)
 guard
     let pdfFiles = try? fileManager.contentsOfDirectory(at: pdfURL, includingPropertiesForKeys: nil)
-        .filter({ $0.pathExtension.lowercased() == "pdf" })
+        .filter({ $0.pathExtension.lowercased() == "pdf" && (requested.isEmpty || requested.contains($0.lastPathComponent)) })
         .sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
 else {
     print("❌ Could not read PDF directory")

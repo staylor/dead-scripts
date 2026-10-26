@@ -2,6 +2,7 @@
   "artists": [
     {
       "name": "Grateful Dead",
+      "slug": "grateful-dead",
       "imageFileName": "grateful-dead.jpg",
       "albums": [
         {
@@ -1976,6 +1977,7 @@
     },
     {
       "name": "Bob Weir",
+      "slug": "bob-weir",
       "imageFileName": "bob-weir.jpg",
       "albums": [
         {
@@ -2085,6 +2087,7 @@
     },
     {
       "name": "Jerry Garcia",
+      "slug": "jerry-garcia",
       "imageFileName": "jerry-garcia.jpg",
       "albums": [
         {
