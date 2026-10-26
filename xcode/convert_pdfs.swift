@@ -1,21 +1,21 @@
 #!/usr/bin/env swift
 
+import AppKit
 import Foundation
 import PDFKit
-import AppKit
 
 let pdfDir = "Sheets/pdfs"
 let outputDir = "Sheets/images"
 
-// Create output directory
 let fileManager = FileManager.default
 try? fileManager.createDirectory(atPath: outputDir, withIntermediateDirectories: true)
 
-// Get all PDFs
 let pdfURL = URL(fileURLWithPath: pdfDir)
-guard let pdfFiles = try? fileManager.contentsOfDirectory(at: pdfURL, includingPropertiesForKeys: nil)
-    .filter({ $0.pathExtension.lowercased() == "pdf" })
-    .sorted(by: { $0.lastPathComponent < $1.lastPathComponent }) else {
+guard
+    let pdfFiles = try? fileManager.contentsOfDirectory(at: pdfURL, includingPropertiesForKeys: nil)
+        .filter({ $0.pathExtension.lowercased() == "pdf" })
+        .sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
+else {
     print("❌ Could not read PDF directory")
     exit(1)
 }
@@ -34,12 +34,12 @@ for (index, pdfURL) in pdfFiles.enumerated() {
     print("[\(index + 1)/\(pdfFiles.count)] Converting: \(filename)")
 
     guard let pdfDocument = PDFDocument(url: pdfURL),
-          let page = pdfDocument.page(at: 0) else {
+        let page = pdfDocument.page(at: 0)
+    else {
         print("  ⚠️  Could not open PDF")
         continue
     }
 
-    // Get page bounds
     let pageBounds = page.bounds(for: .mediaBox)
 
     // 3x keeps the notation sharp on Apple TV 4K, including when the viewer zooms in.
@@ -49,19 +49,20 @@ for (index, pdfURL) in pdfFiles.enumerated() {
         height: pageBounds.height * scale
     )
 
-    // Create bitmap context
-    guard let bitmapRep = NSBitmapImageRep(
-        bitmapDataPlanes: nil,
-        pixelsWide: Int(imageSize.width),
-        pixelsHigh: Int(imageSize.height),
-        bitsPerSample: 8,
-        samplesPerPixel: 4,
-        hasAlpha: true,
-        isPlanar: false,
-        colorSpaceName: .deviceRGB,
-        bytesPerRow: 0,
-        bitsPerPixel: 0
-    ) else {
+    guard
+        let bitmapRep = NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: Int(imageSize.width),
+            pixelsHigh: Int(imageSize.height),
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: .deviceRGB,
+            bytesPerRow: 0,
+            bitsPerPixel: 0
+        )
+    else {
         print("  ⚠️  Could not create bitmap")
         continue
     }
@@ -73,11 +74,9 @@ for (index, pdfURL) in pdfFiles.enumerated() {
     }
     NSGraphicsContext.current = context
 
-    // Set white background
     NSColor.white.setFill()
     NSRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height).fill()
 
-    // Scale and render PDF
     let transform = NSAffineTransform()
     transform.scale(by: scale)
     transform.concat()
@@ -86,7 +85,6 @@ for (index, pdfURL) in pdfFiles.enumerated() {
 
     NSGraphicsContext.restoreGraphicsState()
 
-    // Save as PNG
     guard let pngData = bitmapRep.representation(using: .png, properties: [:]) else {
         print("  ⚠️  Could not create PNG data")
         continue

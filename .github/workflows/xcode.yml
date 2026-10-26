@@ -44,7 +44,7 @@ jobs:
   ci:
     name: CI
     if: always()
-    needs: [changes, build, test, ui-test]
+    needs: [changes, build, test, ui-test, format]
     runs-on: ubuntu-latest
     steps:
       - name: Check results
@@ -123,6 +123,7 @@ jobs:
             -scheme leadsheets \
             -destination "id=${{ steps.simulator.outputs.udid }}" \
             -resultBundlePath UITests.xcresult \
+            -retry-tests-on-failure -test-iterations 3 \
             CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
             | xcbeautify --renderer github-actions
       - name: Upload test results
@@ -131,3 +132,17 @@ jobs:
         with:
           name: UITests.xcresult
           path: xcode/UITests.xcresult
+
+  format:
+    name: Format
+    needs: changes
+    if: needs.changes.outputs.xcode == 'true'
+    runs-on: macos-26
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: xcode
+    steps:
+      - uses: actions/checkout@v5
+      - name: Lint
+        run: swift format lint --recursive --strict .

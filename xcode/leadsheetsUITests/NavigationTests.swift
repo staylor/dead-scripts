@@ -9,7 +9,7 @@ final class NavigationTests: XCTestCase {
     @MainActor
     func testReturningFromASongKeepsTheBrowsingState() {
         let app = launch()
-        app.segmentedControls.buttons["Albums"].tap()
+        select("Albums", in: app)
         open("album-american-beauty", showing: "American Beauty", in: app)
         open("song-ripple", showing: "Ripple", in: app)
         attachScreenshot("Sheet", of: app)
@@ -48,7 +48,7 @@ final class NavigationTests: XCTestCase {
     @MainActor
     func testCategoriesBecomeAMenuAtAccessibilityTextSizes() {
         let app = XCUIApplication()
-        app.launchArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"]
+        app.launchArguments += ["-inMemoryUserData", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"]
         app.launch()
 
         XCTAssertTrue(app.buttons["Browse"].waitForExistence(timeout: 10))
@@ -74,7 +74,7 @@ final class NavigationTests: XCTestCase {
     @MainActor
     func testNextAndPreviousFollowTheAlbumsTrackOrder() {
         let app = launch()
-        app.segmentedControls.buttons["Albums"].tap()
+        select("Albums", in: app)
         element("album-american-beauty", in: app).tap()
         open("song-ripple", showing: "Ripple", in: app)
 
@@ -90,7 +90,7 @@ final class NavigationTests: XCTestCase {
     @MainActor
     func testArrowKeysChangeSongs() {
         let app = launch()
-        app.segmentedControls.buttons["Albums"].tap()
+        select("Albums", in: app)
         element("album-american-beauty", in: app).tap()
         open("song-box-of-rain", showing: "Box of Rain", in: app)
         XCTAssertFalse(app.buttons["Previous Song"].isEnabled)
@@ -105,7 +105,7 @@ final class NavigationTests: XCTestCase {
     @MainActor
     func testRelaunchingAfterTheSystemEndsTheAppReopensTheSong() {
         let app = launch()
-        app.segmentedControls.buttons["Albums"].tap()
+        select("Albums", in: app)
         element("album-american-beauty", in: app).tap()
         open("song-ripple", showing: "Ripple", in: app)
 
@@ -119,7 +119,7 @@ final class NavigationTests: XCTestCase {
         XCTAssertTrue(app.segmentedControls.buttons["Albums"].isSelected)
 
         // Leave the restored state where the other tests expect to start.
-        app.segmentedControls.buttons["Songs"].tap()
+        select("Songs", in: app)
         sendToBackground(app)
         app.terminate()
         app.launch()
@@ -131,17 +131,64 @@ final class NavigationTests: XCTestCase {
     @MainActor
     private func sendToBackground(_ app: XCUIApplication) {
         XCUIDevice.shared.press(.home)
-        let inBackground = NSPredicate(
-            format: "state == %d OR state == %d",
-            XCUIApplication.State.runningBackground.rawValue,
-            XCUIApplication.State.runningBackgroundSuspended.rawValue
-        )
-        _ = XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: inBackground, object: app)], timeout: 15)
+        if !app.wait(for: .runningBackground, timeout: 5), !app.wait(for: .runningBackgroundSuspended, timeout: 1) {
+            // CI simulators sometimes ignore the Home button; bringing SpringBoard forward backgrounds the app too.
+            XCUIApplication(bundleIdentifier: "com.apple.springboard").activate()
+            _ = app.wait(for: .runningBackground, timeout: 10)
+        }
+        // The system writes the saved state to disk shortly after the app leaves the foreground.
+        sleep(2)
+    }
+
+    @MainActor
+    func testFavoritesAppearInTheFavoritesFilter() {
+        let app = launch()
+        select("Albums", in: app)
+        element("album-american-beauty", in: app).tap()
+        element("song-ripple", in: app).tap()
+        app.buttons["Add to Favorites"].tap()
+        XCTAssertTrue(app.buttons["Remove from Favorites"].waitForExistence(timeout: 10))
+
+        goBack(from: "Ripple", in: app)
+        goBack(from: "American Beauty", in: app)
+        select("Songs", in: app)
+        XCTAssertTrue(app.buttons["Filter"].waitForExistence(timeout: 10))
+        app.buttons["Filter"].tap()
+        app.buttons["Favorites"].tap()
+
+        XCTAssertTrue(app.navigationBars["Favorites"].waitForExistence(timeout: 10))
+        XCTAssertTrue(element("song-ripple", in: app).exists)
+        XCTAssertFalse(element("song-alabama-getaway", in: app).exists)
+    }
+
+    @MainActor
+    func testSetlistsPlayInTheOrderSongsWereAdded() {
+        let app = launch()
+        select("Setlists", in: app)
+        app.buttons["New Setlist"].firstMatch.tap()
+        let alert = app.alerts["New Setlist"]
+        XCTAssertTrue(alert.waitForExistence(timeout: 10))
+        alert.textFields.firstMatch.typeText("Saturday")
+        alert.buttons["Create"].tap()
+
+        open("setlist-Saturday", showing: "Saturday", in: app)
+        app.buttons["Add Songs"].firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["Add Songs"].waitForExistence(timeout: 10))
+        element("song-althea", in: app).tap()
+        element("song-alabama-getaway", in: app).tap()
+        app.buttons["Done"].tap()
+
+        open("song-althea", showing: "Althea", in: app)
+        app.buttons["Next Song"].firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["Alabama Getaway"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.buttons["Next Song"].firstMatch.isEnabled)
+        attachScreenshot("Setlist", of: app)
     }
 
     @MainActor
     private func launch() -> XCUIApplication {
         let app = XCUIApplication()
+        app.launchArguments += ["-inMemoryUserData"]
         app.launch()
         return app
     }
@@ -192,5 +239,18 @@ final class NavigationTests: XCTestCase {
     @MainActor
     private func goBack(from title: String, in app: XCUIApplication) {
         app.navigationBars[title].buttons["BackButton"].tap()
+    }
+
+    /// Taps a category until it's selected; a tap can be lost while a pop animation is still running.
+    @MainActor
+    private func select(_ category: String, in app: XCUIApplication) {
+        let segment = app.segmentedControls.buttons[category]
+        XCTAssertTrue(segment.waitForExistence(timeout: 10))
+        let selected = NSPredicate(format: "isSelected == true")
+        for _ in 0..<3 where !segment.isSelected {
+            segment.tap()
+            _ = XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: selected, object: segment)], timeout: 3)
+        }
+        XCTAssertTrue(segment.isSelected, "\(category) wasn't selected")
     }
 }

@@ -29,7 +29,6 @@ struct ImageViewerScreen: View {
 
                 Spacer()
 
-                // Scroll controls
                 HStack(spacing: 40) {
                     Button(action: {
                         scrollOffset = min(0, scrollOffset + 200)
@@ -90,11 +89,10 @@ struct ImageViewerScreen: View {
             .background(Color.black.opacity(0.3))
             .colorScheme(.dark)
 
-            // Main Content: Image + Lyrics side-by-side
             HStack(spacing: 40) {
-                // Left: Sheet Music Image (zoomable and pannable)
                 if let imageURL = song.sheetImageURL,
-                   let image = UIImage(contentsOfFile: imageURL.path(percentEncoded: false)) {
+                    let image = UIImage(contentsOfFile: imageURL.path(percentEncoded: false))
+                {
                     GeometryReader { geometry in
                         let imageAspect = image.size.height / image.size.width
                         let imageHeight = geometry.size.width * imageAspect
@@ -133,12 +131,11 @@ struct ImageViewerScreen: View {
                     .focusable(false)
                 }
 
-                // Right: Lyrics (if available)
                 let lyricsParagraphs = song.lyricParagraphs
                 if !lyricsParagraphs.isEmpty {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 0) {
-                            // Group lyrics into paragraphs, each paragraph is focusable
+                            // Each paragraph is a button so the remote can move focus, and scroll, through the lyrics.
                             ForEach(lyricsParagraphs.indices, id: \.self) { index in
                                 let paragraph = lyricsParagraphs[index]
                                 Button(action: {}) {

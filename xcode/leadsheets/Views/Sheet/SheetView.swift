@@ -19,14 +19,17 @@ struct SheetView: View {
             .navigationTitle(song.title)
             .navigationSubtitle(subtitle)
             #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.inline)
             #else
-            .frame(minWidth: 480)
+        .frame(minWidth: 480)
             #endif
             .toolbar {
                 #if os(iOS)
                 ToolbarItemGroup(placement: .bottomBar) {
                     previousButton
+                    Spacer()
+                    FavoriteButton(songID: song.id)
+                    AddToSetlistMenu(songID: song.id)
                     Spacer()
                     nextButton
                 }
@@ -34,6 +37,10 @@ struct SheetView: View {
                 ToolbarItemGroup(placement: .navigation) {
                     previousButton
                     nextButton
+                }
+                ToolbarItemGroup {
+                    FavoriteButton(songID: song.id)
+                    AddToSetlistMenu(songID: song.id)
                 }
                 #endif
                 if let appleMusicID = song.appleMusicID {
@@ -52,6 +59,11 @@ struct SheetView: View {
             .focusedSceneValue(\.songNavigation, navigation)
             .pageTurnerKeys(navigation)
             .keepsScreenOn(keepsScreenOn)
+            .userActivity(SongActivity.type) { activity in
+                activity.title = song.title
+                activity.userInfo = [SongActivity.songIDKey: song.id]
+                activity.isEligibleForHandoff = true
+            }
             .inspector(isPresented: $showsLyrics) {
                 LyricsView(song: song)
                     .inspectorColumnWidth(min: 240, ideal: 320, max: 420)

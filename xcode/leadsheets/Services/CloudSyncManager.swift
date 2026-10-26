@@ -124,8 +124,8 @@ final class CloudSyncManager {
     /// Called by the app delegate for CloudKit's silent pushes.
     func handleRemoteNotification(userInfo: [AnyHashable: Any]) async {
         guard isEnabled,
-              let notification = CKNotification(fromRemoteNotificationDictionary: userInfo),
-              notification.subscriptionID == Self.subscriptionID
+            let notification = CKNotification(fromRemoteNotificationDictionary: userInfo),
+            notification.subscriptionID == Self.subscriptionID
         else { return }
         await fetchSelection()
     }
@@ -168,8 +168,8 @@ final class CloudSyncManager {
 
     private func apply(_ record: CKRecord) {
         guard let slug = record[Field.slug] as? String, !slug.isEmpty,
-              record[Field.sender] as? String != deviceID,
-              slug != selectedSongSlug
+            record[Field.sender] as? String != deviceID,
+            slug != selectedSongSlug
         else { return }
         selectedSongSlug = slug
         #if os(iOS)

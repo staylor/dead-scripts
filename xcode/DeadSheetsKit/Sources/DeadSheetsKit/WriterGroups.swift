@@ -24,7 +24,8 @@ public struct WriterGroup: Identifiable, Hashable, Sendable {
 
     init(people: [Person], roles: Set<Role>, songs: [Song]) {
         var seen: Set<Person.ID> = []
-        self.people = people
+        self.people =
+            people
             .filter { seen.insert($0.id).inserted }
             .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
         self.roles = roles.sorted()

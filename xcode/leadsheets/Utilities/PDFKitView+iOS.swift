@@ -33,7 +33,6 @@ extension PDFKitView {
         }
 
         func updateUIView(_ pdfView: PDFView, context: Context) {
-            // Load different PDF if URL changed
             if pdfView.document?.documentURL != url {
                 if let document = PDFDocument(url: url) {
                     pdfView.document = document
@@ -47,14 +46,12 @@ extension PDFKitView {
                 return
             }
 
-            // Handle returning from background
             if isReturningFromBackground {
                 fitToWidth(pdfView: pdfView, width: size.width, scrollToTop: true)
                 lockZoom(pdfView: pdfView)
                 return
             }
 
-            // Handle width change (orientation change)
             let widthChanged = abs(context.coordinator.lastWidth - size.width) > 1.0
             if widthChanged && initialLoadComplete {
                 fitToWidth(pdfView: pdfView, width: size.width, scrollToTop: true)
@@ -71,14 +68,13 @@ extension PDFKitView {
             var lastWidth: CGFloat = 0
         }
 
-        // MARK: - Helper Methods
-
         private func fitToWidth(pdfView: PDFView, width: CGFloat, scrollToTop: Bool = false) {
             guard let document = pdfView.document,
-                  let page = document.page(at: 0),
-                  width > 0 else { return }
+                let page = document.page(at: 0),
+                width > 0
+            else { return }
 
-            // Unlock zoom first to allow scale change
+            // lockZoom pinned the zoom scale, so release it before changing the scale factor.
             if let scrollView = pdfView.subviews.first as? UIScrollView {
                 scrollView.minimumZoomScale = 0.1
                 scrollView.maximumZoomScale = 10.0
@@ -91,7 +87,6 @@ extension PDFKitView {
             pdfView.minScaleFactor = scale
             pdfView.maxScaleFactor = scale
 
-            // Scroll to top of first page only on initial load
             if scrollToTop {
                 pdfView.go(to: page)
                 if let scrollView = pdfView.subviews.first as? UIScrollView {

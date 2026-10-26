@@ -1,15 +1,19 @@
 #if os(iOS) || os(macOS)
 import DeadSheetsKit
+import SwiftData
 import SwiftUI
 
 /// The library and the selected lead sheet. On iPhone the split view collapses into a stack.
 struct SplitRootView: View {
     @Environment(\.catalog) private var catalog
+    @Environment(\.modelContext) private var modelContext
+    @Query private var favorites: [Favorite]
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
 
     @SceneStorage("category") private var category: LibraryCategory = .songs
+    @SceneStorage("songFilter") private var songFilter: SongFilter = .all
     @State private var path: [LibraryRoute] = []
     @State private var searchText = ""
     @SceneStorage("selectedSongID") private var selectedSongID: Song.ID?
@@ -19,6 +23,7 @@ struct SplitRootView: View {
     #endif
 
     private let cloudSync = CloudSyncManager.shared
+    private let songRequests = SongRequests.shared
     #if os(iOS)
     private let watchConnectivity = WatchConnectivityManager.shared
     #endif
@@ -26,10 +31,14 @@ struct SplitRootView: View {
     var body: some View {
         NavigationSplitView(preferredCompactColumn: $compactColumn) {
             NavigationStack(path: $path) {
-                LibraryList(category: category, searchText: searchText, selection: songSelection)
-                    .navigationTitle(category.title)
+                LibraryList(category: category, searchText: searchText, songFilter: songFilter, selection: songSelection)
+                    .navigationTitle(category == .songs ? songFilter.title : category.title)
                     .navigationDestination(for: LibraryRoute.self) { route in
-                        LibraryRouteView(route: route, selection: songSelection)
+                        if case .setlist(let setlistID) = route {
+                            SetlistView(setlistID: setlistID, selection: songSelection)
+                        } else {
+                            LibraryRouteView(route: route, selection: songSelection)
+                        }
                     }
                     .searchable(text: $searchText, placement: searchPlacement, prompt: "Titles, albums, lyrics")
                     .safeAreaInset(edge: .top) {
@@ -37,15 +46,30 @@ struct SplitRootView: View {
                             .padding(.horizontal)
                             .padding(.bottom, 8)
                     }
-                    #if os(iOS)
                     .toolbar {
+                        if category == .songs {
+                            ToolbarItem {
+                                Menu {
+                                    Picker("Show", selection: $songFilter) {
+                                        ForEach(SongFilter.allCases) { filter in
+                                            Label(filter.title, systemImage: filter.systemImage)
+                                                .tag(filter)
+                                        }
+                                    }
+                                } label: {
+                                    Label("Filter", systemImage: "line.3.horizontal.decrease")
+                                        .symbolVariant(songFilter == .all ? .none : .circle.fill)
+                                }
+                            }
+                        }
+                        #if os(iOS)
                         ToolbarItem(placement: .primaryAction) {
                             Button("Settings", systemImage: "gearshape") {
                                 showsSettings = true
                             }
                         }
+                        #endif
                     }
-                    #endif
             }
             .navigationSplitViewColumnWidth(min: 360, ideal: 400, max: 480)
         } detail: {
@@ -74,6 +98,16 @@ struct SplitRootView: View {
         .onAppear {
             if selectedSongID != nil {
                 compactColumn = .detail
+            }
+        }
+        .onChange(of: songRequests.pendingSongID, initial: true) { _, songID in
+            guard let songID else { return }
+            songRequests.pendingSongID = nil
+            songSelection.wrappedValue = songID
+        }
+        .onContinueUserActivity(SongActivity.type) { activity in
+            if let songID = activity.userInfo?[SongActivity.songIDKey] as? String, catalog.song(id: songID) != nil {
+                songSelection.wrappedValue = songID
             }
         }
         #if os(iOS)
@@ -116,13 +150,18 @@ struct SplitRootView: View {
 
     /// The songs of the list the open song was chosen from, in the order shown.
     private var openedFromSongs: [Song] {
+        if case .setlist(let setlistID)? = path.last {
+            let descriptor = FetchDescriptor<Setlist>(predicate: #Predicate { $0.id == setlistID })
+            let setlist = try? modelContext.fetch(descriptor).first
+            return (setlist?.songIDs ?? []).compactMap(catalog.song(id:))
+        }
         if let route = path.last {
             return route.songs(in: catalog)
         }
         switch category {
-        case .songs: return catalog.songs(matching: searchText)
+        case .songs: return catalog.songs(matching: searchText, filter: songFilter, favoriteIDs: Set(favorites.map(\.songID)))
         case .covers: return catalog.covers(matching: searchText)
-        case .albums, .artists, .singers, .writers: return []
+        case .albums, .artists, .singers, .writers, .setlists: return []
         }
     }
 

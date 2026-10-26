@@ -118,7 +118,8 @@ final class MusicPlayerService {
                 try await player.play()
                 return .playing
             } catch {
-                Logger.music.info("Resuming \(appleMusicID, privacy: .public) failed, restarting: \(error.localizedDescription, privacy: .public)")
+                Logger.music.info(
+                    "Resuming \(appleMusicID, privacy: .public) failed, restarting: \(error.localizedDescription, privacy: .public)")
             }
         }
 

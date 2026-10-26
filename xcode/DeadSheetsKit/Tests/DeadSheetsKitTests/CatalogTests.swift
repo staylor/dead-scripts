@@ -1,14 +1,16 @@
 import Foundation
 import Testing
+
 @testable import DeadSheetsKit
 
 struct CatalogTests {
     let catalog = Fixtures.catalog
 
     @Test func songsAreSortedByTitle() {
-        #expect(catalog.songs.map(\.title) == [
-            "Big Boss Man", "Box of Rain", "Friend of the Devil", "Morning Dew", "Ripple", "Sugaree",
-        ])
+        #expect(
+            catalog.songs.map(\.title) == [
+                "Big Boss Man", "Box of Rain", "Friend of the Devil", "Morning Dew", "Ripple", "Sugaree",
+            ])
     }
 
     @Test func albumSongsFollowTrackOrder() throws {
@@ -65,19 +67,19 @@ struct CatalogTests {
 
     @Test func unknownReferencesAreReportedButTheSongStillLoads() throws {
         let seeds = """
-        {
-          "artists": [{ "name": "Grateful Dead", "albums": [{ "name": "Go to Heaven", "slug": "go-to-heaven", "songs": [
-            { "name": "Althea", "slug": "althea", "fileName": "Althea Score.pdf", "singer": "keith-godchaux",
-              "writers": [["robert-hunter", "lyrics"], ["mystery", "music"], ["robert-hunter"]] },
-            { "name": "Althea", "slug": "althea", "fileName": "Althea Score.pdf" }
-          ]}]}],
-          "singers": [],
-          "writers": [
-            { "name": "Robert Hunter", "slug": "robert-hunter", "contribution": "lyrics" },
-            { "name": "Jerry Garcia", "slug": "jerry-garcia", "contribution": "arrangement" }
-          ]
-        }
-        """
+            {
+              "artists": [{ "name": "Grateful Dead", "albums": [{ "name": "Go to Heaven", "slug": "go-to-heaven", "songs": [
+                { "name": "Althea", "slug": "althea", "fileName": "Althea Score.pdf", "singer": "keith-godchaux",
+                  "writers": [["robert-hunter", "lyrics"], ["mystery", "music"], ["robert-hunter"]] },
+                { "name": "Althea", "slug": "althea", "fileName": "Althea Score.pdf" }
+              ]}]}],
+              "singers": [],
+              "writers": [
+                { "name": "Robert Hunter", "slug": "robert-hunter", "contribution": "lyrics" },
+                { "name": "Jerry Garcia", "slug": "jerry-garcia", "contribution": "arrangement" }
+              ]
+            }
+            """
         let catalog = try Catalog(seedData: Data(seeds.utf8))
         let althea = try #require(catalog.song(id: "althea"))
 
@@ -85,12 +87,13 @@ struct CatalogTests {
         #expect(althea.credits.map(\.person.id) == ["robert-hunter"])
         #expect(althea.lyrics == "")
         #expect(catalog.songs.count == 1)
-        #expect(catalog.problems == [
-            "Writer jerry-garcia has unknown contribution \"arrangement\"",
-            "Song althea has unknown singer keith-godchaux",
-            "Song althea has unknown writer [\"mystery\", \"music\"]",
-            "Song althea has unknown writer [\"robert-hunter\"]",
-            "Song althea appears more than once",
-        ])
+        #expect(
+            catalog.problems == [
+                "Writer jerry-garcia has unknown contribution \"arrangement\"",
+                "Song althea has unknown singer keith-godchaux",
+                "Song althea has unknown writer [\"mystery\", \"music\"]",
+                "Song althea has unknown writer [\"robert-hunter\"]",
+                "Song althea appears more than once",
+            ])
     }
 }

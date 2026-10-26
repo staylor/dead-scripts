@@ -27,9 +27,7 @@ struct PDFKitView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if oldPhase == .background && newPhase == .active {
-                // Mark that we're returning from background
                 isReturningFromBackground = true
-                // Reset flag after a short delay
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     isReturningFromBackground = false
                 }

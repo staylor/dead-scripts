@@ -1,20 +1,39 @@
 import DeadSheetsKit
+import SwiftData
 import SwiftUI
 
 /// The root list of the library for one category.
 struct LibraryList: View {
     let category: LibraryCategory
     let searchText: String
+    var songFilter: SongFilter = .all
     @Binding var selection: Song.ID?
 
     @Environment(\.catalog) private var catalog
+    #if os(iOS) || os(macOS)
+    @Query private var favorites: [Favorite]
+    #endif
 
     var body: some View {
         switch category {
         case .songs:
-            let songs = catalog.songs(matching: searchText)
+            let songs = catalog.songs(matching: searchText, filter: songFilter, favoriteIDs: favoriteIDs)
             SongList(songs: songs, selection: $selection)
-                .emptyState(isEmpty: songs.isEmpty, category: category, searchText: searchText)
+                .overlay {
+                    if songs.isEmpty {
+                        if !searchText.isEmpty {
+                            ContentUnavailableView.search(text: searchText)
+                        } else if songFilter == .favorites {
+                            ContentUnavailableView(
+                                "No Favorites",
+                                systemImage: "heart",
+                                description: Text("Tap the heart on a lead sheet to add it here.")
+                            )
+                        } else {
+                            ContentUnavailableView("No \(songFilter.title)", systemImage: songFilter.systemImage)
+                        }
+                    }
+                }
         case .covers:
             let covers = catalog.covers(matching: searchText)
             SongList(songs: covers, selection: $selection)
@@ -51,6 +70,30 @@ struct LibraryList: View {
                 }
             }
             .emptyState(isEmpty: groups.isEmpty, category: category, searchText: searchText)
+        case .setlists:
+            #if os(iOS) || os(macOS)
+            SetlistsList()
+            #else
+            EmptyView()
+            #endif
+        }
+    }
+
+    private var favoriteIDs: Set<Song.ID> {
+        #if os(iOS) || os(macOS)
+        Set(favorites.map(\.songID))
+        #else
+        []
+        #endif
+    }
+}
+
+extension Catalog {
+    func songs(matching query: String, filter: SongFilter, favoriteIDs: Set<Song.ID>) -> [Song] {
+        switch filter {
+        case .all: songs(matching: query)
+        case .covers: covers(matching: query)
+        case .favorites: songs(matching: query).filter { favoriteIDs.contains($0.id) }
         }
     }
 }
@@ -104,7 +147,7 @@ struct CategoryPicker: View {
 
     var body: some View {
         let picker = Picker("Browse", selection: $selection) {
-            ForEach(LibraryCategory.allCases) { category in
+            ForEach(LibraryCategory.browsable) { category in
                 Label(category.title, systemImage: category.systemImage)
                     .tag(category)
             }
@@ -124,8 +167,8 @@ struct CategoryPicker: View {
     }
 }
 
-private extension View {
-    func emptyState(isEmpty: Bool, category: LibraryCategory, searchText: String) -> some View {
+extension View {
+    fileprivate func emptyState(isEmpty: Bool, category: LibraryCategory, searchText: String) -> some View {
         overlay {
             if isEmpty {
                 if searchText.isEmpty {

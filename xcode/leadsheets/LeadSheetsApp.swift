@@ -1,6 +1,7 @@
 import DeadSheetsKit
-import os
+import SwiftData
 import SwiftUI
+import os
 
 #if os(iOS)
 import CarPlay
@@ -27,6 +28,9 @@ struct LeadSheetsApp: App {
         // Initialize CloudKit sync
         #if os(iOS) || os(macOS)
         _ = CloudSyncManager.shared
+        Task {
+            await SongIndex.update()
+        }
         #endif
     }
 
@@ -36,6 +40,9 @@ struct LeadSheetsApp: App {
         }
         #if os(macOS)
         .defaultSize(width: 1280, height: 860)
+        #endif
+        #if os(iOS) || os(macOS)
+        .modelContainer(UserData.container)
         #endif
         #if os(iOS) || os(macOS)
         .commands {
@@ -110,4 +117,3 @@ final class MacAppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 #endif
-
