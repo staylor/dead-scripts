@@ -1,6 +1,8 @@
 # dead-scripts
 
-## `yarn lyrics`
+Install dependencies with [pnpm](https://pnpm.io) (`pnpm install`). The `packageManager` field in `package.json` pins the version.
+
+## `pnpm lyrics`
 
 There are too many songs in the Grateful Dead universe to attempt to copy-paste them by hand and create PDFs that can be used in a collection, so we must automate file generation as much as possible.
 
@@ -21,7 +23,7 @@ We then loop through the index pages for each lyricist again to:
 - generate a PDF of each song using `puppeteer` - Puppeteer allows you load HTML/CSS and then save it to a PDF, pretty cool!
 - generate a DOCX file of each using the `docx` lib - we do this in case we want to edit any of the pages later. Since this is automated, we lose nothing by running this script for every song. We use the same-ish styles from the PDF script to create identical formatted content.
 
-## yarn real-book
+## `pnpm real-book`
 
 **tl;dr creates a Grateful Dead Real Book by combining many PDFs into 1 PDF - a collection/book of lyrics and lead sheets.**
 
