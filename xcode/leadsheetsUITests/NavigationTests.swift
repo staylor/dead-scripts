@@ -109,8 +109,7 @@ final class NavigationTests: XCTestCase {
         element("album-american-beauty", in: app).tap()
         open("song-ripple", showing: "Ripple", in: app)
 
-        XCUIDevice.shared.press(.home)
-        sleep(2)
+        sendToBackground(app)
         app.terminate()
         app.launch()
 
@@ -121,12 +120,23 @@ final class NavigationTests: XCTestCase {
 
         // Leave the restored state where the other tests expect to start.
         app.segmentedControls.buttons["Songs"].tap()
-        XCUIDevice.shared.press(.home)
-        sleep(2)
+        sendToBackground(app)
         app.terminate()
         app.launch()
         XCTAssertTrue(app.segmentedControls.buttons["Songs"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.segmentedControls.buttons["Songs"].isSelected)
+    }
+
+    /// Scene storage is saved as the scene moves to the background, so wait for that before ending the app.
+    @MainActor
+    private func sendToBackground(_ app: XCUIApplication) {
+        XCUIDevice.shared.press(.home)
+        let inBackground = NSPredicate(
+            format: "state == %d OR state == %d",
+            XCUIApplication.State.runningBackground.rawValue,
+            XCUIApplication.State.runningBackgroundSuspended.rawValue
+        )
+        _ = XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: inBackground, object: app)], timeout: 15)
     }
 
     @MainActor
