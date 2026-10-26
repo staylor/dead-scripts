@@ -7,7 +7,6 @@ struct LyricsDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                // Song info
                 VStack(alignment: .leading, spacing: 4) {
                     Text(song.title)
                         .font(.title3)
@@ -29,7 +28,6 @@ struct LyricsDetailView: View {
 
                 Divider()
 
-                // Lyrics
                 if !song.lyrics.isEmpty {
                     Text(song.lyrics)
                         .font(.caption)

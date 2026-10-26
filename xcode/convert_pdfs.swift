@@ -7,11 +7,9 @@ import PDFKit
 let pdfDir = "Sheets/pdfs"
 let outputDir = "Sheets/images"
 
-// Create output directory
 let fileManager = FileManager.default
 try? fileManager.createDirectory(atPath: outputDir, withIntermediateDirectories: true)
 
-// Get all PDFs
 let pdfURL = URL(fileURLWithPath: pdfDir)
 guard
     let pdfFiles = try? fileManager.contentsOfDirectory(at: pdfURL, includingPropertiesForKeys: nil)
@@ -42,7 +40,6 @@ for (index, pdfURL) in pdfFiles.enumerated() {
         continue
     }
 
-    // Get page bounds
     let pageBounds = page.bounds(for: .mediaBox)
 
     // 3x keeps the notation sharp on Apple TV 4K, including when the viewer zooms in.
@@ -52,7 +49,6 @@ for (index, pdfURL) in pdfFiles.enumerated() {
         height: pageBounds.height * scale
     )
 
-    // Create bitmap context
     guard
         let bitmapRep = NSBitmapImageRep(
             bitmapDataPlanes: nil,
@@ -78,11 +74,9 @@ for (index, pdfURL) in pdfFiles.enumerated() {
     }
     NSGraphicsContext.current = context
 
-    // Set white background
     NSColor.white.setFill()
     NSRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height).fill()
 
-    // Scale and render PDF
     let transform = NSAffineTransform()
     transform.scale(by: scale)
     transform.concat()
@@ -91,7 +85,6 @@ for (index, pdfURL) in pdfFiles.enumerated() {
 
     NSGraphicsContext.restoreGraphicsState()
 
-    // Save as PNG
     guard let pngData = bitmapRep.representation(using: .png, properties: [:]) else {
         print("  ⚠️  Could not create PNG data")
         continue
