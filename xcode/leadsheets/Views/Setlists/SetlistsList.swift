@@ -1,5 +1,6 @@
 #if os(iOS) || os(macOS)
 import DeadSheetsKit
+import os
 import SwiftData
 import SwiftUI
 
@@ -11,7 +12,7 @@ struct SetlistsList: View {
     var body: some View {
         List {
             ForEach(setlists) { setlist in
-                NavigationLink(value: LibraryRoute.setlist(setlist.persistentModelID)) {
+                NavigationLink(value: LibraryRoute.setlist(setlist.id)) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(setlist.name)
                         Text(Counts.songs(setlist.songIDs.count))
@@ -72,6 +73,11 @@ private struct NewSetlistAlert: ViewModifier {
             Button("Create") {
                 let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
                 context.insert(Setlist(name: trimmed.isEmpty ? "Untitled Setlist" : trimmed, songIDs: songID.map { [$0] } ?? []))
+                do {
+                    try context.save()
+                } catch {
+                    Logger.userData.error("Couldn't save the new setlist: \(error.localizedDescription, privacy: .public)")
+                }
                 name = ""
             }
             Button("Cancel", role: .cancel) {

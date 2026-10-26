@@ -140,7 +140,8 @@ struct SplitRootView: View {
     /// The songs of the list the open song was chosen from, in the order shown.
     private var openedFromSongs: [Song] {
         if case .setlist(let setlistID)? = path.last {
-            let setlist = modelContext.model(for: setlistID) as? Setlist
+            let descriptor = FetchDescriptor<Setlist>(predicate: #Predicate { $0.id == setlistID })
+            let setlist = try? modelContext.fetch(descriptor).first
             return (setlist?.songIDs ?? []).compactMap(catalog.song(id:))
         }
         if let route = path.last {

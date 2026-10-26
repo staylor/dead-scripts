@@ -5,15 +5,19 @@ import SwiftUI
 
 /// A setlist's songs in playing order. Opening one steps through the rest with Previous and Next.
 struct SetlistView: View {
-    let setlistID: PersistentIdentifier
     @Binding var selection: Song.ID?
 
-    @Environment(\.modelContext) private var context
     @Environment(\.catalog) private var catalog
+    @Query private var setlists: [Setlist]
     @State private var isAddingSongs = false
 
+    init(setlistID: Setlist.ID, selection: Binding<Song.ID?>) {
+        _selection = selection
+        _setlists = Query(filter: #Predicate<Setlist> { $0.id == setlistID })
+    }
+
     var body: some View {
-        if let setlist = context.model(for: setlistID) as? Setlist, !setlist.isDeleted {
+        if let setlist = setlists.first {
             content(for: setlist)
         } else {
             ContentUnavailableView("Setlist Deleted", systemImage: LibraryCategory.setlists.systemImage)

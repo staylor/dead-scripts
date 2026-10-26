@@ -19,6 +19,8 @@ final class Favorite {
 
 @Model
 final class Setlist {
+    /// Stable from creation, unlike `persistentModelID`, which changes when a new model is first saved.
+    var id = UUID()
     var name = ""
     /// In playing order.
     var songIDs: [Song.ID] = []

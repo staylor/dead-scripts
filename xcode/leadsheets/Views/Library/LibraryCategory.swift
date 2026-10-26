@@ -1,5 +1,4 @@
 import DeadSheetsKit
-import SwiftData
 import SwiftUI
 
 enum LibraryCategory: String, CaseIterable, Identifiable, Hashable {
@@ -78,7 +77,7 @@ enum LibraryRoute: Hashable {
     case singer(Person)
     case writers(WriterGroup)
     #if os(iOS) || os(macOS)
-    case setlist(PersistentIdentifier)
+    case setlist(Setlist.ID)
     #endif
 
     var title: String {
