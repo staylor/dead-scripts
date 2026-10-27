@@ -6,7 +6,7 @@ Grateful Dead lead sheets and lyrics for iPhone, iPad, Mac, Apple TV, Apple Watc
 | --- | --- |
 | iPhone | The library, then the lead sheet, with lyrics in a sheet |
 | iPad, Mac | The library beside the lead sheet, with lyrics in an inspector |
-| Apple TV | A tab per category; sheets are PNGs because tvOS has no PDFKit |
+| Apple TV | A tab per category; the lead sheet beside its lyrics, zoomed with the remote |
 | Apple Watch | Lyrics, following the song open on the iPhone |
 | CarPlay | Songs and albums, played through Apple Music |
 

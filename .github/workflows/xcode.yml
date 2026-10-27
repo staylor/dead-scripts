@@ -97,11 +97,21 @@ jobs:
         run: swift test --package-path xcode/DeadSheetsKit
 
   ui-test:
-    name: UI tests (iPhone)
+    name: UI tests (${{ matrix.name }})
     needs: changes
     if: needs.changes.outputs.xcode == 'true'
     runs-on: xcode-27
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: iPhone
+            runtime: iOS
+            device: iPhone 18 Pro
+          - name: Apple TV
+            runtime: tvOS
+            device: Apple TV 4K (3rd generation)
     defaults:
       run:
         working-directory: xcode
@@ -109,10 +119,14 @@ jobs:
       - uses: actions/checkout@v5
       - name: Pick a simulator
         id: simulator
+        env:
+          FAMILY: ${{ matrix.name }}
+          RUNTIME: ${{ matrix.runtime }}
+          DEVICE: ${{ matrix.device }}
         run: |
-          udid=$(xcrun simctl list devices available --json | jq -r '
-            [.devices | to_entries | sort_by(.key)[] | select(.key | contains("iOS")) | .value[] | select(.name | startswith("iPhone"))]
-            | (map(select(.name == "iPhone 18 Pro")) | last) // last | .udid')
+          udid=$(xcrun simctl list devices available --json | jq -r --arg runtime "$RUNTIME" --arg family "$FAMILY" --arg device "$DEVICE" '
+            [.devices | to_entries | sort_by(.key)[] | select(.key | contains($runtime)) | .value[] | select(.name | startswith($family))]
+            | (map(select(.name == $device)) | last) // last | .udid')
           echo "udid=$udid" >> "$GITHUB_OUTPUT"
           xcrun simctl list devices available | grep "$udid"
           # The test runner can stall while a cold simulator boots, and then never starts.
@@ -132,7 +146,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: UITests.xcresult
+          name: UITests (${{ matrix.name }}).xcresult
           path: xcode/UITests.xcresult
 
   format:

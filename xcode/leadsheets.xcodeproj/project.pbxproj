@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4CB41EA14212CF18E949AAF0 /* pdfs in Resources */ = {isa = PBXBuildFile; fileRef = 350EB5D0807F532E22CD7BC8 /* pdfs */; platformFilters = (ios, macos, ); };
-		EEC448EF50454D2371C693DD /* images in Resources */ = {isa = PBXBuildFile; fileRef = D698DED2394277506E7BB204 /* images */; platformFilters = (tvos, ); };
+		4CB41EA14212CF18E949AAF0 /* pdfs in Resources */ = {isa = PBXBuildFile; fileRef = 350EB5D0807F532E22CD7BC8 /* pdfs */; };
 		782F84053EEDDA165F834C4D /* DeadSheetsKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0C7C14719702CBD7C7587B22 /* DeadSheetsKit */; };
 		99CA6CFDBF6E0AC0CCCFDE7A /* DeadSheetsKit in Frameworks */ = {isa = PBXBuildFile; productRef = D3EDC39D983F8DED6FC0A629 /* DeadSheetsKit */; };
 		D2AF766A2EC4E950006C0FCE /* leadsheets.watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -49,7 +48,6 @@
 		D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = leadsheets.watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2E1EB562E9DE20C00E5456E /* Dead Sheets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dead Sheets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA9088CBCF8223078DF1C74D /* leadsheetsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = leadsheetsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D698DED2394277506E7BB204 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		350EB5D0807F532E22CD7BC8 /* pdfs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pdfs; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -160,7 +158,6 @@
 			isa = PBXGroup;
 			children = (
 				350EB5D0807F532E22CD7BC8 /* pdfs */,
-				D698DED2394277506E7BB204 /* images */,
 			);
 			path = Sheets;
 			sourceTree = "<group>";
@@ -298,7 +295,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CB41EA14212CF18E949AAF0 /* pdfs in Resources */,
-				EEC448EF50454D2371C693DD /* images in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -628,15 +624,16 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = wonderboymusic.leadsheetsUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator appletvos appletvsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,3";
 				TEST_TARGET_NAME = leadsheets;
+				TVOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
 		};
@@ -651,15 +648,16 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = wonderboymusic.leadsheetsUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator appletvos appletvsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,3";
 				TEST_TARGET_NAME = leadsheets;
+				TVOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
 		};

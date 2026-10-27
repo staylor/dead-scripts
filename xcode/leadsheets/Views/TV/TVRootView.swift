@@ -28,7 +28,7 @@ private struct TVLibraryTab: View {
                     LibraryRouteView(route: route, selection: .constant(nil))
                 }
                 .navigationDestination(for: Song.self) { song in
-                    ImageViewerScreen(song: song)
+                    TVSheetScreen(song: song)
                 }
         }
     }
@@ -42,7 +42,7 @@ private struct TVSearchTab: View {
             LibraryList(category: .songs, searchText: searchText, selection: .constant(nil))
                 .searchable(text: $searchText, prompt: "Titles, albums, lyrics")
                 .navigationDestination(for: Song.self) { song in
-                    ImageViewerScreen(song: song)
+                    TVSheetScreen(song: song)
                 }
         }
     }
