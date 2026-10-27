@@ -17,7 +17,8 @@ extension PDFKitView {
             pdfView.autoScales = false
             pdfView.displayMode = .singlePageContinuous
             pdfView.displayDirection = .vertical
-            pdfView.backgroundColor = UIColor.white
+            // Dark behind the bars in dark mode, where they keep white titles; the page itself stays white.
+            pdfView.backgroundColor = .systemBackground
             pdfView.pageShadowsEnabled = false
             pdfView.barInsets = barInsets
 
