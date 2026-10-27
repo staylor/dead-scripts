@@ -1,11 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "tvos-appstore-2320.png",
+      "filename" : "top-shelf-wide-2320.jpg",
       "idiom" : "tv",
       "scale" : "1x"
     },
     {
+      "filename" : "top-shelf-wide-4640.jpg",
       "idiom" : "tv",
       "scale" : "2x"
     }
