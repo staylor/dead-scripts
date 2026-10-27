@@ -10,7 +10,6 @@ struct TVSheetScreen: View {
     @State private var zoom = SheetZoom.fit
     @State private var viewport = SheetViewport()
     @State private var hint: SheetZoom? = .fit
-    @State private var lastStanza = 0
     @State private var playbackFailure: PlaybackFailure?
     @FocusState private var focus: SheetFocus?
 
@@ -58,8 +57,7 @@ struct TVSheetScreen: View {
             Text(failure.failureReason ?? "")
         }
         .onChange(of: focus) { _, focus in
-            if case .stanza(let index) = focus {
-                lastStanza = index
+            if case .stanza = focus {
                 hint = nil
             }
         }
@@ -82,7 +80,10 @@ struct TVSheetScreen: View {
                 .focusable()
                 .focused($focus, equals: .sheet)
                 .focusEffectDisabled()
-                .onMoveCommand(perform: move)
+                // Sideways at fit there's nothing to pan, and the focus engine moves to the lyrics beside it.
+                .onMoveCommand { direction in
+                    viewport.scroll(direction)
+                }
                 .onTapGesture {
                     setZoom(zoom.next)
                 }
@@ -98,16 +99,6 @@ struct TVSheetScreen: View {
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .glassEffect(in: .rect(cornerRadius: 24))
-        }
-    }
-
-    private func move(_ direction: MoveCommandDirection) {
-        if zoom == .fit, direction == .right {
-            if !paragraphs.isEmpty {
-                focus = .stanza(min(lastStanza, paragraphs.count - 1))
-            }
-        } else {
-            viewport.scroll(direction)
         }
     }
 

@@ -27,9 +27,10 @@ final class TVSheetTests: XCTestCase {
         remote.press(.down)
         attachScreenshot("Sheet scrolled", of: app)
 
-        press(.right, untilFocusIsOn: element("stanza-0", in: app))
-        press(.down, untilFocusIsOn: element("stanza-1", in: app))
-        press(.down, untilFocusIsOn: element("stanza-2", in: app))
+        // The focus engine picks the stanza beside the middle of the sheet.
+        remote.press(.right)
+        let stanza = focusedStanza(in: app)
+        press(.down, untilFocusIsOn: element("stanza-\(stanza + 1)", in: app))
         attachScreenshot("Lyrics", of: app)
 
         press(.left, untilFocusIsOn: sheet)
@@ -62,6 +63,14 @@ final class TVSheetTests: XCTestCase {
     private func waitForFocus(on element: XCUIElement, file: StaticString = #filePath, line: UInt = #line) {
         let focused = XCTNSPredicateExpectation(predicate: NSPredicate(format: "hasFocus == true"), object: element)
         XCTAssertEqual(XCTWaiter.wait(for: [focused], timeout: 10), .completed, "\(element) didn't get focus", file: file, line: line)
+    }
+
+    @MainActor
+    private func focusedStanza(in app: XCUIApplication, file: StaticString = #filePath, line: UInt = #line) -> Int {
+        let stanza = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "identifier BEGINSWITH 'stanza-' AND hasFocus == true")).firstMatch
+        XCTAssertTrue(stanza.waitForExistence(timeout: 10), "No stanza got focus", file: file, line: line)
+        return Int(stanza.identifier.dropFirst("stanza-".count)) ?? -1
     }
 
     /// A press can be lost while an animation is still running, so press until the focus moves.
