@@ -84,10 +84,8 @@ data.singers.push(...Array.from(singerCache.values()));
 data.writers.push(...Array.from(writerCache.values()));
 
 const songs = artists.flatMap((artist) => artist.albums.flatMap((album) => album.songs));
-const { changed, rendered, removed } = await syncSheets(songs);
-console.log(
-  `Lead sheets: ${changed.length} PDFs updated, ${rendered.length} tvOS images rendered, ${removed.length} files removed`
-);
+const { changed, removed } = await syncSheets(songs);
+console.log(`Lead sheets: ${changed.length} updated, ${removed.length} removed`);
 
 const file = path.join(
   process.cwd(),

@@ -21,8 +21,8 @@ xcode/
 │   ├── Views/                       SplitRootView (iOS, macOS), TV/, Library/, Sheet/, Setlists/
 │   └── Resources/                   asset catalog, album covers, band photos
 ├── leadsheets.watch/       watchOS app
-├── leadsheetsUITests/      iPhone UI tests
-└── Sheets/                 lead sheets: pdfs/ (iOS, macOS), images/ (tvOS), and schema.json, which maps
+├── leadsheetsUITests/      iPhone and Apple TV UI tests
+└── Sheets/                 lead sheets: pdfs/, and schema.json, which maps
                             each song to its score in iCloud Drive
 ```
 
@@ -44,7 +44,7 @@ iPhone, iPad and Mac share `SplitRootView`, a two-column `NavigationSplitView`:
 - Previous and Next follow the list the song was opened from (`openedFromSongs`), so a setlist plays in order. Pedals that send arrow keys do the same, through key commands on iOS and `onKeyPress` on the Mac.
 - `SongCommands` builds the Song menu from focused values, so it acts on the frontmost window.
 
-tvOS uses `TVRootView`: a tab per category, plus the system search tab, with native pushes and the PNG viewer. The watch shows the song list and lyrics, and opens the song chosen on the iPhone.
+tvOS uses `TVRootView`: a tab per category, plus the system search tab, with native pushes to `TVSheetScreen`. It puts the lead sheet beside the lyrics; the remote scrolls whichever has focus, pressing zooms the sheet in two steps, and Back zooms out before it leaves. `ZoomableSheet` draws the PDF with Core Graphics in tiles, because tvOS has no PDFKit, so it stays sharp at every zoom. The watch shows the song list and lyrics, and opens the song chosen on the iPhone.
 
 ## Services
 
@@ -57,13 +57,13 @@ tvOS uses `TVRootView`: a tab per category, plus the system search tab, with nat
 
 | | iPhone | iPad, Mac | Apple TV | Apple Watch | CarPlay |
 | --- | --- | --- | --- | --- | --- |
-| Sheet | PDFKit | PDFKit | PNG with zoom | — | — |
+| Sheet | PDFKit | PDFKit | Core Graphics tiles, zoomed with the remote | — | — |
 | Lyrics | Sheet with detents | Inspector | Side panel | Scroll view | — |
 | Setlists, favorites | Yes | Yes | — | — | — |
 | Playback | Apple Music | Apple Music | — | — | Apple Music |
 | Follows another device | CloudKit, watch | CloudKit, Handoff | — | iPhone | — |
 
-Resources are limited to the platforms that use them: the `Sheets/pdfs` and `Sheets/images` folder references carry `platformFilters`, because a synchronized folder can only filter single files.
+Every platform but watchOS bundles `Sheets/pdfs`, a folder reference. `AppIcon.icon` is filtered out of tvOS, which uses Brand Assets.
 
 ## Conventions
 
