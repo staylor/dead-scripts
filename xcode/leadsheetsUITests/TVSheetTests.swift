@@ -55,6 +55,41 @@ final class TVSheetTests: XCTestCase {
     }
 
     @MainActor
+    func testAlbumsAndArtistsOpenTheirSongs() {
+        let remote = XCUIRemote.shared
+        let app = XCUIApplication()
+        app.launchArguments += ["-inMemoryUserData"]
+        app.launch()
+        XCTAssertTrue(element("song-alabama-getaway", in: app).waitForExistence(timeout: 10))
+
+        remote.press(.right)
+        let ace = element("album-ace", in: app)
+        XCTAssertTrue(ace.waitForExistence(timeout: 10))
+        press(.down, untilFocusIsOn: ace)
+        attachScreenshot("Albums", of: app)
+        remote.press(.select)
+        let firstSong = app.cells.containing(.any, identifier: "song-greatest-story-ever-told").firstMatch
+        waitForFocus(on: firstSong)
+        attachScreenshot("Album", of: app)
+        remote.press(.select)
+        waitForFocus(on: element("sheet", in: app))
+        XCTAssertTrue(app.staticTexts["Greatest Story Ever Told"].exists)
+
+        remote.press(.menu)
+        waitForFocus(on: firstSong)
+        remote.press(.menu)
+        waitForFocus(on: ace)
+        press(.up, untilFocusIsOn: app.buttons["Albums"])
+        press(.right, untilFocusIsOn: app.buttons["Artists"])
+        let garcia = element("artist-jerry-garcia", in: app)
+        XCTAssertTrue(garcia.waitForExistence(timeout: 10))
+        press(.down, untilFocusIsOn: garcia)
+        remote.press(.select)
+        waitForFocus(on: app.cells.containing(.any, identifier: "song-bird-song").firstMatch)
+        attachScreenshot("Artist", of: app)
+    }
+
+    @MainActor
     private func element(_ identifier: String, in app: XCUIApplication) -> XCUIElement {
         app.descendants(matching: .any)[identifier].firstMatch
     }

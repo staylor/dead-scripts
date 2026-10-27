@@ -44,7 +44,7 @@ iPhone, iPad and Mac share `SplitRootView`, a two-column `NavigationSplitView`:
 - Previous and Next follow the list the song was opened from (`openedFromSongs`), so a setlist plays in order. Pedals that send arrow keys do the same, through key commands on iOS and `onKeyPress` on the Mac.
 - `SongCommands` builds the Song menu from focused values, so it acts on the frontmost window.
 
-tvOS uses `TVRootView`: a tab per category, plus the system search tab, with native pushes to `TVSheetScreen`. It puts the lead sheet beside the lyrics; the remote scrolls whichever has focus, pressing zooms the sheet in two steps, and Back zooms out before it leaves. `ZoomableSheet` draws the PDF with Core Graphics in tiles, because tvOS has no PDFKit, so it stays sharp at every zoom. The watch shows the song list and lyrics, and opens the song chosen on the iPhone.
+tvOS uses `TVRootView`: a tab per category, plus the system search tab. Albums are a grid of covers, and artists, singers and writers grids of round photos, which open `TVRouteScreen`, the artwork beside the songs. Songs push `TVSheetScreen`. It puts the lead sheet beside the lyrics; the remote scrolls whichever has focus, pressing zooms the sheet in two steps, and Back zooms out before it leaves. `ZoomableSheet` draws the PDF with Core Graphics in tiles, because tvOS has no PDFKit, so it stays sharp at every zoom. The watch shows the song list and lyrics, and opens the song chosen on the iPhone.
 
 ## Services
 
