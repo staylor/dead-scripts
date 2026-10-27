@@ -11,7 +11,10 @@ struct TVSheetScreen: View {
     @State private var viewport = SheetViewport()
     @State private var hint: SheetZoom? = .fit
     @State private var lastStanza = 0
+    @State private var playbackFailure: PlaybackFailure?
     @FocusState private var focus: SheetFocus?
+
+    private let player = MusicPlayerService.shared
 
     private var paragraphs: [[String]] {
         song.lyricParagraphs
@@ -21,7 +24,7 @@ struct TVSheetScreen: View {
         HStack(alignment: .top, spacing: 48) {
             sheet
             if zoom == .fit {
-                LyricsPanel(song: song, paragraphs: paragraphs, focus: $focus)
+                LyricsPanel(song: song, paragraphs: paragraphs, isPlaying: isPlaying, focus: $focus)
                     .frame(width: 640)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
             }
@@ -32,7 +35,7 @@ struct TVSheetScreen: View {
         .ignoresSafeArea(.container, edges: .top)
         .overlay(alignment: .bottom) {
             if let hint {
-                Text(hint.hint)
+                Text(hintText(for: hint))
                     .font(.callout)
                     .padding(.horizontal, 36)
                     .padding(.vertical, 18)
@@ -48,6 +51,12 @@ struct TVSheetScreen: View {
         .toolbar(.hidden, for: .tabBar, .navigationBar)
         .defaultFocus($focus, .sheet)
         .onExitCommand(perform: zoom.previous.map { previous in { setZoom(previous) } })
+        .onPlayPauseCommand(perform: togglePlayback)
+        .alert(isPresented: isShowingFailure, error: playbackFailure) { _ in
+            Button("OK", role: .cancel) {}
+        } message: { failure in
+            Text(failure.failureReason ?? "")
+        }
         .onChange(of: focus) { _, focus in
             if case .stanza(let index) = focus {
                 lastStanza = index
@@ -102,6 +111,40 @@ struct TVSheetScreen: View {
         }
     }
 
+    private func hintText(for zoom: SheetZoom) -> String {
+        zoom == .fit && song.appleMusicID != nil ? "\(zoom.hint)  ·  Play/Pause plays the song" : zoom.hint
+    }
+
+    private var isPlaying: Bool {
+        song.appleMusicID.map(player.isPlayingSong) ?? false
+    }
+
+    private var isShowingFailure: Binding<Bool> {
+        Binding(
+            get: { playbackFailure != nil },
+            set: { if !$0 { playbackFailure = nil } }
+        )
+    }
+
+    /// tvOS has no subscription offer, so someone without Apple Music is told they need it.
+    private func togglePlayback() {
+        guard let appleMusicID = song.appleMusicID else { return }
+        if isPlaying {
+            player.pause()
+            return
+        }
+        Task {
+            switch await player.start(appleMusicID: appleMusicID, title: song.title) {
+            case .playing:
+                break
+            case .needsSubscription:
+                playbackFailure = PlaybackFailure(songTitle: song.title, appleMusicID: appleMusicID, reason: .noSubscription)
+            case .failed(let failure):
+                playbackFailure = failure
+            }
+        }
+    }
+
     private func setZoom(_ newZoom: SheetZoom) {
         zoom = newZoom
         hint = newZoom
@@ -135,6 +178,7 @@ extension SheetZoom {
 private struct LyricsPanel: View {
     let song: Song
     let paragraphs: [[String]]
+    let isPlaying: Bool
     let focus: FocusState<SheetFocus?>.Binding
 
     var body: some View {
@@ -153,6 +197,12 @@ private struct LyricsPanel: View {
                     }
                     .font(.callout)
                     .foregroundStyle(.secondary)
+                    if isPlaying {
+                        Label("Playing in Apple Music", systemImage: "speaker.wave.2.fill")
+                            .symbolEffect(.variableColor.iterative)
+                            .font(.callout)
+                            .padding(.top, 6)
+                    }
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 16)
