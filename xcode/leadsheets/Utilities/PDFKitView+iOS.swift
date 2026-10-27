@@ -7,12 +7,9 @@ import UIKit
 extension PDFKitView {
     struct PDFKitViewRepresentable: UIViewRepresentable {
         let url: URL
-        let size: CGSize
         let barInsets: EdgeInsets
-        @Binding var initialLoadComplete: Bool
-        @Binding var isReturningFromBackground: Bool
 
-        func makeUIView(context: Context) -> PDFView {
+        func makeUIView(context: Context) -> SheetPDFView {
             let pdfView = SheetPDFView()
             pdfView.autoScales = false
             pdfView.displayMode = .singlePageContinuous
@@ -21,98 +18,25 @@ extension PDFKitView {
             pdfView.backgroundColor = .systemBackground
             pdfView.pageShadowsEnabled = false
             pdfView.barInsets = barInsets
-
-            if let document = PDFDocument(url: url) {
-                pdfView.document = document
-                DispatchQueue.main.async {
-                    self.fitToWidth(pdfView: pdfView, width: size.width, scrollToTop: true)
-                    self.lockZoom(pdfView: pdfView)
-                    self.initialLoadComplete = true
-                    context.coordinator.lastWidth = size.width
-                }
-            }
-
+            pdfView.show(PDFDocument(url: url))
             return pdfView
         }
 
-        func updateUIView(_ pdfView: PDFView, context: Context) {
-            if let pdfView = pdfView as? SheetPDFView, pdfView.barInsets != barInsets {
+        func updateUIView(_ pdfView: SheetPDFView, context: Context) {
+            if pdfView.barInsets != barInsets {
                 pdfView.barInsets = barInsets
             }
-
             if pdfView.document?.documentURL != url {
-                if let document = PDFDocument(url: url) {
-                    pdfView.document = document
-                    DispatchQueue.main.async {
-                        self.fitToWidth(pdfView: pdfView, width: size.width, scrollToTop: true)
-                        self.lockZoom(pdfView: pdfView)
-                        self.initialLoadComplete = true
-                        context.coordinator.lastWidth = size.width
-                    }
-                }
-                return
+                pdfView.show(PDFDocument(url: url))
             }
-
-            if isReturningFromBackground {
-                fitToWidth(pdfView: pdfView, width: size.width, scrollToTop: true)
-                lockZoom(pdfView: pdfView)
-                return
-            }
-
-            let widthChanged = abs(context.coordinator.lastWidth - size.width) > 1.0
-            if widthChanged && initialLoadComplete {
-                fitToWidth(pdfView: pdfView, width: size.width, scrollToTop: true)
-                lockZoom(pdfView: pdfView)
-                context.coordinator.lastWidth = size.width
-            }
-        }
-
-        func makeCoordinator() -> Coordinator {
-            Coordinator()
-        }
-
-        class Coordinator {
-            var lastWidth: CGFloat = 0
-        }
-
-        private func fitToWidth(pdfView: PDFView, width: CGFloat, scrollToTop: Bool = false) {
-            guard let document = pdfView.document,
-                let page = document.page(at: 0),
-                width > 0
-            else { return }
-
-            // lockZoom pinned the zoom scale, so release it before changing the scale factor.
-            if let scrollView = pdfView.subviews.first as? UIScrollView {
-                scrollView.minimumZoomScale = 0.1
-                scrollView.maximumZoomScale = 10.0
-            }
-
-            let pageWidth = page.bounds(for: .mediaBox).size.width
-            let scale = width / pageWidth
-
-            pdfView.scaleFactor = scale
-            pdfView.minScaleFactor = scale
-            pdfView.maxScaleFactor = scale
-
-            if scrollToTop {
-                pdfView.go(to: page)
-                (pdfView as? SheetPDFView)?.pinToTop()
-            }
-        }
-
-        private func lockZoom(pdfView: PDFView) {
-            guard let scrollView = pdfView.subviews.first as? UIScrollView else { return }
-            scrollView.minimumZoomScale = scrollView.zoomScale
-            scrollView.maximumZoomScale = scrollView.zoomScale
-            scrollView.bouncesZoom = false
-            scrollView.pinchGestureRecognizer?.isEnabled = false
         }
     }
 }
 
-/// Insets the page by the heights of the bars over it, and keeps its top below them until the reader scrolls.
+/// Fits the page to the view's width and insets it by the heights of the bars over it. Through layout changes,
+/// such as a rotation, the lyrics or the sidebar opening, or the system laying the app out at other sizes for its
+/// snapshots, it keeps the same part of the sheet at the top until the reader scrolls.
 /// SwiftUI reports the bars' heights; on iOS 27 the scroll view's own safe area leaves out the navigation bar.
-/// After `go(to:)`, the scroll view also puts the page back at the frame's top in its own layout pass.
 final class SheetPDFView: PDFView {
     var barInsets = EdgeInsets() {
         didSet {
@@ -120,14 +44,17 @@ final class SheetPDFView: PDFView {
         }
     }
 
-    private var isPinnedToTop = false
+    /// The fraction of the sheet's height at the top of the visible area, restored after each layout pass.
+    private var heldPosition: CGFloat? = 0
 
     private var scrollView: UIScrollView? {
         subviews.first as? UIScrollView
     }
 
-    func pinToTop() {
-        isPinnedToTop = true
+    /// PDFKit reads `document` from its own queues, so this sets it instead of an observer on the property.
+    func show(_ document: PDFDocument?) {
+        self.document = document
+        heldPosition = 0
         setNeedsLayout()
     }
 
@@ -137,33 +64,68 @@ final class SheetPDFView: PDFView {
     }
 
     override func layoutSubviews() {
+        if let page = document?.page(at: 0), bounds.width > 0 {
+            let scale = bounds.width / page.bounds(for: .mediaBox).width
+            if abs(scaleFactor - scale) > scale / 1000 {
+                // The scroll view still has its old layout here, so this is where the reader was.
+                holdPosition()
+                fit(scale)
+            }
+        }
         super.layoutSubviews()
-        guard isPinnedToTop else { return }
-        // The scroll view lays out after this view does.
+        guard heldPosition != nil else { return }
+        // The scroll view lays out after this view does, and PDFKit moves the page again in a later pass.
         DispatchQueue.main.async { [weak self] in
-            self?.applyPin()
+            self?.restoreHeldPosition()
+        }
+    }
+
+    private func fit(_ scale: CGFloat) {
+        // The zoom is locked at the last fitted scale, so release it before scaling.
+        scrollView?.minimumZoomScale = 0.1
+        scrollView?.maximumZoomScale = 10
+        minScaleFactor = min(minScaleFactor, scale)
+        maxScaleFactor = max(maxScaleFactor, scale)
+        scaleFactor = scale
+        minScaleFactor = scale
+        maxScaleFactor = scale
+        if let scrollView {
+            scrollView.minimumZoomScale = scrollView.zoomScale
+            scrollView.maximumZoomScale = scrollView.zoomScale
+            scrollView.bouncesZoom = false
+            scrollView.pinchGestureRecognizer?.isEnabled = false
         }
     }
 
     private func applyBarInsets() {
         guard let scrollView else { return }
-        let insets = UIEdgeInsets(top: barInsets.top, left: 0, bottom: barInsets.bottom, right: 0)
         scrollView.contentInsetAdjustmentBehavior = .never
+        let insets = UIEdgeInsets(top: barInsets.top, left: 0, bottom: barInsets.bottom, right: 0)
+        guard scrollView.contentInset != insets else { return }
+        holdPosition()
         scrollView.contentInset = insets
         scrollView.verticalScrollIndicatorInsets = insets
         setNeedsLayout()
     }
 
-    private func applyPin() {
-        guard isPinnedToTop, let scrollView else { return }
-        let top = CGPoint(x: 0, y: -scrollView.contentInset.top)
-        if scrollView.contentOffset != top {
-            scrollView.setContentOffset(top, animated: false)
+    private func holdPosition() {
+        guard heldPosition == nil, let scrollView, scrollView.contentSize.height > 0 else { return }
+        let position = (scrollView.contentOffset.y + scrollView.contentInset.top) / scrollView.contentSize.height
+        heldPosition = min(max(position, 0), 1)
+    }
+
+    private func restoreHeldPosition() {
+        guard let heldPosition, let scrollView else { return }
+        let top = -scrollView.contentInset.top
+        let bottom = max(top, scrollView.contentSize.height + scrollView.contentInset.bottom - scrollView.bounds.height)
+        let offset = CGPoint(x: 0, y: min(max(heldPosition * scrollView.contentSize.height + top, top), bottom))
+        if scrollView.contentOffset != offset {
+            scrollView.setContentOffset(offset, animated: false)
         }
     }
 
     @objc private func readerScrolled() {
-        isPinnedToTop = false
+        heldPosition = nil
     }
 }
 

@@ -9,7 +9,6 @@ extension PDFKitView {
         let url: URL
         let size: CGSize
         @Binding var initialLoadComplete: Bool
-        @Binding var isReturningFromBackground: Bool
 
         func makeNSView(context: Context) -> PDFView {
             let pdfView = PDFView()

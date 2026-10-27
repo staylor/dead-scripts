@@ -41,6 +41,7 @@ iPhone, iPad and Mac share `SplitRootView`, a two-column `NavigationSplitView`:
 - The **library column** is a `NavigationStack`. Its root is `LibraryList` for the selected `LibraryCategory`, with `.searchable` and a filter on Songs (all, favorites, covers). Drilling into an album, artist, singer, writer group or setlist pushes a `LibraryRoute`.
 - The **detail column** is `SheetView`: the PDF, a toolbar (Play, Lyrics, Favorite, Add to Setlist, Previous, Next), and `LyricsView` as an `.inspector`. The inspector is a column on iPad and Mac, and a sheet with detents on iPhone.
 - On iPhone the split view collapses into a stack, and `preferredCompactColumn` moves to the sheet when a song is chosen.
+- On iOS, `SheetPDFView` fits the page to the column's width. When the width changes, on rotation or when the lyrics or sidebar open, it keeps the same part of the sheet at the top.
 - Previous and Next follow the list the song was opened from (`openedFromSongs`), so a setlist plays in order. Pedals that send arrow keys do the same, through key commands on iOS and `onKeyPress` on the Mac.
 - `SongCommands` builds the Song menu from focused values, so it acts on the frontmost window.
 

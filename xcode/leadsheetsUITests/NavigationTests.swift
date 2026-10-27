@@ -47,6 +47,45 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
+    func testRotatingKeepsThePlaceInTheSheet() {
+        let app = launch()
+        search(for: "terrapin", in: app)
+        open("song-terrapin-station", showing: "Terrapin Station Medley", in: app)
+        addTeardownBlock {
+            await MainActor.run {
+                XCUIDevice.shared.orientation = .portrait
+            }
+        }
+
+        let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+        start.press(forDuration: 0.1, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3)))
+        let portrait = readingPosition(in: app, title: "Terrapin Station Medley")
+        XCTAssertGreaterThan(portrait, 0.05)
+
+        XCUIDevice.shared.orientation = .landscapeLeft
+        let landscape = readingPosition(in: app, title: "Terrapin Station Medley")
+        XCTAssertEqual(landscape, portrait, accuracy: 0.02)
+
+        XCUIDevice.shared.orientation = .portrait
+        XCTAssertEqual(readingPosition(in: app, title: "Terrapin Station Medley"), portrait, accuracy: 0.02)
+    }
+
+    /// How far down the sheet the bottom of the navigation bar is, once the page stops moving.
+    @MainActor
+    private func readingPosition(in app: XCUIApplication, title: String) -> CGFloat {
+        let page = app.textViews.firstMatch
+        XCTAssertTrue(page.waitForExistence(timeout: 10))
+        var frame = CGRect.null
+        for _ in 0..<20 {
+            Thread.sleep(forTimeInterval: 0.5)
+            let next = page.frame
+            if next == frame { break }
+            frame = next
+        }
+        return (app.navigationBars[title].frame.maxY - frame.minY) / frame.height
+    }
+
+    @MainActor
     func testCategoriesBecomeAMenuAtAccessibilityTextSizes() {
         let app = XCUIApplication()
         app.launchArguments += ["-inMemoryUserData", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"]
