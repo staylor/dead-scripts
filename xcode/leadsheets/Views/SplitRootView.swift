@@ -41,7 +41,7 @@ struct SplitRootView: View {
                         }
                     }
                     .searchable(text: $searchText, placement: searchPlacement, prompt: "Titles, albums, lyrics")
-                    .safeAreaInset(edge: .top) {
+                    .safeAreaBar(edge: .top) {
                         CategoryPicker(selection: $category)
                             .padding(.horizontal)
                             .padding(.bottom, 8)
@@ -63,6 +63,7 @@ struct SplitRootView: View {
                             }
                         }
                         #if os(iOS)
+                        ToolbarSpacer(.fixed, placement: .primaryAction)
                         ToolbarItem(placement: .primaryAction) {
                             Button("Settings", systemImage: "gearshape") {
                                 showsSettings = true
