@@ -1,5 +1,6 @@
 import XCTest
 
+#if os(iOS)
 /// iPhone flows: the split view collapses into a navigation stack.
 final class NavigationTests: XCTestCase {
     override func setUp() {
@@ -255,3 +256,4 @@ final class NavigationTests: XCTestCase {
         XCTAssertTrue(segment.isSelected, "\(category) wasn't selected")
     }
 }
+#endif
