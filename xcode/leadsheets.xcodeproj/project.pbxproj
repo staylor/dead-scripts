@@ -59,7 +59,20 @@
 			membershipExceptions = (
 				Info.plist,
 			);
+			platformFiltersByRelativePath = {
+				Resources/AppIcon.icon = (
+					ios,
+					macos,
+				);
+			};
 			target = D2E1EB552E9DE20C00E5456E /* leadsheets */;
+		};
+		DFAFCCFE8AA9C0BB2D239ED0 /* Exceptions for "leadsheets" folder in "leadsheets.watch" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/AppIcon.icon,
+			);
+			target = D2AF765F2EC4E94E006C0FCE /* leadsheets.watch */;
 		};
 		673973FC861E619E62BC5204 /* Exceptions for "leadsheets.watch" folder in "leadsheets.watch" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -83,6 +96,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				81E9F349F684958EF00D5041 /* Exceptions for "leadsheets" folder in "leadsheets" target */,
+				DFAFCCFE8AA9C0BB2D239ED0 /* Exceptions for "leadsheets" folder in "leadsheets.watch" target */,
 			);
 			path = leadsheets;
 			sourceTree = "<group>";
