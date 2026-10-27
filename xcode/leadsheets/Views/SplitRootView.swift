@@ -18,6 +18,7 @@ struct SplitRootView: View {
     @State private var searchText = ""
     @SceneStorage("selectedSongID") private var selectedSongID: Song.ID?
     @State private var compactColumn: NavigationSplitViewColumn = .sidebar
+    @State private var columnVisibility: NavigationSplitViewVisibility = .automatic
     #if os(iOS)
     @State private var showsSettings = false
     #endif
@@ -29,61 +30,30 @@ struct SplitRootView: View {
     #endif
 
     var body: some View {
-        NavigationSplitView(preferredCompactColumn: $compactColumn) {
-            NavigationStack(path: $path) {
-                LibraryList(category: category, searchText: searchText, songFilter: songFilter, selection: songSelection)
-                    .navigationTitle(category == .songs ? songFilter.title : category.title)
-                    .navigationDestination(for: LibraryRoute.self) { route in
-                        if case .setlist(let setlistID) = route {
-                            SetlistView(setlistID: setlistID, selection: songSelection)
-                        } else {
-                            LibraryRouteView(route: route, selection: songSelection)
-                        }
-                    }
-                    .searchable(text: $searchText, placement: searchPlacement, prompt: "Titles, albums, lyrics")
-                    .safeAreaBar(edge: .top) {
-                        CategoryPicker(selection: $category)
-                            .padding(.horizontal)
-                            .padding(.bottom, 8)
-                    }
-                    .toolbar {
-                        if category == .songs {
-                            ToolbarItem {
-                                Menu {
-                                    Picker("Show", selection: $songFilter) {
-                                        ForEach(SongFilter.allCases) { filter in
-                                            Label(filter.title, systemImage: filter.systemImage)
-                                                .tag(filter)
-                                        }
-                                    }
-                                } label: {
-                                    Label("Filter", systemImage: "line.3.horizontal.decrease")
-                                        .symbolVariant(songFilter == .all ? .none : .circle.fill)
-                                }
-                            }
-                        }
-                        #if os(iOS)
-                        ToolbarSpacer(.fixed, placement: .primaryAction)
-                        ToolbarItem(placement: .primaryAction) {
-                            Button("Settings", systemImage: "gearshape") {
-                                showsSettings = true
-                            }
-                        }
-                        #endif
-                    }
-            }
-            .navigationSplitViewColumnWidth(min: 360, ideal: 400, max: 480)
-        } detail: {
-            if let song = selectedSongID.flatMap(catalog.song(id:)) {
-                SheetView(song: song, navigation: navigation(from: song))
-                    .id(song.id)
+        Group {
+            #if os(iOS)
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                // The lyrics hide a large iPhone's sidebar in landscape. On iPad, binding the visibility replaces the
+                // system's choice of columns: on iOS 27 the sidebar then covers the sheet in portrait.
+                NavigationSplitView(columnVisibility: $columnVisibility, preferredCompactColumn: $compactColumn) {
+                    library
+                } detail: {
+                    detail
+                }
             } else {
-                ContentUnavailableView(
-                    "Select a Song",
-                    systemImage: "music.note",
-                    description: Text("Choose a song to see its lead sheet.")
-                )
+                NavigationSplitView(preferredCompactColumn: $compactColumn) {
+                    library
+                } detail: {
+                    detail
+                }
             }
+            #else
+            NavigationSplitView(preferredCompactColumn: $compactColumn) {
+                library
+            } detail: {
+                detail
+            }
+            #endif
         }
         #if os(macOS)
         .navigationSplitViewStyle(.balanced)
@@ -131,6 +101,66 @@ struct SplitRootView: View {
             cloudSync.sendSelection(slug: songID)
         }
         #endif
+    }
+
+    private var library: some View {
+        NavigationStack(path: $path) {
+            LibraryList(category: category, searchText: searchText, songFilter: songFilter, selection: songSelection)
+                .navigationTitle(category == .songs ? songFilter.title : category.title)
+                .navigationDestination(for: LibraryRoute.self) { route in
+                    if case .setlist(let setlistID) = route {
+                        SetlistView(setlistID: setlistID, selection: songSelection)
+                    } else {
+                        LibraryRouteView(route: route, selection: songSelection)
+                    }
+                }
+                .searchable(text: $searchText, placement: searchPlacement, prompt: "Titles, albums, lyrics")
+                .safeAreaBar(edge: .top) {
+                    CategoryPicker(selection: $category)
+                        .padding(.horizontal)
+                        .padding(.bottom, 8)
+                }
+                .toolbar {
+                    if category == .songs {
+                        ToolbarItem {
+                            Menu {
+                                Picker("Show", selection: $songFilter) {
+                                    ForEach(SongFilter.allCases) { filter in
+                                        Label(filter.title, systemImage: filter.systemImage)
+                                            .tag(filter)
+                                    }
+                                }
+                            } label: {
+                                Label("Filter", systemImage: "line.3.horizontal.decrease")
+                                    .symbolVariant(songFilter == .all ? .none : .circle.fill)
+                            }
+                        }
+                    }
+                    #if os(iOS)
+                    ToolbarSpacer(.fixed, placement: .primaryAction)
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Settings", systemImage: "gearshape") {
+                            showsSettings = true
+                        }
+                    }
+                    #endif
+                }
+        }
+        .navigationSplitViewColumnWidth(min: 360, ideal: 400, max: 480)
+    }
+
+    @ViewBuilder
+    private var detail: some View {
+        if let song = selectedSongID.flatMap(catalog.song(id:)) {
+            SheetView(song: song, navigation: navigation(from: song), sidebarVisibility: $columnVisibility)
+                .id(song.id)
+        } else {
+            ContentUnavailableView(
+                "Select a Song",
+                systemImage: "music.note",
+                description: Text("Choose a song to see its lead sheet.")
+            )
+        }
     }
 
     /// The selection as the library sets it, which also tells other devices.

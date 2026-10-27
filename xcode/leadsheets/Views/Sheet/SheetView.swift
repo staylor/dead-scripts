@@ -2,29 +2,55 @@
 import DeadSheetsKit
 import SwiftUI
 
-/// A song's lead sheet, with playback and its lyrics in an inspector.
+/// A song's lead sheet, with playback and its lyrics.
 struct SheetView: View {
     let song: Song
     var navigation = SongNavigation(previous: nil, next: nil)
+    /// The split view's sidebar, which the lyrics push aside in landscape on a large iPhone.
+    var sidebarVisibility: Binding<NavigationSplitViewVisibility> = .constant(.automatic)
 
     #if os(macOS)
     @AppStorage("showsLyrics") private var showsLyrics = true
     #else
     @State private var showsLyrics = false
+    @State private var shownLyricsPlacement = LyricsPlacement.sheet
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
     @AppStorage(SettingsKey.keepsScreenOn) private var keepsScreenOn = true
 
     var body: some View {
-        sheet
-            .navigationTitle(song.title)
-            .navigationSubtitle(subtitle)
+        HStack(spacing: 0) {
+            sheet
             #if os(iOS)
-        .navigationBarTitleDisplayMode(.inline)
-            #else
-        .frame(minWidth: 480)
+            if showsLyrics, lyricsPlacement == .beside {
+                LyricsView(song: song)
+                    .frame(width: 320)
+                    .background(Color(uiColor: .secondarySystemBackground))
+            }
             #endif
-            .toolbar {
-                #if os(iOS)
+        }
+        .navigationTitle(song.title)
+        .navigationSubtitle(subtitle)
+        #if os(iOS)
+        .navigationBarTitleDisplayMode(.inline)
+        #else
+        .frame(minWidth: 480)
+        #endif
+        .toolbar {
+            #if os(iOS)
+            if verticalSizeClass == .compact {
+                // In landscape a bottom bar takes a fifth of the height, and beside a sidebar it doesn't appear.
+                ToolbarItemGroup(placement: .topBarLeading) {
+                    previousButton
+                    nextButton
+                }
+                ToolbarSpacer(.fixed, placement: .primaryAction)
+                ToolbarItemGroup(placement: .primaryAction) {
+                    FavoriteButton(songID: song.id)
+                    AddToSetlistMenu(songID: song.id)
+                }
+            } else {
                 ToolbarItemGroup(placement: .bottomBar) {
                     previousButton
                     Spacer()
@@ -33,44 +59,116 @@ struct SheetView: View {
                     Spacer()
                     nextButton
                 }
-                #else
-                ToolbarItemGroup(placement: .navigation) {
-                    previousButton
-                    nextButton
-                }
-                ToolbarItemGroup {
-                    FavoriteButton(songID: song.id)
-                    AddToSetlistMenu(songID: song.id)
-                }
-                #endif
-                if let appleMusicID = song.appleMusicID {
-                    ToolbarItem {
-                        PlayButton(appleMusicID: appleMusicID, title: song.title)
-                    }
-                }
+            }
+            #else
+            ToolbarItemGroup(placement: .navigation) {
+                previousButton
+                nextButton
+            }
+            ToolbarItemGroup {
+                FavoriteButton(songID: song.id)
+                AddToSetlistMenu(songID: song.id)
+            }
+            #endif
+            if let appleMusicID = song.appleMusicID {
                 ToolbarItem {
-                    Toggle(isOn: $showsLyrics) {
-                        Label("Lyrics", systemImage: "text.quote")
+                    PlayButton(appleMusicID: appleMusicID, title: song.title)
+                }
+            }
+            ToolbarItem {
+                Toggle(isOn: $showsLyrics) {
+                    Label("Lyrics", systemImage: "text.quote")
+                }
+            }
+        }
+        .focusedSceneValue(\.shownSong, song)
+        .focusedSceneValue(\.showsLyrics, $showsLyrics)
+        .focusedSceneValue(\.songNavigation, navigation)
+        .pageTurnerKeys(navigation)
+        .keepsScreenOn(keepsScreenOn)
+        .userActivity(SongActivity.type) { activity in
+            activity.title = song.title
+            activity.userInfo = [SongActivity.songIDKey: song.id]
+            activity.isEligibleForHandoff = true
+        }
+        .inspector(isPresented: inspectorIsPresented) {
+            LyricsView(song: song)
+                .inspectorColumnWidth(min: 240, ideal: 320, max: 420)
+        }
+        #if os(iOS)
+        .sheet(isPresented: showsLyrics(in: .sheet)) {
+            lyricsSheet
+        }
+        .onChange(of: lyricsPlacement, initial: true) { _, placement in
+            shownLyricsPlacement = placement
+        }
+        .onChange(of: lyricsNeedTheSidebarsRoom, initial: true) { _, needRoom in
+            guard needRoom else { return }
+            // Turning to landscape, the split view sets its own column visibility as it expands, after this runs.
+            Task {
+                sidebarVisibility.wrappedValue = .detailOnly
+            }
+        }
+        #endif
+    }
+
+    private var inspectorIsPresented: Binding<Bool> {
+        #if os(iOS)
+        showsLyrics(in: .inspector)
+        #else
+        $showsLyrics
+        #endif
+    }
+
+    #if os(iOS)
+    private enum LyricsPlacement {
+        case inspector, sheet, beside
+    }
+
+    /// An inspector column on iPad, a sheet under the music on iPhone, and beside the music when an iPhone is
+    /// in landscape, where a sheet would cover it. Each placement has one presentation style: an inspector that
+    /// changes between a sheet and a column as the device turns closes on iOS 26 and stays open on iOS 27.
+    private var lyricsPlacement: LyricsPlacement {
+        if verticalSizeClass == .compact {
+            .beside
+        } else if horizontalSizeClass == .compact {
+            .sheet
+        } else {
+            .inspector
+        }
+    }
+
+    private var lyricsSheet: some View {
+        LyricsView(song: song)
+            .presentationDetents([.medium, .large])
+            .presentationBackgroundInteraction(.enabled(upThrough: .medium))
+    }
+
+    /// A large iPhone in landscape shows the sidebar, and the lyrics beside the sheet need its room.
+    private var lyricsNeedTheSidebarsRoom: Bool {
+        showsLyrics && lyricsPlacement == .beside && horizontalSizeClass == .regular
+    }
+
+    /// Whether the lyrics are open in `placement`. A presentation that ends because the device turned and the
+    /// lyrics moved doesn't close them.
+    private func showsLyrics(in placement: LyricsPlacement) -> Binding<Bool> {
+        Binding(
+            get: { showsLyrics && lyricsPlacement == placement },
+            set: { isPresented in
+                guard placement == .sheet, !isPresented else {
+                    showsLyrics = isPresented
+                    return
+                }
+                // As an iPhone turns, the system can end the sheet before this view sees the new size class.
+                Task {
+                    if shownLyricsPlacement == .sheet {
+                        showsLyrics = false
                     }
                 }
             }
-            .focusedSceneValue(\.shownSong, song)
-            .focusedSceneValue(\.showsLyrics, $showsLyrics)
-            .focusedSceneValue(\.songNavigation, navigation)
-            .pageTurnerKeys(navigation)
-            .keepsScreenOn(keepsScreenOn)
-            .userActivity(SongActivity.type) { activity in
-                activity.title = song.title
-                activity.userInfo = [SongActivity.songIDKey: song.id]
-                activity.isEligibleForHandoff = true
-            }
-            .inspector(isPresented: $showsLyrics) {
-                LyricsView(song: song)
-                    .inspectorColumnWidth(min: 240, ideal: 320, max: 420)
-                    .presentationDetents([.medium, .large])
-                    .presentationBackgroundInteraction(.enabled(upThrough: .medium))
-            }
+        )
     }
+    #endif
 
     private var previousButton: some View {
         Button("Previous Song", systemImage: "chevron.backward") {
