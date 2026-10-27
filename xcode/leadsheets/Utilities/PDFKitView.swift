@@ -16,12 +16,24 @@ struct PDFKitView: View {
     var body: some View {
         VStack(spacing: 0) {
             GeometryReader { geometry in
+                #if os(iOS)
+                // The sheet runs under the glass bars, and the scroll view insets the page by their heights.
+                PDFKitViewRepresentable(
+                    url: url,
+                    size: geometry.size,
+                    barInsets: geometry.safeAreaInsets,
+                    initialLoadComplete: $initialLoadComplete,
+                    isReturningFromBackground: $isReturningFromBackground
+                )
+                .ignoresSafeArea(.container, edges: .vertical)
+                #else
                 PDFKitViewRepresentable(
                     url: url,
                     size: geometry.size,
                     initialLoadComplete: $initialLoadComplete,
                     isReturningFromBackground: $isReturningFromBackground
                 )
+                #endif
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

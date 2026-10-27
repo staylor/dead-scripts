@@ -110,7 +110,7 @@ private struct SongPicker: View {
             #endif
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
+                    Button(role: .confirm) {
                         dismiss()
                     }
                 }
