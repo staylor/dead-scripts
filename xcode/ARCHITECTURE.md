@@ -22,7 +22,7 @@ xcode/
 │   └── Resources/                   asset catalog, album covers, band photos
 ├── leadsheets.watch/       watchOS app
 ├── leadsheetsUITests/      iPhone and Apple TV UI tests
-└── Sheets/                 lead sheets: pdfs/ (iOS, macOS), images/ (tvOS), and schema.json, which maps
+└── Sheets/                 lead sheets: pdfs/, and schema.json, which maps
                             each song to its score in iCloud Drive
 ```
 
@@ -63,7 +63,7 @@ tvOS uses `TVRootView`: a tab per category, plus the system search tab, with nat
 | Playback | Apple Music | Apple Music | — | — | Apple Music |
 | Follows another device | CloudKit, watch | CloudKit, Handoff | — | iPhone | — |
 
-Resources are limited to the platforms that use them: the `Sheets/pdfs` and `Sheets/images` folder references carry `platformFilters`, because a synchronized folder can only filter single files.
+Every platform but watchOS bundles `Sheets/pdfs`, a folder reference. `AppIcon.icon` is filtered out of tvOS, which uses Brand Assets.
 
 ## Conventions
 

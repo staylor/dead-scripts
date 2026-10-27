@@ -69,11 +69,4 @@ struct BundledCatalogTests {
         #expect(expected.subtracting(pdfs).sorted() == [], "missing from Sheets/pdfs")
         #expect(pdfs.subtracting(expected).sorted() == [], "in Sheets/pdfs but not in the catalog")
     }
-
-    @Test func everySongHasATVImageAndNothingElseDoes() {
-        let expected = Set(catalog.songs.map { ($0.sheetFileName as NSString).deletingPathExtension + ".png" })
-        let images = Self.files(in: "Sheets/images", withExtension: "png")
-        #expect(expected.subtracting(images).sorted() == [], "missing from Sheets/images")
-        #expect(images.subtracting(expected).sorted() == [], "in Sheets/images but not in the catalog")
-    }
 }

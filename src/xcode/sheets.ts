@@ -1,4 +1,3 @@
-import { execFileSync } from 'child_process';
 import { readdir, readFile, rm, writeFile } from 'fs/promises';
 import path from 'path';
 
@@ -9,12 +8,10 @@ interface SheetSong {
   fileName: string | null;
 }
 
-const convertScript = path.join(process.cwd(), 'xcode', 'convert_pdfs.swift');
-
 /**
  * Copies each song's score from iCloud Drive into `Sheets/pdfs`, finding it through
- * `Sheets/schema.json`, and renders tvOS images for the scores that changed. The sheets are
- * committed, so files that haven't changed are left untouched.
+ * `Sheets/schema.json`. The sheets are committed, so files that haven't changed are left
+ * untouched.
  */
 export async function syncSheets(
   songs: SheetSong[],
@@ -41,7 +38,6 @@ export async function syncSheets(
   }
 
   const pdfsDir = path.join(sheetsDir, 'pdfs');
-  const imagesDir = path.join(sheetsDir, 'images');
   const pdfs = songs.map((song) => song.fileName!);
   const changed: string[] = [];
 
@@ -55,30 +51,11 @@ export async function syncSheets(
     }
   }
 
-  const removed = [
-    ...(await removeAllExcept(pdfsDir, new Set(pdfs), '.pdf')),
-    ...(await removeAllExcept(imagesDir, new Set(pdfs.map(imageName)), '.png')),
-  ];
+  const keep = new Set(pdfs);
+  const removed = (await readdir(pdfsDir)).filter(
+    (file) => file.endsWith('.pdf') && !keep.has(file)
+  );
+  await Promise.all(removed.map((file) => rm(path.join(pdfsDir, file))));
 
-  const images = new Set(await readdir(imagesDir));
-  const rendered = pdfs.filter((pdf) => changed.includes(pdf) || !images.has(imageName(pdf)));
-  if (rendered.length > 0) {
-    // convert_pdfs.swift reads Sheets/pdfs and writes Sheets/images relative to where it runs.
-    execFileSync('swift', [convertScript, ...rendered], {
-      cwd: path.dirname(sheetsDir),
-      stdio: 'inherit',
-    });
-  }
-
-  return { changed, rendered, removed };
-}
-
-function imageName(pdf: string) {
-  return pdf.replace(/\.pdf$/, '.png');
-}
-
-async function removeAllExcept(dir: string, keep: Set<string>, extension: string) {
-  const stale = (await readdir(dir)).filter((file) => file.endsWith(extension) && !keep.has(file));
-  await Promise.all(stale.map((file) => rm(path.join(dir, file))));
-  return stale;
+  return { changed, removed };
 }
