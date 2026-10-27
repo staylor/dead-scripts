@@ -23,13 +23,25 @@ private struct TVLibraryTab: View {
 
     var body: some View {
         NavigationStack {
-            LibraryList(category: category, searchText: "", selection: .constant(nil))
+            content
                 .navigationDestination(for: LibraryRoute.self) { route in
-                    LibraryRouteView(route: route, selection: .constant(nil))
+                    TVRouteScreen(route: route)
                 }
                 .navigationDestination(for: Song.self) { song in
-                    ImageViewerScreen(song: song)
+                    TVSheetScreen(song: song)
                 }
+        }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        switch category {
+        case .albums:
+            TVAlbumGrid()
+        case .artists, .singers, .writers:
+            TVPeopleGrid(category: category)
+        case .songs, .covers, .setlists:
+            LibraryList(category: category, searchText: "", selection: .constant(nil))
         }
     }
 }
@@ -42,7 +54,7 @@ private struct TVSearchTab: View {
             LibraryList(category: .songs, searchText: searchText, selection: .constant(nil))
                 .searchable(text: $searchText, prompt: "Titles, albums, lyrics")
                 .navigationDestination(for: Song.self) { song in
-                    ImageViewerScreen(song: song)
+                    TVSheetScreen(song: song)
                 }
         }
     }
