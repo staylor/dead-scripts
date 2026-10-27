@@ -9,42 +9,23 @@ import UIKit
 
 struct PDFKitView: View {
     let url: URL
+    #if os(macOS)
     @State private var initialLoadComplete = false
-    @Environment(\.scenePhase) private var scenePhase
-    @State private var isReturningFromBackground = false
+    #endif
 
     var body: some View {
         VStack(spacing: 0) {
             GeometryReader { geometry in
                 #if os(iOS)
                 // The sheet runs under the glass bars, and the scroll view insets the page by their heights.
-                PDFKitViewRepresentable(
-                    url: url,
-                    size: geometry.size,
-                    barInsets: geometry.safeAreaInsets,
-                    initialLoadComplete: $initialLoadComplete,
-                    isReturningFromBackground: $isReturningFromBackground
-                )
-                .ignoresSafeArea(.container, edges: .vertical)
+                PDFKitViewRepresentable(url: url, barInsets: geometry.safeAreaInsets)
+                    .ignoresSafeArea(.container, edges: .vertical)
                 #else
-                PDFKitViewRepresentable(
-                    url: url,
-                    size: geometry.size,
-                    initialLoadComplete: $initialLoadComplete,
-                    isReturningFromBackground: $isReturningFromBackground
-                )
+                PDFKitViewRepresentable(url: url, size: geometry.size, initialLoadComplete: $initialLoadComplete)
                 #endif
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .onChange(of: scenePhase) { oldPhase, newPhase in
-            if oldPhase == .background && newPhase == .active {
-                isReturningFromBackground = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    isReturningFromBackground = false
-                }
-            }
-        }
     }
 }
 
