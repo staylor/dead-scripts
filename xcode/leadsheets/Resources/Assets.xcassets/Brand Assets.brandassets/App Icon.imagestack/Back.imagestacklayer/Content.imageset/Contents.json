@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "white-back.png",
+      "filename" : "forest-400.png",
       "idiom" : "tv",
       "scale" : "1x"
     },
     {
-      "filename" : "white-back 1.png",
+      "filename" : "forest-800.png",
       "idiom" : "tv",
       "scale" : "2x"
     }

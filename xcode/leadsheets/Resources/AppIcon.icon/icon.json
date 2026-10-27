@@ -1,27 +1,27 @@
 {
-  "fill": {
-    "solid": "extended-srgb:1.00000,1.00000,1.00000,1.00000"
+  "fill" : {
+    "automatic-gradient" : "extended-srgb:0.36000,0.55000,0.24000,1.00000"
   },
-  "groups": [
+  "groups" : [
     {
-      "layers": [
+      "layers" : [
         {
-          "glass": true,
-          "image-name": "bear.png",
-          "name": "bear",
-          "position": {
-            "scale": 0.9,
-            "translation-in-points": [
+          "glass" : true,
+          "image-name" : "banjo-bear.png",
+          "name" : "banjo-bear",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
               0,
               0
             ]
           },
-          "position-specializations": [
+          "position-specializations" : [
             {
-              "idiom": "watchOS",
-              "value": {
-                "scale": 0.78,
-                "translation-in-points": [
+              "idiom" : "watchOS",
+              "value" : {
+                "scale" : 0.84,
+                "translation-in-points" : [
                   0,
                   0
                 ]
@@ -30,20 +30,51 @@
           ]
         }
       ],
-      "shadow": {
-        "kind": "neutral",
-        "opacity": 0.5
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
       },
-      "translucency": {
-        "enabled": false,
-        "value": 0.5
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+        {
+          "glass" : false,
+          "image-name" : "forest.png",
+          "name" : "forest",
+          "hidden-specializations" : [
+            {
+              "idiom" : "watchOS",
+              "value" : true
+            },
+            {
+              "appearance" : "dark",
+              "value" : true
+            },
+            {
+              "appearance" : "tinted",
+              "value" : true
+            }
+          ]
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
       }
     }
   ],
-  "supported-platforms": {
-    "circles": [
+  "supported-platforms" : {
+    "circles" : [
       "watchOS"
     ],
-    "squares": "shared"
+    "squares" : "shared"
   }
 }
