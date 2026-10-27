@@ -188,6 +188,42 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
+    func testLandscapeMovesTheSongButtonsUpAndTheLyricsBesideTheSheet() {
+        let app = launch()
+        search(for: "ripple", in: app)
+        open("song-ripple", showing: "Ripple", in: app)
+        addTeardownBlock {
+            await MainActor.run {
+                XCUIDevice.shared.orientation = .portrait
+            }
+        }
+
+        XCUIDevice.shared.orientation = .landscapeLeft
+        let bar = app.navigationBars["Ripple"]
+        XCTAssertTrue(bar.buttons["Next Song"].waitForExistence(timeout: 10))
+        XCTAssertTrue(bar.buttons["Add to Favorites"].exists)
+
+        app.buttons["Lyrics"].tap()
+        let line = app.staticTexts["If my words did glow with the gold of sunshine"]
+        XCTAssertTrue(line.waitForExistence(timeout: 10))
+        XCTAssertLessThan(app.textViews.firstMatch.frame.midX, line.frame.minX)
+
+        XCUIDevice.shared.orientation = .portrait
+        XCTAssertTrue(app.buttons["Next Song"].waitForExistence(timeout: 10))
+        XCTAssertFalse(bar.buttons["Next Song"].exists)
+        XCTAssertTrue(line.waitForExistence(timeout: 10))
+
+        // Dragging the sheet down by its header closes the lyrics; a swipe on the text would scroll it.
+        app.staticTexts["Sung by Jerry Garcia"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            .press(forDuration: 0.1, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.99)))
+        let closed = NSPredicate(format: "exists == false")
+        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: closed, object: line)], timeout: 10), .completed)
+        // If closing the sheet had left the lyrics on, this tap would turn them off.
+        app.buttons["Lyrics"].tap()
+        XCTAssertTrue(line.waitForExistence(timeout: 10))
+    }
+
+    @MainActor
     private func launch() -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments += ["-inMemoryUserData"]
