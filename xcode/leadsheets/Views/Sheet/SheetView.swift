@@ -25,7 +25,7 @@ struct SheetView: View {
             #if os(iOS)
             if showsLyrics, lyricsPlacement == .beside {
                 LyricsView(song: song)
-                    .frame(width: 320)
+                    .frame(width: Self.lyricsWidth)
                     .background(Color(uiColor: .secondarySystemBackground))
             }
             #endif
@@ -34,8 +34,6 @@ struct SheetView: View {
         .navigationSubtitle(subtitle)
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
-        #else
-        .frame(minWidth: 480)
         #endif
         .toolbar {
             #if os(iOS)
@@ -93,7 +91,7 @@ struct SheetView: View {
         }
         .inspector(isPresented: inspectorIsPresented) {
             LyricsView(song: song)
-                .inspectorColumnWidth(min: 240, ideal: 320, max: 420)
+                .inspectorColumnWidth(min: 240, ideal: Self.lyricsWidth, max: 420)
         }
         #if os(iOS)
         .sheet(isPresented: showsLyrics(in: .sheet)) {
@@ -109,8 +107,21 @@ struct SheetView: View {
                 sidebarVisibility.wrappedValue = .detailOnly
             }
         }
+        #else
+        // A minimum width on the sheet counts the sidebar twice, which kept the window at least 1,645 points wide.
+        // The column's minimum counts it once, and includes the lyrics.
+        .navigationSplitViewColumnWidth(min: columnWidth, ideal: columnWidth)
         #endif
     }
+
+    private static let lyricsWidth: CGFloat = 320
+
+    #if os(macOS)
+    /// The narrowest the sheet gets, with room for the lyrics beside it.
+    private var columnWidth: CGFloat {
+        showsLyrics ? 480 + Self.lyricsWidth : 480
+    }
+    #endif
 
     private var inspectorIsPresented: Binding<Bool> {
         #if os(iOS)
