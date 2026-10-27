@@ -11,6 +11,7 @@ struct SheetView: View {
     @AppStorage("showsLyrics") private var showsLyrics = true
     #else
     @State private var showsLyrics = false
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     #endif
     @AppStorage(SettingsKey.keepsScreenOn) private var keepsScreenOn = true
 
@@ -25,13 +26,26 @@ struct SheetView: View {
             #endif
             .toolbar {
                 #if os(iOS)
-                ToolbarItemGroup(placement: .bottomBar) {
-                    previousButton
-                    Spacer()
-                    FavoriteButton(songID: song.id)
-                    AddToSetlistMenu(songID: song.id)
-                    Spacer()
-                    nextButton
+                if verticalSizeClass == .compact {
+                    // In landscape a bottom bar takes a fifth of the height, and beside a sidebar it doesn't appear.
+                    ToolbarItemGroup(placement: .topBarLeading) {
+                        previousButton
+                        nextButton
+                    }
+                    ToolbarSpacer(.fixed, placement: .primaryAction)
+                    ToolbarItemGroup(placement: .primaryAction) {
+                        FavoriteButton(songID: song.id)
+                        AddToSetlistMenu(songID: song.id)
+                    }
+                } else {
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        previousButton
+                        Spacer()
+                        FavoriteButton(songID: song.id)
+                        AddToSetlistMenu(songID: song.id)
+                        Spacer()
+                        nextButton
+                    }
                 }
                 #else
                 ToolbarItemGroup(placement: .navigation) {
