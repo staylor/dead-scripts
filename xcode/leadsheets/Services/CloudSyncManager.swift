@@ -114,7 +114,7 @@ final class CloudSyncManager {
                 record[Field.slug] = slug
                 record[Field.sender] = deviceID
                 record[Field.timestamp] = Date()
-                try await database.save(record)
+                _ = try await database.save(record)
             } catch {
                 Logger.sync.error("Couldn't save the selection: \(error.localizedDescription, privacy: .public)")
             }
@@ -203,7 +203,7 @@ final class CloudSyncManager {
             let notificationInfo = CKSubscription.NotificationInfo()
             notificationInfo.shouldSendContentAvailable = true
             subscription.notificationInfo = notificationInfo
-            try await database.save(subscription)
+            _ = try await database.save(subscription)
         } catch {
             Logger.sync.error("Couldn't save the subscription: \(error.localizedDescription, privacy: .public)")
         }

@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
 
 jobs:
   changes:
@@ -58,7 +58,7 @@ jobs:
     name: Build ${{ matrix.name }}
     needs: changes
     if: needs.changes.outputs.xcode == 'true'
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 30
     strategy:
       fail-fast: false
@@ -89,7 +89,7 @@ jobs:
     name: Test DeadSheetsKit
     needs: changes
     if: needs.changes.outputs.xcode == 'true'
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
@@ -100,11 +100,8 @@ jobs:
     name: UI tests (iPhone)
     needs: changes
     if: needs.changes.outputs.xcode == 'true'
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 30
-    env:
-      # Simulators are always set up for the runner's default Xcode, but not always for older ones.
-      DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
     defaults:
       run:
         working-directory: xcode
@@ -115,9 +112,11 @@ jobs:
         run: |
           udid=$(xcrun simctl list devices available --json | jq -r '
             [.devices | to_entries | sort_by(.key)[] | select(.key | contains("iOS")) | .value[] | select(.name | startswith("iPhone"))]
-            | (map(select(.name == "iPhone 17 Pro")) | last) // last | .udid')
+            | (map(select(.name == "iPhone 18 Pro")) | last) // last | .udid')
           echo "udid=$udid" >> "$GITHUB_OUTPUT"
           xcrun simctl list devices available | grep "$udid"
+          # The test runner can stall while a cold simulator boots, and then never starts.
+          xcrun simctl bootstatus "$udid" -b
       - name: Test
         run: |
           set -o pipefail
@@ -140,7 +139,7 @@ jobs:
     name: Format
     needs: changes
     if: needs.changes.outputs.xcode == 'true'
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 10
     defaults:
       run:
@@ -156,7 +155,7 @@ jobs:
     if: >-
       !cancelled() && needs.ci.result == 'success' && needs.changes.outputs.xcode == 'true'
       && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 45
     environment: testflight
     strategy:

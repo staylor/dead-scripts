@@ -66,7 +66,8 @@ final class NavigationTests: XCTestCase {
 
         XCTAssertTrue(app.switches["Sync with Other Devices"].waitForExistence(timeout: 10))
         attachScreenshot("Settings", of: app)
-        XCTAssertTrue(app.buttons["Privacy Policy"].exists)
+        // iOS 27 no longer reports a Link as a button.
+        XCTAssertTrue(app.links["Privacy Policy"].exists || app.buttons["Privacy Policy"].exists)
         let version = NSPredicate(format: "label CONTAINS %@ OR value CONTAINS %@", "1.0 (1)", "1.0 (1)")
         XCTAssertTrue(app.descendants(matching: .any).matching(version).firstMatch.exists)
     }
