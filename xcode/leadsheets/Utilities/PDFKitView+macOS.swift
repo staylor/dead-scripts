@@ -7,87 +7,85 @@ import AppKit
 extension PDFKitView {
     struct PDFKitViewRepresentable: NSViewRepresentable {
         let url: URL
-        let size: CGSize
-        @Binding var initialLoadComplete: Bool
 
-        func makeNSView(context: Context) -> PDFView {
-            let pdfView = PDFView()
+        func makeNSView(context: Context) -> SheetPDFView {
+            let pdfView = SheetPDFView()
             pdfView.autoScales = false
             pdfView.displayMode = .singlePageContinuous
             pdfView.displayDirection = .vertical
-
-            pdfView.backgroundColor = NSColor.white
-
-            pdfView.layer?.shadowOpacity = 0
-            pdfView.layer?.shadowRadius = 0
-            pdfView.layer?.shadowOffset = CGSize.zero
-
+            pdfView.backgroundColor = .white
             pdfView.pageShadowsEnabled = false
-
-            if let document = PDFKit.PDFDocument(url: url) {
-                pdfView.document = document
-
-                // The view has no frame until it's laid out, so scale on the next pass.
-                DispatchQueue.main.async {
-                    self.updateScaleFactor(for: pdfView, width: size.width, resetPosition: true)
-                    self.initialLoadComplete = true
-                    context.coordinator.lastSize = size
-                }
-            }
-
+            pdfView.show(PDFDocument(url: url))
             return pdfView
         }
 
-        func updateNSView(_ pdfView: PDFView, context: Context) {
+        func updateNSView(_ pdfView: SheetPDFView, context: Context) {
             if pdfView.document?.documentURL != url {
-                if let document = PDFKit.PDFDocument(url: url) {
-                    pdfView.document = document
-                    DispatchQueue.main.async {
-                        self.updateScaleFactor(for: pdfView, width: size.width, resetPosition: true)
-                        self.initialLoadComplete = true
-                        context.coordinator.lastSize = size
-                    }
-                }
-            } else if initialLoadComplete {
-                let sizeChanged =
-                    abs(context.coordinator.lastSize.width - size.width) > 1.0
-                    || abs(context.coordinator.lastSize.height - size.height) > 1.0
-
-                if sizeChanged {
-                    pdfView.layoutDocumentView()
-                    updateScaleFactor(for: pdfView, width: size.width, resetPosition: false)
-                    context.coordinator.lastSize = size
-                }
+                pdfView.show(PDFDocument(url: url))
             }
         }
+    }
+}
 
-        func makeCoordinator() -> Coordinator {
-            Coordinator()
+/// Fits the page to the view's width. When the view changes size, as the window resizes or the lyrics or the
+/// sidebar open, it keeps the same part of the sheet at the top.
+final class SheetPDFView: PDFView {
+    private var fittedWidth: CGFloat = 0
+    /// The part of the sheet at the top before the view changed size, restored once PDFKit has laid out the new size.
+    private var positionBeforeResize: PDFDestination?
+    /// Where the reader was when a live resize began. Each step returns there, so a step that runs into the end
+    /// of the sheet doesn't move the reader for the rest of the resize.
+    private var liveResizePosition: PDFDestination?
+
+    func show(_ document: PDFDocument?) {
+        self.document = document
+        fittedWidth = 0
+        positionBeforeResize = nil
+        needsLayout = true
+    }
+
+    override func setFrameSize(_ newSize: NSSize) {
+        if newSize != frame.size, fittedWidth > 0, positionBeforeResize == nil {
+            positionBeforeResize = liveResizePosition ?? currentDestination
         }
+        super.setFrameSize(newSize)
+        needsLayout = true
+    }
 
-        class Coordinator {
-            var lastSize: CGSize = .zero
+    override func layout() {
+        super.layout()
+        guard let page = document?.page(at: 0), bounds.width > 0 else { return }
+        let isFirstFit = fittedWidth == 0
+        if bounds.width != fittedWidth {
+            let scale = bounds.width / page.bounds(for: .mediaBox).width
+            minScaleFactor = min(minScaleFactor, scale)
+            maxScaleFactor = max(maxScaleFactor, scale * 4)
+            scaleFactor = scale
+            minScaleFactor = scale
+            maxScaleFactor = scale * 4
+            fittedWidth = bounds.width
+            layoutDocumentView()
         }
-
-        private func updateScaleFactor(for pdfView: PDFView, width: CGFloat, resetPosition: Bool) {
-            guard let document = pdfView.document,
-                let page = document.page(at: 0)
-            else { return }
-
-            let pageSize = page.bounds(for: .mediaBox).size
-
-            guard width > 0 else { return }
-
-            let scaleToFit = width / pageSize.width
-
-            guard resetPosition || abs(pdfView.scaleFactor - scaleToFit) > 0.01 else { return }
-
-            pdfView.scaleFactor = scaleToFit
-            pdfView.minScaleFactor = scaleToFit
-            pdfView.maxScaleFactor = scaleToFit * 4.0
-
-            pdfView.go(to: page)
+        if isFirstFit {
+            go(to: page)
+        } else if let position = positionBeforeResize {
+            go(to: position)
+            // Right after a resize PDFKit lands about 30 points off, so go there again once it has settled.
+            Task { [weak self] in
+                self?.go(to: position)
+            }
         }
+        positionBeforeResize = nil
+    }
+
+    override func viewWillStartLiveResize() {
+        super.viewWillStartLiveResize()
+        liveResizePosition = currentDestination
+    }
+
+    override func viewDidEndLiveResize() {
+        super.viewDidEndLiveResize()
+        liveResizePosition = nil
     }
 }
 

@@ -9,9 +9,6 @@ import UIKit
 
 struct PDFKitView: View {
     let url: URL
-    #if os(macOS)
-    @State private var initialLoadComplete = false
-    #endif
 
     var body: some View {
         VStack(spacing: 0) {
@@ -21,7 +18,7 @@ struct PDFKitView: View {
                 PDFKitViewRepresentable(url: url, barInsets: geometry.safeAreaInsets)
                     .ignoresSafeArea(.container, edges: .vertical)
                 #else
-                PDFKitViewRepresentable(url: url, size: geometry.size, initialLoadComplete: $initialLoadComplete)
+                PDFKitViewRepresentable(url: url)
                 #endif
             }
         }
