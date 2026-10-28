@@ -14,6 +14,8 @@ Grateful Dead lead sheets and lyrics for iPhone, iPad, Mac, Apple TV, Apple Watc
 
 Requirements: Xcode 27.1 or later.
 
+Every target builds with the 27 SDKs and deploys to 26.0, so the app runs on the 26 releases too. The 27 releases dropped Intel Macs and some older iPads and Apple Watches, which stay on 26.
+
 1. Open `leadsheets.xcodeproj`. The `leadsheets` scheme builds the iPhone, iPad, Mac and Apple TV app, and embeds the watch app in iOS builds.
 2. Choose a run destination and run. Signing uses team `LQR2VDPY65`.
 
@@ -48,7 +50,15 @@ The seed-integrity tests check that every song in `seeds.json` resolves its sing
 
 UI tests launch the app with `-inMemoryUserData`, so favorites and setlists start empty each time.
 
-CI (`.github/workflows/xcode.yml`) builds macOS, iOS + watchOS and tvOS with Xcode 27.1, and runs the package tests, the UI tests and the format check, on every change under `xcode/`. On `main`, it then uploads the apps to TestFlight.
+Some layouts behave differently on 26 and 27, so run the UI tests on both:
+
+```sh
+xcodebuild -downloadPlatform iOS -buildVersion 23F77        # the iOS 26.5 simulator, once
+xcodebuild test -project leadsheets.xcodeproj -scheme leadsheets \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.5'
+```
+
+CI (`.github/workflows/xcode.yml`) builds macOS, iOS + watchOS and tvOS with Xcode 27.1, and runs the package tests, the UI tests on iPhone and Apple TV simulators with 27 and 26.5, and the format check, on every change under `xcode/`. On `main`, it then uploads the apps to TestFlight.
 
 ## Releasing
 

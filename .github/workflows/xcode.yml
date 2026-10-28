@@ -101,32 +101,56 @@ jobs:
     needs: changes
     if: needs.changes.outputs.xcode == 'true'
     runs-on: xcode-27
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
         include:
           - name: iPhone
-            runtime: iOS
+            platform: iOS
             device: iPhone 18 Pro
           - name: Apple TV
-            runtime: tvOS
+            platform: tvOS
+            device: Apple TV 4K (3rd generation)
+          # The deployment target is 26.0, and the image only has 27 simulators. These are the 26.5 releases' builds:
+          # asking for version 26.5 sometimes installs its release candidate.
+          - name: iPhone, iOS 26.5
+            platform: iOS
+            build: 23F77
+            device: iPhone 17 Pro
+          - name: Apple TV, tvOS 26.5
+            platform: tvOS
+            build: 23L470
             device: Apple TV 4K (3rd generation)
     defaults:
       run:
         working-directory: xcode
     steps:
       - uses: actions/checkout@v5
+      - name: Install the simulator runtime
+        if: matrix.build
+        env:
+          PLATFORM: ${{ matrix.platform }}
+          BUILD: ${{ matrix.build }}
+        run: |
+          xcodebuild -downloadPlatform "$PLATFORM" -buildVersion "$BUILD" -architectureVariant arm64
+          # A simulator that boots before its runtime's dyld shared cache is built stays several times slower.
+          xcrun simctl runtime dyld_shared_cache update --all
       - name: Pick a simulator
         id: simulator
         env:
-          FAMILY: ${{ matrix.name }}
-          RUNTIME: ${{ matrix.runtime }}
+          PLATFORM: ${{ matrix.platform }}
+          BUILD: ${{ matrix.build }}
           DEVICE: ${{ matrix.device }}
         run: |
-          udid=$(xcrun simctl list devices available --json | jq -r --arg runtime "$RUNTIME" --arg family "$FAMILY" --arg device "$DEVICE" '
-            [.devices | to_entries | sort_by(.key)[] | select(.key | contains($runtime)) | .value[] | select(.name | startswith($family))]
-            | (map(select(.name == $device)) | last) // last | .udid')
+          runtimes=$(xcrun simctl list runtimes available --json | jq -c --arg platform "$PLATFORM" --arg build "$BUILD" '
+            [.runtimes[] | select(.platform == $platform and ($build == "" or .buildversion == $build))]
+            | sort_by(.version | split(".") | map(tonumber)) | map(.identifier)')
+          udid=$(xcrun simctl list devices available --json | jq -r --argjson runtimes "$runtimes" --arg device "$DEVICE" '
+            [.devices as $devices | $runtimes[] | $devices[.][]? | select(.name == $device)] | last | .udid // empty')
+          if [ -z "$udid" ]; then
+            udid=$(xcrun simctl create "$DEVICE" "$DEVICE" "$(jq -r last <<< "$runtimes")")
+          fi
           echo "udid=$udid" >> "$GITHUB_OUTPUT"
           xcrun simctl list devices available | grep "$udid"
           # The test runner can stall while a cold simulator boots, and then never starts.
