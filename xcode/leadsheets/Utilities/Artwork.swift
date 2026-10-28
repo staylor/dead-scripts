@@ -1,13 +1,14 @@
+import MusicKit
 import SwiftUI
 
-/// A square cover or round photo from the app bundle, with a symbol when the file is missing.
+/// A square cover or round photo from Apple Music, with a symbol when there's none.
 struct Artwork: View {
     enum Style {
         case cover
         case portrait
     }
 
-    let fileName: String?
+    let appleMusicID: String?
     let placeholder: String
     var style: Style = .cover
 
@@ -15,10 +16,8 @@ struct Artwork: View {
 
     var body: some View {
         Group {
-            if let fileName, let image = ImageLoader.loadImage(named: fileName) {
-                Image(platformImage: image)
-                    .resizable()
-                    .scaledToFill()
+            if let artwork = ArtworkStore.shared.artwork(for: appleMusicID) {
+                ArtworkImage(artwork, width: size, height: size)
             } else {
                 Image(systemName: placeholder)
                     .font(.system(size: size * 0.45))
@@ -39,16 +38,6 @@ struct Artwork: View {
         80
         #else
         48
-        #endif
-    }
-}
-
-extension Image {
-    init(platformImage: PlatformImage) {
-        #if canImport(UIKit)
-        self.init(uiImage: platformImage)
-        #elseif canImport(AppKit)
-        self.init(nsImage: platformImage)
         #endif
     }
 }

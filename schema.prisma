@@ -26,30 +26,30 @@ model Song {
 }
 
 model Album {
-  id               Int     @id @default(autoincrement())
-  name             String  @unique
-  slug             String  @unique
-  releaseYear      Int?
-  coverArtFileName String?
-  artist           Artist? @relation(fields: [artistId], references: [id])
-  artistId         Int?
-  songs            Song[]
+  id           Int     @id @default(autoincrement())
+  name         String  @unique
+  slug         String  @unique
+  releaseYear  Int?
+  appleMusicId String?
+  artist       Artist? @relation(fields: [artistId], references: [id])
+  artistId     Int?
+  songs        Song[]
 }
 
 model Artist {
-  id            Int     @id @default(autoincrement())
-  name          String  @unique
-  slug          String  @unique
-  imageFileName String?
-  albums        Album[]
+  id           Int     @id @default(autoincrement())
+  name         String  @unique
+  slug         String  @unique
+  appleMusicId String?
+  albums       Album[]
 }
 
 model Singer {
-  id            Int     @id @default(autoincrement())
-  name          String  @unique
-  slug          String  @unique
-  imageFileName String?
-  songs         Song[]
+  id           Int     @id @default(autoincrement())
+  name         String  @unique
+  slug         String  @unique
+  appleMusicId String?
+  songs        Song[]
 }
 
 model Writer {

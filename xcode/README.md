@@ -19,14 +19,14 @@ Every target builds with the 27 SDKs and deploys to 26.0, so the app runs on the
 1. Open `leadsheets.xcodeproj`. The `leadsheets` scheme builds the iPhone, iPad, Mac and Apple TV app, and embeds the watch app in iOS builds.
 2. Choose a run destination and run. Signing uses team `LQR2VDPY65`.
 
-Everything the app bundles is in the repository: the catalog (`DeadSheetsKit/Sources/DeadSheetsKit/Resources/seeds.json`), the lead sheets (`Sheets/`), album covers and band photos. A fresh clone builds the complete app, and so does CI.
+Everything the app bundles is in the repository: the catalog (`DeadSheetsKit/Sources/DeadSheetsKit/Resources/seeds.json`) and the lead sheets (`Sheets/`). A fresh clone builds the complete app, and so does CI. Album covers and artist photos aren't bundled: the app fetches them from Apple Music by ID, once Apple Music access is allowed.
 
 ## Generating the data
 
 The scripts in the repository root generate the data from the Prisma database and the scores in iCloud Drive. Their output is committed, so they only need to run on a machine with both, after something changes:
 
 ```sh
-pnpm apple-music   # look up Apple Music IDs, and download 600 px covers and photos
+pnpm apple-music   # look up Apple Music IDs for albums, artists and singers without one
 pnpm xcode         # write seeds.json, and update the lead sheets from iCloud Drive
 ```
 
@@ -46,9 +46,9 @@ xcodebuild test -project leadsheets.xcodeproj -scheme leadsheets \
 swift format lint --recursive --strict .                     # formatting
 ```
 
-The seed-integrity tests check that every song in `seeds.json` resolves its singer and writers and has lyrics, and that every cover and photo exists. They also check that `Sheets/schema.json` covers exactly the catalog's songs, and that `Sheets/pdfs` has a PDF for every song, and nothing else.
+The seed-integrity tests check that every song in `seeds.json` resolves its singer and writers and has lyrics, and that every album and artist has an Apple Music ID. They also check that `Sheets/schema.json` covers exactly the catalog's songs, and that `Sheets/pdfs` has a PDF for every song, and nothing else.
 
-UI tests launch the app with `-inMemoryUserData`, so favorites and setlists start empty each time.
+UI tests launch the app with `-inMemoryUserData`, so favorites and setlists start empty each time, and `-noArtwork`, so it doesn't ask for Apple Music access.
 
 Some layouts behave differently on 26 and 27, so run the UI tests on both:
 

@@ -3,13 +3,13 @@
     {
       "name": "Grateful Dead",
       "slug": "grateful-dead",
-      "imageFileName": "grateful-dead.jpg",
+      "appleMusicId": "1273063",
       "albums": [
         {
           "name": "Grateful Dead",
           "slug": "grateful-dead",
           "releaseYear": 1967,
-          "coverArtFileName": "grateful-dead-album.jpg",
+          "appleMusicId": "663678672",
           "songs": [
             {
               "trackNumber": 4,
@@ -84,7 +84,7 @@
           "name": "Anthem of the Sun",
           "slug": "anthem-of-the-sun",
           "releaseYear": 1968,
-          "coverArtFileName": "anthem-of-the-sun.jpg",
+          "appleMusicId": "663665553",
           "songs": [
             {
               "trackNumber": 1,
@@ -111,7 +111,7 @@
           "name": "Aoxomoxoa",
           "slug": "aoxomoxoa",
           "releaseYear": 1969,
-          "coverArtFileName": "aoxomoxoa.jpg",
+          "appleMusicId": "663597904",
           "songs": [
             {
               "trackNumber": 1,
@@ -141,7 +141,7 @@
           "name": "Live Dead",
           "slug": "live-dead",
           "releaseYear": 1969,
-          "coverArtFileName": "live-dead.jpg",
+          "appleMusicId": "20885553",
           "songs": [
             {
               "trackNumber": 3,
@@ -214,7 +214,7 @@
           "name": "Workingman's Dead",
           "slug": "workingmans-dead",
           "releaseYear": 1970,
-          "coverArtFileName": "workingmans-dead.jpg",
+          "appleMusicId": "663696329",
           "songs": [
             {
               "trackNumber": 1,
@@ -376,7 +376,7 @@
           "name": "American Beauty",
           "slug": "american-beauty",
           "releaseYear": 1970,
-          "coverArtFileName": "american-beauty.jpg",
+          "appleMusicId": "664831661",
           "songs": [
             {
               "trackNumber": 1,
@@ -551,7 +551,7 @@
           "name": "Grateful Dead (Skull & Roses)",
           "slug": "skull-and-roses",
           "releaseYear": 1971,
-          "coverArtFileName": "skull-and-roses.jpg",
+          "appleMusicId": "20885501",
           "songs": [
             {
               "trackNumber": 1,
@@ -728,7 +728,7 @@
           "name": "Europe '72",
           "slug": "europe-72",
           "releaseYear": 1972,
-          "coverArtFileName": "europe-72.jpg",
+          "appleMusicId": "20885461",
           "songs": [
             {
               "trackNumber": 2,
@@ -928,7 +928,7 @@
           "name": "Wake of the Flood",
           "slug": "wake-of-the-flood",
           "releaseYear": 1973,
-          "coverArtFileName": "wake-of-the-flood.jpg",
+          "appleMusicId": "663663258",
           "songs": [
             {
               "trackNumber": 1,
@@ -1050,7 +1050,7 @@
           "name": "From the Mars Hotel",
           "slug": "from-the-mars-hotel",
           "releaseYear": 1974,
-          "coverArtFileName": "from-the-mars-hotel.jpg",
+          "appleMusicId": "663668215",
           "songs": [
             {
               "trackNumber": 1,
@@ -1153,7 +1153,7 @@
           "name": "Blues for Allah",
           "slug": "blues-for-allah",
           "releaseYear": 1975,
-          "coverArtFileName": "blues-for-allah.jpg",
+          "appleMusicId": "663665016",
           "songs": [
             {
               "trackNumber": 1,
@@ -1240,7 +1240,7 @@
           "name": "Shakedown Street",
           "slug": "shakedown-street",
           "releaseYear": 1978,
-          "coverArtFileName": "shakedown-street.jpg",
+          "appleMusicId": "663672224",
           "songs": [
             {
               "trackNumber": 1,
@@ -1353,7 +1353,7 @@
           "name": "Terrapin Station",
           "slug": "terrapin-station",
           "releaseYear": 1977,
-          "coverArtFileName": "terrapin-station.jpg",
+          "appleMusicId": "663667314",
           "songs": [
             {
               "trackNumber": 1,
@@ -1473,7 +1473,7 @@
           "name": "Go to Heaven",
           "slug": "go-to-heaven",
           "releaseYear": 1980,
-          "coverArtFileName": "go-to-heaven.jpg",
+          "appleMusicId": "663697282",
           "songs": [
             {
               "trackNumber": 1,
@@ -1596,7 +1596,7 @@
           "name": "In the Dark",
           "slug": "in-the-dark",
           "releaseYear": 1987,
-          "coverArtFileName": "in-the-dark.jpg",
+          "appleMusicId": "663662522",
           "songs": [
             {
               "trackNumber": 1,
@@ -1703,7 +1703,7 @@
           "name": "Built to Last",
           "slug": "built-to-last",
           "releaseYear": 1989,
-          "coverArtFileName": "built-to-last.jpg",
+          "appleMusicId": "663965011",
           "songs": [
             {
               "trackNumber": 1,
@@ -1768,7 +1768,7 @@
           "name": "So Many Roads",
           "slug": "so-many-roads",
           "releaseYear": 1999,
-          "coverArtFileName": "so-many-roads.jpg",
+          "appleMusicId": "307938974",
           "songs": [
             {
               "name": "Days Between",
@@ -1794,7 +1794,7 @@
           "name": "Ladies and Gentleman... The Grateful Dead",
           "slug": "ladies-and-gentlman-the-grateful-dead",
           "releaseYear": 2000,
-          "coverArtFileName": "ladies-and-gentlman-the-grateful-dead.jpg",
+          "appleMusicId": "307793560",
           "songs": [
             {
               "songType": "cover",
@@ -1821,7 +1821,7 @@
           "name": "Crimson, White & Indigo",
           "slug": "crimson-white-and-indigo",
           "releaseYear": 2010,
-          "coverArtFileName": "crimson-white-and-indigo.jpg",
+          "appleMusicId": "366394085",
           "songs": [
             {
               "songType": "cover",
@@ -1868,7 +1868,7 @@
           "name": "So Glad You Made It",
           "slug": "so-glad-you-made-it",
           "releaseYear": 2012,
-          "coverArtFileName": "so-glad-you-made-it.jpg",
+          "appleMusicId": "558274264",
           "songs": [
             {
               "songType": "cover",
@@ -1894,7 +1894,7 @@
           "name": "Complete Studio Rarities Collection",
           "slug": "complete-studio-rarities-collection",
           "releaseYear": 2013,
-          "coverArtFileName": "complete-studio-rarities-collection.jpg",
+          "appleMusicId": "663700579",
           "songs": [
             {
               "songType": "cover",
@@ -1921,7 +1921,7 @@
           "name": "Truckin' Up to Buffalo",
           "slug": "truckin-up-to-buffalo",
           "releaseYear": 2005,
-          "coverArtFileName": "truckin-up-to-buffalo.jpg",
+          "appleMusicId": null,
           "songs": [
             {
               "trackNumber": 11,
@@ -1949,7 +1949,7 @@
           "name": "30 Trips Around the Sun",
           "slug": "30-trips-around-the-sun",
           "releaseYear": 2015,
-          "coverArtFileName": "30-trips-around-the-sun.jpg",
+          "appleMusicId": "999637526",
           "songs": [
             {
               "trackNumber": 3,
@@ -1978,13 +1978,13 @@
     {
       "name": "Bob Weir",
       "slug": "bob-weir",
-      "imageFileName": "bob-weir.jpg",
+      "appleMusicId": "6563017",
       "albums": [
         {
           "name": "Ace",
           "slug": "ace",
           "releaseYear": 1972,
-          "coverArtFileName": "ace.jpg",
+          "appleMusicId": "1647459819",
           "songs": [
             {
               "trackNumber": 1,
@@ -2088,13 +2088,13 @@
     {
       "name": "Jerry Garcia",
       "slug": "jerry-garcia",
-      "imageFileName": "jerry-garcia.jpg",
+      "appleMusicId": "931545",
       "albums": [
         {
           "name": "Garcia",
           "slug": "garcia",
           "releaseYear": 1972,
-          "coverArtFileName": "garcia.jpg",
+          "appleMusicId": "1139010553",
           "songs": [
             {
               "trackNumber": 1,
@@ -2220,7 +2220,7 @@
           "name": "Reflections",
           "slug": "reflections",
           "releaseYear": 1976,
-          "coverArtFileName": "reflections.jpg",
+          "appleMusicId": "1139060274",
           "songs": [
             {
               "trackNumber": 3,
@@ -2266,7 +2266,7 @@
           "name": "Cats Under the Stars",
           "slug": "cats-under-the-stars",
           "releaseYear": 1978,
-          "coverArtFileName": "cats-under-the-stars.jpg",
+          "appleMusicId": "1280522177",
           "songs": [
             {
               "trackNumber": 1,
@@ -2296,27 +2296,27 @@
     {
       "name": "Jerry Garcia",
       "slug": "jerry-garcia",
-      "imageFileName": "jerry-garcia.jpg"
+      "appleMusicId": "931545"
     },
     {
       "name": "Ron \"Pigpen\" McKernan",
       "slug": "pigpen",
-      "imageFileName": "pigpen.jpg"
+      "appleMusicId": null
     },
     {
       "name": "Bob Weir",
       "slug": "bob-weir",
-      "imageFileName": "bob-weir.jpg"
+      "appleMusicId": "6563017"
     },
     {
       "name": "Phil Lesh",
       "slug": "phil-lesh",
-      "imageFileName": "phil-lesh.jpg"
+      "appleMusicId": "549301"
     },
     {
       "name": "Brent Mydland",
       "slug": "brent-mydland",
-      "imageFileName": "brent-mydland.jpg"
+      "appleMusicId": null
     }
   ],
   "writers": [

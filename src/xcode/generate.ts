@@ -31,7 +31,7 @@ for (const node of artists) {
   const artist = {
     name: node.name,
     slug: node.slug,
-    imageFileName: node.imageFileName,
+    appleMusicId: node.appleMusicId,
     albums: [] as any[],
   };
 
@@ -40,7 +40,7 @@ for (const node of artists) {
       name: entry.name,
       slug: entry.slug,
       releaseYear: entry.releaseYear,
-      coverArtFileName: entry.coverArtFileName,
+      appleMusicId: entry.appleMusicId,
       songs: [] as any[],
     };
 

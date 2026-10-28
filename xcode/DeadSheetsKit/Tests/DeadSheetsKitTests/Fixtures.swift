@@ -21,13 +21,13 @@ enum Fixtures {
           "artists": [
             {
               "name": "Grateful Dead",
-              "imageFileName": "grateful-dead.jpg",
+              "appleMusicId": "10",
               "albums": [
                 {
                   "name": "American Beauty",
                   "slug": "american-beauty",
                   "releaseYear": 1970,
-                  "coverArtFileName": "american-beauty.jpg",
+                  "appleMusicId": "20",
                   "songs": [
                     {
                       "trackNumber": 8, "name": "Ripple", "slug": "ripple", "fileName": "Ripple Score.pdf",
@@ -50,6 +50,7 @@ enum Fixtures {
                   "name": "Grateful Dead (Skull & Roses)",
                   "slug": "skull-and-roses",
                   "releaseYear": 1971,
+                  "appleMusicId": "",
                   "songs": [
                     {
                       "trackNumber": 2, "songType": "cover", "name": "Big Boss Man", "slug": "big-boss-man",
@@ -92,9 +93,9 @@ enum Fixtures {
             }
           ],
           "singers": [
-            { "name": "Jerry Garcia", "slug": "jerry-garcia", "imageFileName": "jerry-garcia.jpg" },
-            { "name": "Phil Lesh", "slug": "phil-lesh", "imageFileName": "phil-lesh.jpg" },
-            { "name": "Ron \\"Pigpen\\" McKernan", "slug": "pigpen", "imageFileName": "pigpen.jpg" }
+            { "name": "Jerry Garcia", "slug": "jerry-garcia", "appleMusicId": "30" },
+            { "name": "Phil Lesh", "slug": "phil-lesh", "appleMusicId": "31" },
+            { "name": "Ron \\"Pigpen\\" McKernan", "slug": "pigpen", "appleMusicId": null }
           ],
           "writers": [
             { "name": "Robert Hunter", "slug": "robert-hunter", "contribution": "lyrics" },

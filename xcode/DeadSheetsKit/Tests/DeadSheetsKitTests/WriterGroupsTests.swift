@@ -17,7 +17,7 @@ struct WriterGroupsTests {
         let dobson = try #require(catalog.writerGroups().first { $0.name == "Bonnie Dobson" })
         #expect(dobson.rolesText == "Lyrics & Music")
         #expect(dobson.songs.map(\.id) == ["morning-dew"])
-        #expect(dobson.imageFileName == nil)
+        #expect(dobson.appleMusicID == nil)
     }
 
     @Test func mergesWritersWhoOnlyWroteTogether() throws {
@@ -35,7 +35,7 @@ struct WriterGroupsTests {
 
     @Test func usesTheSingersPhotoForWriters() throws {
         let garcia = try #require(catalog.writerGroups().first { $0.name == "Jerry Garcia" })
-        #expect(garcia.imageFileName == "jerry-garcia.jpg")
+        #expect(garcia.appleMusicID == "30")
     }
 
     @Test func filtersByNameOrRoleBeforeGrouping() {

@@ -8,7 +8,7 @@ struct SongRow: View {
 
     var body: some View {
         LibraryRow(id: "song-\(song.id)", title: song.title, subtitle: subtitle) {
-            Artwork(fileName: song.coverFileName, placeholder: "music.note")
+            Artwork(appleMusicID: song.albumAppleMusicID, placeholder: "music.note")
         }
     }
 
@@ -24,7 +24,7 @@ struct AlbumRow: View {
 
     var body: some View {
         LibraryRow(id: "album-\(album.id)", title: album.title, subtitle: subtitle) {
-            Artwork(fileName: album.coverFileName, placeholder: "square.stack")
+            Artwork(appleMusicID: album.appleMusicID, placeholder: "square.stack")
         }
     }
 
@@ -50,7 +50,7 @@ struct ArtistRow: View {
             title: artist.name,
             subtitle: "\(Counts.songs(artist.songIDs.count)) · \(Counts.albums(artist.albumIDs.count))"
         ) {
-            Artwork(fileName: artist.imageFileName, placeholder: "music.mic", style: .portrait)
+            Artwork(appleMusicID: artist.appleMusicID, placeholder: "music.mic", style: .portrait)
         }
     }
 }
@@ -62,7 +62,7 @@ struct SingerRow: View {
 
     var body: some View {
         LibraryRow(id: "singer-\(singer.id)", title: singer.name, subtitle: Counts.songs(catalog.songs(sungBy: singer).count)) {
-            Artwork(fileName: singer.imageFileName, placeholder: "person.wave.2", style: .portrait)
+            Artwork(appleMusicID: singer.appleMusicID, placeholder: "person.wave.2", style: .portrait)
         }
     }
 }
@@ -73,7 +73,7 @@ struct WriterGroupRow: View {
     var body: some View {
         LibraryRow(id: "writers-\(group.id)", title: group.name, subtitle: "\(group.rolesText) · \(Counts.songs(group.songs.count))") {
             Artwork(
-                fileName: group.imageFileName,
+                appleMusicID: group.appleMusicID,
                 placeholder: group.people.count > 1 ? "person.2" : "pencil.line",
                 style: .portrait
             )

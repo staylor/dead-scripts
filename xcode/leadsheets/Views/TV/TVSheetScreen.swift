@@ -249,13 +249,9 @@ private struct Backdrop: View {
     var body: some View {
         ZStack {
             Color.black
-            if let fileName = song.coverFileName, let image = ImageLoader.loadImage(named: fileName) {
-                Image(platformImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .blur(radius: 80)
-                    .opacity(0.55)
-            }
+            TVArtwork(appleMusicID: song.albumAppleMusicID, placeholder: nil)
+                .blur(radius: 80)
+                .opacity(0.55)
         }
         .ignoresSafeArea()
     }

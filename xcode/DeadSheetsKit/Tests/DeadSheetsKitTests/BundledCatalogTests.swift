@@ -13,9 +13,8 @@ struct BundledCatalogTests {
         .deletingLastPathComponent()
         .deletingLastPathComponent()
 
-    static func exists(_ relativePath: String) -> Bool {
-        FileManager.default.fileExists(atPath: xcodeDirectory.appending(path: relativePath).path(percentEncoded: false))
-    }
+    /// Not on Apple Music, so they show a placeholder.
+    static let albumsMissingFromAppleMusic: Set<Album.ID> = ["truckin-up-to-buffalo"]
 
     static func files(in folder: String, withExtension pathExtension: String) -> Set<String> {
         let contents = try? FileManager.default.contentsOfDirectory(
@@ -36,20 +35,15 @@ struct BundledCatalogTests {
         }
     }
 
-    @Test func albumCoversExist() {
-        for album in catalog.albums {
-            guard let cover = album.coverFileName else {
-                Issue.record("\(album.id) has no cover")
-                continue
-            }
-            #expect(Self.exists("leadsheets/Resources/albums/\(cover)"), "albums/\(cover) is missing")
+    @Test func albumsAndArtistsHaveAppleMusicIDs() {
+        for album in catalog.albums where !Self.albumsMissingFromAppleMusic.contains(album.id) {
+            #expect(album.appleMusicID != nil, "\(album.id) has no Apple Music ID")
         }
-    }
-
-    @Test func artistAndSingerPhotosExist() {
-        let photos = catalog.artists.compactMap(\.imageFileName) + catalog.singers.compactMap(\.imageFileName)
-        for photo in photos {
-            #expect(Self.exists("leadsheets/Resources/artists/\(photo)"), "artists/\(photo) is missing")
+        for artist in catalog.artists {
+            #expect(artist.appleMusicID != nil, "\(artist.id) has no Apple Music ID")
+        }
+        for id in catalog.albumAppleMusicIDs + catalog.artistAppleMusicIDs {
+            #expect(Int(id) != nil, "\(id) isn't an Apple Music catalog ID")
         }
     }
 

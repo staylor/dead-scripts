@@ -36,4 +36,4 @@ The main advantages to programmatically creating this book are the following:
 
 ## `pnpm xcode`
 
-Exports the catalog and lead sheets to the Dead Sheets app in [`xcode/`](xcode/README.md): `seeds.json` and the score PDFs listed in `xcode/Sheets/schema.json`. The output is committed, so only run it when songs or scores change. `pnpm apple-music` looks up Apple Music IDs and downloads album covers and band photos.
+Exports the catalog and lead sheets to the Dead Sheets app in [`xcode/`](xcode/README.md): `seeds.json` and the score PDFs listed in `xcode/Sheets/schema.json`. The output is committed, so only run it when songs or scores change. `pnpm apple-music` looks up the Apple Music IDs of albums, artists and singers that don't have one, and lists candidates for those it can't match. The app shows their artwork from Apple Music, so none of it is bundled.

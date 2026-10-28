@@ -5,7 +5,7 @@ struct SeedFile: Decodable {
     struct Artist: Decodable {
         let name: String
         let slug: String?
-        let imageFileName: String?
+        let appleMusicId: String?
         let albums: [Album]?
     }
 
@@ -13,7 +13,7 @@ struct SeedFile: Decodable {
         let name: String
         let slug: String
         let releaseYear: Int?
-        let coverArtFileName: String?
+        let appleMusicId: String?
         let songs: [Song]?
     }
 
@@ -34,7 +34,7 @@ struct SeedFile: Decodable {
     struct Singer: Decodable {
         let name: String
         let slug: String
-        let imageFileName: String?
+        let appleMusicId: String?
     }
 
     struct Writer: Decodable {

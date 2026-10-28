@@ -11,7 +11,7 @@ final class TVSheetTests: XCTestCase {
     func testTheSheetAndLyricsScrollAndTheSheetZooms() {
         let remote = XCUIRemote.shared
         let app = XCUIApplication()
-        app.launchArguments += ["-inMemoryUserData"]
+        app.launchArguments += ["-inMemoryUserData", "-noArtwork"]
         app.launch()
         let row = element("song-alabama-getaway", in: app)
         XCTAssertTrue(row.waitForExistence(timeout: 10))
@@ -58,7 +58,7 @@ final class TVSheetTests: XCTestCase {
     func testAlbumsAndArtistsOpenTheirSongs() {
         let remote = XCUIRemote.shared
         let app = XCUIApplication()
-        app.launchArguments += ["-inMemoryUserData"]
+        app.launchArguments += ["-inMemoryUserData", "-noArtwork"]
         app.launch()
         XCTAssertTrue(element("song-alabama-getaway", in: app).waitForExistence(timeout: 10))
 

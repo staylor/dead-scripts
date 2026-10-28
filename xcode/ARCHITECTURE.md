@@ -16,10 +16,10 @@ xcode/
 │   ├── LeadSheetsApp.swift          scenes, commands, app delegates
 │   ├── CarPlaySceneDelegate.swift
 │   ├── Models/UserData.swift        favorites and setlists (SwiftData)
-│   ├── Services/                    CloudSyncManager, MusicPlayerService, ImageLoader
+│   ├── Services/                    ArtworkStore, CloudSyncManager, MusicPlayerService
 │   ├── Intents/                     App Intents, Spotlight, Handoff
 │   ├── Views/                       SplitRootView (iOS, macOS), TV/, Library/, Sheet/, Setlists/
-│   └── Resources/                   asset catalog, album covers, band photos
+│   └── Resources/                   asset catalog, app icon
 ├── leadsheets.watch/       watchOS app
 ├── leadsheetsUITests/      iPhone and Apple TV UI tests
 └── Sheets/                 lead sheets: pdfs/, and schema.json, which maps
@@ -28,7 +28,7 @@ xcode/
 
 ## Data
 
-**The catalog** is read-only and bundled. `Catalog.bundled` decodes `seeds.json` once into value types keyed by slug. Songs carry the names and cover they show in lists, and `Catalog` answers the relationship questions (an album's songs in track order, a person's credits). A singer and a writer with the same slug are the same `Person`. Data errors such as an unknown writer are collected in `Catalog.problems` rather than dropped: the app logs them, and the tests require there to be none.
+**The catalog** is read-only and bundled. `Catalog.bundled` decodes `seeds.json` once into value types keyed by slug. Songs carry the names they show in lists and their album's Apple Music ID, for its cover, and `Catalog` answers the relationship questions (an album's songs in track order, a person's credits). A singer and a writer with the same slug are the same `Person`. Data errors such as an unknown writer are collected in `Catalog.problems` rather than dropped: the app logs them, and the tests require there to be none.
 
 **User data** is favorites and setlists, in a SwiftData store of its own (`UserData.store`). They refer to songs by slug, so a new `seeds.json` never touches them. The models avoid unique constraints and give every property a default, so CloudKit sync could be added later. If the store can't open, the app falls back to an in-memory store instead of crashing.
 
@@ -49,6 +49,7 @@ tvOS uses `TVRootView`: a tab per category, plus the system search tab. Albums a
 
 ## Services
 
+- `ArtworkStore` fetches the covers and photos from the Apple Music catalog by ID, in one request for albums and one for artists, after asking for Apple Music access at launch. Rows draw them with MusicKit's `ArtworkImage`. tvOS lockups draw a downloaded `Image` instead, which the borderless button style lifts on focus, and CarPlay takes the same downloads. Without access, or offline, the artwork is a symbol.
 - `MusicPlayerService` plays Apple Music catalog songs with `ApplicationMusicPlayer`. It reads play/pause state from the player itself, so the state stays right when playback changes elsewhere. Failures become an alert, or the Apple Music subscription offer (`playbackAlerts()`). CarPlay uses the result to show its own alert.
 - `CloudSyncManager` shares the open song through one CloudKit record in the private database. It makes no requests until sync is turned on. While the app is active it polls, one request at a time, honoring CloudKit's retry-after; in the background it relies on a query subscription's silent pushes. Devices are told apart by a per-install ID.
 - `WatchConnectivityManager` (in the package) passes the selection between iPhone and Apple Watch.
