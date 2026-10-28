@@ -71,25 +71,18 @@ async function main() {
   const singers: Record<string, Singer> = {};
 
   for (const [slug, data] of Object.entries(metadata.artists)) {
-    const fields = {
-      imageFileName: data.imageFileName,
-    };
     artists[slug] = await prisma.artist.upsert({
       where: { slug },
-      update: {
-        ...fields,
-      },
+      update: {},
       create: {
         name: data.name,
         slug,
-        ...fields,
       },
     });
   }
 
   for (const [slug, data] of Object.entries(metadata.albums)) {
     const fields = {
-      coverArtFileName: data.coverArtFileName,
       releaseYear: data.releaseYear,
       artist: {
         connect: { id: artists[data.artist].id },

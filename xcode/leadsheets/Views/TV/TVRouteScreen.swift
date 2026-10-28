@@ -11,7 +11,7 @@ struct TVRouteScreen: View {
     var body: some View {
         HStack(alignment: .top, spacing: 80) {
             VStack(alignment: .leading, spacing: 32) {
-                TVArtwork(fileName: route.imageFileName, placeholder: route.placeholder)
+                TVArtwork(appleMusicID: route.appleMusicID, placeholder: route.placeholder)
                     .aspectRatio(1, contentMode: .fit)
                     .clipShape(route.isPortrait ? AnyShape(.circle) : AnyShape(.rect(cornerRadius: 24)))
                     .shadow(color: .black.opacity(0.4), radius: 24, y: 12)

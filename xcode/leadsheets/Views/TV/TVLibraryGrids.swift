@@ -12,7 +12,7 @@ struct TVAlbumGrid: View {
                 ForEach(catalog.albums(matching: "")) { album in
                     NavigationLink(value: LibraryRoute.album(album)) {
                         Lockup(title: album.title, subtitle: LibraryRoute.album(album).summary(in: catalog)) {
-                            TVArtwork(fileName: album.coverFileName, placeholder: "square.stack")
+                            TVArtwork(appleMusicID: album.appleMusicID, placeholder: "square.stack")
                                 .aspectRatio(1, contentMode: .fit)
                         }
                     }
@@ -86,7 +86,7 @@ private struct PortraitLockup: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            TVArtwork(fileName: route.imageFileName, placeholder: route.placeholder)
+            TVArtwork(appleMusicID: route.appleMusicID, placeholder: route.placeholder)
                 .aspectRatio(1, contentMode: .fit)
                 .clipShape(.circle)
                 .scaleEffect(isFocused ? 1.12 : 1)
@@ -123,33 +123,44 @@ private struct LockupText: View {
     }
 }
 
-/// A cover or photo from the app bundle that fills its frame, with a symbol when the file is missing.
+/// A cover or photo from Apple Music that fills its frame, with the placeholder symbol when there's none. It's an
+/// `Image`, which the borderless button style lifts when the lockup has focus.
 struct TVArtwork: View {
-    let fileName: String?
-    let placeholder: String
+    let appleMusicID: String?
+    let placeholder: String?
 
     var body: some View {
-        if let fileName, let image = ImageLoader.loadImage(named: fileName) {
-            Image(platformImage: image)
-                .resizable()
-                .scaledToFill()
-        } else {
-            Image(systemName: placeholder)
-                .font(.system(size: 80))
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(.fill.tertiary)
+        let store = ArtworkStore.shared
+        Group {
+            if let image = store.image(for: appleMusicID, width: Self.pixels, height: Self.pixels) {
+                Image(decorative: image, scale: 1)
+                    .resizable()
+                    .scaledToFill()
+            } else if let placeholder {
+                Image(systemName: placeholder)
+                    .font(.system(size: 80))
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(.fill.tertiary)
+            } else {
+                Color.clear
+            }
+        }
+        .task(id: store.url(for: appleMusicID, width: Self.pixels, height: Self.pixels)) {
+            await store.download(appleMusicID, width: Self.pixels, height: Self.pixels)
         }
     }
+
+    private static let pixels = 600
 }
 
 extension LibraryRoute {
-    var imageFileName: String? {
+    var appleMusicID: String? {
         switch self {
-        case .album(let album): album.coverFileName
-        case .artist(let artist): artist.imageFileName
-        case .singer(let person): person.imageFileName
-        case .writers(let group): group.imageFileName
+        case .album(let album): album.appleMusicID
+        case .artist(let artist): artist.appleMusicID
+        case .singer(let person): person.appleMusicID
+        case .writers(let group): group.appleMusicID
         }
     }
 

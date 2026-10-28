@@ -18,8 +18,9 @@ public struct WriterGroup: Identifiable, Hashable, Sendable {
         roles.map(\.title).joined(separator: " & ")
     }
 
-    public var imageFileName: String? {
-        people.count == 1 ? people[0].imageFileName : nil
+    /// The Apple Music artist whose photo stands for the group, when it's one person.
+    public var appleMusicID: String? {
+        people.count == 1 ? people[0].appleMusicID : nil
     }
 
     init(people: [Person], roles: Set<Role>, songs: [Song]) {

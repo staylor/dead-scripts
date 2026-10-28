@@ -88,7 +88,9 @@ final class NavigationTests: XCTestCase {
     @MainActor
     func testCategoriesBecomeAMenuAtAccessibilityTextSizes() {
         let app = XCUIApplication()
-        app.launchArguments += ["-inMemoryUserData", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"]
+        app.launchArguments += [
+            "-inMemoryUserData", "-noArtwork", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL",
+        ]
         app.launch()
 
         XCTAssertTrue(app.buttons["Browse"].waitForExistence(timeout: 10))
@@ -265,7 +267,7 @@ final class NavigationTests: XCTestCase {
     @MainActor
     private func launch() -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments += ["-inMemoryUserData"]
+        app.launchArguments += ["-inMemoryUserData", "-noArtwork"]
         app.launch()
         return app
     }

@@ -45,7 +45,7 @@ public struct Catalog: Sendable {
 
         var people: [Person.ID: Person] = [:]
         for singer in seed.singers {
-            people[singer.slug] = Person(id: singer.slug, name: singer.name, imageFileName: singer.imageFileName)
+            people[singer.slug] = Person(id: singer.slug, name: singer.name, appleMusicID: Self.nonEmpty(singer.appleMusicId))
         }
         var knownCredits: Set<CreditKey> = []
         for writer in seed.writers {
@@ -59,7 +59,7 @@ public struct Catalog: Sendable {
                     problems.append("\(writer.slug) is named both \"\(person.name)\" and \"\(writer.name)\"")
                 }
             } else {
-                people[writer.slug] = Person(id: writer.slug, name: writer.name, imageFileName: nil)
+                people[writer.slug] = Person(id: writer.slug, name: writer.name, appleMusicID: nil)
             }
         }
 
@@ -74,6 +74,7 @@ public struct Catalog: Sendable {
             var artistSongIDs: [Song.ID] = []
 
             for seedAlbum in seedArtist.albums ?? [] {
+                let albumAppleMusicID = Self.nonEmpty(seedAlbum.appleMusicId)
                 var albumSongs: [Song] = []
                 for seedSong in seedAlbum.songs ?? [] {
                     guard seenSongIDs.insert(seedSong.slug).inserted else {
@@ -110,11 +111,11 @@ public struct Catalog: Sendable {
                             discNumber: seedSong.discNumber,
                             trackNumber: seedSong.trackNumber,
                             isCover: seedSong.songType?.lowercased() == "cover",
-                            appleMusicID: seedSong.appleMusicId.flatMap { $0.isEmpty ? nil : $0 },
+                            appleMusicID: Self.nonEmpty(seedSong.appleMusicId),
                             albumID: seedAlbum.slug,
                             albumTitle: seedAlbum.name,
                             albumReleaseYear: seedAlbum.releaseYear,
-                            coverFileName: seedAlbum.coverArtFileName,
+                            albumAppleMusicID: albumAppleMusicID,
                             artistID: artistID,
                             artistName: seedArtist.name,
                             singer: singer,
@@ -131,7 +132,7 @@ public struct Catalog: Sendable {
                         id: seedAlbum.slug,
                         title: seedAlbum.name,
                         releaseYear: seedAlbum.releaseYear,
-                        coverFileName: seedAlbum.coverArtFileName,
+                        appleMusicID: albumAppleMusicID,
                         artistID: artistID,
                         artistName: seedArtist.name,
                         songIDs: albumSongs.map(\.id)
@@ -142,7 +143,7 @@ public struct Catalog: Sendable {
                 Artist(
                     id: artistID,
                     name: seedArtist.name,
-                    imageFileName: seedArtist.imageFileName,
+                    appleMusicID: Self.nonEmpty(seedArtist.appleMusicId),
                     albumIDs: artistAlbumIDs,
                     songIDs: artistSongIDs
                 ))
@@ -212,10 +213,27 @@ public struct Catalog: Sendable {
         (songIDsByPerson[person.id] ?? []).compactMap { songsByID[$0] }
     }
 
+    // MARK: - Artwork
+
+    /// The Apple Music albums whose covers the library shows.
+    public var albumAppleMusicIDs: [String] {
+        albums.compactMap(\.appleMusicID)
+    }
+
+    /// The Apple Music artists whose photos the library shows, for artists, singers and writers.
+    public var artistAppleMusicIDs: [String] {
+        let people = songs.compactMap(\.singer) + songs.flatMap(\.credits).map(\.person)
+        return Set(artists.compactMap(\.appleMusicID) + people.compactMap(\.appleMusicID)).sorted()
+    }
+
     // MARK: - Helpers
 
     static let titleOrder: @Sendable (Song, Song) -> Bool = {
         $0.title.localizedStandardCompare($1.title) == .orderedAscending
+    }
+
+    static func nonEmpty(_ id: String?) -> String? {
+        id.flatMap { $0.isEmpty ? nil : $0 }
     }
 
     static func slug(for name: String) -> String {

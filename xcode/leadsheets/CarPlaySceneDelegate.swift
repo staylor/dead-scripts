@@ -6,7 +6,6 @@ import UIKit
 
 final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
     private var interfaceController: CPInterfaceController?
-    private var thumbnails: [String: UIImage] = [:]
 
     func templateApplicationScene(
         _ templateApplicationScene: CPTemplateApplicationScene,
@@ -29,7 +28,6 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         didDisconnectInterfaceController interfaceController: CPInterfaceController
     ) {
         self.interfaceController = nil
-        thumbnails = [:]
     }
 
     // MARK: - Templates
@@ -60,7 +58,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             if let year = album.releaseYear {
                 detail = "\(year) · \(detail)"
             }
-            let item = CPListItem(text: album.title, detailText: detail, image: thumbnail(for: album.coverFileName))
+            let item = CPListItem(text: album.title, detailText: detail, image: nil)
+            showArtwork(album.appleMusicID, on: item)
             item.accessoryType = .disclosureIndicator
             item.handler = { [weak self] _, completion in
                 self?.showSongs(on: album)
@@ -81,7 +80,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
 
     private func makeItem(for song: Song) -> CPListItem {
-        let item = CPListItem(text: song.title, detailText: song.albumTitle, image: thumbnail(for: song.coverFileName))
+        let item = CPListItem(text: song.title, detailText: song.albumTitle, image: nil)
+        showArtwork(song.albumAppleMusicID, on: item)
         item.handler = { [weak self] _, completion in
             self?.play(song)
             completion()
@@ -89,17 +89,16 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         return item
     }
 
-    private func thumbnail(for fileName: String?) -> UIImage? {
-        guard let fileName else { return nil }
-        if let thumbnail = thumbnails[fileName] {
-            return thumbnail
-        }
+    private func showArtwork(_ appleMusicID: String?, on item: CPListItem) {
+        guard let appleMusicID else { return }
         let scale = interfaceController?.carTraitCollection.displayScale ?? 2
         let size = CPListItem.maximumImageSize
-        let thumbnail = ImageLoader.loadImage(named: fileName)?
-            .preparingThumbnail(of: CGSize(width: size.width * scale, height: size.height * scale))
-        thumbnails[fileName] = thumbnail
-        return thumbnail
+        Task {
+            let store = ArtworkStore.shared
+            await store.load()
+            let image = await store.download(appleMusicID, width: Int(size.width * scale), height: Int(size.height * scale))
+            item.setImage(image.map { UIImage(cgImage: $0, scale: scale, orientation: .up) })
+        }
     }
 
     // MARK: - Playback

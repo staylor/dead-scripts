@@ -22,10 +22,10 @@ struct CatalogTests {
         let ripple = Fixtures.song("ripple")
         #expect(ripple.albumTitle == "American Beauty")
         #expect(ripple.albumReleaseYear == 1970)
-        #expect(ripple.coverFileName == "american-beauty.jpg")
+        #expect(ripple.albumAppleMusicID == "20")
         #expect(ripple.artistName == "Grateful Dead")
         #expect(ripple.singer?.name == "Jerry Garcia")
-        #expect(ripple.singer?.imageFileName == "jerry-garcia.jpg")
+        #expect(ripple.singer?.appleMusicID == "30")
     }
 
     @Test func artistIDFallsBackToASlugOfTheName() {
@@ -47,6 +47,14 @@ struct CatalogTests {
         #expect(Fixtures.song("ripple").appleMusicID == "1")
         #expect(Fixtures.song("morning-dew").appleMusicID == nil)
         #expect(Fixtures.song("friend-of-the-devil").appleMusicID == nil)
+        #expect(catalog.album(id: "skull-and-roses")?.appleMusicID == nil)
+        #expect(Fixtures.song("big-boss-man").albumAppleMusicID == nil)
+    }
+
+    @Test func artworkCoversAlbumsArtistsAndPeople() {
+        #expect(catalog.albumAppleMusicIDs == ["20"])
+        #expect(catalog.artistAppleMusicIDs == ["10", "30", "31"])
+        #expect(Fixtures.song("big-boss-man").singer?.appleMusicID == nil)
     }
 
     @Test func coversAreFlagged() {
@@ -58,7 +66,7 @@ struct CatalogTests {
         #expect(catalog.singers.map(\.id) == ["jerry-garcia", "phil-lesh", "pigpen"])
         #expect(catalog.songs(sungBy: garcia).map(\.id) == ["friend-of-the-devil", "morning-dew", "ripple", "sugaree"])
         #expect(catalog.songs(creditedTo: garcia).map(\.id) == ["friend-of-the-devil", "ripple", "sugaree"])
-        #expect(Fixtures.song("ripple").credits.first { $0.role == .music }?.person.imageFileName == "jerry-garcia.jpg")
+        #expect(Fixtures.song("ripple").credits.first { $0.role == .music }?.person.appleMusicID == "30")
     }
 
     @Test func fixtureHasNoProblems() {

@@ -13,7 +13,7 @@ public struct Song: Identifiable, Hashable, Sendable {
     public let albumID: Album.ID
     public let albumTitle: String
     public let albumReleaseYear: Int?
-    public let coverFileName: String?
+    public let albumAppleMusicID: String?
     public let artistID: Artist.ID
     public let artistName: String
 
@@ -25,7 +25,7 @@ public struct Album: Identifiable, Hashable, Sendable {
     public let id: String
     public let title: String
     public let releaseYear: Int?
-    public let coverFileName: String?
+    public let appleMusicID: String?
     public let artistID: Artist.ID
     public let artistName: String
     /// In disc and track order.
@@ -35,7 +35,7 @@ public struct Album: Identifiable, Hashable, Sendable {
 public struct Artist: Identifiable, Hashable, Sendable {
     public let id: String
     public let name: String
-    public let imageFileName: String?
+    public let appleMusicID: String?
     public let albumIDs: [Album.ID]
     public let songIDs: [Song.ID]
 }
@@ -43,7 +43,7 @@ public struct Artist: Identifiable, Hashable, Sendable {
 public struct Person: Identifiable, Hashable, Sendable {
     public let id: String
     public let name: String
-    public let imageFileName: String?
+    public let appleMusicID: String?
 }
 
 public enum Role: String, CaseIterable, Comparable, Hashable, Sendable {
