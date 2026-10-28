@@ -67,23 +67,35 @@ jobs:
           - name: macOS
             destination: generic/platform=macOS
           - name: iOS + watchOS
-            destination: generic/platform=iOS Simulator
+            destination: generic/platform=iOS
           - name: tvOS
-            destination: generic/platform=tvOS Simulator
+            destination: generic/platform=tvOS
     defaults:
       run:
         working-directory: xcode
     steps:
       - uses: actions/checkout@v5
-      - name: Build
+      # The UI tests build Debug for the simulators, so this archives for devices, as the TestFlight job does, unsigned.
+      - name: Archive
         run: |
           set -o pipefail
-          xcodebuild build \
+          xcodebuild archive \
             -project leadsheets.xcodeproj \
             -scheme leadsheets \
             -destination "${{ matrix.destination }}" \
+            -archivePath "$RUNNER_TEMP/leadsheets.xcarchive" \
+            -resultBundlePath Build.xcresult \
             CODE_SIGNING_ALLOWED=NO \
             | xcbeautify --renderer github-actions
+      # The result bundle counts every warning, from asset catalogs and the linker as well as the compiler, where
+      # SWIFT_TREAT_WARNINGS_AS_ERRORS would only catch Swift's.
+      - name: Check for warnings
+        run: |
+          warnings=$(xcrun xcresulttool get build-results --path Build.xcresult | jq .warningCount)
+          if [ "$warnings" != 0 ]; then
+            echo "::error::The build has $warnings warnings."
+            exit 1
+          fi
 
   test:
     name: Test DeadSheetsKit
@@ -94,7 +106,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Test
-        run: swift test --package-path xcode/DeadSheetsKit
+        run: swift test --package-path xcode/DeadSheetsKit -Xswiftc -warnings-as-errors
 
   ui-test:
     name: UI tests (${{ matrix.name }})
