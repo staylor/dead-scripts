@@ -120,6 +120,11 @@ final class NavigationTests: XCTestCase {
         app.launchArguments += ["-noArtwork", "-unavailableUserData"]
         app.launch()
         XCTAssertTrue(element("user-data-unavailable", in: app).waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["Filter"].isHittable)
+        XCTAssertTrue(app.buttons["Settings"].isHittable)
+        app.buttons["Settings"].tap()
+        XCTAssertTrue(app.switches["Sync with Other Devices"].waitForExistence(timeout: 10))
+        app.buttons["Close"].tap()
 
         select("Setlists", in: app)
         XCTAssertTrue(app.staticTexts["Setlists Unavailable"].waitForExistence(timeout: 10))
