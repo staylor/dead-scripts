@@ -39,37 +39,13 @@ struct LibraryList: View {
             SongList(songs: covers, selection: $selection)
                 .emptyState(isEmpty: covers.isEmpty, category: category, searchText: searchText)
         case .albums:
-            let albums = catalog.albums(matching: searchText)
-            List(albums) { album in
-                NavigationLink(value: LibraryRoute.album(album)) {
-                    AlbumRow(album: album)
-                }
-            }
-            .emptyState(isEmpty: albums.isEmpty, category: category, searchText: searchText)
+            routeList(catalog.albums(matching: searchText).map(LibraryRoute.album))
         case .artists:
-            let artists = catalog.artists(matching: searchText)
-            List(artists) { artist in
-                NavigationLink(value: LibraryRoute.artist(artist)) {
-                    ArtistRow(artist: artist)
-                }
-            }
-            .emptyState(isEmpty: artists.isEmpty, category: category, searchText: searchText)
+            routeList(catalog.artists(matching: searchText).map(LibraryRoute.artist))
         case .singers:
-            let singers = catalog.singers(matching: searchText)
-            List(singers) { singer in
-                NavigationLink(value: LibraryRoute.singer(singer)) {
-                    SingerRow(singer: singer)
-                }
-            }
-            .emptyState(isEmpty: singers.isEmpty, category: category, searchText: searchText)
+            routeList(catalog.singers(matching: searchText).map(LibraryRoute.singer))
         case .writers:
-            let groups = catalog.writerGroups(matching: searchText)
-            List(groups) { group in
-                NavigationLink(value: LibraryRoute.writers(group)) {
-                    WriterGroupRow(group: group)
-                }
-            }
-            .emptyState(isEmpty: groups.isEmpty, category: category, searchText: searchText)
+            routeList(catalog.writerGroups(matching: searchText).map(LibraryRoute.writers))
         case .setlists:
             #if os(iOS) || os(macOS)
             SetlistsList()
@@ -77,6 +53,15 @@ struct LibraryList: View {
             EmptyView()
             #endif
         }
+    }
+
+    private func routeList(_ routes: [LibraryRoute]) -> some View {
+        List(routes) { route in
+            NavigationLink(value: route) {
+                RouteRow(route: route)
+            }
+        }
+        .emptyState(isEmpty: routes.isEmpty, category: category, searchText: searchText)
     }
 
     private var favoriteIDs: Set<Song.ID> {

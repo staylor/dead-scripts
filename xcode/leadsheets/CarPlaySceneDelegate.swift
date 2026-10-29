@@ -12,9 +12,6 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         didConnect interfaceController: CPInterfaceController
     ) {
         self.interfaceController = interfaceController
-        Task {
-            await MusicPlayerService.shared.requestAuthorization()
-        }
         let tabs = CPTabBarTemplate(templates: [makeSongList(), makeAlbumList()])
         interfaceController.setRootTemplate(tabs, animated: false) { _, error in
             if let error {

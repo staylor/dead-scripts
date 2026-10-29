@@ -8,7 +8,7 @@ struct SongRow: View {
 
     var body: some View {
         LibraryRow(id: "song-\(song.id)", title: song.title, subtitle: subtitle) {
-            Artwork(appleMusicID: song.albumAppleMusicID, placeholder: "music.note")
+            ArtworkThumbnail(appleMusicID: song.albumAppleMusicID, placeholder: "music.note")
         }
     }
 
@@ -17,66 +17,15 @@ struct SongRow: View {
     }
 }
 
-struct AlbumRow: View {
-    let album: Album
+/// An album, artist, singer or writers.
+struct RouteRow: View {
+    let route: LibraryRoute
 
     @Environment(\.catalog) private var catalog
 
     var body: some View {
-        LibraryRow(id: "album-\(album.id)", title: album.title, subtitle: subtitle) {
-            Artwork(appleMusicID: album.appleMusicID, placeholder: "square.stack")
-        }
-    }
-
-    private var subtitle: String {
-        var parts: [String] = []
-        if album.artistID != catalog.mainArtist?.id {
-            parts.append(album.artistName)
-        }
-        if let year = album.releaseYear {
-            parts.append(String(year))
-        }
-        parts.append(Counts.songs(album.songIDs.count))
-        return parts.joined(separator: " · ")
-    }
-}
-
-struct ArtistRow: View {
-    let artist: Artist
-
-    var body: some View {
-        LibraryRow(
-            id: "artist-\(artist.id)",
-            title: artist.name,
-            subtitle: "\(Counts.songs(artist.songIDs.count)) · \(Counts.albums(artist.albumIDs.count))"
-        ) {
-            Artwork(appleMusicID: artist.appleMusicID, placeholder: "music.mic", style: .portrait)
-        }
-    }
-}
-
-struct SingerRow: View {
-    let singer: Person
-
-    @Environment(\.catalog) private var catalog
-
-    var body: some View {
-        LibraryRow(id: "singer-\(singer.id)", title: singer.name, subtitle: Counts.songs(catalog.songs(sungBy: singer).count)) {
-            Artwork(appleMusicID: singer.appleMusicID, placeholder: "person.wave.2", style: .portrait)
-        }
-    }
-}
-
-struct WriterGroupRow: View {
-    let group: WriterGroup
-
-    var body: some View {
-        LibraryRow(id: "writers-\(group.id)", title: group.name, subtitle: "\(group.rolesText) · \(Counts.songs(group.songs.count))") {
-            Artwork(
-                appleMusicID: group.appleMusicID,
-                placeholder: group.people.count > 1 ? "person.2" : "pencil.line",
-                style: .portrait
-            )
+        LibraryRow(id: route.id, title: route.title, subtitle: route.summary(in: catalog)) {
+            ArtworkThumbnail(appleMusicID: route.appleMusicID, placeholder: route.placeholder, isPortrait: route.isPortrait)
         }
     }
 }
@@ -124,16 +73,16 @@ enum Counts {
             SongRow(song: song)
         }
         if let album = catalog.album(id: "american-beauty") {
-            AlbumRow(album: album)
+            RouteRow(route: .album(album))
         }
         if let artist = catalog.artists.first {
-            ArtistRow(artist: artist)
+            RouteRow(route: .artist(artist))
         }
         if let singer = catalog.singers.first {
-            SingerRow(singer: singer)
+            RouteRow(route: .singer(singer))
         }
         if let group = catalog.writerGroups().first {
-            WriterGroupRow(group: group)
+            RouteRow(route: .writers(group))
         }
     }
 }

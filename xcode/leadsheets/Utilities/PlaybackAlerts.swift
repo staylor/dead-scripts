@@ -10,7 +10,7 @@ extension View {
 }
 
 private struct PlaybackAlerts: ViewModifier {
-    @Bindable private var player = MusicPlayerService.shared
+    private let player = MusicPlayerService.shared
     @Environment(\.openURL) private var openURL
 
     func body(content: Content) -> some View {
@@ -24,7 +24,9 @@ private struct PlaybackAlerts: ViewModifier {
                     }
                 } else {
                     Button("Open in Apple Music") {
-                        player.openInAppleMusic(failure.appleMusicID)
+                        if let url = Self.appleMusicURL(for: failure.appleMusicID) {
+                            openURL(url)
+                        }
                     }
                 }
                 Button("OK", role: .cancel) {}
@@ -60,6 +62,14 @@ private struct PlaybackAlerts: ViewModifier {
         URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Media")
         #else
         URL(string: UIApplication.openSettingsURLString)
+        #endif
+    }
+
+    private static func appleMusicURL(for appleMusicID: String) -> URL? {
+        #if os(macOS)
+        URL(string: "music://music.apple.com/song/\(appleMusicID)")
+        #else
+        URL(string: "https://music.apple.com/song/\(appleMusicID)")
         #endif
     }
 }

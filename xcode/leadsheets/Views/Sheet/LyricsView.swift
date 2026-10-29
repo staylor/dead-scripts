@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import DeadSheetsKit
 import SwiftUI
 
@@ -37,9 +38,7 @@ struct LyricsView: View {
                             }
                         }
                     }
-                    #if !os(tvOS)
                     .textSelection(.enabled)
-                    #endif
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -53,3 +52,4 @@ struct LyricsView: View {
         LyricsView(song: song)
     }
 }
+#endif

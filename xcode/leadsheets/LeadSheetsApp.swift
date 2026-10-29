@@ -5,6 +5,8 @@ import os
 
 #if os(iOS)
 import CarPlay
+#elseif os(macOS)
+import AppKit
 #endif
 
 @main
@@ -89,8 +91,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 #endif
 
 #if os(macOS)
-import AppKit
-
 final class MacAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         // CloudKit subscriptions deliver changes as silent pushes.

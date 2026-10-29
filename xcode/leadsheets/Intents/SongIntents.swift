@@ -91,9 +91,7 @@ enum SongIndex {
         }
     }
 }
-#endif
 
-#if os(iOS) || os(macOS)
 /// Handoff for the open song.
 enum SongActivity {
     static let type = "wonderboymusic.leadsheets.song"

@@ -2,17 +2,12 @@ import MusicKit
 import SwiftUI
 
 /// A square cover or round photo from Apple Music, with a symbol when there's none.
-struct Artwork: View {
-    enum Style {
-        case cover
-        case portrait
-    }
-
+struct ArtworkThumbnail: View {
     let appleMusicID: String?
     let placeholder: String
-    var style: Style = .cover
+    var isPortrait = false
 
-    @ScaledMetric(relativeTo: .body) private var size: CGFloat = Artwork.defaultSize
+    @ScaledMetric(relativeTo: .body) private var size: CGFloat = ArtworkThumbnail.defaultSize
 
     var body: some View {
         Group {
@@ -27,7 +22,7 @@ struct Artwork: View {
             }
         }
         .frame(width: size, height: size)
-        .clipShape(style == .portrait ? AnyShape(Circle()) : AnyShape(RoundedRectangle(cornerRadius: size * 0.15)))
+        .clipShape(isPortrait ? AnyShape(Circle()) : AnyShape(RoundedRectangle(cornerRadius: size * 0.15)))
         .accessibilityHidden(true)
     }
 

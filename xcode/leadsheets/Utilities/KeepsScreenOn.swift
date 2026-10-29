@@ -11,32 +11,46 @@ extension View {
 private struct KeepsScreenOn: ViewModifier {
     let isEnabled: Bool
 
-    #if os(macOS)
-    @State private var activity: (any NSObjectProtocol)?
-    #endif
+    @State private var isHolding = false
 
     func body(content: Content) -> some View {
         content
-            .onAppear { update(isEnabled) }
-            .onChange(of: isEnabled) { _, isEnabled in update(isEnabled) }
-            .onDisappear { update(false) }
+            .onAppear { hold(isEnabled) }
+            .onChange(of: isEnabled) { _, isEnabled in hold(isEnabled) }
+            .onDisappear { hold(false) }
     }
 
-    private func update(_ keepsOn: Bool) {
-        #if os(macOS)
-        if keepsOn, activity == nil {
-            activity = ProcessInfo.processInfo.beginActivity(
-                options: [.idleDisplaySleepDisabled, .userInitiated],
-                reason: "Showing a lead sheet"
-            )
-        } else if !keepsOn, let activity {
-            ProcessInfo.processInfo.endActivity(activity)
-            self.activity = nil
-        }
-        #elseif os(iOS) || os(tvOS)
-        UIApplication.shared.isIdleTimerDisabled = keepsOn
-        #endif
+    private func hold(_ holds: Bool) {
+        guard holds != isHolding else { return }
+        isHolding = holds
+        ScreenWake.holders += holds ? 1 : -1
     }
+}
+
+/// Counts the views keeping the screen on. A sheet that replaces another appears before the old one disappears,
+/// and another window can be showing one too.
+private enum ScreenWake {
+    static var holders = 0 {
+        didSet {
+            #if os(macOS)
+            if holders > 0, activity == nil {
+                activity = ProcessInfo.processInfo.beginActivity(
+                    options: [.idleDisplaySleepDisabled, .userInitiated],
+                    reason: "Showing a lead sheet"
+                )
+            } else if holders == 0, let activity {
+                ProcessInfo.processInfo.endActivity(activity)
+                self.activity = nil
+            }
+            #elseif os(iOS) || os(tvOS)
+            UIApplication.shared.isIdleTimerDisabled = holders > 0
+            #endif
+        }
+    }
+
+    #if os(macOS)
+    private static var activity: (any NSObjectProtocol)?
+    #endif
 }
 
 enum SettingsKey {

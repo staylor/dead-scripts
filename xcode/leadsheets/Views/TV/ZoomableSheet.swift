@@ -37,10 +37,8 @@ enum SheetZoom: CaseIterable {
 final class SheetViewport {
     fileprivate weak var scrollView: SheetScrollView?
 
-    /// Returns false when the sheet is already at that edge.
-    @discardableResult
-    func scroll(_ direction: MoveCommandDirection) -> Bool {
-        scrollView?.scroll(direction) ?? false
+    func scroll(_ direction: MoveCommandDirection) {
+        scrollView?.scroll(direction)
     }
 }
 
@@ -132,19 +130,16 @@ final class SheetScrollView: UIScrollView, UIScrollViewDelegate {
         zoom(to: CGRect(origin: origin, size: size), animated: true)
     }
 
-    func scroll(_ direction: MoveCommandDirection) -> Bool {
+    func scroll(_ direction: MoveCommandDirection) {
         var offset = contentOffset
         switch direction {
         case .up: offset.y -= bounds.height * 0.6
         case .down: offset.y += bounds.height * 0.6
         case .left: offset.x -= bounds.width * 0.6
         case .right: offset.x += bounds.width * 0.6
-        @unknown default: return false
+        @unknown default: return
         }
-        let target = clamped(offset)
-        guard target != contentOffset else { return false }
-        setContentOffset(target, animated: true)
-        return true
+        setContentOffset(clamped(offset), animated: true)
     }
 
     private func clamped(_ point: CGPoint) -> CGPoint {
