@@ -16,7 +16,6 @@ struct LeadSheetsApp: App {
     #endif
 
     init() {
-        LegacyStoreCleanup.run()
         for problem in Catalog.bundled.problems {
             Logger.catalog.fault("\(problem, privacy: .public)")
         }
@@ -25,7 +24,6 @@ struct LeadSheetsApp: App {
         _ = WatchConnectivityManager.shared
         #endif
 
-        // Initialize CloudKit sync
         #if os(iOS) || os(macOS)
         _ = CloudSyncManager.shared
         Task {
@@ -43,8 +41,6 @@ struct LeadSheetsApp: App {
         #endif
         #if os(iOS) || os(macOS)
         .modelContainer(UserData.container)
-        #endif
-        #if os(iOS) || os(macOS)
         .commands {
             SongCommands()
         }
@@ -82,21 +78,12 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         configurationForConnecting connectingSceneSession: UISceneSession,
         options: UIScene.ConnectionOptions
     ) -> UISceneConfiguration {
-
-        if connectingSceneSession.role == .carTemplateApplication {
-            let configuration = UISceneConfiguration(
-                name: "CarPlay Configuration",
-                sessionRole: connectingSceneSession.role
-            )
-            configuration.delegateClass = CarPlaySceneDelegate.self
-            return configuration
-        } else {
-            let configuration = UISceneConfiguration(
-                name: "Default Configuration",
-                sessionRole: connectingSceneSession.role
-            )
-            return configuration
+        guard connectingSceneSession.role == .carTemplateApplication else {
+            return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
         }
+        let configuration = UISceneConfiguration(name: "CarPlay Configuration", sessionRole: connectingSceneSession.role)
+        configuration.delegateClass = CarPlaySceneDelegate.self
+        return configuration
     }
 }
 #endif

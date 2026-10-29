@@ -4,7 +4,6 @@ import SwiftUI
 @main
 struct LeadSheetsWatchApp: App {
     init() {
-        LegacyStoreCleanup.run()
         _ = WatchConnectivityManager.shared
     }
 
