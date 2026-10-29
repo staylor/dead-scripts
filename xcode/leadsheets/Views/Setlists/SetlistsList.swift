@@ -40,6 +40,7 @@ struct SetlistsList: View {
         .overlay {
             if matches.isEmpty, !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 ContentUnavailableView.search(text: searchText)
+                    .accessibilityIdentifier("setlist-search-empty")
             } else if setlists.isEmpty {
                 ContentUnavailableView {
                     Label("No Setlists", systemImage: LibraryCategory.setlists.systemImage)

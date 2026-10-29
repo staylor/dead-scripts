@@ -247,7 +247,7 @@ final class NavigationTests: XCTestCase {
 
         element("setlist-Saturday", in: app).swipeLeft()
         app.buttons["Delete"].tap()
-        XCTAssertTrue(app.staticTexts["No Results"].waitForExistence(timeout: 10))
+        XCTAssertTrue(element("setlist-search-empty", in: app).waitForExistence(timeout: 10))
 
         app.searchFields.firstMatch.buttons["Clear text"].tap()
         XCTAssertTrue(element("setlist-Sunday", in: app).waitForExistence(timeout: 10))
