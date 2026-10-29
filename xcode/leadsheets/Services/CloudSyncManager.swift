@@ -19,8 +19,13 @@ import AppKit
 final class CloudSyncManager {
     static let shared = CloudSyncManager()
 
-    /// The song most recently selected on another device.
-    private(set) var selectedSongSlug: String?
+    /// The song most recently selected on another device. Selecting the same song again is a new selection.
+    private(set) var selection: Selection?
+
+    struct Selection: Equatable {
+        let songID: Song.ID
+        let date: Date
+    }
 
     var isEnabled: Bool = UserDefaults.standard.bool(forKey: DefaultsKey.enabled) {
         didSet {
@@ -106,12 +111,12 @@ final class CloudSyncManager {
         }
     }
 
-    func sendSelection(slug: String) {
+    func sendSelectedSong(id: Song.ID) {
         guard isEnabled else { return }
         Task {
             do {
                 let record = try await existingRecord() ?? CKRecord(recordType: Self.recordType, recordID: Self.recordID)
-                record[Field.slug] = slug
+                record[Field.slug] = id
                 record[Field.sender] = deviceID
                 record[Field.timestamp] = Date()
                 _ = try await database.save(record)
@@ -167,14 +172,15 @@ final class CloudSyncManager {
     }
 
     private func apply(_ record: CKRecord) {
-        guard let slug = record[Field.slug] as? String, !slug.isEmpty,
+        guard let songID = record[Field.slug] as? String, !songID.isEmpty,
             record[Field.sender] as? String != deviceID,
-            slug != selectedSongSlug
+            let date = record[Field.timestamp] as? Date,
+            date != selection?.date
         else { return }
-        selectedSongSlug = slug
+        selection = Selection(songID: songID, date: date)
         #if os(iOS)
         if UIDevice.current.userInterfaceIdiom == .phone {
-            WatchConnectivityManager.shared.sendSelectedSong(id: slug)
+            WatchConnectivityManager.shared.sendSelectedSong(id: songID)
         }
         #endif
     }

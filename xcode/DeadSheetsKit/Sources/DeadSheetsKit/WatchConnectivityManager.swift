@@ -10,8 +10,13 @@ import WatchConnectivity
 public final class WatchConnectivityManager: NSObject {
     public static let shared = WatchConnectivityManager()
 
-    /// The song most recently selected on the paired device.
-    public private(set) var selectedSongID: Song.ID?
+    /// The song most recently selected on the paired device. Selecting the same song again is a new selection.
+    public private(set) var selection: Selection?
+
+    public struct Selection: Equatable, Sendable {
+        public let songID: Song.ID
+        let timestamp: TimeInterval
+    }
 
     override private init() {
         super.init()
@@ -79,10 +84,13 @@ extension WatchConnectivityManager: WCSessionDelegate {
         receive(applicationContext)
     }
 
+    /// A selection arrives as a message and again as the application context, with the same timestamp.
     private nonisolated func receive(_ message: [String: Any]) {
-        guard let songID = message[MessageKey.songID] as? String else { return }
+        guard let songID = message[MessageKey.songID] as? String,
+            let timestamp = message[MessageKey.timestamp] as? TimeInterval
+        else { return }
         Task { @MainActor in
-            self.selectedSongID = songID
+            self.selection = Selection(songID: songID, timestamp: timestamp)
         }
     }
 }

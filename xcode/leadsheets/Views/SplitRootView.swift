@@ -89,16 +89,16 @@ struct SplitRootView: View {
             }
         }
         #endif
-        .onChange(of: cloudSync.selectedSongSlug) { _, slug in
-            if let slug {
-                show(slug)
+        .onChange(of: cloudSync.selection) { _, selection in
+            if let selection {
+                show(selection.songID)
             }
         }
         #if os(iOS)
-        .onChange(of: watchConnectivity.selectedSongID) { _, songID in
-            guard UIDevice.current.userInterfaceIdiom == .phone, let songID, show(songID) else { return }
+        .onChange(of: watchConnectivity.selection) { _, selection in
+            guard UIDevice.current.userInterfaceIdiom == .phone, let songID = selection?.songID, show(songID) else { return }
             // Forward the watch's selection so an iPad following along sees it too.
-            cloudSync.sendSelection(slug: songID)
+            cloudSync.sendSelectedSong(id: songID)
         }
         #endif
     }
@@ -174,7 +174,7 @@ struct SplitRootView: View {
                 #if os(iOS)
                 watchConnectivity.sendSelectedSong(id: songID)
                 #endif
-                cloudSync.sendSelection(slug: songID)
+                cloudSync.sendSelectedSong(id: songID)
             }
         )
     }
