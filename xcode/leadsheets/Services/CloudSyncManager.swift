@@ -10,72 +10,84 @@ import UIKit
 import AppKit
 #endif
 
-/// Shares the selected song between devices on the same iCloud account through a single CloudKit record.
-///
-/// Nothing touches CloudKit until sync is turned on. While the app is active it polls the record,
-/// because CloudKit's silent pushes arrive too late to follow along; in the background it relies on
-/// a query subscription.
 @Observable
 final class CloudSyncManager {
-    static let shared = CloudSyncManager()
+    static let shared = CloudSyncManager(
+        observesAppActivity: true,
+        didReceive: { selection in
+            #if os(iOS)
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                WatchConnectivityManager.shared.forwardSelectedSong(selection)
+            }
+            #endif
+        }
+    )
 
-    /// The song most recently selected on another device. Selecting the same song again is a new selection.
-    private(set) var selection: Selection?
+    private(set) var selection: SongSelection?
 
-    struct Selection: Equatable {
-        let songID: Song.ID
-        let date: Date
-    }
-
-    var isEnabled: Bool = UserDefaults.standard.bool(forKey: DefaultsKey.enabled) {
+    var isEnabled: Bool {
         didSet {
             guard isEnabled != oldValue else { return }
-            UserDefaults.standard.set(isEnabled, forKey: DefaultsKey.enabled)
-            if isEnabled {
-                Task { await saveSubscription() }
-            } else {
-                Task { await deleteSubscription() }
+            defaults.set(isEnabled, forKey: DefaultsKey.enabled)
+            generation = UUID()
+            if !isEnabled {
+                sendTask?.cancel()
+                sendTask = nil
+                fetchRequest?.task.cancel()
+                fetchRequest = nil
+                state = SongSelectionState()
+                selection = nil
             }
+            reconcileSubscription()
             updatePolling()
         }
     }
 
-    @ObservationIgnored private var isAppActive = false
+    @ObservationIgnored private(set) var sendTask: Task<Void, Never>?
+    @ObservationIgnored private(set) var subscriptionTask: Task<Void, Never>?
+    @ObservationIgnored private var fetchRequest: (id: UUID, task: Task<Duration, Never>)?
     @ObservationIgnored private var pollTask: Task<Void, Never>?
+    @ObservationIgnored private var isAppActive = false
+    @ObservationIgnored private var generation = UUID()
+    @ObservationIgnored private var state = SongSelectionState()
+
+    private let store: any CloudSelectionStore
+    private let defaults: UserDefaults
+    private let deviceID: String
+    private let now: () -> Date
+    private let didReceive: (SongSelection) -> Void
 
     private static let pollInterval: Duration = .seconds(3)
     private static let errorBackoff: Duration = .seconds(30)
-    private static let recordType = "SongSelection"
-    private static let subscriptionID = "song-selection-changes"
-    private static let recordID = CKRecord.ID(recordName: "currentSelection")
 
     private enum DefaultsKey {
         static let enabled = "syncWithOtherDevices"
         static let deviceID = "syncDeviceID"
     }
 
-    private enum Field {
-        static let slug = "slug"
-        static let sender = "sender"
-        static let timestamp = "timestamp"
-    }
-
-    /// Identifies this install, so a device ignores its own selection but still follows another device of
-    /// the same kind.
-    private let deviceID: String = {
-        if let id = UserDefaults.standard.string(forKey: DefaultsKey.deviceID) {
-            return id
+    init(
+        store: any CloudSelectionStore = CloudKitSelectionStore(),
+        defaults: UserDefaults = .standard,
+        observesAppActivity: Bool = false,
+        now: @escaping () -> Date = Date.init,
+        didReceive: @escaping (SongSelection) -> Void = { _ in }
+    ) {
+        self.store = store
+        self.defaults = defaults
+        self.now = now
+        self.didReceive = didReceive
+        deviceID = defaults.string(forKey: DefaultsKey.deviceID) ?? UUID().uuidString
+        defaults.set(deviceID, forKey: DefaultsKey.deviceID)
+        isEnabled = defaults.bool(forKey: DefaultsKey.enabled)
+        if observesAppActivity {
+            observeAppActivity()
         }
-        let id = UUID().uuidString
-        UserDefaults.standard.set(id, forKey: DefaultsKey.deviceID)
-        return id
-    }()
-
-    private var database: CKDatabase {
-        CKContainer.default().privateCloudDatabase
+        if isEnabled {
+            reconcileSubscription()
+        }
     }
 
-    private init() {
+    private func observeAppActivity() {
         #if os(iOS)
         let didBecomeActive = UIApplication.didBecomeActiveNotification
         let willResignActive = UIApplication.willResignActiveNotification
@@ -84,21 +96,17 @@ final class CloudSyncManager {
         let willResignActive = NSApplication.willResignActiveNotification
         #endif
         let center = NotificationCenter.default
-        center.addObserver(forName: didBecomeActive, object: nil, queue: .main) { _ in
+        center.addObserver(forName: didBecomeActive, object: nil, queue: .main) { [weak self] _ in
             MainActor.assumeIsolated {
-                CloudSyncManager.shared.isAppActive = true
-                CloudSyncManager.shared.updatePolling()
+                self?.isAppActive = true
+                self?.updatePolling()
             }
         }
-        center.addObserver(forName: willResignActive, object: nil, queue: .main) { _ in
+        center.addObserver(forName: willResignActive, object: nil, queue: .main) { [weak self] _ in
             MainActor.assumeIsolated {
-                CloudSyncManager.shared.isAppActive = false
-                CloudSyncManager.shared.updatePolling()
+                self?.isAppActive = false
+                self?.updatePolling()
             }
-        }
-
-        if isEnabled {
-            Task { await saveSubscription() }
         }
     }
 
@@ -112,30 +120,53 @@ final class CloudSyncManager {
     }
 
     func sendSelectedSong(id: Song.ID) {
-        guard isEnabled else { return }
-        Task {
-            do {
-                let record = try await existingRecord() ?? CKRecord(recordType: Self.recordType, recordID: Self.recordID)
-                record[Field.slug] = id
-                record[Field.sender] = deviceID
-                record[Field.timestamp] = Date()
-                _ = try await database.save(record)
-            } catch {
-                Logger.sync.error("Couldn't save the selection: \(error.localizedDescription, privacy: .public)")
+        guard isEnabled, Catalog.bundled.song(id: id) != nil else { return }
+        state.select(songID: id, at: now())
+        selection = nil
+        sendPendingSelection()
+    }
+
+    func forwardSelectedSong(_ selection: SongSelection) {
+        guard isEnabled, Catalog.bundled.song(id: selection.songID) != nil, state.forward(selection) else { return }
+        self.selection = nil
+        sendPendingSelection()
+    }
+
+    private func sendPendingSelection() {
+        guard sendTask == nil else { return }
+        let generation = generation
+        sendTask = Task {
+            defer {
+                if self.generation == generation {
+                    sendTask = nil
+                }
+            }
+            while isEnabled, self.generation == generation, !Task.isCancelled, let pending = state.pending {
+                do {
+                    try await store.save(CloudSongSelection(selection: pending, sender: deviceID))
+                    guard self.generation == generation, !Task.isCancelled else { return }
+                    state.acknowledge(pending)
+                } catch is CancellationError {
+                    return
+                } catch {
+                    Logger.sync.error("Couldn't save the selection: \(error.localizedDescription, privacy: .public)")
+                    do {
+                        try await Task.sleep(for: Self.retryDelay(for: error))
+                    } catch {
+                        return
+                    }
+                }
             }
         }
     }
 
-    /// Called by the app delegate for CloudKit's silent pushes.
     func handleRemoteNotification(userInfo: [AnyHashable: Any]) async {
         guard isEnabled,
             let notification = CKNotification(fromRemoteNotificationDictionary: userInfo),
-            notification.subscriptionID == Self.subscriptionID
+            notification.subscriptionID == CloudKitSelectionStore.subscriptionID
         else { return }
         await fetchSelection()
     }
-
-    // MARK: - Polling
 
     private func updatePolling() {
         if isEnabled && isAppActive {
@@ -152,73 +183,67 @@ final class CloudSyncManager {
         }
     }
 
-    /// Returns how long to wait before fetching again.
     @discardableResult
-    private func fetchSelection() async -> Duration {
-        do {
-            guard let record = try await existingRecord() else { return Self.pollInterval }
-            apply(record)
-            return Self.pollInterval
-        } catch {
-            if let retryAfter = (error as? CKError)?.retryAfterSeconds {
-                return .seconds(retryAfter)
+    func fetchSelection() async -> Duration {
+        guard isEnabled else { return Self.pollInterval }
+        if let fetchRequest {
+            return await fetchRequest.task.value
+        }
+        let generation = generation
+        let id = UUID()
+        let task = Task {
+            do {
+                let value = try await store.fetch()
+                guard isEnabled, self.generation == generation, !Task.isCancelled else { return Self.pollInterval }
+                if let value {
+                    apply(value)
+                }
+                return Self.pollInterval
+            } catch is CancellationError {
+                return Self.pollInterval
+            } catch {
+                Logger.sync.error("Couldn't fetch the selection: \(error.localizedDescription, privacy: .public)")
+                return Self.retryDelay(for: error)
             }
-            Logger.sync.error("Couldn't fetch the selection: \(error.localizedDescription, privacy: .public)")
-            return Self.errorBackoff
         }
+        fetchRequest = (id, task)
+        let delay = await task.value
+        if fetchRequest?.id == id {
+            fetchRequest = nil
+        }
+        return delay
     }
 
-    private func apply(_ record: CKRecord) {
-        guard let songID = record[Field.slug] as? String, !songID.isEmpty,
-            record[Field.sender] as? String != deviceID,
-            let date = record[Field.timestamp] as? Date,
-            date != selection?.date
+    private func apply(_ value: CloudSongSelection) {
+        guard value.sender != deviceID, Catalog.bundled.song(id: value.selection.songID) != nil,
+            state.receive(value.selection)
         else { return }
-        selection = Selection(songID: songID, date: date)
-        #if os(iOS)
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            WatchConnectivityManager.shared.sendSelectedSong(id: songID)
-        }
-        #endif
+        selection = value.selection
+        didReceive(value.selection)
     }
 
-    private func existingRecord() async throws -> CKRecord? {
-        do {
-            return try await database.record(for: Self.recordID)
-        } catch let error as CKError where error.code == .unknownItem {
-            return nil
-        }
-    }
-
-    // MARK: - Subscription
-
-    private func saveSubscription() async {
-        do {
-            let subscriptions = try await database.allSubscriptions()
-            guard !subscriptions.contains(where: { $0.subscriptionID == Self.subscriptionID }) else { return }
-
-            let subscription = CKQuerySubscription(
-                recordType: Self.recordType,
-                predicate: NSPredicate(value: true),
-                subscriptionID: Self.subscriptionID,
-                options: [.firesOnRecordCreation, .firesOnRecordUpdate]
-            )
-            let notificationInfo = CKSubscription.NotificationInfo()
-            notificationInfo.shouldSendContentAvailable = true
-            subscription.notificationInfo = notificationInfo
-            _ = try await database.save(subscription)
-        } catch {
-            Logger.sync.error("Couldn't save the subscription: \(error.localizedDescription, privacy: .public)")
+    private func reconcileSubscription() {
+        let previous = subscriptionTask
+        previous?.cancel()
+        let generation = generation
+        let enabled = isEnabled
+        subscriptionTask = Task {
+            await previous?.value
+            guard self.generation == generation, !Task.isCancelled else { return }
+            do {
+                try await store.setSubscription(enabled: enabled)
+            } catch is CancellationError {
+            } catch {
+                Logger.sync.error("Couldn't update the subscription: \(error.localizedDescription, privacy: .public)")
+            }
         }
     }
 
-    private func deleteSubscription() async {
-        do {
-            try await database.deleteSubscription(withID: Self.subscriptionID)
-        } catch let error as CKError where error.code == .unknownItem {
-        } catch {
-            Logger.sync.error("Couldn't delete the subscription: \(error.localizedDescription, privacy: .public)")
+    private static func retryDelay(for error: any Error) -> Duration {
+        if let retryAfter = (error as? CKError)?.retryAfterSeconds, retryAfter.isFinite, retryAfter > 0 {
+            return .seconds(retryAfter)
         }
+        return errorBackoff
     }
 }
 #endif

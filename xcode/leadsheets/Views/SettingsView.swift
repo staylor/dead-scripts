@@ -55,7 +55,6 @@ struct SettingsView: View {
                 Text("Lyrics are by the writers credited on each song. Album artwork and playback come from Apple Music.")
             }
         }
-        .task(disableSyncIfICloudIsUnavailable)
         .alert("iCloud Required", isPresented: $showingICloudAlert) {
             Button("Open \(Self.settingsApp)") {
                 if let url = Self.iCloudSettingsURL {
@@ -85,12 +84,6 @@ struct SettingsView: View {
                 }
             }
         )
-    }
-
-    private func disableSyncIfICloudIsUnavailable() async {
-        if cloudSync.isEnabled, await !cloudSync.isAccountAvailable() {
-            cloudSync.isEnabled = false
-        }
     }
 
     private static let version: String = {
