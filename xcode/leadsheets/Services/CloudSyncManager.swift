@@ -159,13 +159,10 @@ final class CloudSyncManager {
             guard let record = try await existingRecord() else { return Self.pollInterval }
             apply(record)
             return Self.pollInterval
-        } catch let error as CKError {
-            if let retryAfter = error.retryAfterSeconds {
+        } catch {
+            if let retryAfter = (error as? CKError)?.retryAfterSeconds {
                 return .seconds(retryAfter)
             }
-            Logger.sync.error("Couldn't fetch the selection: \(error.localizedDescription, privacy: .public)")
-            return Self.errorBackoff
-        } catch {
             Logger.sync.error("Couldn't fetch the selection: \(error.localizedDescription, privacy: .public)")
             return Self.errorBackoff
         }

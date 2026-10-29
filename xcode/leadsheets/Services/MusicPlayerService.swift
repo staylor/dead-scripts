@@ -4,12 +4,6 @@ import MusicKit
 import Observation
 import os
 
-#if os(iOS) || os(tvOS)
-import UIKit
-#elseif os(macOS)
-import AppKit
-#endif
-
 struct PlaybackFailure: LocalizedError {
     enum Reason: Equatable {
         case notAuthorized
@@ -74,10 +68,6 @@ final class MusicPlayerService {
             self?.syncWithPlayer()
         }
         syncWithPlayer()
-    }
-
-    func requestAuthorization() async {
-        _ = await MusicAuthorization.request()
     }
 
     func isPlayingSong(_ appleMusicID: String) -> Bool {
@@ -148,18 +138,6 @@ final class MusicPlayerService {
     func pause() {
         ApplicationMusicPlayer.shared.pause()
         syncWithPlayer()
-    }
-
-    func openInAppleMusic(_ appleMusicID: String) {
-        #if os(macOS)
-        if let url = URL(string: "music://music.apple.com/song/\(appleMusicID)") {
-            NSWorkspace.shared.open(url)
-        }
-        #else
-        if let url = URL(string: "https://music.apple.com/song/\(appleMusicID)") {
-            UIApplication.shared.open(url)
-        }
-        #endif
     }
 
     private func syncWithPlayer() {

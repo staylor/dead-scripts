@@ -74,7 +74,7 @@ struct SetlistView: View {
 
 /// Adds and removes songs from a setlist; new songs go at the end.
 private struct SongPicker: View {
-    @Bindable var setlist: Setlist
+    let setlist: Setlist
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.catalog) private var catalog

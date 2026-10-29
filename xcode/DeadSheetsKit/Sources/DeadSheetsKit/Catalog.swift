@@ -20,8 +20,6 @@ public struct Catalog: Sendable {
     private let songIDsBySinger: [Person.ID: [Song.ID]]
     private let songIDsByPerson: [Person.ID: [Song.ID]]
 
-    public static let empty = Catalog(problems: [])
-
     public init(seedData: Data) throws {
         let seed = try JSONDecoder().decode(SeedFile.self, from: seedData)
         self.init(seed: seed)
@@ -149,10 +147,10 @@ public struct Catalog: Sendable {
                 ))
         }
 
-        let songsByID = Dictionary(uniqueKeysWithValues: songs.map { ($0.id, $0) })
+        songs.sort(by: Self.titleOrder)
         var songIDsBySinger: [Person.ID: [Song.ID]] = [:]
         var songIDsByPerson: [Person.ID: [Song.ID]] = [:]
-        for song in songs.sorted(by: Self.titleOrder) {
+        for song in songs {
             if let singer = song.singer {
                 songIDsBySinger[singer.id, default: []].append(song.id)
             }
@@ -161,13 +159,13 @@ public struct Catalog: Sendable {
             }
         }
 
-        self.songs = songs.sorted(by: Self.titleOrder)
+        self.songs = songs
         self.albums = albums.sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
         self.artists = artists.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
         self.singers = songIDsBySinger.keys.compactMap { people[$0] }
             .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
         self.problems = problems
-        self.songsByID = songsByID
+        self.songsByID = Dictionary(uniqueKeysWithValues: songs.map { ($0.id, $0) })
         self.albumsByID = Dictionary(uniqueKeysWithValues: albums.map { ($0.id, $0) })
         self.artistsByID = Dictionary(uniqueKeysWithValues: artists.map { ($0.id, $0) })
         self.songIDsBySinger = songIDsBySinger
