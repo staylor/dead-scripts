@@ -229,6 +229,32 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
+    func testSearchingSetlistsAndDeletingAResultKeepsOtherSetlists() {
+        let app = launch()
+        select("Setlists", in: app)
+        for name in ["Saturday", "Sunday"] {
+            app.buttons["New Setlist"].firstMatch.tap()
+            let alert = app.alerts["New Setlist"]
+            XCTAssertTrue(alert.waitForExistence(timeout: 10))
+            alert.textFields.firstMatch.typeText(name)
+            alert.buttons["Create"].tap()
+            XCTAssertTrue(element("setlist-\(name)", in: app).waitForExistence(timeout: 10))
+        }
+
+        search(for: "saturday", in: app)
+        XCTAssertTrue(element("setlist-Saturday", in: app).exists)
+        XCTAssertFalse(element("setlist-Sunday", in: app).exists)
+
+        element("setlist-Saturday", in: app).swipeLeft()
+        app.buttons["Delete"].tap()
+        XCTAssertTrue(element("setlist-search-empty", in: app).waitForExistence(timeout: 10))
+
+        app.searchFields.firstMatch.buttons["Clear text"].tap()
+        XCTAssertTrue(element("setlist-Sunday", in: app).waitForExistence(timeout: 10))
+        XCTAssertFalse(element("setlist-Saturday", in: app).exists)
+    }
+
+    @MainActor
     func testLandscapeMovesTheSongButtonsUpAndTheLyricsBesideTheSheet() {
         let app = launch()
         search(for: "ripple", in: app)

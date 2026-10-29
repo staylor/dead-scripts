@@ -48,7 +48,7 @@ struct LibraryList: View {
             routeList(catalog.writerGroups(matching: searchText).map(LibraryRoute.writers))
         case .setlists:
             #if os(iOS) || os(macOS)
-            SetlistsList()
+            SetlistsList(searchText: searchText)
             #else
             EmptyView()
             #endif
