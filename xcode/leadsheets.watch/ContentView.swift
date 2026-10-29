@@ -37,7 +37,7 @@ struct ContentView: View {
                         songOpenedFromPhone = nil
                     }
             }
-            .onChange(of: connectivity.selection) { _, selection in
+            .onChange(of: connectivity.selection, initial: true) { _, selection in
                 guard let songID = selection?.songID, path.last?.id != songID, let song = catalog.song(id: songID) else { return }
                 songOpenedFromPhone = songID
                 WKInterfaceDevice.current().play(.notification)
