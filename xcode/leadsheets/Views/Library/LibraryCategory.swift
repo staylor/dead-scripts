@@ -1,6 +1,3 @@
-import DeadSheetsKit
-import SwiftUI
-
 enum LibraryCategory: String, CaseIterable, Identifiable, Hashable {
     case songs
     case albums
@@ -66,41 +63,6 @@ enum SongFilter: String, CaseIterable, Identifiable {
         case .all: "music.note.list"
         case .favorites: "heart"
         case .covers: LibraryCategory.covers.systemImage
-        }
-    }
-}
-
-/// A level below a category: the songs on an album, by an artist, and so on.
-enum LibraryRoute: Hashable {
-    case album(Album)
-    case artist(Artist)
-    case singer(Person)
-    case writers(WriterGroup)
-    #if os(iOS) || os(macOS)
-    case setlist(Setlist.ID)
-    #endif
-
-    var title: String {
-        switch self {
-        case .album(let album): album.title
-        case .artist(let artist): artist.name
-        case .singer(let person): person.name
-        case .writers(let group): group.name
-        #if os(iOS) || os(macOS)
-        case .setlist: ""
-        #endif
-        }
-    }
-
-    func songs(in catalog: Catalog) -> [Song] {
-        switch self {
-        case .album(let album): catalog.songs(on: album)
-        case .artist(let artist): catalog.songs(by: artist)
-        case .singer(let person): catalog.songs(sungBy: person)
-        case .writers(let group): group.songs
-        #if os(iOS) || os(macOS)
-        case .setlist: []
-        #endif
         }
     }
 }

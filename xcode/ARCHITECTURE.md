@@ -38,7 +38,7 @@ xcode/
 
 iPhone, iPad and Mac share `SplitRootView`, a two-column `NavigationSplitView`:
 
-- The **library column** is a `NavigationStack`. Its root is `LibraryList` for the selected `LibraryCategory`, with `.searchable` and a filter on Songs (all, favorites, covers). Drilling into an album, artist, singer, writer group or setlist pushes a `LibraryRoute`.
+- The **library column** is a `NavigationStack`. Its root is `LibraryList` for the selected `LibraryCategory`, with `.searchable` and a filter on Songs (all, favorites, covers). Drilling into an album, artist, singer, writer group or setlist pushes a `LibraryRoute`, which also gives its row, and its lockup on Apple TV, a title, summary and artwork.
 - The **detail column** is `SheetView`: the PDF, a toolbar (Play, Lyrics, Favorite, Add to Setlist, Previous, Next), and `LyricsView`. On iPad and Mac the lyrics are an `.inspector` column, and on iPhone a sheet with detents. An iPhone in landscape moves the bottom bar's buttons to the top and puts the lyrics beside the sheet, hiding the sidebar of a large iPhone to make room.
 - On iPhone the split view collapses into a stack, and `preferredCompactColumn` moves to the sheet when a song is chosen.
 - `SheetPDFView`, a `PDFView` subclass on iOS and the Mac, fits the page to the column's width. When the column changes size, on rotation, as a Mac window resizes, or when the lyrics or sidebar open, it keeps the same part of the sheet at the top.
