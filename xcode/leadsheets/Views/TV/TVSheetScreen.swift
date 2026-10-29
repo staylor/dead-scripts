@@ -120,13 +120,13 @@ struct TVSheetScreen: View {
     /// tvOS has no subscription offer, so someone without Apple Music is told they need it.
     private func togglePlayback() {
         guard let appleMusicID = song.appleMusicID else { return }
-        if isPlaying {
+        if isPlaying || player.isLoadingSong(appleMusicID) {
             player.pause()
             return
         }
         Task {
             switch await player.start(appleMusicID: appleMusicID, title: song.title) {
-            case .playing:
+            case .playing, .cancelled:
                 break
             case .needsSubscription:
                 playbackFailure = PlaybackFailure(songTitle: song.title, appleMusicID: appleMusicID, reason: .noSubscription)

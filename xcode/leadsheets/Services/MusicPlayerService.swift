@@ -4,8 +4,8 @@ import MusicKit
 import Observation
 import os
 
-struct PlaybackFailure: LocalizedError {
-    enum Reason: Equatable {
+struct PlaybackFailure: LocalizedError, Equatable, Sendable {
+    enum Reason: Equatable, Sendable {
         case notAuthorized
         case notInCatalog
         case noSubscription
@@ -34,7 +34,8 @@ struct PlaybackFailure: LocalizedError {
     }
 }
 
-enum PlaybackResult {
+enum PlaybackResult: Equatable, Sendable {
+    case cancelled
     case playing
     case needsSubscription
     case failed(PlaybackFailure)
@@ -44,7 +45,7 @@ enum PlaybackResult {
 /// correct when playback changes elsewhere (Control Center, CarPlay, the song ending).
 @Observable
 final class MusicPlayerService {
-    static let shared = MusicPlayerService()
+    static let shared = MusicPlayerService(observesPlayer: true)
 
     private(set) var isPlaying = false
     private(set) var currentSongID: String?
@@ -55,8 +56,21 @@ final class MusicPlayerService {
     var subscriptionOfferSongID: String?
 
     @ObservationIgnored private var playerObservation: AnyCancellable?
+    @ObservationIgnored private var playbackRequest: (id: UUID, task: Task<PlaybackResult, Never>)?
 
-    private init() {
+    private let observesPlayer: Bool
+    private let startPlayback: (String, String) async -> PlaybackResult
+    private let pausePlayback: () -> Void
+
+    init(
+        observesPlayer: Bool = false,
+        startPlayback: @escaping (String, String) async -> PlaybackResult = MusicPlayerService.performStart,
+        pausePlayback: @escaping () -> Void = { ApplicationMusicPlayer.shared.pause() }
+    ) {
+        self.observesPlayer = observesPlayer
+        self.startPlayback = startPlayback
+        self.pausePlayback = pausePlayback
+        guard observesPlayer else { return }
         let player = ApplicationMusicPlayer.shared
         // objectWillChange fires before the player updates, so read its state on the next pass.
         playerObservation = Publishers.Merge(
@@ -81,7 +95,7 @@ final class MusicPlayerService {
     /// Plays the song, reporting problems through `failure` and `subscriptionOfferSongID`.
     func play(appleMusicID: String, title: String) async {
         switch await start(appleMusicID: appleMusicID, title: title) {
-        case .playing:
+        case .playing, .cancelled:
             break
         case .needsSubscription:
             subscriptionOfferSongID = appleMusicID
@@ -91,56 +105,97 @@ final class MusicPlayerService {
     }
 
     func start(appleMusicID: String, title: String) async -> PlaybackResult {
-        let player = ApplicationMusicPlayer.shared
+        let previous = playbackRequest?.task
+        previous?.cancel()
+        let id = UUID()
         loadingSongID = appleMusicID
+        failure = nil
+        subscriptionOfferSongID = nil
+        let task = Task<PlaybackResult, Never> {
+            // MusicKit can finish a cancelled play call; its cleanup must not pause the next request.
+            _ = await previous?.value
+            guard !Task.isCancelled else { return .cancelled }
+            let result = await startPlayback(appleMusicID, title)
+            if Task.isCancelled {
+                pausePlayback()
+                return .cancelled
+            }
+            return result
+        }
+        playbackRequest = (id, task)
         defer {
-            loadingSongID = nil
+            if playbackRequest?.id == id {
+                playbackRequest = nil
+                loadingSongID = nil
+            }
             syncWithPlayer()
         }
+        let result = await withTaskCancellationHandler {
+            await task.value
+        } onCancel: {
+            task.cancel()
+        }
+        return playbackRequest?.id == id && !task.isCancelled ? result : .cancelled
+    }
+
+    private static func performStart(appleMusicID: String, title: String) async -> PlaybackResult {
+        let player = ApplicationMusicPlayer.shared
 
         func failed(_ reason: PlaybackFailure.Reason) -> PlaybackResult {
             Logger.music.error("Couldn't play \(appleMusicID, privacy: .public): \(String(describing: reason), privacy: .public)")
             return .failed(PlaybackFailure(songTitle: title, appleMusicID: appleMusicID, reason: reason))
         }
 
-        if currentSongID == appleMusicID && !isPlaying {
+        if case .song(let current)? = player.queue.currentEntry?.item,
+            current.id.rawValue == appleMusicID, player.state.playbackStatus != .playing
+        {
             do {
                 try await player.play()
                 return .playing
             } catch {
+                guard !Task.isCancelled else { return .cancelled }
                 Logger.music.info(
                     "Resuming \(appleMusicID, privacy: .public) failed, restarting: \(error.localizedDescription, privacy: .public)")
             }
         }
 
-        guard await MusicAuthorization.request() == .authorized else {
+        let authorization = await MusicAuthorization.request()
+        guard !Task.isCancelled else { return .cancelled }
+        guard authorization == .authorized else {
             return failed(.notAuthorized)
         }
 
         do {
             let subscription = try await MusicSubscription.current
+            try Task.checkCancellation()
             guard subscription.canPlayCatalogContent else {
                 return subscription.canBecomeSubscriber ? .needsSubscription : failed(.noSubscription)
             }
 
             let request = MusicCatalogResourceRequest<MusicKit.Song>(matching: \.id, equalTo: MusicItemID(appleMusicID))
-            guard let song = try await request.response().items.first else {
+            let songs = try await request.response().items
+            try Task.checkCancellation()
+            guard let song = songs.first else {
                 return failed(.notInCatalog)
             }
             player.queue = [song]
             try await player.play()
             return .playing
         } catch {
+            guard !Task.isCancelled else { return .cancelled }
             return failed(.other(error.localizedDescription))
         }
     }
 
     func pause() {
-        ApplicationMusicPlayer.shared.pause()
+        playbackRequest?.task.cancel()
+        loadingSongID = nil
+        pausePlayback()
         syncWithPlayer()
     }
 
     private func syncWithPlayer() {
+        guard observesPlayer else { return }
         let player = ApplicationMusicPlayer.shared
         isPlaying = player.state.playbackStatus == .playing
         if case .song(let song)? = player.queue.currentEntry?.item {

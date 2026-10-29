@@ -22,6 +22,7 @@ struct PlayButton: View {
         } label: {
             if isLoading {
                 ProgressView()
+                    .accessibilityLabel("Loading \(title)")
             } else {
                 Label(isPlaying ? "Pause" : "Play in Apple Music", systemImage: isPlaying ? "pause.fill" : "play.fill")
             }

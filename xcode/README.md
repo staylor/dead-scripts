@@ -48,7 +48,7 @@ swift format lint --recursive --strict .                     # formatting
 
 The seed-integrity tests check that every song in `seeds.json` resolves its singer and writers and has lyrics, and that every album and artist has an Apple Music ID. They also check that `Sheets/schema.json` covers exactly the catalog's songs, and that `Sheets/pdfs` has a PDF for every song, and nothing else.
 
-The `leadsheets` scheme also runs `leadsheetsTests`, which tests user-data persistence, failed saves, the read-only fallback and device-sync races without an iCloud account. Tests launch the app with `-inMemoryUserData`, so favorites and setlists start empty each time, and `-noArtwork`, so it doesn't ask for Apple Music access. The storage-failure UI test uses `-unavailableUserData` in Debug builds to fail the persistent-store open without touching saved data.
+The `leadsheets` scheme also runs `leadsheetsTests`, which tests user-data persistence, failed saves, the read-only fallback, device-sync races and playback ordering without iCloud or Apple Music access. Tests launch the app with `-inMemoryUserData`, so favorites and setlists start empty each time, and `-noArtwork`, so it doesn't ask for Apple Music access. The unit-test host also overrides song sync to off, so a developer’s saved sync preference cannot start CloudKit requests during tests. The storage-failure UI test uses `-unavailableUserData` in Debug builds to fail the persistent-store open without touching saved data.
 
 Some layouts behave differently on 26 and 27, so run the UI tests on both:
 
