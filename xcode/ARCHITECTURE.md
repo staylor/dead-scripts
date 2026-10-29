@@ -50,7 +50,7 @@ tvOS uses `TVRootView`: a tab per category, plus the system search tab. Albums a
 ## Services
 
 - `ArtworkStore` fetches the covers and photos from the Apple Music catalog by ID, in one request for albums and one for artists, after asking for Apple Music access at launch. Rows draw them with MusicKit's `ArtworkImage`. tvOS lockups draw a downloaded `Image` instead, which the borderless button style lifts on focus, and CarPlay takes the same downloads. Without access, or offline, the artwork is a symbol.
-- `MusicPlayerService` plays Apple Music catalog songs with `ApplicationMusicPlayer`. It reads play/pause state from the player itself, so the state stays right when playback changes elsewhere. Failures become an alert, or the Apple Music subscription offer (`playbackAlerts()`). CarPlay uses the result to show its own alert.
+- `MusicPlayerService` plays Apple Music catalog songs with `ApplicationMusicPlayer`. A new Play request cancels and waits for its predecessor, so a slow lookup or playback start cannot overtake the latest choice. Pause also cancels pending playback, and cancelled requests do not show alerts or subscription offers. It reads play/pause state from the player itself, so the state stays right when playback changes elsewhere. Failures become an alert, or the Apple Music subscription offer (`playbackAlerts()`). CarPlay uses the result to show its own alert.
 - `CloudSyncManager` shares the open song through one CloudKit record in the private database, through `CloudSelectionStore`. It makes no requests until sync is turned on. Polls and silent pushes share an in-flight fetch, writes are serialized and coalesced, and disabling sync invalidates pending work. Writes retry conflicts against the server record without overwriting newer selections, and requests honor CloudKit's retry-after. Devices are told apart by a per-install ID.
 - `WatchConnectivityManager` (in the package) passes the selection between iPhone and Apple Watch. It holds the latest outgoing selection until the session activates and restores cached context at activation. Both transports use `SongSelectionState` to reject duplicate or older events and preserve the original timestamp when forwarding between them.
 - `SongIntents.swift` exposes songs as an `AppEntity` with an Open Song intent and App Shortcut phrases, indexes them in Spotlight, and defines the Handoff activity.
@@ -62,7 +62,7 @@ tvOS uses `TVRootView`: a tab per category, plus the system search tab. Albums a
 | Sheet | PDFKit | PDFKit | Core Graphics tiles, zoomed with the remote | — | — |
 | Lyrics | Sheet with detents, side panel in landscape | Inspector | Side panel | Scroll view | — |
 | Setlists, favorites | Yes | Yes | — | — | — |
-| Playback | Apple Music | Apple Music | — | — | Apple Music |
+| Playback | Apple Music | Apple Music | Apple Music | — | Apple Music |
 | Follows another device | CloudKit, watch | CloudKit, Handoff | — | iPhone | — |
 
 Every platform but watchOS bundles `Sheets/pdfs`, a folder reference. `AppIcon.icon` is filtered out of tvOS, which uses Brand Assets.

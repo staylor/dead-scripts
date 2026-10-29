@@ -107,6 +107,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         }
         Task {
             switch await MusicPlayerService.shared.start(appleMusicID: appleMusicID, title: song.title) {
+            case .cancelled:
+                break
             case .playing:
                 showNowPlaying()
             case .needsSubscription:

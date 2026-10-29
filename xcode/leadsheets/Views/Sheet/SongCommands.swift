@@ -55,10 +55,11 @@ private struct PlayPauseCommand: View {
     var body: some View {
         let appleMusicID = song?.appleMusicID
         let isPlaying = appleMusicID.map(player.isPlayingSong) ?? false
+        let isLoading = appleMusicID.map(player.isLoadingSong) ?? false
 
-        Button(isPlaying ? "Pause" : "Play in Apple Music") {
+        Button(isLoading ? "Cancel Playback" : isPlaying ? "Pause" : "Play in Apple Music") {
             guard let song, let appleMusicID else { return }
-            if isPlaying {
+            if isPlaying || isLoading {
                 player.pause()
             } else {
                 Task {
