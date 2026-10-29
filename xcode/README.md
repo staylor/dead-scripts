@@ -58,7 +58,7 @@ xcodebuild test -project leadsheets.xcodeproj -scheme leadsheets \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.5'
 ```
 
-CI (`.github/workflows/xcode.yml`) builds macOS, iOS + watchOS and tvOS with Xcode 27.1, and runs the package tests, the UI tests on iPhone and Apple TV simulators with 27 and 26.5, and the format check, on every change under `xcode/`. On `main`, it then uploads the apps to TestFlight.
+CI (`.github/workflows/xcode.yml`) archives macOS, iOS + watchOS and tvOS with Xcode 27.1, as the TestFlight upload does but unsigned, and fails on any warning. It runs the package tests, the UI tests on iPhone and Apple TV simulators with 27 and 26.5, and the format check, on every change under `xcode/`. On `main`, it then uploads the apps to TestFlight. Changes to the workflows also run `actionlint`.
 
 ## Releasing
 

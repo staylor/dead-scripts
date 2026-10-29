@@ -24,6 +24,7 @@ swift format lint --recursive --strict .
 ## Rules
 
 - Keep every platform building: macOS, iOS + watchOS and tvOS. Shared views compile for tvOS, where `textSelection`, PDFKit and SwiftData-backed features don't exist.
+- Keep the build free of warnings: CI fails on any.
 - Every target deploys to 26.0 and builds with the 27 SDKs. An API that's new in 27 goes behind `if #available`, with a fallback for 26. Inspectors, split views and safe areas have behaved differently on 26 and 27, so check layout changes on both; CI runs the UI tests on both.
 - Put logic that doesn't need UIKit, AppKit or SwiftData in DeadSheetsKit, and test it with Swift Testing.
 - Swift 6 with main-actor default isolation: mark delegate callbacks that arrive on background queues `nonisolated`. Use `@Observable`, `os.Logger` and async APIs, not `ObservableObject`, `print` or completion handlers.
