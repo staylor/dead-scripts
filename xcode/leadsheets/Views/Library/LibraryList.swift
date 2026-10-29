@@ -25,9 +25,13 @@ struct LibraryList: View {
                             ContentUnavailableView.search(text: searchText)
                         } else if songFilter == .favorites {
                             ContentUnavailableView(
-                                "No Favorites",
+                                isUserDataAvailable ? "No Favorites" : "Favorites Unavailable",
                                 systemImage: "heart",
-                                description: Text("Tap the heart on a lead sheet to add it here.")
+                                description: Text(
+                                    isUserDataAvailable
+                                        ? "Tap the heart on a lead sheet to add it here."
+                                        : "Restart Dead Sheets to try opening your saved data again."
+                                )
                             )
                         } else {
                             ContentUnavailableView("No \(songFilter.title)", systemImage: songFilter.systemImage)
@@ -62,6 +66,14 @@ struct LibraryList: View {
             }
         }
         .emptyState(isEmpty: routes.isEmpty, category: category, searchText: searchText)
+    }
+
+    private var isUserDataAvailable: Bool {
+        #if os(iOS) || os(macOS)
+        UserData.shared.isAvailable
+        #else
+        true
+        #endif
     }
 
     private var favoriteIDs: Set<Song.ID> {

@@ -11,6 +11,7 @@
 		782F84053EEDDA165F834C4D /* DeadSheetsKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0C7C14719702CBD7C7587B22 /* DeadSheetsKit */; };
 		99CA6CFDBF6E0AC0CCCFDE7A /* DeadSheetsKit in Frameworks */ = {isa = PBXBuildFile; productRef = D3EDC39D983F8DED6FC0A629 /* DeadSheetsKit */; };
 		D2AF766A2EC4E950006C0FCE /* leadsheets.watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8E40A627F2E64AB8B9D9900C /* DeadSheetsKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8E40A627F2E64AB8B9D9900D /* DeadSheetsKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -22,6 +23,13 @@
 			remoteInfo = leadsheets.watch;
 		};
 		88816567900B4F1F50623F4B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D2E1EB4E2E9DE20C00E5456E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2E1EB552E9DE20C00E5456E;
+			remoteInfo = leadsheets;
+		};
+		8E40A627F2E64AB8B9D9900B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D2E1EB4E2E9DE20C00E5456E /* Project object */;
 			proxyType = 1;
@@ -49,6 +57,7 @@
 		D2E1EB562E9DE20C00E5456E /* Dead Sheets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dead Sheets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA9088CBCF8223078DF1C74D /* leadsheetsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = leadsheetsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		350EB5D0807F532E22CD7BC8 /* pdfs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pdfs; sourceTree = "<group>"; };
+		8E40A627F2E64AB8B9D99002 /* leadsheetsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = leadsheetsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -104,6 +113,11 @@
 			path = leadsheetsUITests;
 			sourceTree = "<group>";
 		};
+		8E40A627F2E64AB8B9D99003 /* leadsheetsTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = leadsheetsTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +144,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8E40A627F2E64AB8B9D99005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E40A627F2E64AB8B9D9900C /* DeadSheetsKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -140,6 +162,7 @@
 				6D571899E92B469310C9999A /* Sheets */,
 				D2AF76612EC4E94E006C0FCE /* leadsheets.watch */,
 				69A35E1CB55CDD00F1DB80F9 /* leadsheetsUITests */,
+				8E40A627F2E64AB8B9D99003 /* leadsheetsTests */,
 				D2E1EB572E9DE20C00E5456E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -150,6 +173,7 @@
 				D2E1EB562E9DE20C00E5456E /* Dead Sheets.app */,
 				D2AF76602EC4E94E006C0FCE /* leadsheets.watch.app */,
 				DA9088CBCF8223078DF1C74D /* leadsheetsUITests.xctest */,
+				8E40A627F2E64AB8B9D99002 /* leadsheetsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -236,6 +260,30 @@
 			productReference = DA9088CBCF8223078DF1C74D /* leadsheetsUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		8E40A627F2E64AB8B9D99001 /* leadsheetsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8E40A627F2E64AB8B9D99007 /* Build configuration list for PBXNativeTarget "leadsheetsTests" */;
+			buildPhases = (
+				8E40A627F2E64AB8B9D99004 /* Sources */,
+				8E40A627F2E64AB8B9D99005 /* Frameworks */,
+				8E40A627F2E64AB8B9D99006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8E40A627F2E64AB8B9D9900A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				8E40A627F2E64AB8B9D99003 /* leadsheetsTests */,
+			);
+			name = leadsheetsTests;
+			packageProductDependencies = (
+				8E40A627F2E64AB8B9D9900D /* DeadSheetsKit */,
+			);
+			productName = leadsheetsTests;
+			productReference = 8E40A627F2E64AB8B9D99002 /* leadsheetsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -251,6 +299,10 @@
 					};
 					D2E1EB552E9DE20C00E5456E = {
 						CreatedOnToolsVersion = 26.0.1;
+					};
+					8E40A627F2E64AB8B9D99001 = {
+						CreatedOnToolsVersion = 27.1;
+						TestTargetID = D2E1EB552E9DE20C00E5456E;
 					};
 					45FCB9A999C61F9679E0D382 = {
 						CreatedOnToolsVersion = 26.3;
@@ -278,6 +330,7 @@
 				D2E1EB552E9DE20C00E5456E /* leadsheets */,
 				D2AF765F2EC4E94E006C0FCE /* leadsheets.watch */,
 				45FCB9A999C61F9679E0D382 /* leadsheetsUITests */,
+				8E40A627F2E64AB8B9D99001 /* leadsheetsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -299,6 +352,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F8B2F95186C8C78CBD03AF48 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8E40A627F2E64AB8B9D99006 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -329,6 +389,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8E40A627F2E64AB8B9D99004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -342,6 +409,11 @@
 			isa = PBXTargetDependency;
 			target = D2E1EB552E9DE20C00E5456E /* leadsheets */;
 			targetProxy = 88816567900B4F1F50623F4B /* PBXContainerItemProxy */;
+		};
+		8E40A627F2E64AB8B9D9900A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2E1EB552E9DE20C00E5456E /* leadsheets */;
+			targetProxy = 8E40A627F2E64AB8B9D9900B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -661,6 +733,60 @@
 			};
 			name = Release;
 		};
+		8E40A627F2E64AB8B9D99008 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LQR2VDPY65;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = wonderboymusic.leadsheetsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx appletvos appletvsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,3";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Dead Sheets.app/Dead Sheets";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Dead Sheets.app/Contents/MacOS/Dead Sheets";
+				TVOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		8E40A627F2E64AB8B9D99009 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LQR2VDPY65;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = wonderboymusic.leadsheetsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx appletvos appletvsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,3";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Dead Sheets.app/Dead Sheets";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Dead Sheets.app/Contents/MacOS/Dead Sheets";
+				TVOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -700,6 +826,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		8E40A627F2E64AB8B9D99007 /* Build configuration list for PBXNativeTarget "leadsheetsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8E40A627F2E64AB8B9D99008 /* Debug */,
+				8E40A627F2E64AB8B9D99009 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
@@ -715,6 +850,10 @@
 			productName = DeadSheetsKit;
 		};
 		D3EDC39D983F8DED6FC0A629 /* DeadSheetsKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DeadSheetsKit;
+		};
+		8E40A627F2E64AB8B9D9900D /* DeadSheetsKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DeadSheetsKit;
 		};

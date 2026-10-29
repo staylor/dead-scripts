@@ -30,7 +30,7 @@ xcode/
 
 **The catalog** is read-only and bundled. `Catalog.bundled` decodes `seeds.json` once into value types keyed by slug. Songs carry the names they show in lists and their album's Apple Music ID, for its cover, and `Catalog` answers the relationship questions (an album's songs in track order, a person's credits). A singer and a writer with the same slug are the same `Person`. Data errors such as an unknown writer are collected in `Catalog.problems` rather than dropped: the app logs them, and the tests require there to be none.
 
-**User data** is favorites and setlists, in a SwiftData store of its own (`UserData.store`). They refer to songs by slug, so a new `seeds.json` never touches them. The models avoid unique constraints and give every property a default, so CloudKit sync could be added later. If the store can't open, the app falls back to an in-memory store instead of crashing.
+**User data** is favorites and setlists, in a local SwiftData store of its own (`UserData.store`), explicitly opted out of CloudKit. They refer to songs by slug, so a new `seeds.json` never touches them. The models avoid unique constraints and give every property a default, so CloudKit sync could be added later. Every edit saves immediately; a failed save rolls the edit back and shows an alert. If the store can't open, the app leaves it untouched and uses an empty in-memory store for browsing, with a warning and favorites and setlist editing disabled.
 
 **Settings and window state** use `@AppStorage` (keep screen on, sync, show lyrics on the Mac) and `@SceneStorage` (category, song filter, open song).
 

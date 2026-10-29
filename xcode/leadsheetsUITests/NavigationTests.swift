@@ -115,6 +115,29 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
+    func testUnavailableUserDataKeepsTheCatalogReadableWithoutOfferingUnsavedEdits() {
+        let app = XCUIApplication()
+        app.launchArguments += ["-noArtwork", "-unavailableUserData"]
+        app.launch()
+        XCTAssertTrue(element("user-data-unavailable", in: app).waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["Filter"].isHittable)
+        XCTAssertTrue(app.buttons["Settings"].isHittable)
+        app.buttons["Settings"].tap()
+        XCTAssertTrue(app.switches["Sync with Other Devices"].waitForExistence(timeout: 10))
+        app.buttons["Close"].tap()
+
+        select("Setlists", in: app)
+        XCTAssertTrue(app.staticTexts["Setlists Unavailable"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.buttons["New Setlist"].isEnabled)
+
+        select("Songs", in: app)
+        open("song-alabama-getaway", showing: "Alabama Getaway", in: app)
+        XCTAssertFalse(app.buttons["Add to Favorites"].isEnabled)
+        XCTAssertFalse(app.buttons["Add to Setlist"].isEnabled)
+        XCTAssertTrue(app.textViews.firstMatch.waitForExistence(timeout: 10))
+    }
+
+    @MainActor
     func testNextAndPreviousFollowTheAlbumsTrackOrder() {
         let app = launch()
         select("Albums", in: app)
