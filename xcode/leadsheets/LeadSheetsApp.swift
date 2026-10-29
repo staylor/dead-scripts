@@ -42,7 +42,7 @@ struct LeadSheetsApp: App {
         .defaultSize(width: 1280, height: 860)
         #endif
         #if os(iOS) || os(macOS)
-        .modelContainer(UserData.container)
+        .modelContainer(UserData.shared.container)
         .commands {
             SongCommands()
         }

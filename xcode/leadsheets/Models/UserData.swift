@@ -32,24 +32,84 @@ final class Setlist {
     }
 }
 
-enum UserData {
-    static let container: ModelContainer = {
-        let schema = Schema([Favorite.self, Setlist.self])
-        // UI tests start from an empty library each time.
-        let inMemory = ProcessInfo.processInfo.arguments.contains("-inMemoryUserData")
+struct UserData {
+    let container: ModelContainer
+    let isAvailable: Bool
+
+    static let shared: UserData = {
+        let arguments = ProcessInfo.processInfo.arguments
         do {
-            return try ModelContainer(
-                for: schema,
-                configurations: ModelConfiguration("UserData", schema: schema, isStoredInMemoryOnly: inMemory)
-            )
-        } catch {
-            Logger.userData.fault("Couldn't open the user data store: \(error.localizedDescription, privacy: .public)")
-            do {
-                return try ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
-            } catch {
-                fatalError("Couldn't create an in-memory store: \(error)")
+            return try UserData(isStoredInMemoryOnly: arguments.contains("-inMemoryUserData")) { configuration in
+                #if DEBUG
+                if arguments.contains("-unavailableUserData"), !configuration.isStoredInMemoryOnly {
+                    throw CocoaError(.fileReadCorruptFile)
+                }
+                #endif
+                return try ModelContainer(for: schema, configurations: configuration)
             }
+        } catch {
+            fatalError("Couldn't create an in-memory store: \(error)")
         }
     }()
+
+    static let schema = Schema([Favorite.self, Setlist.self])
+
+    init(
+        isStoredInMemoryOnly: Bool = false,
+        url: URL? = nil,
+        makeContainer: (ModelConfiguration) throws -> ModelContainer = {
+            try ModelContainer(for: schema, configurations: $0)
+        }
+    ) throws {
+        let configuration =
+            if let url {
+                ModelConfiguration("UserData", schema: Self.schema, url: url, cloudKitDatabase: .none)
+            } else {
+                ModelConfiguration(
+                    "UserData", schema: Self.schema, isStoredInMemoryOnly: isStoredInMemoryOnly, cloudKitDatabase: .none
+                )
+            }
+        do {
+            container = try makeContainer(configuration)
+            isAvailable = true
+        } catch {
+            Logger.userData.fault("Couldn't open the user data store: \(error.localizedDescription, privacy: .public)")
+            container = try makeContainer(
+                ModelConfiguration(schema: Self.schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+            )
+            isAvailable = false
+        }
+        container.mainContext.autosaveEnabled = false
+    }
+
+    func save(
+        in context: ModelContext,
+        restoring setlists: [Setlist] = [],
+        using persist: (ModelContext) throws -> Void = { try $0.save() },
+        _ changes: () -> Void
+    ) -> SaveFailure? {
+        guard isAvailable else { return SaveFailure() }
+        let originalSongs = setlists.map { ($0, $0.songIDs) }
+        changes()
+        do {
+            try persist(context)
+            return nil
+        } catch {
+            // iOS 26 leaves array-valued attributes cached after rollback.
+            for (setlist, songIDs) in originalSongs {
+                setlist.songIDs = songIDs
+            }
+            context.rollback()
+            Logger.userData.error("Couldn't save user data: \(error.localizedDescription, privacy: .public)")
+            return SaveFailure()
+        }
+    }
+
+    struct SaveFailure: LocalizedError {
+        var errorDescription: String? { "Couldn’t Save Changes" }
+        var failureReason: String? {
+            "Your changes weren’t saved and have been undone. Please try again. If the problem continues, restart Dead Sheets."
+        }
+    }
 }
 #endif

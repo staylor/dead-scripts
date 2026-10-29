@@ -1,6 +1,5 @@
 #if os(iOS) || os(macOS)
 import DeadSheetsKit
-import os
 import SwiftData
 import SwiftUI
 
@@ -10,6 +9,7 @@ struct SetlistsList: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \Setlist.createdAt, order: .reverse) private var setlists: [Setlist]
     @State private var isNaming = false
+    @State private var saveFailure: UserData.SaveFailure?
 
     private var matchingSetlists: [Setlist] {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -32,13 +32,17 @@ struct SetlistsList: View {
                 .accessibilityIdentifier("setlist-\(setlist.name)")
             }
             .onDelete { offsets in
-                for offset in offsets {
-                    context.delete(matches[offset])
+                saveFailure = UserData.shared.save(in: context) {
+                    for offset in offsets {
+                        context.delete(matches[offset])
+                    }
                 }
             }
         }
         .overlay {
-            if matches.isEmpty, !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            if !UserData.shared.isAvailable {
+                ContentUnavailableView("Setlists Unavailable", systemImage: "exclamationmark.triangle")
+            } else if matches.isEmpty, !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 ContentUnavailableView.search(text: searchText)
                     .accessibilityIdentifier("setlist-search-empty")
             } else if setlists.isEmpty {
@@ -58,9 +62,11 @@ struct SetlistsList: View {
                 Button("New Setlist", systemImage: "plus") {
                     isNaming = true
                 }
+                .disabled(!UserData.shared.isAvailable)
             }
         }
         .newSetlistAlert(isPresented: $isNaming)
+        .userDataSaveAlert($saveFailure)
     }
 }
 
@@ -77,24 +83,25 @@ private struct NewSetlistAlert: ViewModifier {
 
     @Environment(\.modelContext) private var context
     @State private var name = ""
+    @State private var saveFailure: UserData.SaveFailure?
 
     func body(content: Content) -> some View {
         content.alert("New Setlist", isPresented: $isPresented) {
             TextField("Name", text: $name)
             Button("Create") {
                 let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
-                context.insert(Setlist(name: trimmed.isEmpty ? "Untitled Setlist" : trimmed, songIDs: songID.map { [$0] } ?? []))
-                do {
-                    try context.save()
-                } catch {
-                    Logger.userData.error("Couldn't save the new setlist: \(error.localizedDescription, privacy: .public)")
+                saveFailure = UserData.shared.save(in: context) {
+                    context.insert(Setlist(name: trimmed.isEmpty ? "Untitled Setlist" : trimmed, songIDs: songID.map { [$0] } ?? []))
                 }
-                name = ""
+                if saveFailure == nil {
+                    name = ""
+                }
             }
             Button("Cancel", role: .cancel) {
                 name = ""
             }
         }
+        .userDataSaveAlert($saveFailure)
     }
 }
 #endif

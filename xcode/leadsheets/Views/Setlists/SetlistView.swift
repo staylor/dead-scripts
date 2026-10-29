@@ -8,8 +8,10 @@ struct SetlistView: View {
     @Binding var selection: Song.ID?
 
     @Environment(\.catalog) private var catalog
+    @Environment(\.modelContext) private var context
     @Query private var setlists: [Setlist]
     @State private var isAddingSongs = false
+    @State private var saveFailure: UserData.SaveFailure?
 
     init(setlistID: Setlist.ID, selection: Binding<Song.ID?>) {
         _selection = selection
@@ -35,11 +37,15 @@ struct SetlistView: View {
             .onMove { offsets, destination in
                 var reordered = songs
                 reordered.move(fromOffsets: offsets, toOffset: destination)
-                setlist.songIDs = reordered.map(\.id)
+                saveFailure = UserData.shared.save(in: context, restoring: [setlist]) {
+                    setlist.songIDs = reordered.map(\.id)
+                }
             }
             .onDelete { offsets in
                 let removed = Set(offsets.map { songs[$0].id })
-                setlist.songIDs = songs.map(\.id).filter { !removed.contains($0) }
+                saveFailure = UserData.shared.save(in: context, restoring: [setlist]) {
+                    setlist.songIDs = songs.map(\.id).filter { !removed.contains($0) }
+                }
             }
         }
         .overlay {
@@ -69,6 +75,7 @@ struct SetlistView: View {
         .sheet(isPresented: $isAddingSongs) {
             SongPicker(setlist: setlist)
         }
+        .userDataSaveAlert($saveFailure)
     }
 }
 
@@ -78,17 +85,21 @@ private struct SongPicker: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.catalog) private var catalog
+    @Environment(\.modelContext) private var context
     @State private var searchText = ""
+    @State private var saveFailure: UserData.SaveFailure?
 
     var body: some View {
         NavigationStack {
             List(catalog.songs(matching: searchText)) { song in
                 let isAdded = setlist.songIDs.contains(song.id)
                 Button {
-                    if isAdded {
-                        setlist.songIDs.removeAll { $0 == song.id }
-                    } else {
-                        setlist.songIDs.append(song.id)
+                    saveFailure = UserData.shared.save(in: context, restoring: [setlist]) {
+                        if setlist.songIDs.contains(song.id) {
+                            setlist.songIDs.removeAll { $0 == song.id }
+                        } else {
+                            setlist.songIDs.append(song.id)
+                        }
                     }
                 } label: {
                     HStack {
@@ -116,6 +127,7 @@ private struct SongPicker: View {
                 }
             }
         }
+        .userDataSaveAlert($saveFailure)
         #if os(macOS)
         .frame(minWidth: 420, minHeight: 520)
         #endif

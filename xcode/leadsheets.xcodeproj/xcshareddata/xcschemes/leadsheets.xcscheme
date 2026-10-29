@@ -27,7 +27,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldUseLaunchSchemeArgsEnv = "NO"
       shouldAutocreateTestPlan = "YES">
       <Testables>
          <TestableReference
@@ -41,7 +41,22 @@
                ReferencedContainer = "container:leadsheets.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8E40A627F2E64AB8B9D99001"
+               BuildableName = "leadsheetsTests.xctest"
+               BlueprintName = "leadsheetsTests"
+               ReferencedContainer = "container:leadsheets.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <CommandLineArguments>
+         <CommandLineArgument argument = "-inMemoryUserData" isEnabled = "YES"/>
+         <CommandLineArgument argument = "-noArtwork" isEnabled = "YES"/>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
