@@ -5,13 +5,21 @@ import SwiftData
 import SwiftUI
 
 struct SetlistsList: View {
+    let searchText: String
+
     @Environment(\.modelContext) private var context
     @Query(sort: \Setlist.createdAt, order: .reverse) private var setlists: [Setlist]
     @State private var isNaming = false
 
+    private var matchingSetlists: [Setlist] {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        return query.isEmpty ? setlists : setlists.filter { $0.name.localizedStandardContains(query) }
+    }
+
     var body: some View {
+        let matches = matchingSetlists
         List {
-            ForEach(setlists) { setlist in
+            ForEach(matches) { setlist in
                 NavigationLink(value: LibraryRoute.setlist(setlist.id)) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(setlist.name)
@@ -25,12 +33,14 @@ struct SetlistsList: View {
             }
             .onDelete { offsets in
                 for offset in offsets {
-                    context.delete(setlists[offset])
+                    context.delete(matches[offset])
                 }
             }
         }
         .overlay {
-            if setlists.isEmpty {
+            if matches.isEmpty, !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                ContentUnavailableView.search(text: searchText)
+            } else if setlists.isEmpty {
                 ContentUnavailableView {
                     Label("No Setlists", systemImage: LibraryCategory.setlists.systemImage)
                 } description: {

@@ -114,7 +114,10 @@ struct SplitRootView: View {
                         LibraryRouteView(route: route, selection: songSelection)
                     }
                 }
-                .searchable(text: $searchText, placement: searchPlacement, prompt: "Titles, albums, lyrics")
+                .searchable(
+                    text: $searchText, placement: searchPlacement,
+                    prompt: category == .setlists ? "Setlist names" : "Titles, albums, lyrics"
+                )
                 .safeAreaBar(edge: .top) {
                     CategoryPicker(selection: $category)
                         .padding(.horizontal)
