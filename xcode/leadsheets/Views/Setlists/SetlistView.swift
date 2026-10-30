@@ -103,7 +103,7 @@ private struct SongPicker: View {
                 .buttonStyle(.plain)
                 .accessibilityAddTraits(isAdded ? .isSelected : [])
             }
-            .searchable(text: $searchText, prompt: "Titles, albums, lyrics")
+            .searchable(text: $searchText, prompt: "Titles, artists, albums, lyrics")
             .navigationTitle("Add Songs")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)

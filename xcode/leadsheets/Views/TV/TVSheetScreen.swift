@@ -181,6 +181,7 @@ private struct LyricsPanel: View {
                         .font(.title3)
                         .bold()
                     Group {
+                        Text(song.artistName)
                         Text(song.creditsText)
                         if let singer = song.singer {
                             Text("Sung by \(singer.name)")

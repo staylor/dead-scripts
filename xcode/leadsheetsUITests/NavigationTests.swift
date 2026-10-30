@@ -26,9 +26,29 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
+    func testRowsIdentifyEveryArtist() {
+        let app = launch()
+        let song = element("song-alabama-getaway", in: app)
+        XCTAssertTrue(song.waitForExistence(timeout: 10))
+        XCTAssertTrue(song.label.contains("Grateful Dead"))
+
+        select("Albums", in: app)
+        let album = element("album-american-beauty", in: app)
+        XCTAssertTrue(album.waitForExistence(timeout: 10))
+        XCTAssertTrue(album.label.contains("Grateful Dead"))
+        XCTAssertTrue(element("album-ace", in: app).label.contains("Bob Weir"))
+
+        select("Artists", in: app)
+        open("artist-jerry-garcia", showing: "Jerry Garcia", in: app)
+        let solo = element("song-bird-song", in: app)
+        XCTAssertTrue(solo.waitForExistence(timeout: 10))
+        XCTAssertTrue(solo.label.contains("Jerry Garcia"))
+    }
+
+    @MainActor
     func testSearchFiltersSongs() {
         let app = launch()
-        search(for: "ripple", in: app)
+        search(for: "Grateful Dead ripple", in: app)
 
         XCTAssertTrue(element("song-ripple", in: app).waitForExistence(timeout: 10))
         XCTAssertFalse(element("song-box-of-rain", in: app).exists)

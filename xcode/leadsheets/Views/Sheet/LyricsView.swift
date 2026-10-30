@@ -12,6 +12,9 @@ struct LyricsView: View {
                     Text(song.title)
                         .font(.title2)
                         .bold()
+                    Text(song.artistName)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
                     Text(song.creditsText)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -48,7 +51,7 @@ struct LyricsView: View {
 }
 
 #Preview {
-    if let song = Catalog.bundled.song(id: "ripple") {
+    if let song = Catalog.bundled.songs.first {
         LyricsView(song: song)
     }
 }

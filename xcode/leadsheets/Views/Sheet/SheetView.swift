@@ -85,7 +85,7 @@ struct SheetView: View {
         .pageTurnerKeys(navigation)
         .keepsScreenOn(keepsScreenOn)
         .userActivity(SongActivity.type) { activity in
-            activity.title = song.title
+            activity.title = "\(song.title) — \(song.artistName)"
             activity.userInfo = [SongActivity.songIDKey: song.id]
             activity.isEligibleForHandoff = true
         }
@@ -209,7 +209,7 @@ struct SheetView: View {
     }
 
     private var subtitle: String {
-        var subtitle = song.albumTitle
+        var subtitle = song.artistAndAlbum
         if let year = song.albumReleaseYear {
             subtitle += " (\(year))"
         }
@@ -221,7 +221,7 @@ struct SheetView: View {
 }
 
 #Preview {
-    if let song = Catalog.bundled.song(id: "ripple") {
+    if let song = Catalog.bundled.songs.first {
         NavigationStack {
             SheetView(song: song)
         }

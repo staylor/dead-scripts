@@ -34,10 +34,7 @@ enum LibraryRoute: Hashable, Identifiable {
     func summary(in catalog: Catalog) -> String {
         switch self {
         case .album(let album):
-            var parts: [String] = []
-            if album.artistID != catalog.mainArtist?.id {
-                parts.append(album.artistName)
-            }
+            var parts = [album.artistName]
             if let year = album.releaseYear {
                 parts.append(String(year))
             }

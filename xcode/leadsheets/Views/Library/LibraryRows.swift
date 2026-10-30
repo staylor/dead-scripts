@@ -4,16 +4,10 @@ import SwiftUI
 struct SongRow: View {
     let song: Song
 
-    @Environment(\.catalog) private var catalog
-
     var body: some View {
-        LibraryRow(id: "song-\(song.id)", title: song.title, subtitle: subtitle) {
+        LibraryRow(id: "song-\(song.id)", title: song.title, subtitle: song.artistAndAlbum) {
             ArtworkThumbnail(appleMusicID: song.albumAppleMusicID, placeholder: "music.note")
         }
-    }
-
-    private var subtitle: String {
-        song.artistID == catalog.mainArtist?.id ? song.albumTitle : "\(song.artistName) · \(song.albumTitle)"
     }
 }
 
@@ -69,10 +63,10 @@ enum Counts {
 #Preview {
     let catalog = Catalog.bundled
     List {
-        if let song = catalog.song(id: "ripple") {
+        if let song = catalog.songs.first {
             SongRow(song: song)
         }
-        if let album = catalog.album(id: "american-beauty") {
+        if let album = catalog.albums.first {
             RouteRow(route: .album(album))
         }
         if let artist = catalog.artists.first {

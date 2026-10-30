@@ -30,18 +30,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     // MARK: - Templates
 
     private func makeSongList() -> CPListTemplate {
-        let songsByInitial = Dictionary(grouping: Catalog.bundled.songs) { song in
-            let initial = song.title.prefix(1).uppercased()
-            return initial.rangeOfCharacter(from: .letters) == nil ? "#" : initial
-        }
-        let sections = songsByInitial.keys.sorted().map { initial in
-            CPListSection(
-                items: (songsByInitial[initial] ?? []).map(makeItem),
-                header: initial,
-                sectionIndexTitle: initial
-            )
-        }
-        let template = CPListTemplate(title: "Songs", sections: sections)
+        let template = CPListTemplate(title: "Songs", sections: sections(for: Catalog.bundled.songs))
         template.tabTitle = "Songs"
         template.tabImage = UIImage(systemName: "music.note.list")
         template.emptyViewTitleVariants = ["No Songs"]
@@ -49,22 +38,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
 
     private func makeAlbumList() -> CPListTemplate {
-        let catalog = Catalog.bundled
-        let items = catalog.albums.map { album in
-            var detail = Counts.songs(album.songIDs.count)
-            if let year = album.releaseYear {
-                detail = "\(year) · \(detail)"
-            }
-            let item = CPListItem(text: album.title, detailText: detail, image: nil)
-            showArtwork(album.appleMusicID, on: item)
-            item.accessoryType = .disclosureIndicator
-            item.handler = { [weak self] _, completion in
-                self?.showSongs(on: album)
-                completion()
-            }
-            return item
-        }
-        let template = CPListTemplate(title: "Albums", sections: [CPListSection(items: items)])
+        let template = CPListTemplate(title: "Albums", sections: [CPListSection(items: Catalog.bundled.albums.map(makeItem))])
         template.tabTitle = "Albums"
         template.tabImage = UIImage(systemName: "square.stack")
         return template
@@ -76,8 +50,28 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         interfaceController?.pushTemplate(template, animated: true, completion: nil)
     }
 
+    /// Lists stay whole rather than paged: some cars cut lists to 12 items while driving, and iOS applies that limit.
+    private func sections(for songs: [Song]) -> [CPListSection] {
+        let sections = songs.titleSections()
+        guard sections.count <= CPListTemplate.maximumSectionCount else {
+            return [CPListSection(items: songs.map(makeItem))]
+        }
+        return sections.map { CPListSection(items: $0.songs.map(makeItem), header: $0.heading, sectionIndexTitle: $0.heading) }
+    }
+
+    private func makeItem(for album: Album) -> CPListItem {
+        let item = CPListItem(text: album.title, detailText: LibraryRoute.album(album).summary(in: .bundled), image: nil)
+        showArtwork(album.appleMusicID, on: item)
+        item.accessoryType = .disclosureIndicator
+        item.handler = { [weak self] _, completion in
+            self?.showSongs(on: album)
+            completion()
+        }
+        return item
+    }
+
     private func makeItem(for song: Song) -> CPListItem {
-        let item = CPListItem(text: song.title, detailText: song.albumTitle, image: nil)
+        let item = CPListItem(text: song.title, detailText: song.artistAndAlbum, image: nil)
         showArtwork(song.albumAppleMusicID, on: item)
         item.handler = { [weak self] _, completion in
             self?.play(song)

@@ -28,7 +28,7 @@ public struct WriterGroup: Identifiable, Hashable, Sendable {
         self.people =
             people
             .filter { seen.insert($0.id).inserted }
-            .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+            .sorted { Catalog.nameOrder($0.name, $0.id, $1.name, $1.id) }
         self.roles = roles.sorted()
         self.songs = songs
         id = self.people.map(\.id).joined(separator: "+") + ":" + self.roles.map(\.rawValue).joined(separator: "+")
@@ -57,11 +57,8 @@ extension Catalog {
             }
         }
 
-        let matching = entries.values.filter { entry in
-            query.isEmpty
-                || entry.person.name.localizedStandardContains(query)
-                || entry.role.title.localizedStandardContains(query)
-        }
+        let query = CatalogSearchQuery(query)
+        let matching = entries.values.filter { query.matches([$0.person.name, $0.role.title]) }
 
         var individuals: [(people: [Person], roles: Set<Role>, songIDs: Set<Song.ID>)] = []
         for (_, personEntries) in Dictionary(grouping: matching, by: \.person.id) {
@@ -83,6 +80,6 @@ extension Catalog {
                     songs: songIDs.compactMap(song(id:)).sorted(by: Self.titleOrder)
                 )
             }
-            .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+            .sorted { Self.nameOrder($0.name, $0.id, $1.name, $1.id) }
     }
 }

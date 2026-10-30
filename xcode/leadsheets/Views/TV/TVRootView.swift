@@ -52,7 +52,7 @@ private struct TVSearchTab: View {
     var body: some View {
         NavigationStack {
             LibraryList(category: .songs, searchText: searchText, selection: .constant(nil))
-                .searchable(text: $searchText, prompt: "Titles, albums, lyrics")
+                .searchable(text: $searchText, prompt: "Titles, artists, albums, lyrics")
                 .navigationDestination(for: Song.self) { song in
                     TVSheetScreen(song: song)
                 }

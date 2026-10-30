@@ -17,7 +17,7 @@ struct SongEntity: AppEntity, IndexedEntity {
     init(_ song: Song) {
         id = song.id
         title = song.title
-        subtitle = "\(song.albumTitle) · \(song.creditsText)"
+        subtitle = "\(song.artistAndAlbum) · \(song.creditsText)"
     }
 
     var displayRepresentation: DisplayRepresentation {

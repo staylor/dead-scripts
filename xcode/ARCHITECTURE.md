@@ -6,7 +6,7 @@ xcode/
 │   ├── Sources/DeadSheetsKit/
 │   │   ├── Catalog.swift            seeds.json → value types, lookups, data problems
 │   │   ├── Models.swift             Song, Album, Artist, Person, Credit, Role
-│   │   ├── Search.swift             matching songs, albums, artists, singers, covers
+│   │   ├── Search.swift             ranking songs and covers, matching albums, artists, singers
 │   │   ├── WriterGroups.swift       "By Writer" rows
 │   │   ├── Credits.swift, Lyrics.swift
 │   │   ├── WatchConnectivityManager.swift
@@ -28,7 +28,7 @@ xcode/
 
 ## Data
 
-**The catalog** is read-only and bundled. `Catalog.bundled` decodes `seeds.json` once into value types keyed by slug. Songs carry the names they show in lists and their album's Apple Music ID, for its cover, and `Catalog` answers the relationship questions (an album's songs in track order, a person's credits). A singer and a writer with the same slug are the same `Person`. Data errors such as an unknown writer are collected in `Catalog.problems` rather than dropped: the app logs them, and the tests require there to be none.
+**The catalog** is read-only and bundled. `Catalog.bundled` decodes `seeds.json` once into value types keyed by slug. Songs carry the names they show in lists and their album's Apple Music ID, for its cover, and `Catalog` answers the relationship questions (an album's songs in track order, a person's credits). There is no primary artist: song and album descriptions identify their artist throughout the library, reader, CarPlay and system intents. Display names can repeat; artist, album and recording slugs remain globally unique. A singer and a writer with the same slug are the same `Person`. Data errors such as an unknown writer are collected in `Catalog.problems` rather than dropped: the app logs them, and the tests require there to be none.
 
 **User data** is favorites and setlists, in a SwiftData store of its own (`UserData.store`). They refer to songs by slug, so a new `seeds.json` never touches them. The models avoid unique constraints and give every property a default, so CloudKit sync could be added later. If the store can't open, the app falls back to an in-memory store instead of crashing.
 
@@ -38,7 +38,7 @@ xcode/
 
 iPhone, iPad and Mac share `SplitRootView`, a two-column `NavigationSplitView`:
 
-- The **library column** is a `NavigationStack`. Its root is `LibraryList` for the selected `LibraryCategory`, with `.searchable` and a filter on Songs (all, favorites, covers). Drilling into an album, artist, singer, writer group or setlist pushes a `LibraryRoute`, which also gives its row, and its lockup on Apple TV, a title, summary and artwork.
+- The **library column** is a `NavigationStack`. Its root is `LibraryList` for the selected `LibraryCategory`, with `.searchable` and a filter on Songs (all, favorites, covers). Song results rank recordings whose title, artist and album contain every search word first, then those containing the whole query as a phrase, such as a lyric line, then those whose lyrics supply the remaining words. Drilling into an album, artist, singer, writer group or setlist pushes a `LibraryRoute`, which also gives its row, and its lockup on Apple TV, a title, summary and artwork.
 - The **detail column** is `SheetView`: the PDF, a toolbar (Play, Lyrics, Favorite, Add to Setlist, Previous, Next), and `LyricsView`. On iPad and Mac the lyrics are an `.inspector` column, and on iPhone a sheet with detents. An iPhone in landscape moves the bottom bar's buttons to the top and puts the lyrics beside the sheet, hiding the sidebar of a large iPhone to make room.
 - On iPhone the split view collapses into a stack, and `preferredCompactColumn` moves to the sheet when a song is chosen.
 - `SheetPDFView`, a `PDFView` subclass on iOS and the Mac, fits the page to the column's width. When the column changes size, on rotation, as a Mac window resizes, or when the lyrics or sidebar open, it keeps the same part of the sheet at the top.
@@ -49,7 +49,7 @@ tvOS uses `TVRootView`: a tab per category, plus the system search tab. Albums a
 
 ## Services
 
-- `ArtworkStore` fetches the covers and photos from the Apple Music catalog by ID, in one request for albums and one for artists, after asking for Apple Music access at launch. Rows draw them with MusicKit's `ArtworkImage`. tvOS lockups draw a downloaded `Image` instead, which the borderless button style lifts on focus, and CarPlay takes the same downloads. Without access, or offline, the artwork is a symbol.
+- `ArtworkStore` fetches covers and photos by ID in batches of at most 100 albums or 25 artists, after asking for Apple Music access. These are the limits for [album](https://developer.apple.com/documentation/applemusicapi/get-multiple-catalog-albums) and [artist](https://developer.apple.com/documentation/applemusicapi/get-multiple-catalog-artists) lookups. Successful batches are retained, failed batches can retry on the next load, and a catalog without IDs makes no request. Rows draw them with MusicKit's `ArtworkImage`. tvOS lockups draw a downloaded `Image` instead, which the borderless button style lifts on focus, and CarPlay takes the same downloads. Without access, or offline, the artwork is a symbol.
 - `MusicPlayerService` plays Apple Music catalog songs with `ApplicationMusicPlayer`. It reads play/pause state from the player itself, so the state stays right when playback changes elsewhere. Failures become an alert, or the Apple Music subscription offer (`playbackAlerts()`). CarPlay uses the result to show its own alert.
 - `CloudSyncManager` shares the open song through one CloudKit record in the private database. It makes no requests until sync is turned on. While the app is active it polls, one request at a time, honoring CloudKit's retry-after; in the background it relies on a query subscription's silent pushes. Devices are told apart by a per-install ID.
 - `WatchConnectivityManager` (in the package) passes the selection between iPhone and Apple Watch.
@@ -64,6 +64,8 @@ tvOS uses `TVRootView`: a tab per category, plus the system search tab. Albums a
 | Setlists, favorites | Yes | Yes | — | — | — |
 | Playback | Apple Music | Apple Music | — | — | Apple Music |
 | Follows another device | CloudKit, watch | CloudKit, Handoff | — | iPhone | — |
+
+CarPlay shows whole song and album lists rather than paging them: [some cars cut lists to 12 items while driving](https://developer.apple.com/download/files/CarPlay-Developer-Guide.pdf), and iOS applies that limit. Song sections follow the library’s title order and file accented titles under their base letter; a list with more initials than `CPListTemplate.maximumSectionCount` is shown without sections.
 
 Every platform but watchOS bundles `Sheets/pdfs`, a folder reference. `AppIcon.icon` is filtered out of tvOS, which uses Brand Assets.
 
