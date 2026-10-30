@@ -65,7 +65,7 @@ tvOS uses `TVRootView`: a tab per category, plus the system search tab. Albums a
 | Playback | Apple Music | Apple Music | — | — | Apple Music |
 | Follows another device | CloudKit, watch | CloudKit, Handoff | — | iPhone | — |
 
-CarPlay pages song and album lists within `CPListTemplate`’s item limit rather than letting the system trim them. Short song lists keep their alphabetic sections when those fit the section limit; paging an album keeps track order. Only the visible page creates rows and downloads its thumbnails.
+CarPlay shows whole song and album lists rather than paging them: [some cars cut lists to 12 items while driving](https://developer.apple.com/download/files/CarPlay-Developer-Guide.pdf), and iOS applies that limit. Song sections follow the library’s title order and file accented titles under their base letter; a list with more initials than `CPListTemplate.maximumSectionCount` is shown without sections.
 
 Every platform but watchOS bundles `Sheets/pdfs`, a folder reference. `AppIcon.icon` is filtered out of tvOS, which uses Brand Assets.
 
