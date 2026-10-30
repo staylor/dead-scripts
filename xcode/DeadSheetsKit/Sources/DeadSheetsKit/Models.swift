@@ -19,6 +19,10 @@ public struct Song: Identifiable, Hashable, Sendable {
 
     public let singer: Person?
     public let credits: [Credit]
+
+    public var artistAndAlbum: String {
+        "\(artistName) · \(albumTitle)"
+    }
 }
 
 public struct Album: Identifiable, Hashable, Sendable {

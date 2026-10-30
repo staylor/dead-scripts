@@ -1,6 +1,6 @@
 # Dead Sheets
 
-Grateful Dead lead sheets and lyrics for iPhone, iPad, Mac, Apple TV, Apple Watch and CarPlay. Browse by song, album, artist, singer or writer, put songs in setlists, and step through them on stage with the toolbar or a page-turner pedal. Songs play from Apple Music, and the open song can follow you to your other devices.
+Lead sheets and lyrics for iPhone, iPad, Mac, Apple TV, Apple Watch and CarPlay. The bundled catalog focuses on the Grateful Dead, but the app supports multiple artists without a primary artist. Browse by song, album, artist, singer or writer, put songs in setlists, and step through them on stage with the toolbar or a page-turner pedal. Songs play from Apple Music, and the open song can follow you to your other devices.
 
 | Platform | What it shows |
 | --- | --- |
@@ -35,7 +35,9 @@ pnpm xcode         # write seeds.json, and update the lead sheets from iCloud Dr
 - `DeadSheetsKit/Sources/DeadSheetsKit/Resources/seeds.json`: the catalog.
 - `Sheets/pdfs/`: each song's score, named after its `fileName` in the catalog.
 
-`Sheets/schema.json` says where each song's score lives in the iCloud Drive scores folder, keyed by song slug. A new song needs an entry there, or `pnpm xcode` stops before writing anything. The script only rewrites PDFs whose content changed, and removes sheets for songs that left the catalog. Commit whatever changes under `Sheets/`.
+Artists, releases and recordings are identified by globally unique, stable slugs; their display names do not have to be unique. Do not rename existing song slugs when adding artists: favorites, setlists and device sync refer to them. Give a new recording an artist- or release-qualified slug when its title is already used.
+
+`Sheets/schema.json` says where each song's score lives in the scores folder, keyed by song slug. Set `XCODE_SCORES_DIR` when running `pnpm xcode` to choose a different root; paths in the schema can include artist folders. The default remains the original Grateful Dead scores folder. A new song needs an entry there, or `pnpm xcode` stops before writing anything. The script only rewrites PDFs whose content changed, and removes sheets for songs that left the catalog. Commit whatever changes under `Sheets/`.
 
 ## Testing
 
@@ -46,7 +48,7 @@ xcodebuild test -project leadsheets.xcodeproj -scheme leadsheets \
 swift format lint --recursive --strict .                     # formatting
 ```
 
-The seed-integrity tests check that every song in `seeds.json` resolves its singer and writers and has lyrics, and that every album and artist has an Apple Music ID. They also check that `Sheets/schema.json` covers exactly the catalog's songs, and that `Sheets/pdfs` has a PDF for every song, and nothing else.
+The seed-integrity tests check that catalog references resolve, supplied Apple Music IDs are valid, and every song has a sheet. Lyrics, singer, writer credits and Apple Music IDs are optional, so instrumental and independently released music can be included. They also check that `Sheets/schema.json` covers exactly the catalog's songs, and that `Sheets/pdfs` has a PDF for every song, and nothing else.
 
 UI tests launch the app with `-inMemoryUserData`, so favorites and setlists start empty each time, and `-noArtwork`, so it doesn't ask for Apple Music access.
 

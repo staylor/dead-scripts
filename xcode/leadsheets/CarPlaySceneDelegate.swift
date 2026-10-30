@@ -29,19 +29,20 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
 
     // MARK: - Templates
 
+    private enum Library {
+        case songs([Song], alphabetic: Bool)
+        case albums([Album])
+
+        var count: Int {
+            switch self {
+            case .songs(let songs, _): songs.count
+            case .albums(let albums): albums.count
+            }
+        }
+    }
+
     private func makeSongList() -> CPListTemplate {
-        let songsByInitial = Dictionary(grouping: Catalog.bundled.songs) { song in
-            let initial = song.title.prefix(1).uppercased()
-            return initial.rangeOfCharacter(from: .letters) == nil ? "#" : initial
-        }
-        let sections = songsByInitial.keys.sorted().map { initial in
-            CPListSection(
-                items: (songsByInitial[initial] ?? []).map(makeItem),
-                header: initial,
-                sectionIndexTitle: initial
-            )
-        }
-        let template = CPListTemplate(title: "Songs", sections: sections)
+        let template = list(title: "Songs", library: .songs(Catalog.bundled.songs, alphabetic: true))
         template.tabTitle = "Songs"
         template.tabImage = UIImage(systemName: "music.note.list")
         template.emptyViewTitleVariants = ["No Songs"]
@@ -49,35 +50,79 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
 
     private func makeAlbumList() -> CPListTemplate {
-        let catalog = Catalog.bundled
-        let items = catalog.albums.map { album in
-            var detail = Counts.songs(album.songIDs.count)
-            if let year = album.releaseYear {
-                detail = "\(year) · \(detail)"
-            }
-            let item = CPListItem(text: album.title, detailText: detail, image: nil)
-            showArtwork(album.appleMusicID, on: item)
-            item.accessoryType = .disclosureIndicator
-            item.handler = { [weak self] _, completion in
-                self?.showSongs(on: album)
-                completion()
-            }
-            return item
-        }
-        let template = CPListTemplate(title: "Albums", sections: [CPListSection(items: items)])
+        let template = list(title: "Albums", library: .albums(Catalog.bundled.albums))
         template.tabTitle = "Albums"
         template.tabImage = UIImage(systemName: "square.stack")
         return template
     }
 
     private func showSongs(on album: Album) {
-        let songs = Catalog.bundled.songs(on: album)
-        let template = CPListTemplate(title: album.title, sections: [CPListSection(items: songs.map(makeItem))])
+        let template = list(title: album.title, library: .songs(Catalog.bundled.songs(on: album), alphabetic: false))
         interfaceController?.pushTemplate(template, animated: true, completion: nil)
     }
 
+    private func list(title: String, library: Library) -> CPListTemplate {
+        let template = CPListTemplate(title: title, sections: [])
+        showPage(0, of: library, in: template)
+        return template
+    }
+
+    private func showPage(_ index: Int, of library: Library, in template: CPListTemplate) {
+        let page = CatalogPage(itemCount: library.count, maximumItemCount: CPListTemplate.maximumItemCount, index: index)
+        var items: [CPListItem]
+        switch library {
+        case .songs(let songs, let alphabetic):
+            let visible = Array(songs[page.range])
+            if alphabetic, page.previous == nil, page.next == nil {
+                let groups = Dictionary(grouping: visible) { song in
+                    let initial = song.title.prefix(1).uppercased()
+                    return initial.rangeOfCharacter(from: .letters) == nil ? "#" : initial
+                }
+                if groups.count <= CPListTemplate.maximumSectionCount {
+                    template.updateSections(
+                        groups.keys.sorted().map { initial in
+                            CPListSection(items: (groups[initial] ?? []).map(makeItem), header: initial, sectionIndexTitle: initial)
+                        })
+                    return
+                }
+            }
+            items = visible.map(makeItem)
+        case .albums(let albums):
+            items = albums[page.range].map(makeItem)
+        }
+
+        func pageItem(_ title: String, index: Int) -> CPListItem {
+            let item = CPListItem(text: title, detailText: nil)
+            item.handler = { [weak self, weak template] _, completion in
+                if let template {
+                    self?.showPage(index, of: library, in: template)
+                }
+                completion()
+            }
+            return item
+        }
+        if let previous = page.previous {
+            items.insert(pageItem("Previous Page", index: previous), at: 0)
+        }
+        if let next = page.next {
+            items.append(pageItem("Next Page", index: next))
+        }
+        template.updateSections([CPListSection(items: items)])
+    }
+
+    private func makeItem(for album: Album) -> CPListItem {
+        let item = CPListItem(text: album.title, detailText: LibraryRoute.album(album).summary(in: .bundled), image: nil)
+        showArtwork(album.appleMusicID, on: item)
+        item.accessoryType = .disclosureIndicator
+        item.handler = { [weak self] _, completion in
+            self?.showSongs(on: album)
+            completion()
+        }
+        return item
+    }
+
     private func makeItem(for song: Song) -> CPListItem {
-        let item = CPListItem(text: song.title, detailText: song.albumTitle, image: nil)
+        let item = CPListItem(text: song.title, detailText: song.artistAndAlbum, image: nil)
         showArtwork(song.albumAppleMusicID, on: item)
         item.handler = { [weak self] _, completion in
             self?.play(song)

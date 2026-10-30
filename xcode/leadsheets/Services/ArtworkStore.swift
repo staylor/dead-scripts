@@ -15,6 +15,8 @@ final class ArtworkStore {
     private var images: [URL: CGImage] = [:]
     @ObservationIgnored private var downloads: [URL: Task<CGImage?, Never>] = [:]
     @ObservationIgnored private var loading: Task<Void, Never>?
+    @ObservationIgnored private var completedRequests: Set<ArtworkRequest> = []
+    private let catalogRequests = Catalog.bundled.artworkRequests
 
     private init() {}
 
@@ -26,13 +28,14 @@ final class ArtworkStore {
         artwork(for: appleMusicID)?.url(width: width, height: height)
     }
 
-    /// Asks for Apple Music access the first time, then fetches the library's artwork unless it already has it.
+    /// Successful batches, including IDs without artwork, are not fetched again. Failed batches can retry.
     func load() async {
-        guard artworks.isEmpty, !Self.isDisabled else { return }
+        let requests = catalogRequests.filter { !completedRequests.contains($0) }
+        guard !requests.isEmpty, !Self.isDisabled else { return }
         let loading =
             self.loading
             ?? Task {
-                await fetch(from: .bundled)
+                await fetch(requests)
                 self.loading = nil
             }
         self.loading = loading
@@ -69,28 +72,30 @@ final class ArtworkStore {
         return image
     }
 
-    private func fetch(from catalog: Catalog) async {
+    private func fetch(_ requests: [ArtworkRequest]) async {
         guard await MusicAuthorization.request() == .authorized else { return }
-        do {
-            let albums = try await MusicCatalogResourceRequest<MusicKit.Album>(
-                matching: \.id,
-                memberOf: catalog.albumAppleMusicIDs.map { MusicItemID($0) }
-            ).response().items
-            let artists = try await MusicCatalogResourceRequest<MusicKit.Artist>(
-                matching: \.id,
-                memberOf: catalog.artistAppleMusicIDs.map { MusicItemID($0) }
-            ).response().items
-
-            var artworks: [String: MusicKit.Artwork] = [:]
-            for album in albums {
-                artworks[album.id.rawValue] = album.artwork
+        for request in requests {
+            do {
+                switch request.kind {
+                case .albums:
+                    let albums = try await MusicCatalogResourceRequest<MusicKit.Album>(
+                        matching: \.id, memberOf: request.ids.map { MusicItemID($0) }
+                    ).response().items
+                    for album in albums {
+                        artworks[album.id.rawValue] = album.artwork
+                    }
+                case .artists:
+                    let artists = try await MusicCatalogResourceRequest<MusicKit.Artist>(
+                        matching: \.id, memberOf: request.ids.map { MusicItemID($0) }
+                    ).response().items
+                    for artist in artists {
+                        artworks[artist.id.rawValue] = artist.artwork
+                    }
+                }
+                completedRequests.insert(request)
+            } catch {
+                Logger.music.error("Couldn't load artwork: \(error.localizedDescription, privacy: .public)")
             }
-            for artist in artists {
-                artworks[artist.id.rawValue] = artist.artwork
-            }
-            self.artworks = artworks
-        } catch {
-            Logger.music.error("Couldn't load artwork: \(error.localizedDescription, privacy: .public)")
         }
     }
 

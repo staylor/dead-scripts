@@ -64,14 +64,24 @@ public struct Catalog: Sendable {
         var songs: [Song] = []
         var albums: [Album] = []
         var artists: [Artist] = []
+        var seenArtistIDs: Set<Artist.ID> = []
+        var seenAlbumIDs: Set<Album.ID> = []
         var seenSongIDs: Set<Song.ID> = []
 
         for seedArtist in seed.artists {
             let artistID = seedArtist.slug ?? Self.slug(for: seedArtist.name)
+            guard seenArtistIDs.insert(artistID).inserted else {
+                problems.append("Artist \(artistID) appears more than once")
+                continue
+            }
             var artistAlbumIDs: [Album.ID] = []
             var artistSongIDs: [Song.ID] = []
 
             for seedAlbum in seedArtist.albums ?? [] {
+                guard seenAlbumIDs.insert(seedAlbum.slug).inserted else {
+                    problems.append("Album \(seedAlbum.slug) appears more than once")
+                    continue
+                }
                 let albumAppleMusicID = Self.nonEmpty(seedAlbum.appleMusicId)
                 var albumSongs: [Song] = []
                 for seedSong in seedAlbum.songs ?? [] {
@@ -160,21 +170,21 @@ public struct Catalog: Sendable {
         }
 
         self.songs = songs
-        self.albums = albums.sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
-        self.artists = artists.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+        self.albums = albums.sorted {
+            let order = $0.title.localizedStandardCompare($1.title)
+            return order == .orderedSame
+                ? Self.nameOrder($0.artistName, $0.id, $1.artistName, $1.id)
+                : order == .orderedAscending
+        }
+        self.artists = artists.sorted { Self.nameOrder($0.name, $0.id, $1.name, $1.id) }
         self.singers = songIDsBySinger.keys.compactMap { people[$0] }
-            .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+            .sorted { Self.nameOrder($0.name, $0.id, $1.name, $1.id) }
         self.problems = problems
         self.songsByID = Dictionary(uniqueKeysWithValues: songs.map { ($0.id, $0) })
         self.albumsByID = Dictionary(uniqueKeysWithValues: albums.map { ($0.id, $0) })
         self.artistsByID = Dictionary(uniqueKeysWithValues: artists.map { ($0.id, $0) })
         self.songIDsBySinger = songIDsBySinger
         self.songIDsByPerson = songIDsByPerson
-    }
-
-    /// The artist with the most songs, whose name lists can leave out.
-    public var mainArtist: Artist? {
-        artists.max { $0.songIDs.count < $1.songIDs.count }
     }
 
     // MARK: - Lookup
@@ -215,7 +225,7 @@ public struct Catalog: Sendable {
 
     /// The Apple Music albums whose covers the library shows.
     public var albumAppleMusicIDs: [String] {
-        albums.compactMap(\.appleMusicID)
+        Set(albums.compactMap(\.appleMusicID)).sorted()
     }
 
     /// The Apple Music artists whose photos the library shows, for artists, singers and writers.
@@ -227,7 +237,15 @@ public struct Catalog: Sendable {
     // MARK: - Helpers
 
     static let titleOrder: @Sendable (Song, Song) -> Bool = {
-        $0.title.localizedStandardCompare($1.title) == .orderedAscending
+        let order = $0.title.localizedStandardCompare($1.title)
+        return order == .orderedSame
+            ? nameOrder($0.artistName, $0.id, $1.artistName, $1.id)
+            : order == .orderedAscending
+    }
+
+    static func nameOrder(_ lhsName: String, _ lhsID: String, _ rhsName: String, _ rhsID: String) -> Bool {
+        let order = lhsName.localizedStandardCompare(rhsName)
+        return order == .orderedSame ? lhsID < rhsID : order == .orderedAscending
     }
 
     static func nonEmpty(_ id: String?) -> String? {

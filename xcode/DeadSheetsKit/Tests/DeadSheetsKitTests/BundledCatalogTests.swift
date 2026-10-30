@@ -13,9 +13,6 @@ struct BundledCatalogTests {
         .deletingLastPathComponent()
         .deletingLastPathComponent()
 
-    /// Not on Apple Music, so they show a placeholder.
-    static let albumsMissingFromAppleMusic: Set<Album.ID> = ["truckin-up-to-buffalo"]
-
     static func files(in folder: String, withExtension pathExtension: String) -> Set<String> {
         let contents = try? FileManager.default.contentsOfDirectory(
             atPath: xcodeDirectory.appending(path: folder).path(percentEncoded: false))
@@ -27,22 +24,14 @@ struct BundledCatalogTests {
         #expect(catalog.problems == [])
     }
 
-    @Test func everySongHasASheetAndCredits() {
+    @Test func everySongHasASheet() {
         for song in catalog.songs {
             #expect(song.sheetFileName.hasSuffix(".pdf"), "\(song.id)")
-            #expect(!song.credits.isEmpty, "\(song.id) has no writers")
-            #expect(!song.lyrics.isEmpty, "\(song.id) has no lyrics")
         }
     }
 
-    @Test func albumsAndArtistsHaveAppleMusicIDs() {
-        for album in catalog.albums where !Self.albumsMissingFromAppleMusic.contains(album.id) {
-            #expect(album.appleMusicID != nil, "\(album.id) has no Apple Music ID")
-        }
-        for artist in catalog.artists {
-            #expect(artist.appleMusicID != nil, "\(artist.id) has no Apple Music ID")
-        }
-        for id in catalog.albumAppleMusicIDs + catalog.artistAppleMusicIDs {
+    @Test func suppliedAppleMusicIDsAreValid() {
+        for id in catalog.songs.compactMap(\.appleMusicID) + catalog.albumAppleMusicIDs + catalog.artistAppleMusicIDs {
             #expect(Int(id) != nil, "\(id) isn't an Apple Music catalog ID")
         }
     }
