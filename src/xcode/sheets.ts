@@ -16,7 +16,7 @@ interface SheetSong {
 export async function syncSheets(
   songs: SheetSong[],
   {
-    scoresDir = ICLOUD_DIR,
+    scoresDir = process.env.XCODE_SCORES_DIR || ICLOUD_DIR,
     sheetsDir = path.join(process.cwd(), 'xcode', 'Sheets'),
   }: { scoresDir?: string; sheetsDir?: string } = {}
 ) {
@@ -24,15 +24,30 @@ export async function syncSheets(
     await readFile(path.join(sheetsDir, 'schema.json'), 'utf8')
   );
 
-  const problems = songs.flatMap((song) => {
+  const problems: string[] = [];
+  const destinations = new Map<string, { slug: string; name: string; source: string }>();
+  for (const song of songs) {
     if (!song.fileName) {
-      return [`${song.slug} has no fileName`];
+      problems.push(`${song.slug} has no fileName`);
+      continue;
+    }
+    if (path.basename(song.fileName) !== song.fileName || !song.fileName.endsWith('.pdf')) {
+      problems.push(`${song.slug} needs a PDF filename without directories`);
+      continue;
     }
     if (!schema[song.slug]) {
-      return [`${song.slug} has no score in Sheets/schema.json`];
+      problems.push(`${song.slug} has no score in Sheets/schema.json`);
+      continue;
     }
-    return [];
-  });
+    const source = path.resolve(scoresDir, schema[song.slug]);
+    const key = song.fileName.normalize().toLowerCase();
+    const previous = destinations.get(key);
+    if (previous && (previous.source !== source || previous.name !== song.fileName)) {
+      problems.push(`${song.slug} and ${previous.slug} would both write ${song.fileName}`);
+    } else {
+      destinations.set(key, { slug: song.slug, name: song.fileName, source });
+    }
+  }
   if (problems.length > 0) {
     throw new Error(`Can't update the lead sheets:\n${problems.join('\n')}`);
   }
@@ -42,7 +57,7 @@ export async function syncSheets(
   const changed: string[] = [];
 
   for (const song of songs) {
-    const score = await readFile(path.join(scoresDir, schema[song.slug]));
+    const score = await readFile(path.resolve(scoresDir, schema[song.slug]));
     const destination = path.join(pdfsDir, song.fileName!);
     const current = await readFile(destination).catch(() => undefined);
     if (!current?.equals(score)) {

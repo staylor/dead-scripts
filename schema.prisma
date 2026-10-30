@@ -10,7 +10,7 @@ generator client {
 
 model Song {
   id           Int      @id @default(autoincrement())
-  name         String   @unique
+  name         String
   slug         String   @unique
   lyrics       String?
   fileName     String?
@@ -23,33 +23,41 @@ model Song {
   singerId     Int?
   writers      Writer[]
   appleMusicId String?
+
+  @@index([name])
 }
 
 model Album {
   id           Int     @id @default(autoincrement())
-  name         String  @unique
+  name         String
   slug         String  @unique
   releaseYear  Int?
   appleMusicId String?
   artist       Artist? @relation(fields: [artistId], references: [id])
   artistId     Int?
   songs        Song[]
+
+  @@index([name])
 }
 
 model Artist {
   id           Int     @id @default(autoincrement())
-  name         String  @unique
+  name         String
   slug         String  @unique
   appleMusicId String?
   albums       Album[]
+
+  @@index([name])
 }
 
 model Singer {
   id           Int     @id @default(autoincrement())
-  name         String  @unique
+  name         String
   slug         String  @unique
   appleMusicId String?
   songs        Song[]
+
+  @@index([name])
 }
 
 model Writer {

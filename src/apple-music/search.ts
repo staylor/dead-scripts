@@ -3,6 +3,7 @@ import dotenv from '@dotenvx/dotenvx';
 import { PrismaClient } from '~/prisma/client/client';
 
 import { generateToken } from './jwt';
+import { duplicateNames, normalizedName, sameName } from './matching';
 
 dotenv.config();
 
@@ -28,8 +29,14 @@ async function search(type: 'albums' | 'artists', term: string): Promise<Resourc
   return results[type]?.data ?? [];
 }
 
-const sameName = (a: string, b: string) =>
-  a.replaceAll('’', "'").toLowerCase() === b.replaceAll('’', "'").toLowerCase();
+function needsDisambiguation(name: string, names: Set<string>): boolean {
+  if (!names.has(normalizedName(name))) return false;
+  missed += 1;
+  console.log(
+    `🚫 ${name}: multiple catalog entries share this name; set the Apple Music ID manually.`
+  );
+  return true;
+}
 
 async function lookUp(
   name: string,
@@ -53,12 +60,18 @@ async function lookUp(
   }
 }
 
+const artists = await prisma.artist.findMany();
+const singers = await prisma.singer.findMany();
+const ambiguousArtists = duplicateNames(artists);
+const ambiguousSingers = duplicateNames(singers);
+
 const albums = await prisma.album.findMany({
   where: { appleMusicId: null },
   include: { artist: true },
 });
 for (const album of albums) {
   const artistName = album.artist?.name;
+  if (artistName && needsDisambiguation(artistName, ambiguousArtists)) continue;
   await lookUp(
     album.name,
     await search('albums', [artistName, album.name].filter(Boolean).join(' ')),
@@ -68,7 +81,8 @@ for (const album of albums) {
   );
 }
 
-for (const artist of await prisma.artist.findMany({ where: { appleMusicId: null } })) {
+for (const artist of artists) {
+  if (artist.appleMusicId || needsDisambiguation(artist.name, ambiguousArtists)) continue;
   await lookUp(
     artist.name,
     await search('artists', artist.name),
@@ -77,7 +91,8 @@ for (const artist of await prisma.artist.findMany({ where: { appleMusicId: null 
   );
 }
 
-for (const singer of await prisma.singer.findMany({ where: { appleMusicId: null } })) {
+for (const singer of singers) {
+  if (singer.appleMusicId || needsDisambiguation(singer.name, ambiguousSingers)) continue;
   await lookUp(
     singer.name,
     await search('artists', singer.name),

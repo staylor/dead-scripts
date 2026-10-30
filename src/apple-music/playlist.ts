@@ -1,24 +1,18 @@
-import fs from 'node:fs';
-
 import dotenv from '@dotenvx/dotenvx';
 
 import { PrismaClient } from '~/prisma/client/client';
-import { readJSON, saveJSON } from '~/utils';
+import { saveJSON } from '~/utils';
 
 import { generateToken } from './jwt';
+import { matchRecording } from './matching';
 
 dotenv.config();
 
 const CACHED_FILE = '.cache/playlist.json';
 
 async function fetchPlaylist() {
-  // if (fs.existsSync(CACHED_FILE)) {
-  //   return readJSON(CACHED_FILE);
-  // }
-
-  const REAL_BOOK_ID = 'pl.u-xrY5WFkedj2p';
-
-  const playlistUrl = `https://api.music.apple.com/v1/catalog/us/playlists/${encodeURIComponent(REAL_BOOK_ID)}?include=tracks`;
+  const playlistID = process.argv[2] ?? 'pl.u-xrY5WFkedj2p';
+  const playlistUrl = `https://api.music.apple.com/v1/catalog/us/playlists/${encodeURIComponent(playlistID)}?include=tracks`;
 
   return fetch(playlistUrl, {
     headers: {
@@ -37,14 +31,36 @@ async function fetchPlaylist() {
 
 const prisma = new PrismaClient();
 const tracks = await fetchPlaylist();
+const recordings = await prisma.song.findMany({
+  select: {
+    id: true,
+    name: true,
+    album: { select: { name: true, artist: { select: { name: true } } } },
+  },
+});
 
-async function updateSong(id: string, name: string) {
-  const song = await prisma.song.update({ where: { name }, data: { appleMusicId: id } });
-
-  console.log(id, name, song ? '✅' : '🚫');
+async function updateSong(
+  id: string,
+  name: string,
+  attributes: { artistName: string; albumName: string }
+) {
+  const song = matchRecording(recordings, { ...attributes, name });
+  if (!song) {
+    console.warn(
+      `🚫 ${attributes.artistName} · ${attributes.albumName} · ${name}: no unique match`
+    );
+    return;
+  }
+  await prisma.song.update({ where: { id: song.id }, data: { appleMusicId: id } });
+  console.log(id, name, '✅');
 }
 
 for (const track of tracks) {
+  if (track.type !== 'songs') continue;
+  if (track.attributes.artistName !== 'Grateful Dead') {
+    await updateSong(track.id, track.attributes.name, track.attributes);
+    continue;
+  }
   let name = track.attributes.name;
   if (name.match(/[([]/)) {
     name = name.split(/[([]/)[0].trim();
@@ -59,10 +75,10 @@ for (const track of tracks) {
   } else if (name === "Not Fade Away / Goin' Down the Road Feeling Bad") {
     const names = name.split(' / ');
     for (const title of names) {
-      await updateSong(track.id, title);
+      await updateSong(track.id, title, track.attributes);
     }
     continue;
   }
 
-  await updateSong(track.id, name);
+  await updateSong(track.id, name, track.attributes);
 }
