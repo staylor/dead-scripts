@@ -26,6 +26,17 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
+    func testTheLibraryTitleStaysAboveTheCategoryBarsBlur() {
+        let app = launch()
+        let title = app.navigationBars["Songs"].staticTexts["Songs"]
+        XCTAssertTrue(title.waitForExistence(timeout: 10))
+        if #unavailable(iOS 27) {
+            XCTAssertLessThanOrEqual(title.frame.maxY, app.buttons["Settings"].frame.maxY)
+        }
+        attachScreenshot("Library title", of: app)
+    }
+
+    @MainActor
     func testSearchFiltersSongs() {
         let app = launch()
         search(for: "ripple", in: app)

@@ -145,7 +145,16 @@ jobs:
           PLATFORM: ${{ matrix.platform }}
           BUILD: ${{ matrix.build }}
         run: |
+          set -o pipefail
           xcodebuild -downloadPlatform "$PLATFORM" -buildVersion "$BUILD" -architectureVariant arm64
+          # Deferred cleanup of stale runtime registrations can unmount the active simulator mid-test.
+          # Keep the assets shared with their usable replacements, then remount those replacements.
+          xcrun simctl runtime scan-and-mount
+          xcrun simctl runtime list --json | jq -r '.[] | select(.state == "Unusable") | .identifier' |
+            while IFS= read -r runtime; do
+              xcrun simctl runtime delete "$runtime" --keep-asset
+            done
+          xcrun simctl runtime scan-and-mount
           # A simulator that boots before its runtime's dyld shared cache is built stays several times slower.
           xcrun simctl runtime dyld_shared_cache update --all
       - name: Pick a simulator

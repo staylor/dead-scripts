@@ -107,6 +107,9 @@ struct SplitRootView: View {
         NavigationStack(path: $path) {
             LibraryList(category: category, searchText: searchText, songFilter: songFilter, selection: songSelection)
                 .navigationTitle(category == .songs ? songFilter.title : category.title)
+                #if os(iOS)
+            .navigationBarTitleDisplayMode(libraryTitleDisplayMode)
+                #endif
                 .navigationDestination(for: LibraryRoute.self) { route in
                     if case .setlist(let setlistID) = route {
                         SetlistView(setlistID: setlistID, selection: songSelection)
@@ -219,6 +222,17 @@ struct SplitRootView: View {
         compactColumn = .detail
         return true
     }
+
+    #if os(iOS)
+    private var libraryTitleDisplayMode: NavigationBarItem.TitleDisplayMode {
+        if #available(iOS 27, *) {
+            .automatic
+        } else {
+            // On iOS 26 the category bar’s scroll-edge effect blurs the large title.
+            .inline
+        }
+    }
+    #endif
 
     private var searchPlacement: SearchFieldPlacement {
         #if os(macOS)
