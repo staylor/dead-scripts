@@ -9,7 +9,6 @@ struct SongRow: View {
             ArtworkThumbnail(appleMusicID: song.albumAppleMusicID, placeholder: "music.note")
         }
     }
-
 }
 
 /// An album, artist, singer or writers.

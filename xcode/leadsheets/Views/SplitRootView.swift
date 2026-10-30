@@ -116,7 +116,7 @@ struct SplitRootView: View {
                 }
                 .searchable(
                     text: $searchText, placement: searchPlacement,
-                    prompt: category == .setlists ? "Setlist names" : "Titles, albums, lyrics"
+                    prompt: category == .setlists ? "Setlist names" : "Titles, artists, albums, lyrics"
                 )
                 .safeAreaBar(edge: .top) {
                     CategoryPicker(selection: $category)

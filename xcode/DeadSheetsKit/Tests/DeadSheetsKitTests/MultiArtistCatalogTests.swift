@@ -34,6 +34,14 @@ struct MultiArtistCatalogTests {
         #expect(catalog.songs(matching: " \n ").map(\.id) == catalog.songs.map(\.id))
     }
 
+    @Test func titleAndArtistMatchesRankAboveLyricMatches() throws {
+        let catalog = try makeCatalog(seeds: Self.rankingSeeds)
+        #expect(catalog.songs(matching: "harbor home").map(\.id) == ["harbor-home", "northbound-lanterns", "harbor-away"])
+        #expect(catalog.songs(matching: "home").map(\.id) == ["harbor-home", "harbor-away", "northbound-lanterns"])
+        #expect(catalog.songs(matching: "take me home").map(\.id) == ["harbor-away"])
+        #expect(catalog.covers(matching: "harbor home").map(\.id) == ["northbound-lanterns", "harbor-away"])
+    }
+
     @Test func lyricsCreditsAndAppleMusicAreOptional() throws {
         let catalog = try makeCatalog()
         let song = try #require(catalog.song(id: "northbound-home"))
@@ -80,6 +88,34 @@ struct MultiArtistCatalogTests {
     private func makeCatalog(seeds: String = Self.seeds) throws -> Catalog {
         try Catalog(seedData: Data(seeds.utf8))
     }
+
+    private static let rankingSeeds = """
+        {
+          "artists": [
+            {
+              "name": "Harbor Trio", "slug": "harbor",
+              "albums": [{
+                "name": "Tides", "slug": "harbor-tides",
+                "songs": [
+                  {"name": "Away", "slug": "harbor-away", "fileName": "Away.pdf", "lyrics": "Take me home tonight", "songType": "cover"},
+                  {"name": "Home", "slug": "harbor-home", "fileName": "Home.pdf"}
+                ]
+              }]
+            },
+            {
+              "name": "Northbound", "slug": "northbound",
+              "albums": [{
+                "name": "Lights", "slug": "northbound-lights",
+                "songs": [
+                  {"name": "Lanterns", "slug": "northbound-lanterns", "fileName": "Lanterns.pdf", "lyrics": "The lights of the harbor home", "songType": "cover"}
+                ]
+              }]
+            }
+          ],
+          "singers": [],
+          "writers": []
+        }
+        """
 
     private static let seeds = """
         {
