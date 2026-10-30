@@ -1,0 +1,43 @@
+name: Catalog
+
+on:
+  pull_request:
+    paths:
+      [
+        'src/**',
+        'schema.prisma',
+        'prisma.config.ts',
+        'db/migrations/**',
+        'package.json',
+        'pnpm-lock.yaml',
+        '.github/workflows/catalog.yml',
+      ]
+  push:
+    branches: [main]
+    paths:
+      [
+        'src/**',
+        'schema.prisma',
+        'prisma.config.ts',
+        'db/migrations/**',
+        'package.json',
+        'pnpm-lock.yaml',
+        '.github/workflows/catalog.yml',
+      ]
+
+jobs:
+  test:
+    name: Test catalog tooling
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test

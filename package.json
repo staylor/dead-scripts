@@ -6,6 +6,7 @@
   "packageManager": "pnpm@10.34.5",
   "scripts": {
     "postinstall": "prisma generate",
+    "test": "tsx --test src/**/*.test.ts",
     "lyrics": "tsx src/lyrics/generate.ts",
     "real-book": "tsx src/real-book/generate.ts",
     "xcode": "tsx src/xcode/generate.ts",
