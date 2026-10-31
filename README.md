@@ -34,16 +34,20 @@ The main advantages to programmatically creating this book are the following:
 - Page layout is determined by a schema written in JSON, PDFs are combined using `pdf-lib`
 - TODO: page numbers can be added to existing PDFs programmatically, so you never have to consider managing these manually
 
+## Database
+
+The catalog lives in `dev.db`, a SQLite database at the repository root that Git ignores. Edit it with `pnpm exec prisma studio`. `pnpm xcode` exports it to the app's `seeds.json`, which is committed and is also the database's seed: `pnpm exec prisma migrate reset` rebuilds `dev.db` from the last export, so run `pnpm xcode` first to keep newer edits. `pnpm exec prisma db seed` only fills an empty database.
+
+The database uses globally unique slugs, not unique display names. Different artists can have songs called “Home” or albums called “Greatest Hits”; give each recording and release a distinct slug and preserve existing slugs. Back up `dev.db` before applying schema changes with `pnpm exec prisma migrate deploy`, then regenerate the client with `pnpm exec prisma generate`. The multi-artist migration changes only name indexes, not existing rows or IDs.
+
 ## `pnpm xcode`
 
 Exports all artists, albums and songs in the database to the Dead Sheets app in [`xcode/`](xcode/README.md): `seeds.json` and the score PDFs listed in `xcode/Sheets/schema.json`. The output is committed, so only run it when songs or scores change. `pnpm apple-music` looks up the Apple Music IDs of albums, artists and singers that don't have one, and lists candidates for those it can't match. The app shows their artwork from Apple Music, so none of it is bundled. Apple Music IDs are optional; ambiguous artist or singer names need an ID set manually.
 
-The database uses globally unique slugs, not unique display names. Different artists can have songs called “Home” or albums called “Greatest Hits”; give each recording and release a distinct slug and preserve existing slugs. After backing up the database, apply schema changes with `pnpm exec prisma migrate deploy` and regenerate the client with `pnpm exec prisma generate`. The multi-artist migration changes only name indexes, not existing rows or IDs.
-
 Set `XCODE_SCORES_DIR=/path/to/scores` to export scores from another root. `xcode/Sheets/schema.json` maps song slugs to paths under that root, so each artist can have its own folder. The existing Grateful Dead scores folder remains the default. Output PDF filenames must be distinct, including case, unless recordings explicitly share the same source score. Conflicting filenames are rejected before any score is written.
 
-The lyrics scraper, Real Book generator and legacy seed script remain specific to the original Grateful Dead collection. They are not required to add other artists to the database or export the app.
+The lyrics scraper and Real Book generator remain specific to the original Grateful Dead collection. They are not required to add other artists to the database or export the app.
 
 ## Tests
 
-`pnpm test` (Node.js 24) checks database migrations, recording matching and score export using temporary data. It does not use your database, iCloud files or Apple Music credentials.
+`pnpm test` (Node.js 24) checks database migrations, recording matching and score export using temporary data, and that the committed `seeds.json` restores into a database that exports it unchanged. It does not use your database, iCloud files or Apple Music credentials.
