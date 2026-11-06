@@ -60,14 +60,14 @@ xcodebuild test -project leadsheets.xcodeproj -scheme leadsheets \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.5'
 ```
 
-CI (`.github/workflows/xcode.yml`) archives macOS, iOS + watchOS and tvOS with Xcode 27.1, as the TestFlight upload does but unsigned, and fails on any warning. It runs the package tests, the UI tests on iPhone and Apple TV simulators with 27 and 26.5, and the format check, on every change under `xcode/`. On `main`, it then uploads the apps to TestFlight. Changes to the workflows also run `actionlint`.
+CI (`.github/workflows/xcode.yml`) archives macOS, iOS + watchOS and tvOS with Xcode 27.1, as the TestFlight upload does but unsigned, and fails on any warning. It runs the package tests, the UI tests on iPhone and Apple TV simulators with 27 and 26.5, and the format check, on every change under `xcode/` other than Markdown. On `main`, it then uploads the apps to TestFlight. Changes to the workflows run `actionlint`; to run the Xcode jobs on a change to their workflow, run it manually on the branch.
 
 ## Releasing
 
-Every merge to `main` that changes `xcode/` uploads TestFlight builds for iOS (with the watch app), macOS and tvOS once CI passes. To upload without a change, for example when the 90-day builds expire, run the Xcode workflow from the Actions tab.
+Every merge to `main` that changes `xcode/`, other than its Markdown, uploads TestFlight builds for iOS (with the watch app), macOS and tvOS once CI passes. To upload without a change, for example when the 90-day builds expire, run the Xcode workflow from the Actions tab.
 
 - The `testflight` environment, which only deploys from `main`, holds an App Store Connect team key with the Admin role: `ASC_KEY` (the contents of the `.p8`), `ASC_KEY_ID` and `ASC_ISSUER_ID`.
-- Archives are signed for development, which needs a registered device for each platform. CI has its own development certificate, `DEVELOPMENT_CERTIFICATE` (a base64 `.p12`) and `DEVELOPMENT_CERTIFICATE_PASSWORD`, which expires on 2027-10-26. To replace it, export a new Apple Development certificate as a `.p12` (Xcode → Settings → Accounts → Manage Certificates) and update both secrets. Until then, each job creates a certificate of its own.
+- Archives are signed for development, which needs a registered device for each platform. CI has its own development certificate, `DEVELOPMENT_CERTIFICATE` (a base64 `.p12`) and `DEVELOPMENT_CERTIFICATE_PASSWORD`, which expires on 2027-10-26, after which the TestFlight jobs fail. To replace it, export a new Apple Development certificate as a `.p12` (Xcode → Settings → Accounts → Manage Certificates) and update both secrets.
 - Uploads are signed with cloud-managed distribution certificates, and Xcode gives each one the next build number for its platform (`ExportOptions.plist`), so only the version needs bumping: `xcrun agvtool new-marketing-version 1.1`.
 - Before the first TestFlight build, deploy the `SongSelection` record type to Production in the CloudKit Console. Production builds can't create it.
 - In App Store Connect, set App Privacy to "Data Not Collected", and use [`PRIVACY.md`](PRIVACY.md) as the privacy policy URL.
