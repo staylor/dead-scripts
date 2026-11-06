@@ -6,6 +6,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 # A push to a pull request cancels its older run, but a run on main that has started is never cut short by the next merge.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -32,17 +35,21 @@ jobs:
           base=HEAD^1
           if [ "$GITHUB_EVENT_NAME" = push ]; then
             base=$BEFORE
+            # A push can add several commits, and the checkout has only the last two.
+            git fetch --quiet --depth=1 origin "$base" || true
           fi
+          # Documentation and this workflow don't change the app, so changing only them skips the Xcode jobs.
+          # To test a workflow change, run the workflow manually on its branch.
           if [ "$GITHUB_EVENT_NAME" = workflow_dispatch ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
             echo "xcode=true" >> "$GITHUB_OUTPUT"
-          elif git diff --name-only "$base" HEAD | grep -qE '^(xcode/|\.github/workflows/xcode\.yml$)'; then
+          elif git diff --name-only "$base" HEAD | grep '^xcode/' | grep -qv '\.md$'; then
             echo "xcode=true" >> "$GITHUB_OUTPUT"
           else
             echo "xcode=false" >> "$GITHUB_OUTPUT"
           fi
 
-  # The check that branch rules require. Jobs skipped because nothing under xcode/ changed count as passing,
-  # so this has to run, and fail, when a job it needs fails or the run is cancelled. The step needs always() too,
+  # The check for branch rules to require. Jobs skipped because nothing the app uses changed count as passing, so
+  # this has to run, and fail, when a job it needs fails or the run is cancelled. The step needs always() too,
   # because a step's condition implicitly includes success(), which is false once the run is cancelled.
   ci:
     name: CI
@@ -163,26 +170,56 @@ jobs:
           PLATFORM: ${{ matrix.platform }}
           BUILD: ${{ matrix.build }}
           DEVICE: ${{ matrix.device }}
+        # Xcode can leave an older runtime's simulators out of its destinations, as Xcode 27.1 does with tvOS 27.0
+        # once tvOS 27.2 is installed, so this uses the newest runtime for the device, adding the device to it when
+        # it's missing. Runtimes made for one new model, such as iPhone Duo's, support only that model.
         run: |
-          runtimes=$(xcrun simctl list runtimes available --json | jq -c --arg platform "$PLATFORM" --arg build "$BUILD" '
-            [.runtimes[] | select(.platform == $platform and ($build == "" or .buildversion == $build))]
-            | sort_by(.version | split(".") | map(tonumber)) | map(.identifier)')
-          udid=$(xcrun simctl list devices available --json | jq -r --argjson runtimes "$runtimes" --arg device "$DEVICE" '
-            [.devices as $devices | $runtimes[] | $devices[.][]? | select(.name == $device)] | last | .udid // empty')
-          if [ -z "$udid" ]; then
-            udid=$(xcrun simctl create "$DEVICE" "$DEVICE" "$(jq -r last <<< "$runtimes")")
+          runtime=$(xcrun simctl list runtimes available --json |
+            jq -r --arg platform "$PLATFORM" --arg build "$BUILD" --arg device "$DEVICE" '
+              [.runtimes[] | select(.platform == $platform and ($build == "" or .buildversion == $build))
+                | select(any(.supportedDeviceTypes[]?; .name == $device))]
+              | sort_by(.version | split(".") | map(tonumber)) | last | .identifier // empty')
+          if [ -z "$runtime" ]; then
+            echo "::error::No $PLATFORM ${BUILD:-runtime} supports $DEVICE."
+            exit 1
           fi
-          echo "udid=$udid" >> "$GITHUB_OUTPUT"
+          udid=$(xcrun simctl list devices available --json | jq -r --arg runtime "$runtime" --arg device "$DEVICE" '
+            [.devices[$runtime][]? | select(.name == $device)] | last | .udid // empty')
+          if [ -z "$udid" ]; then
+            udid=$(xcrun simctl create "$DEVICE" "$DEVICE" "$runtime")
+          fi
+          echo "destination=id=$udid" >> "$GITHUB_OUTPUT"
           xcrun simctl list devices available | grep "$udid"
-          # The test runner can stall while a cold simulator boots, and then never starts.
-          xcrun simctl bootstatus "$udid" -b
+          # The test runner can stall while a cold simulator boots, and then never starts. The boot itself can also hang
+          # at "Waiting on BackBoard": CI boots take under 5 minutes, so give up after 10 and boot the erased device again.
+          boot() {
+            xcrun simctl bootstatus "$udid" -b &
+            local pid=$!
+            SECONDS=0
+            while kill -0 "$pid" 2>/dev/null; do
+              if [ "$SECONDS" -ge 600 ]; then
+                kill "$pid"
+                return 1
+              fi
+              sleep 5
+            done
+            wait "$pid"
+          }
+          if ! boot; then
+            echo "::warning::The simulator didn't finish booting in 10 minutes, so it's being erased and booted again."
+            xcrun simctl shutdown "$udid" || true
+            xcrun simctl erase "$udid"
+            boot
+          fi
       - name: Test
+        env:
+          DESTINATION: ${{ steps.simulator.outputs.destination }}
         run: |
           set -o pipefail
           xcodebuild test \
             -project leadsheets.xcodeproj \
             -scheme leadsheets \
-            -destination "id=${{ steps.simulator.outputs.udid }}" \
+            -destination "$DESTINATION" \
             -resultBundlePath UITests.xcresult \
             -retry-tests-on-failure -test-iterations 3 \
             CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
@@ -213,7 +250,8 @@ jobs:
     needs: [changes, ci]
     if: >-
       !cancelled() && needs.ci.result == 'success' && needs.changes.outputs.xcode == 'true'
-      && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+      && github.ref == 'refs/heads/main'
+      && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: xcode-27
     timeout-minutes: 45
     environment: testflight
@@ -235,17 +273,23 @@ jobs:
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
     steps:
       - uses: actions/checkout@v5
-      - name: Write the App Store Connect key
+      # Archives are signed for development. Without that identity in the keychain, Xcode would create a new
+      # certificate on every runner.
+      - name: Install signing credentials
         env:
           ASC_KEY: ${{ secrets.ASC_KEY }}
-        run: printf '%s\n' "$ASC_KEY" > "$RUNNER_TEMP/AuthKey.p8"
-      # Archives are signed for development, and without an identity in the keychain, Xcode creates a new
-      # certificate on every runner.
-      - name: Install the development certificate
-        env:
           DEVELOPMENT_CERTIFICATE: ${{ secrets.DEVELOPMENT_CERTIFICATE }}
           DEVELOPMENT_CERTIFICATE_PASSWORD: ${{ secrets.DEVELOPMENT_CERTIFICATE_PASSWORD }}
         run: |
+          set -euo pipefail
+          umask 077
+          for name in ASC_KEY ASC_KEY_ID ASC_ISSUER_ID DEVELOPMENT_CERTIFICATE DEVELOPMENT_CERTIFICATE_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::The testflight environment has no $name secret."
+              exit 1
+            fi
+          done
+          printf '%s\n' "$ASC_KEY" > "$RUNNER_TEMP/AuthKey.p8"
           keychain="$RUNNER_TEMP/signing.keychain-db"
           password=$(uuidgen)
           security create-keychain -p "$password" "$keychain"
@@ -253,8 +297,13 @@ jobs:
           security unlock-keychain -p "$password" "$keychain"
           base64 --decode <<< "$DEVELOPMENT_CERTIFICATE" > "$RUNNER_TEMP/development.p12"
           security import "$RUNNER_TEMP/development.p12" -k "$keychain" -P "$DEVELOPMENT_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          rm "$RUNNER_TEMP/development.p12"
           security set-key-partition-list -S apple-tool:,apple: -s -k "$password" "$keychain" > /dev/null
           security list-keychains -d user -s "$keychain" login.keychain-db
+          if ! security find-identity -v -p codesigning "$keychain" | grep -q '1 valid identities found'; then
+            echo "::error::The development certificate is missing or has expired. Replace the signing secrets."
+            exit 1
+          fi
       - name: Archive
         run: |
           set -o pipefail
@@ -263,15 +312,24 @@ jobs:
             -scheme leadsheets \
             -destination "${{ matrix.destination }}" \
             -archivePath "$RUNNER_TEMP/leadsheets.xcarchive" \
+            -resultBundlePath "$RUNNER_TEMP/Archive.xcresult" \
             -allowProvisioningUpdates \
             -authenticationKeyPath "$RUNNER_TEMP/AuthKey.p8" \
             -authenticationKeyID "$ASC_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
             | xcbeautify --renderer github-actions
-      # The export is signed with cloud-managed distribution certificates, and gets the next build number.
+      - name: Check for warnings
+        run: |
+          warnings=$(xcrun xcresulttool get build-results --path "$RUNNER_TEMP/Archive.xcresult" | jq .warningCount)
+          if [ "$warnings" != 0 ]; then
+            echo "::error::The signed archive has $warnings warnings."
+            exit 1
+          fi
+      # The export is signed with cloud-managed distribution certificates, and gets the next build number. It runs
+      # rsync with arguments only the system rsync accepts, so keep Homebrew's off the PATH.
       - name: Upload to TestFlight
         run: |
-          xcodebuild -exportArchive \
+          PATH="/usr/bin:$PATH" xcodebuild -exportArchive \
             -archivePath "$RUNNER_TEMP/leadsheets.xcarchive" \
             -exportOptionsPlist ExportOptions.plist \
             -exportPath "$RUNNER_TEMP/export" \
@@ -279,3 +337,10 @@ jobs:
             -authenticationKeyPath "$RUNNER_TEMP/AuthKey.p8" \
             -authenticationKeyID "$ASC_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+      - name: Remove signing credentials
+        if: always()
+        run: |
+          if [ -e "$RUNNER_TEMP/signing.keychain-db" ]; then
+            security delete-keychain "$RUNNER_TEMP/signing.keychain-db"
+          fi
+          rm -f "$RUNNER_TEMP/AuthKey.p8" "$RUNNER_TEMP/development.p12"
