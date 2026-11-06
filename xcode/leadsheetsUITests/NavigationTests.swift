@@ -67,7 +67,8 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
-    func testRotatingKeepsThePlaceInTheSheet() {
+    func testRotatingKeepsThePlaceInTheSheet() throws {
+        try XCTSkipIf(isIPhoneDuoSimulator, "The iPhone Duo simulator keeps its interface upright when a test turns it.")
         let app = launch()
         search(for: "terrapin", in: app)
         open("song-terrapin-station", showing: "Terrapin Station Medley", in: app)
@@ -151,7 +152,8 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
-    func testArrowKeysChangeSongs() {
+    func testArrowKeysChangeSongs() throws {
+        try XCTSkipIf(isIPhoneDuoSimulator, "Key presses from XCTest don't reach the app on the iPhone Duo simulator.")
         let app = launch()
         select("Albums", in: app)
         element("album-american-beauty", in: app).tap()
@@ -275,7 +277,8 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
-    func testLandscapeMovesTheSongButtonsUpAndTheLyricsBesideTheSheet() {
+    func testLandscapeMovesTheSongButtonsUpAndTheLyricsBesideTheSheet() throws {
+        try XCTSkipIf(isIPhoneDuoSimulator, "The iPhone Duo simulator keeps its interface upright when a test turns it.")
         let app = launch()
         search(for: "ripple", in: app)
         open("song-ripple", showing: "Ripple", in: app)
@@ -331,11 +334,15 @@ final class NavigationTests: XCTestCase {
         add(attachment)
     }
 
-    /// On a freshly booted simulator the first tap can land before the field accepts focus, and typing
-    /// then fails, so tap until it has focus.
+    /// iPhone Duo's vertical bar holds search as a button that opens the field. On a freshly booted simulator
+    /// the first tap can land before the field accepts focus, and typing then fails, so tap until it has focus.
     @MainActor
     private func search(for text: String, in app: XCUIApplication) {
         let field = app.searchFields.firstMatch
+        let button = app.buttons["Search"].firstMatch
+        if !field.waitForExistence(timeout: 2), button.exists {
+            button.tap()
+        }
         XCTAssertTrue(field.waitForExistence(timeout: 10))
         let hasFocus = NSPredicate(format: "hasKeyboardFocus == true")
         for _ in 0..<5 where !hasFocus.evaluate(with: field) {
@@ -361,9 +368,20 @@ final class NavigationTests: XCTestCase {
         XCTAssertTrue(screen.exists, "\(identifier) didn't open \(title)")
     }
 
+    /// Taps Back on the screen titled `title`. iPhone Duo puts the Back button in its vertical bar, outside the
+    /// navigation bar.
     @MainActor
     private func goBack(from title: String, in app: XCUIApplication) {
-        app.navigationBars[title].buttons["BackButton"].tap()
+        let bar = app.navigationBars[title]
+        XCTAssertTrue(bar.waitForExistence(timeout: 10))
+        let back = bar.buttons["BackButton"]
+        (back.exists ? back : app.buttons["BackButton"].firstMatch).tap()
+    }
+
+    /// The iPhone Duo simulator keeps its interface upright when a test turns the device, and key presses from
+    /// XCTest don't reach the app's views there, not even a focused text field.
+    private var isIPhoneDuoSimulator: Bool {
+        ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] == "iPhone19,4"
     }
 
     /// Taps a category until it's selected; a tap can be lost while a pop animation is still running.
