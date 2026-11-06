@@ -32,3 +32,4 @@ swift format lint --recursive --strict .
 - Don't bundle album covers or artist photos. `ArtworkStore` fetches them from Apple Music by the Apple Music IDs on albums, artists and singers, which `pnpm apple-music` looks up.
 - New user data goes in `Models/UserData.swift`, keyed by song slug, with no unique constraints and a default for every property.
 - Give new list rows an accessibility identifier, and add a UI test for new navigation.
+- UI tests also run on iPhone Duo, where the system stacks the bars' buttons in a column down the side. Find a bar button anywhere in the app, not inside `navigationBars` or `toolbars`.

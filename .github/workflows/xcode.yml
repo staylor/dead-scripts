@@ -128,6 +128,11 @@ jobs:
           - name: iPhone
             platform: iOS
             device: iPhone 18 Pro
+          # Built with the iOS 27.1 SDK, the app fills iPhone Duo's displays, with its bars down the side. simctl can't
+          # fold or unfold the simulator, so the tests see the pose it boots in.
+          - name: iPhone Duo
+            platform: iOS
+            device: iPhone Duo
           - name: Apple TV
             platform: tvOS
             device: Apple TV 4K (3rd generation)

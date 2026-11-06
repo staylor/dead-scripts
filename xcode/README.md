@@ -60,7 +60,14 @@ xcodebuild test -project leadsheets.xcodeproj -scheme leadsheets \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.5'
 ```
 
-CI (`.github/workflows/xcode.yml`) archives macOS, iOS + watchOS and tvOS with Xcode 27.1, as the TestFlight upload does but unsigned, and fails on any warning. It runs the package tests, the UI tests on iPhone and Apple TV simulators with 27 and 26.5, and the format check, on every change under `xcode/` other than Markdown. On `main`, it then uploads the apps to TestFlight. Changes to the workflows run `actionlint`; to run the Xcode jobs on a change to their workflow, run it manually on the branch.
+iPhone Duo puts the navigation bars and toolbars in a column down the side, with search as a button there. Its simulator boots closed and can't be opened from a test. It also keeps its interface upright when a test turns it, and key presses from XCTest don't reach the app, so the rotation, landscape and arrow-key tests skip there:
+
+```sh
+xcodebuild test -project leadsheets.xcodeproj -scheme leadsheets \
+  -destination 'platform=iOS Simulator,name=iPhone Duo'
+```
+
+CI (`.github/workflows/xcode.yml`) archives macOS, iOS + watchOS and tvOS with Xcode 27.1, as the TestFlight upload does but unsigned, and fails on any warning. It runs the package tests, the UI tests on iPhone and Apple TV simulators with 27 and 26.5 and on iPhone Duo, and the format check, on every change under `xcode/` other than Markdown. On `main`, it then uploads the apps to TestFlight. Changes to the workflows run `actionlint`; to run the Xcode jobs on a change to their workflow, run it manually on the branch.
 
 ## Releasing
 
