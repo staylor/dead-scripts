@@ -7,6 +7,8 @@
   "scripts": {
     "postinstall": "prisma generate",
     "test": "tsx --test src/**/*.test.ts",
+    "lint": "oxlint && oxfmt --check",
+    "lint-fix": "oxlint --fix && oxfmt",
     "lyrics": "tsx src/lyrics/generate.ts",
     "real-book": "tsx src/real-book/generate.ts",
     "xcode": "tsx src/xcode/generate.ts",
@@ -26,9 +28,9 @@
   "devDependencies": {
     "@types/jsdom": "21.1.7",
     "@types/jsonwebtoken": "9.0.10",
-    "@wonderboymusic/eslint-config": "3.0.0",
-    "eslint": "10.14.0",
-    "prettier": "3.9.10",
+    "@wonderboymusic/oxc-config": "1.0.1",
+    "oxfmt": "0.76.0",
+    "oxlint": "1.91.0",
     "prisma": "6.19.0"
   }
 }
