@@ -17,11 +17,14 @@ struct SetlistView: View {
     }
 
     var body: some View {
-        if let setlist = setlists.first {
-            content(for: setlist)
-        } else {
-            ContentUnavailableView("Setlist Deleted", systemImage: LibraryCategory.setlists.systemImage)
+        Group {
+            if let setlist = setlists.first {
+                content(for: setlist)
+            } else {
+                ContentUnavailableView("Setlist Deleted", systemImage: LibraryCategory.setlists.systemImage)
+            }
         }
+        .libraryBackBar(title: setlists.first?.name ?? "")
     }
 
     private func content(for setlist: Setlist) -> some View {
