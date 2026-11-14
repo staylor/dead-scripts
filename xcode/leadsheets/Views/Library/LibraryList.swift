@@ -93,6 +93,7 @@ struct LibraryRouteView: View {
     var body: some View {
         SongList(songs: route.songs(in: catalog), selection: $selection)
             .navigationTitle(route.title)
+            .libraryBackBar(title: route.title)
     }
 }
 
